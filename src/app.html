@@ -1,0 +1,756 @@
+<title>高速IC 乗降記録</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ground:#f3f5f2; --card:#ffffff; --ink:#161a17; --sub:#5f6b62; --rule:#dde3dc;
+  --field:#eef1ed;
+  --green:#0a6b3d; --green-deep:#075530; --green-soft:#e4f0e8;
+  --blue:#1b4fa0; --blue-deep:#153f80; --blue-soft:#e5ecf7;
+  --sign-ink:#ffffff;
+  --alert:#a52020; --live:#0a6b3d;
+  --shadow:0 1px 2px rgba(14,26,18,.06), 0 10px 26px rgba(14,26,18,.09);
+  --plate:#ffffff; --plate-line:#c8d2c9;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#101410; --card:#191e19; --ink:#e7ece6; --sub:#96a29a; --rule:#28302a;
+    --field:#131813;
+    --green:#2f9e63; --green-deep:#0d7a45; --green-soft:#14261b;
+    --blue:#5b8fd8; --blue-deep:#1d4f9e; --blue-soft:#121b2b;
+    --sign-ink:#ffffff;
+    --alert:#e57373; --live:#2f9e63;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
+    --plate:#0f140f; --plate-line:#3a453d;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101410; --card:#191e19; --ink:#e7ece6; --sub:#96a29a; --rule:#28302a;
+  --field:#131813;
+  --green:#2f9e63; --green-deep:#0d7a45; --green-soft:#14261b;
+  --blue:#5b8fd8; --blue-deep:#1d4f9e; --blue-soft:#121b2b;
+  --sign-ink:#ffffff;
+  --alert:#e57373; --live:#2f9e63;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
+  --plate:#0f140f; --plate-line:#3a453d;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",Meiryo,sans-serif;
+  font-size:16px; line-height:1.65; font-weight:400;
+  -webkit-text-size-adjust:100%;
+}
+.mono{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.wrap{max-width:540px;margin:0 auto;padding:0 14px calc(44px + env(safe-area-inset-bottom))}
+
+header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max(12px,env(safe-area-inset-top))}
+.brand{display:flex;align-items:baseline;gap:9px;margin:0 2px 10px}
+.brand h1{font-size:17px;font-weight:900;letter-spacing:.06em;margin:0}
+.brand .count{font-size:11px;color:var(--sub);letter-spacing:.04em}
+
+nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
+nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;font-size:14px;font-weight:700;letter-spacing:.06em;padding:9px 4px;border-radius:8px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--green);color:var(--sign-ink)}
+nav button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+.gauge{display:flex;align-items:center;gap:9px;margin:16px 4px 2px;min-height:22px;font-size:12.5px;color:var(--sub);letter-spacing:.02em}
+.lamp{width:9px;height:9px;border-radius:50%;background:var(--rule);flex:none;box-shadow:0 0 0 3px var(--field)}
+.lamp.ok{background:var(--live)}
+.lamp.busy{background:#d08a12;animation:blink 1.1s ease-in-out infinite}
+.lamp.ng{background:var(--alert)}
+@keyframes blink{50%{opacity:.15}}
+@media (prefers-reduced-motion:reduce){.lamp.busy{animation:none}}
+
+/* 案内標識に見立てた大型ボタン */
+.sign{
+  position:relative;display:block;width:100%;border:0;cursor:pointer;
+  border-radius:14px;padding:22px 18px 18px;margin-top:12px;
+  color:var(--sign-ink);font:inherit;text-align:left;
+  box-shadow:var(--shadow);-webkit-tap-highlight-color:transparent;
+  transition:transform .09s ease, filter .15s ease;
+}
+.sign:active{transform:scale(.985);filter:brightness(.93)}
+.sign:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.sign[disabled]{opacity:.5;cursor:default}
+.sign::after{content:"";position:absolute;inset:6px;border:2px solid rgba(255,255,255,.55);border-radius:9px;pointer-events:none}
+.sign .verb{display:block;font-size:34px;font-weight:900;letter-spacing:.1em;line-height:1.15}
+.sign .role{display:block;font-size:12.5px;font-weight:700;letter-spacing:.28em;opacity:.9;margin-top:3px}
+.sign .road{position:absolute;right:20px;bottom:18px;font-size:11.5px;font-weight:700;letter-spacing:.16em;opacity:.82}
+.sign.in{background:linear-gradient(168deg,var(--green),var(--green-deep))}
+.sign.out{background:linear-gradient(168deg,var(--blue),var(--blue-deep))}
+
+.card{background:var(--card);border:1px solid var(--rule);border-radius:13px;padding:13px 14px;margin-top:12px;box-shadow:var(--shadow)}
+.note-hint{font-size:12px;color:var(--sub);line-height:1.95;margin:18px 4px 0}
+.note-hint b{color:var(--ink);font-weight:700}
+
+/* 記録の行 */
+.rec{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--rule)}
+.rec:first-child{border-top:0}
+.tag{flex:none;width:38px;height:38px;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:900;color:var(--sign-ink)}
+.tag.in{background:var(--green)}
+.tag.out{background:var(--blue)}
+.rec .body{flex:1;min-width:0}
+.rec .ic{font-weight:700;font-size:15.5px;line-height:1.4;word-break:break-all}
+.rec .meta{font-size:12px;color:var(--sub);display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:2px}
+.rec .memo{font-size:13px;color:var(--sub);margin-top:2px;word-break:break-all}
+.fix{flex:none;border:1px solid var(--rule);background:transparent;color:var(--sub);font:inherit;font-size:12px;font-weight:700;border-radius:8px;padding:6px 11px;cursor:pointer}
+.fix:hover{color:var(--ink);border-color:var(--sub)}
+.fix:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+
+/* IC番号プレート */
+.plate{
+  font-family:"Roboto Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  font-size:11px;font-weight:700;letter-spacing:.02em;
+  background:var(--plate);border:1.5px solid var(--plate-line);border-radius:4px;
+  padding:0 5px;line-height:1.5;color:var(--sub);flex:none;
+}
+
+.day{display:flex;align-items:center;gap:9px;margin:22px 4px 7px}
+.day .date{font-size:13.5px;font-weight:900;letter-spacing:.06em}
+.day .line{flex:1;height:1px;background:var(--rule)}
+.day .year{font-size:11px;color:var(--sub);letter-spacing:.08em}
+
+.route{border-top:1px dashed var(--rule);margin-top:10px;padding-top:9px;font-size:12.5px;color:var(--sub)}
+.route .leg{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--ink);font-weight:700}
+.route .arrow{color:var(--green);font-weight:900}
+.route .dur{color:var(--sub);font-weight:500}
+.route .memo{margin-top:2px}
+
+.empty{color:var(--sub);font-size:14px;text-align:center;padding:40px 12px;line-height:2}
+.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:26px 0 0;opacity:.75}
+
+label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
+input[type=text],input[type=datetime-local],select{
+  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
+  border:1px solid var(--rule);border-radius:9px;padding:11px 12px;
+}
+input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+
+.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:700;letter-spacing:.04em;border-radius:10px;padding:12px 14px;cursor:pointer;width:100%;margin-top:9px}
+.btn:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.btn.primary{background:var(--green);border-color:var(--green);color:var(--sign-ink)}
+.btn.mail{background:var(--blue);border-color:var(--blue);color:var(--sign-ink)}
+.btn.line{background:#06c755;border-color:#06c755;color:#fff}
+.btn.danger{color:var(--alert);border-color:var(--alert)}
+.row{display:flex;gap:9px}
+
+.cands{margin-top:4px;max-height:42vh;overflow:auto;-webkit-overflow-scrolling:touch}
+.cand{display:flex;align-items:center;gap:9px;width:100%;text-align:left;font:inherit;background:transparent;border:0;border-bottom:1px solid var(--rule);padding:12px 4px;cursor:pointer;color:var(--ink)}
+.cand[aria-pressed="true"]{background:var(--green-soft)}
+.cand:focus-visible{outline:2px solid var(--green);outline-offset:-2px}
+.cand .nm{flex:1;font-weight:700;font-size:15px;word-break:break-all}
+.cand .ds{font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums;font-size:12px;color:var(--sub);flex:none}
+
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(8,14,10,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--card);width:100%;max-width:540px;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+.sheet h2{margin:2px 0 0;font-size:15.5px;font-weight:900;letter-spacing:.06em}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;background:var(--ink);color:var(--ground);font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+
+.stat{display:flex;gap:8px;margin-top:12px}
+.stat div{flex:1;background:var(--field);border:1px solid var(--rule);border-radius:9px;padding:9px 4px;text-align:center}
+.stat b{display:block;font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums;font-size:21px;font-weight:700;line-height:1.3}
+.stat span{font-size:10.5px;color:var(--sub);letter-spacing:.06em}
+
+pre.out{
+  white-space:pre-wrap;word-break:break-all;font-family:"Roboto Mono",ui-monospace,monospace;
+  font-size:11.5px;line-height:1.85;background:var(--field);border:1px solid var(--rule);
+  border-radius:9px;padding:12px;max-height:34vh;overflow:auto;margin:13px 0 0;
+}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="brand">
+    <h1>高速IC 乗降記録</h1>
+    <span class="count mono" id="dbcount"></span>
+  </div>
+  <nav role="tablist">
+    <button role="tab" id="tab-rec" aria-selected="true">記録</button>
+    <button role="tab" id="tab-hist" aria-selected="false">履歴</button>
+    <button role="tab" id="tab-out" aria-selected="false">送る</button>
+  </nav>
+</header>
+
+<section id="view-rec">
+  <div class="gauge"><span class="lamp" id="gpsdot"></span><span id="gpstext">位置情報は待機中です</span></div>
+
+  <button class="sign in" id="btn-in">
+    <span class="verb">乗った</span>
+    <span class="role">入口</span>
+    <span class="road">高速道路へ</span>
+  </button>
+  <button class="sign out" id="btn-out">
+    <span class="verb">降りた</span>
+    <span class="role">出口</span>
+    <span class="road">一般道へ</span>
+  </button>
+
+  <div id="last"></div>
+
+  <p class="note-hint">
+    ボタンを押すと現在地から<b>一番近いICを自動で判定</b>して、日時と一緒に保存します。<br>
+    違うICになったときは、下のカードの「直す」から変更できます。<br>
+    IC情報は端末の中に持っているので、<b>圏外でも判定できます</b>。<br>
+    運転中は操作せず、停車してから押してください。
+  </p>
+</section>
+
+<section id="view-hist" hidden>
+  <div id="hist"></div>
+</section>
+
+<section id="view-out" hidden>
+  <div class="card">
+    <label for="period">期間</label>
+    <select id="period">
+      <option value="thism">今月</option>
+      <option value="lastm">先月</option>
+      <option value="7d">直近7日</option>
+      <option value="all">すべて</option>
+    </select>
+    <div class="stat">
+      <div><b id="st-trip">0</b><span>トリップ</span></div>
+      <div><b id="st-rec">0</b><span>記録件数</span></div>
+      <div><b id="st-day">0</b><span>稼働日数</span></div>
+    </div>
+    <pre class="out" id="preview"></pre>
+    <div class="row">
+      <button class="btn mail" id="btn-mail">メールで送る</button>
+      <button class="btn line" id="btn-line">LINEで送る</button>
+    </div>
+    <button class="btn" id="btn-copy">本文をコピー</button>
+    <button class="btn" id="btn-csv">CSVをコピー（Excel貼り付け用）</button>
+    <button class="btn" id="btn-dl">CSVファイルを保存</button>
+  </div>
+  <div class="card">
+    <label for="mailto">送り先メールアドレス</label>
+    <input type="text" id="mailto" placeholder="例: taro@example.com" inputmode="email" autocomplete="email">
+    <p class="note-hint">入れておくと「メールで送る」のときに毎回この宛先が入ります。端末の中だけに保存され、どこにも送信されません。</p>
+    <button class="btn danger" id="btn-wipe">記録をすべて削除</button>
+  </div>
+</section>
+
+<p class="credit">IC位置データ: © OpenStreetMap contributors（ODbL）</p>
+</div>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="panel">
+    <h2 id="sheet-title">記録を直す</h2>
+    <label for="search">IC　近い順・タップで選ぶ</label>
+    <input type="text" id="search" placeholder="IC名で検索（例: 宝塚）" autocomplete="off">
+    <div class="cands" id="cands"></div>
+    <label for="f-time">日時</label>
+    <input type="datetime-local" id="f-time">
+    <label for="f-note">訪問先・メモ</label>
+    <input type="text" id="f-note" list="notes" placeholder="例: 園田支店 亀田様" autocomplete="off">
+    <datalist id="notes"></datalist>
+    <button class="btn primary" id="f-save">保存する</button>
+    <div class="row">
+      <button class="btn" id="f-cancel">閉じる</button>
+      <button class="btn danger" id="f-del">この記録を削除</button>
+    </div>
+  </div>
+</div>
+
+<script type="text/plain" id="ic-db">
+__IC_DB__
+</script>
+<script>
+(function(){
+'use strict';
+
+/* ---------- IC データベース（OpenStreetMap 由来・端末内） ---------- */
+var DB = [];
+(function(){
+  var lines = document.getElementById('ic-db').textContent.split('\n');
+  for (var i = 0; i < lines.length; i++){
+    var f = lines[i].split('\t');
+    if (f.length < 4) continue;
+    var la = parseFloat(f[2]), lo = parseFloat(f[3]);
+    if (!isFinite(la) || !isFinite(lo)) continue;
+    DB.push({ n:f[0], r:f[1], la:la, lo:lo });
+  }
+})();
+
+function nearest(lat, lon, k){
+  var cos = Math.cos(lat * Math.PI / 180), all = [];
+  for (var i = 0; i < DB.length; i++){
+    var p = DB[i];
+    var dx = (p.lo - lon) * cos * 111320, dy = (p.la - lat) * 110574;
+    all.push({ p:p, d:Math.sqrt(dx*dx + dy*dy) });
+  }
+  all.sort(function(a,b){ return a.d - b.d; });
+  var seen = {}, res = [];
+  for (var j = 0; j < all.length && res.length < (k || 8); j++){
+    var key = all[j].p.n + '|' + all[j].p.r;
+    if (seen[key]) continue;
+    seen[key] = 1;
+    res.push(all[j]);
+  }
+  return res;
+}
+
+/* ---------- 保存（端末内のみ） ---------- */
+var KEY = 'ic-noriori.v1', MAILKEY = 'ic-noriori.mail';
+var recs = [];
+try { recs = JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch(e){ recs = []; }
+if (!Array.isArray(recs)) recs = [];
+
+function persist(){
+  try { localStorage.setItem(KEY, JSON.stringify(recs)); }
+  catch(e){ toast('保存できませんでした。端末の空き容量を確認してください'); }
+}
+function getMail(){ try { return localStorage.getItem(MAILKEY) || ''; } catch(e){ return ''; } }
+function setMail(v){ try { localStorage.setItem(MAILKEY, v); } catch(e){} }
+
+/* ---------- 小道具 ---------- */
+var $ = function(id){ return document.getElementById(id); };
+var WD = ['日','月','火','水','木','金','土'];
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function two(n){ return n < 10 ? '0' + n : '' + n; }
+function hhmm(ts){ var d = new Date(ts); return two(d.getHours()) + ':' + two(d.getMinutes()); }
+function md(ts){ var d = new Date(ts); return two(d.getMonth()+1) + '/' + two(d.getDate()) + '（' + WD[d.getDay()] + '）'; }
+function ymd(ts){ var d = new Date(ts); return d.getFullYear() + '-' + two(d.getMonth()+1) + '-' + two(d.getDate()); }
+function forInput(ts){ var d = new Date(ts); return d.getFullYear()+'-'+two(d.getMonth()+1)+'-'+two(d.getDate())+'T'+two(d.getHours())+':'+two(d.getMinutes()); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function icName(r){ return r.ic ? r.ic : 'IC未設定'; }
+function dist(m){ return m < 1000 ? Math.round(m) + 'm' : (m/1000).toFixed(1) + 'km'; }
+
+var toastTimer = null;
+function toast(msg){
+  var el = document.querySelector('.toast');
+  if (!el){ el = document.createElement('div'); el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 2800);
+}
+function gauge(kind, text){
+  $('gpsdot').className = 'lamp' + (kind ? ' ' + kind : '');
+  $('gpstext').textContent = text;
+}
+
+/* ---------- 測位して記録 ---------- */
+var busy = false;
+function setBusy(b){ busy = b; $('btn-in').disabled = b; $('btn-out').disabled = b; }
+
+function gpsError(e){
+  if (e && e.code === 1) return '位置情報が許可されていません。ブラウザの設定でこのページの位置情報を許可してください';
+  if (e && e.code === 2) return '現在地を取得できませんでした。トンネルや屋内では測位できません';
+  if (e && e.code === 3) return '測位に時間がかかっています。空の見える場所でもう一度お試しください';
+  return 'この端末では現在地を取得できません';
+}
+
+function addRecord(type){
+  if (busy) return;
+  setBusy(true);
+  gauge('busy', '現在地を測位中…');
+
+  var done = function(err, c){
+    setBusy(false);
+    var rec = { id:uid(), t:type, ts:Date.now(), ic:'', ref:'', note:'' };
+
+    var prev = recs.slice().sort(function(a,b){ return b.ts - a.ts; })[0];
+    if (prev && prev.note && rec.ts - prev.ts < 6 * 3600 * 1000) rec.note = prev.note;
+
+    if (err){
+      gauge('ng', gpsError(err));
+      recs.push(rec); persist(); renderAll();
+      openSheet(rec.id);
+      toast('現在地が取れないため、ICを選んでください');
+      return;
+    }
+    rec.la = Math.round(c.latitude * 1e6) / 1e6;
+    rec.lo = Math.round(c.longitude * 1e6) / 1e6;
+    rec.acc = Math.round(c.accuracy || 0);
+    var hit = nearest(c.latitude, c.longitude, 1)[0];
+    if (hit){ rec.ic = hit.p.n; rec.ref = hit.p.r; rec.d = Math.round(hit.d); }
+    recs.push(rec); persist(); renderAll();
+    gauge('ok', '測位しました　誤差 約' + rec.acc + 'm');
+    toast((type === 'in' ? '入口' : '出口') + '　' + icName(rec) + ' を記録しました');
+  };
+
+  if (!navigator.geolocation){ done({}); return; }
+  navigator.geolocation.getCurrentPosition(
+    function(p){ done(null, p.coords); },
+    function(e){ done(e); },
+    { enableHighAccuracy:true, timeout:15000, maximumAge:20000 }
+  );
+}
+
+/* ---------- 描画 ---------- */
+function sortedAsc(list){ return list.slice().sort(function(a,b){ return a.ts - b.ts; }); }
+function sortedDesc(list){ return list.slice().sort(function(a,b){ return b.ts - a.ts; }); }
+
+function recRow(r){
+  var meta = '<span class="mono">' + hhmm(r.ts) + '</span>';
+  if (r.ref) meta += '<span class="plate">' + esc(r.ref) + '</span>';
+  if (r.d != null) meta += '<span class="mono">' + dist(r.d) + '</span>';
+  if (r.acc != null) meta += '<span class="mono">誤差' + r.acc + 'm</span>';
+  return '<div class="rec">' +
+    '<div class="tag ' + r.t + '">' + (r.t === 'in' ? '入' : '出') + '</div>' +
+    '<div class="body">' +
+      '<div class="ic">' + esc(icName(r)) + '</div>' +
+      '<div class="meta">' + meta + '</div>' +
+      (r.note ? '<div class="memo">' + esc(r.note) + '</div>' : '') +
+    '</div>' +
+    '<button class="fix" data-edit="' + r.id + '">直す</button></div>';
+}
+
+function buildTrips(dayAsc){
+  var items = [], open = null;
+  dayAsc.forEach(function(r){
+    if (r.t === 'in'){
+      if (open) items.push({ ts:open.ts, a:open, b:null });
+      open = r;
+    } else if (open){ items.push({ ts:open.ts, a:open, b:r }); open = null; }
+    else items.push({ ts:r.ts, a:null, b:r });
+  });
+  if (open) items.push({ ts:open.ts, a:open, b:null });
+  return items;
+}
+
+function duration(ms){
+  var min = Math.max(0, Math.round(ms / 60000));
+  return min >= 60 ? Math.floor(min/60) + '時間' + (min%60) + '分' : min + '分';
+}
+function tripText(it){
+  if (it.a && it.b) return hhmm(it.a.ts) + ' ' + icName(it.a) + ' → ' + hhmm(it.b.ts) + ' ' + icName(it.b) + '（' + duration(it.b.ts - it.a.ts) + '）';
+  if (it.a) return hhmm(it.a.ts) + ' ' + icName(it.a) + ' → 出口の記録なし';
+  return '入口の記録なし → ' + hhmm(it.b.ts) + ' ' + icName(it.b);
+}
+function tripHTML(it){
+  var memo = (it.b && it.b.note) || (it.a && it.a.note) || '';
+  var leg;
+  if (it.a && it.b){
+    leg = '<span class="mono">' + hhmm(it.a.ts) + '</span> ' + esc(icName(it.a)) +
+          ' <span class="arrow">▶</span> <span class="mono">' + hhmm(it.b.ts) + '</span> ' + esc(icName(it.b)) +
+          ' <span class="dur mono">' + duration(it.b.ts - it.a.ts) + '</span>';
+  } else if (it.a){
+    leg = '<span class="mono">' + hhmm(it.a.ts) + '</span> ' + esc(icName(it.a)) + ' <span class="dur">→ 出口の記録なし</span>';
+  } else {
+    leg = '<span class="dur">入口の記録なし →</span> <span class="mono">' + hhmm(it.b.ts) + '</span> ' + esc(icName(it.b));
+  }
+  return '<div class="route"><div class="leg">' + leg + '</div>' + (memo ? '<div class="memo">' + esc(memo) + '</div>' : '') + '</div>';
+}
+
+function renderLast(){
+  var recent = sortedDesc(recs).slice(0, 3);
+  $('last').innerHTML = recent.length ? '<div class="card">' + recent.map(recRow).join('') + '</div>' : '';
+}
+
+function groupByDay(list){
+  var days = {}, order = [];
+  sortedAsc(list).forEach(function(r){
+    var k = ymd(r.ts);
+    if (!days[k]){ days[k] = []; order.push(k); }
+    days[k].push(r);
+  });
+  return { days:days, order:order };
+}
+
+function renderHistory(){
+  if (!recs.length){
+    $('hist').innerHTML = '<div class="empty">まだ記録がありません。<br>「記録」タブの大きいボタンを押すと、<br>その場のICが記録されます。</div>';
+    return;
+  }
+  var g = groupByDay(recs);
+  $('hist').innerHTML = g.order.slice().reverse().map(function(k){
+    var list = g.days[k];
+    var head = '<div class="day"><span class="date mono">' + md(list[0].ts) + '</span><span class="line"></span>' +
+               '<span class="year mono">' + new Date(list[0].ts).getFullYear() + '</span></div>';
+    return head + '<div class="card">' + list.slice().reverse().map(recRow).join('') +
+           buildTrips(list).map(tripHTML).join('') + '</div>';
+  }).join('');
+}
+
+function renderNotes(){
+  var seen = {}, opts = [];
+  sortedDesc(recs).forEach(function(r){
+    if (r.note && !seen[r.note]){ seen[r.note] = 1; opts.push(r.note); }
+  });
+  $('notes').innerHTML = opts.slice(0, 25).map(function(n){ return '<option value="' + esc(n) + '"></option>'; }).join('');
+}
+
+function renderAll(){ renderLast(); renderHistory(); renderNotes(); renderOutput(); }
+
+/* ---------- 編集シート ---------- */
+var editing = null, picked = null, shownCands = [];
+
+function openSheet(id){
+  var r = null;
+  for (var i = 0; i < recs.length; i++) if (recs[i].id === id) r = recs[i];
+  if (!r) return;
+  editing = r;
+  picked = r.ic ? { n:r.ic, r:r.ref } : null;
+  $('sheet-title').textContent = (r.t === 'in' ? '入口' : '出口') + 'の記録を直す';
+  $('search').value = '';
+  $('f-time').value = forInput(r.ts);
+  $('f-note').value = r.note || '';
+  renderCands();
+  $('sheet').hidden = false;
+}
+function closeSheet(){ $('sheet').hidden = true; editing = null; picked = null; }
+
+function candList(){
+  var q = $('search').value.trim();
+  if (q){
+    var out = [], seen = {};
+    for (var i = 0; i < DB.length && out.length < 40; i++){
+      var p = DB[i];
+      if (p.n.indexOf(q) === -1) continue;
+      var key = p.n + '|' + p.r;
+      if (seen[key]) continue;
+      seen[key] = 1;
+      var d = null;
+      if (editing && editing.la != null){
+        var cos = Math.cos(editing.la * Math.PI / 180);
+        var dx = (p.lo - editing.lo) * cos * 111320, dy = (p.la - editing.la) * 110574;
+        d = Math.sqrt(dx*dx + dy*dy);
+      }
+      out.push({ p:p, d:d });
+    }
+    return out;
+  }
+  if (editing && editing.la != null) return nearest(editing.la, editing.lo, 12);
+  var used = [], mark = {};
+  sortedDesc(recs).forEach(function(r){
+    var key = r.ic + '|' + r.ref;
+    if (r.ic && !mark[key]){ mark[key] = 1; used.push({ p:{ n:r.ic, r:r.ref }, d:null }); }
+  });
+  return used.slice(0, 12);
+}
+
+function renderCands(){
+  shownCands = candList();
+  if (!shownCands.length){ $('cands').innerHTML = '<div class="empty">見つかりませんでした</div>'; return; }
+  $('cands').innerHTML = shownCands.map(function(o, i){
+    var on = picked && picked.n === o.p.n && picked.r === o.p.r;
+    return '<button class="cand" data-i="' + i + '" aria-pressed="' + (on ? 'true' : 'false') + '">' +
+      '<span class="nm">' + esc(o.p.n) + '</span>' +
+      (o.p.r ? '<span class="plate">' + esc(o.p.r) + '</span>' : '') +
+      '<span class="ds">' + (o.d == null ? '' : dist(o.d)) + '</span></button>';
+  }).join('');
+}
+
+/* ---------- 書き出し ---------- */
+function periodRange(){
+  var v = $('period').value, now = new Date(), s, e;
+  if (v === 'thism'){ s = new Date(now.getFullYear(), now.getMonth(), 1); e = new Date(now.getFullYear(), now.getMonth()+1, 1); }
+  else if (v === 'lastm'){ s = new Date(now.getFullYear(), now.getMonth()-1, 1); e = new Date(now.getFullYear(), now.getMonth(), 1); }
+  else if (v === '7d'){ s = new Date(now.getTime() - 6*86400000); s.setHours(0,0,0,0); e = new Date(now.getTime() + 86400000); }
+  else { s = new Date(0); e = new Date(now.getTime() + 86400000); }
+  return { s:s.getTime(), e:e.getTime(), v:v };
+}
+function periodLabel(rg){
+  if (rg.v === 'all') return 'すべての記録';
+  if (rg.v === '7d') return '直近7日';
+  var d = new Date(rg.s);
+  return d.getFullYear() + '年' + (d.getMonth()+1) + '月';
+}
+function inRange(){
+  var rg = periodRange();
+  return sortedAsc(recs).filter(function(r){ return r.ts >= rg.s && r.ts < rg.e; });
+}
+
+function summarize(){
+  var list = inRange(), g = groupByDay(list), trips = 0;
+  g.order.forEach(function(k){
+    buildTrips(g.days[k]).forEach(function(it){ if (it.a && it.b) trips++; });
+  });
+  return { list:list, g:g, trips:trips };
+}
+
+function buildText(){
+  var rg = periodRange(), s = summarize();
+  var lines = ['【高速道路 乗降記録】' + periodLabel(rg)];
+  if (!s.list.length){ lines.push('', '記録はありません。'); return lines.join('\n'); }
+  s.g.order.forEach(function(k){
+    lines.push('');
+    lines.push('■ ' + md(s.g.days[k][0].ts));
+    buildTrips(s.g.days[k]).forEach(function(it){
+      lines.push('　' + tripText(it));
+      var memo = (it.b && it.b.note) || (it.a && it.a.note);
+      if (memo) lines.push('　　' + memo);
+    });
+  });
+  lines.push('');
+  lines.push('― 合計 ' + s.trips + 'トリップ / ' + s.list.length + '件 / ' + s.g.order.length + '日');
+  return lines.join('\n');
+}
+
+function buildCSV(){
+  var rows = [['日付','時刻','区分','IC名','番号','訪問先・メモ','緯度','経度','測位誤差m']];
+  inRange().forEach(function(r){
+    rows.push([ymd(r.ts), hhmm(r.ts), r.t === 'in' ? '入口' : '出口', r.ic || '', r.ref || '', r.note || '',
+      r.la != null ? r.la : '', r.lo != null ? r.lo : '', r.acc != null ? r.acc : '']);
+  });
+  return rows.map(function(row){
+    return row.map(function(c){
+      c = String(c);
+      return /[",\n]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c;
+    }).join(',');
+  }).join('\r\n');
+}
+
+function renderOutput(){
+  var s = summarize();
+  $('st-trip').textContent = s.trips;
+  $('st-rec').textContent = s.list.length;
+  $('st-day').textContent = s.g.order.length;
+  $('preview').textContent = buildText();
+}
+
+/* 公開ページ（claude.ai）ではファイル保存に downloads ケイパビリティが要る。
+   ローカルの index.html を直接開いたときは window.claude が無いので通常の保存を使う。 */
+var savePromise = (window.claude && typeof window.claude.use === 'function')
+  ? window.claude.use('downloads').catch(function(){ return null; })
+  : null;
+
+function copyText(text, okMsg){
+  var fallback = function(){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : 'コピーできませんでした。本文を長押しして選択してください');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, fallback);
+  } else fallback();
+}
+
+function openExternal(url){
+  var a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+/* ---------- 操作 ---------- */
+$('btn-in').addEventListener('click', function(){ addRecord('in'); });
+$('btn-out').addEventListener('click', function(){ addRecord('out'); });
+
+document.addEventListener('click', function(ev){
+  var t = ev.target;
+  if (t && t.getAttribute && t.getAttribute('data-edit')) openSheet(t.getAttribute('data-edit'));
+});
+
+$('cands').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.cand') : null;
+  if (!b) return;
+  var o = shownCands[+b.getAttribute('data-i')];
+  if (!o) return;
+  picked = { n:o.p.n, r:o.p.r };
+  renderCands();
+});
+
+$('search').addEventListener('input', renderCands);
+$('f-cancel').addEventListener('click', closeSheet);
+$('sheet').addEventListener('click', function(ev){ if (ev.target === this) closeSheet(); });
+
+$('f-save').addEventListener('click', function(){
+  if (!editing) return;
+  if (picked){ editing.ic = picked.n; editing.ref = picked.r; }
+  var tv = $('f-time').value;
+  if (tv){ var d = new Date(tv); if (!isNaN(d.getTime())) editing.ts = d.getTime(); }
+  editing.note = $('f-note').value.trim();
+  persist(); renderAll(); closeSheet();
+  toast('保存しました');
+});
+
+$('f-del').addEventListener('click', function(){
+  if (!editing) return;
+  if (!confirm('この記録を削除します。よろしいですか？')) return;
+  var id = editing.id;
+  recs = recs.filter(function(r){ return r.id !== id; });
+  persist(); renderAll(); closeSheet();
+  toast('削除しました');
+});
+
+var tabs = [['tab-rec','view-rec'], ['tab-hist','view-hist'], ['tab-out','view-out']];
+tabs.forEach(function(pair){
+  $(pair[0]).addEventListener('click', function(){
+    tabs.forEach(function(p){
+      var on = p[0] === pair[0];
+      $(p[0]).setAttribute('aria-selected', on ? 'true' : 'false');
+      $(p[1]).hidden = !on;
+    });
+    if (pair[0] === 'tab-out') renderOutput();
+    window.scrollTo(0, 0);
+  });
+});
+
+$('period').addEventListener('change', renderOutput);
+$('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本文をコピーしました'); });
+$('btn-csv').addEventListener('click', function(){ copyText(buildCSV(), 'CSVをコピーしました'); });
+
+/* メール・LINE は先に本文をコピーしてから開く。
+   アプリが開かなかったときでも貼り付けるだけで済むようにするため。 */
+$('btn-mail').addEventListener('click', function(){
+  var full = buildText(), addr = $('mailto').value.trim();
+  var subject = '高速道路 乗降記録 ' + periodLabel(periodRange());
+  var body = full.length > 1600 ? full.slice(0, 1600) + '\n\n（長いため省略しました。全文は貼り付けてください）' : full;
+  copyText(full, 'メールを開きます（本文はコピー済み）');
+  openExternal('mailto:' + encodeURIComponent(addr) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+});
+
+$('btn-line').addEventListener('click', function(){
+  var full = buildText();
+  var body = full.length > 900 ? full.slice(0, 900) + '\n（以下省略）' : full;
+  copyText(full, 'LINEを開きます（本文はコピー済み）');
+  openExternal('https://line.me/R/msg/text/?' + encodeURIComponent(body));
+});
+
+$('btn-dl').addEventListener('click', function(){
+  var csv = '﻿' + buildCSV();
+  var name = '乗降記録_' + ymd(Date.now()) + '.csv';
+
+  if (savePromise){
+    toast('保存を準備しています…');
+    savePromise.then(function(dl){
+      if (!dl || !dl.save){ toast('この画面ではファイル保存を使えません。「CSVをコピー」をお使いください'); return; }
+      dl.save({ filename:name, data:csv }).then(function(){
+        toast('CSVを保存しました');
+      }, function(err){
+        if (err && err.code === 'declined') return;
+        toast('保存できませんでした。「CSVをコピー」をお使いください');
+      });
+    });
+    return;
+  }
+
+  try {
+    var url = URL.createObjectURL(new Blob([csv], { type:'text/csv;charset=utf-8;' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+    toast('CSVを保存しました');
+  } catch(e){
+    toast('保存できませんでした。「CSVをコピー」をお使いください');
+  }
+});
+
+$('mailto').value = getMail();
+$('mailto').addEventListener('change', function(){ setMail(this.value.trim()); });
+
+$('btn-wipe').addEventListener('click', function(){
+  if (!confirm('保存されている記録をすべて削除します。元に戻せません。よろしいですか？')) return;
+  recs = []; persist(); renderAll();
+  toast('すべて削除しました');
+});
+
+$('dbcount').textContent = DB.length.toLocaleString('ja-JP') + ' 地点収録';
+renderAll();
+})();
+</script>
