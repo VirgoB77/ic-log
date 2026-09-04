@@ -54,6 +54,7 @@ https://virgob77.github.io/ic-log/
 | `tools/build.sh` | `src` と `data` から `index.html` を生成する |
 | `tools/fetch-ic.sh` | IC一覧を OpenStreetMap から取り直す |
 | `dist/artifact.html` | 公開用（`build.sh` が生成） |
+| `tenant/index.html` | もうひとつのアプリ（テナント誘致台帳）。単体で動く |
 
 ### 作り直すとき
 
@@ -66,6 +67,16 @@ bash tools/build.sh
 ```bash
 bash tools/fetch-ic.sh && bash tools/build.sh
 ```
+
+## もうひとつのアプリ：テナント誘致台帳
+
+土地・空き物件にテナントを誘致するときの、接触の記録と「次にやること」を残すアプリ。
+同じ作り（1ファイルで完結・端末内に保存・スマホ用）で `tenant/` に入れてある。
+
+- 使い方: [tenant/README.md](tenant/README.md)
+- 公開版: https://virgob77.github.io/ic-log/tenant/
+
+保存場所は高速IC記録と別なので、同じ端末で両方使っても混ざらない。
 
 ## 出典
 

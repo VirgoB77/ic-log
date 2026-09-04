@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#24476f">
+<title>テナント誘致台帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f4f5f2; --card:#ffffff; --ink:#16191d; --sub:#616974; --rule:#dfe2dd; --field:#eef0ec;
+  --key:#24476f; --key-deep:#193453; --key-soft:#e7ecf3; --on-key:#ffffff;
+  --hot:#b0442a; --hot-soft:#f8e9e4;
+  --ok:#1d7048; --ok-soft:#e4efe8;
+  --mute:#6f7883;
+  --shadow:0 1px 2px rgba(16,22,30,.06), 0 10px 26px rgba(16,22,30,.09);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#111316; --card:#191c20; --ink:#e7eaed; --sub:#97a0aa; --rule:#292f35; --field:#14171a;
+    --key:#6d9cd6; --key-deep:#2c5788; --key-soft:#151f2c; --on-key:#ffffff;
+    --hot:#e08a6d; --hot-soft:#2b1c16;
+    --ok:#4faa7d; --ok-soft:#16241d;
+    --mute:#8b949e;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#111316; --card:#191c20; --ink:#e7eaed; --sub:#97a0aa; --rule:#292f35; --field:#14171a;
+  --key:#6d9cd6; --key-deep:#2c5788; --key-soft:#151f2c; --on-key:#ffffff;
+  --hot:#e08a6d; --hot-soft:#2b1c16;
+  --ok:#4faa7d; --ok-soft:#16241d;
+  --mute:#8b949e;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",Meiryo,sans-serif;
+  font-size:16px; line-height:1.65; -webkit-text-size-adjust:100%;
+}
+.mono{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+.wrap{max-width:600px;margin:0 auto;padding:0 14px calc(46px + env(safe-area-inset-bottom))}
+
+header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max(12px,env(safe-area-inset-top))}
+.brand{display:flex;align-items:baseline;gap:9px;margin:0 2px 10px;flex-wrap:wrap}
+.brand h1{font-size:17px;font-weight:900;letter-spacing:.06em;margin:0}
+.brand .count{font-size:11px;color:var(--sub);letter-spacing:.04em}
+
+nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
+nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;font-size:14px;font-weight:700;letter-spacing:.06em;padding:9px 4px;border-radius:8px;cursor:pointer}
+nav button[aria-selected="true"]{background:var(--key);color:var(--on-key)}
+nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+.sec{display:flex;align-items:center;gap:9px;margin:24px 4px 7px;font-size:13px;font-weight:900;letter-spacing:.08em}
+.sec .line{flex:1;height:1px;background:var(--rule)}
+.sec .n{font-size:11px;color:var(--sub);font-weight:700}
+
+.card{background:var(--card);border:1px solid var(--rule);border-radius:13px;padding:4px 14px;margin-top:10px;box-shadow:var(--shadow)}
+.card.pad{padding:14px}
+
+/* 大ボタン */
+.big{
+  position:relative;display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);
+  border-radius:14px;padding:20px 18px 17px;margin-top:14px;font:inherit;text-align:left;
+  background:linear-gradient(168deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
+  -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease;
+}
+.big:active{transform:scale(.985);filter:brightness(.93)}
+.big:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.big::after{content:"";position:absolute;inset:6px;border:2px solid rgba(255,255,255,.5);border-radius:9px;pointer-events:none}
+.big .verb{display:block;font-size:29px;font-weight:900;letter-spacing:.09em;line-height:1.2}
+.big .role{display:block;font-size:12px;font-weight:700;letter-spacing:.2em;opacity:.9;margin-top:3px}
+
+.stat{display:flex;gap:8px;margin-top:12px}
+.stat div{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:9px 3px;text-align:center;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums;font-size:21px;font-weight:700;line-height:1.3}
+.stat span{font-size:10.5px;color:var(--sub);letter-spacing:.04em}
+.stat .warn b{color:var(--hot)}
+
+/* 一覧の行 */
+.item{display:flex;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:transparent;border:0;border-top:1px solid var(--rule);padding:12px 0;cursor:pointer}
+.item:first-child{border-top:0}
+.item:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
+.item .body{flex:1;min-width:0}
+.item .ttl{font-weight:700;font-size:15.5px;line-height:1.45;word-break:break-word;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.item .meta{font-size:12px;color:var(--sub);margin-top:1px;word-break:break-word}
+.item .next{font-size:12.5px;font-weight:700;color:var(--key);margin-top:3px;word-break:break-word}
+.item .next.over{color:var(--hot)}
+.item .chev{flex:none;color:var(--sub);font-size:20px;line-height:1}
+
+.bdg{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:1px 6px;line-height:1.7;border:1px solid transparent}
+.bdg.a{background:var(--hot-soft);color:var(--hot);border-color:var(--hot)}
+.bdg.b{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+.bdg.c{background:var(--field);color:var(--mute);border-color:var(--rule)}
+.bdg.stage{background:var(--field);color:var(--sub);border-color:var(--rule)}
+.bdg.stage.on{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+.bdg.stage.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.bdg.stage.drop{background:var(--field);color:var(--mute);border-color:var(--rule);opacity:.8}
+.bdg.land{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.bdg.bldg{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+
+/* 履歴のタイムライン */
+.tl{border-top:1px solid var(--rule);padding:11px 0;display:flex;gap:10px;align-items:flex-start}
+.tl:first-child{border-top:0}
+.tl .body{flex:1;min-width:0}
+.tl .head{font-size:14.5px;font-weight:700;display:flex;gap:7px;align-items:center;flex-wrap:wrap;line-height:1.55}
+.tl .when{flex:none;font-family:"Roboto Mono",monospace;font-size:11.5px;color:var(--sub);font-weight:700}
+.tl .kind{font-size:10.5px;font-weight:700;letter-spacing:.06em;background:var(--key-soft);color:var(--key);border-radius:5px;padding:1px 6px}
+.tl .txt{font-size:13.5px;color:var(--ink);margin-top:2px;white-space:pre-wrap;word-break:break-word}
+.tl .to{font-size:12px;color:var(--sub);margin-top:1px}
+.tl .edit{flex:none;border:1px solid var(--rule);background:transparent;color:var(--sub);font:inherit;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 9px;cursor:pointer;align-self:flex-start}
+.tl .edit:hover{color:var(--ink);border-color:var(--sub)}
+
+.tools{margin-top:12px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:9px 2px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
+  font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
+.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
+input[type=text],input[type=date],input[type=tel],input[type=email],input[type=search],select,textarea{
+  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
+  border:1px solid var(--rule);border-radius:9px;padding:11px 12px;
+}
+textarea{line-height:1.7;resize:vertical;min-height:84px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+.half{display:flex;gap:9px}
+.half > div{flex:1;min-width:0}
+
+.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14px;
+  font-weight:700;letter-spacing:.04em;border-radius:10px;padding:12px 14px;cursor:pointer;width:100%;margin-top:9px}
+.btn:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+.btn.primary{background:var(--key);border-color:var(--key);color:var(--on-key)}
+.btn.danger{color:var(--hot);border-color:var(--hot)}
+.btn.line{background:#06c755;border-color:#06c755;color:#fff}
+.row{display:flex;gap:9px}
+
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(10,14,20,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--card);width:100%;max-width:600px;max-height:92vh;overflow:auto;
+  border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+.sheet h2{margin:2px 0 0;font-size:15.5px;font-weight:900;letter-spacing:.06em}
+.sheet .sub{font-size:12px;color:var(--sub);margin:4px 0 0}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;background:var(--ink);color:var(--ground);
+  font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+
+.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 12px;line-height:2}
+.note-hint{font-size:12px;color:var(--sub);line-height:1.95;margin:18px 4px 0}
+.note-hint b{color:var(--ink);font-weight:700}
+.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:26px 0 0;opacity:.75}
+
+pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-monospace,monospace;
+  font-size:11.5px;line-height:1.85;background:var(--field);border:1px solid var(--rule);
+  border-radius:9px;padding:12px;max-height:34vh;overflow:auto;margin:13px 0 0}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="brand">
+    <h1>テナント誘致台帳</h1>
+    <span class="count mono" id="hdcount"></span>
+  </div>
+  <nav role="tablist">
+    <button role="tab" id="tab-home" aria-selected="true">動き</button>
+    <button role="tab" id="tab-lead" aria-selected="false">候補先</button>
+    <button role="tab" id="tab-prop" aria-selected="false">物件</button>
+    <button role="tab" id="tab-out" aria-selected="false">送る</button>
+  </nav>
+</header>
+
+<section id="view-home">
+  <button class="big" id="btn-log">
+    <span class="verb">接触を記録</span>
+    <span class="role">電話・訪問・内見・メール</span>
+  </button>
+
+  <div class="stat">
+    <div class="warn"><b id="st-todo">0</b><span>要対応</span></div>
+    <div><b id="st-month">0</b><span>今月の接触</span></div>
+    <div><b id="st-live">0</b><span>進行中</span></div>
+    <div><b id="st-prop">0</b><span>物件</span></div>
+  </div>
+
+  <div class="sec"><span>次にやること</span><span class="line"></span><span class="n" id="n-todo"></span></div>
+  <div class="card" id="todo"></div>
+
+  <div class="sec"><span>最近の記録</span><span class="line"></span><span class="n" id="n-recent"></span></div>
+  <div class="card" id="recent"></div>
+
+  <div class="sec"><span>しばらく置いている先</span><span class="line"></span><span class="n" id="n-stale"></span></div>
+  <div class="card" id="stale"></div>
+
+  <p class="note-hint">
+    電話や訪問が終わったら、その場で<b>「接触を記録」</b>を押して一行だけ残してください。<br>
+    次にやることの日付を入れておくと、この画面の上に出てきます。<br>
+    記録は<b>この端末の中だけ</b>に保存されます。機種変更の前に「送る」タブでバックアップを取ってください。
+  </p>
+</section>
+
+<section id="view-lead" hidden>
+  <div class="tools">
+    <input type="search" id="q-lead" placeholder="会社名・業種・担当者で探す" autocomplete="off">
+    <div class="chips" id="chips-lead">
+      <button class="chip" data-f="all" aria-pressed="true">すべて</button>
+      <button class="chip" data-f="todo" aria-pressed="false">要対応</button>
+      <button class="chip" data-f="live" aria-pressed="false">進行中</button>
+      <button class="chip" data-f="new" aria-pressed="false">未接触</button>
+      <button class="chip" data-f="A" aria-pressed="false">温度A</button>
+      <button class="chip" data-f="B" aria-pressed="false">温度B</button>
+      <button class="chip" data-f="C" aria-pressed="false">温度C</button>
+      <button class="chip" data-f="done" aria-pressed="false">成約</button>
+      <button class="chip" data-f="drop" aria-pressed="false">見送り</button>
+    </div>
+  </div>
+  <div class="card" id="leads"></div>
+  <div class="row">
+    <button class="btn primary" id="btn-add-lead">＋ 候補先を追加</button>
+    <button class="btn" id="btn-bulk">まとめて追加</button>
+  </div>
+</section>
+
+<section id="view-prop" hidden>
+  <div id="props"></div>
+  <button class="btn primary" id="btn-add-prop">＋ 物件を追加</button>
+  <p class="note-hint">
+    土地・空き物件を1件ずつ登録します。候補先の<b>「対象物件」</b>で結びつけると、
+    どの物件に何社当たっているかがこの画面に出ます。
+  </p>
+</section>
+
+<section id="view-out" hidden>
+  <div class="card pad">
+    <label for="period">期間</label>
+    <select id="period">
+      <option value="thism">今月</option>
+      <option value="lastm">先月</option>
+      <option value="30d">直近30日</option>
+      <option value="7d">直近7日</option>
+      <option value="all">すべて</option>
+    </select>
+    <div class="stat">
+      <div><b id="rp-log">0</b><span>接触件数</span></div>
+      <div><b id="rp-lead">0</b><span>接触した先</span></div>
+      <div><b id="rp-view">0</b><span>内見</span></div>
+      <div><b id="rp-deal">0</b><span>成約</span></div>
+    </div>
+    <pre class="out" id="preview"></pre>
+    <div class="row">
+      <button class="btn primary" id="btn-mail">メールで送る</button>
+      <button class="btn line" id="btn-line">LINEで送る</button>
+    </div>
+    <button class="btn" id="btn-copy">報告の本文をコピー</button>
+    <label for="mailto">送り先メールアドレス</label>
+    <input type="text" id="mailto" placeholder="例: taro@example.com" inputmode="email" autocomplete="email">
+  </div>
+
+  <div class="card pad">
+    <label for="csvkind">Excel用の書き出し（CSV）</label>
+    <select id="csvkind">
+      <option value="log">接触履歴（期間で絞る）</option>
+      <option value="lead">候補先の一覧（すべて）</option>
+      <option value="prop">物件の一覧（すべて）</option>
+    </select>
+    <div class="row">
+      <button class="btn" id="btn-csv-copy">コピー</button>
+      <button class="btn" id="btn-csv-save">ファイルに保存</button>
+    </div>
+  </div>
+
+  <div class="card pad">
+    <label>バックアップ（機種変更・端末の乗り換え用）</label>
+    <p class="note-hint" style="margin:0">
+      記録は端末の中にしかありません。<b>月に一度</b>ここから書き出しておくと、
+      別の端末やブラウザにそのまま移せます。
+    </p>
+    <button class="btn" id="btn-backup">バックアップを保存（.json）</button>
+    <label for="restore-file">バックアップから復元</label>
+    <input type="file" id="restore-file" accept=".json,application/json">
+    <button class="btn danger" id="btn-wipe">記録をすべて削除</button>
+    <button class="btn" id="btn-sample">お試し用のサンプルを入れる</button>
+  </div>
+
+  <p class="credit">記録はサーバーに送られません。すべて端末の中で処理しています。</p>
+</section>
+</div>
+
+<div class="sheet" id="sheet" hidden><div class="panel" id="panel"></div></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ===================== 保存（端末内のみ） ===================== */
+var KEY = 'tenant-log.v1';
+var db = { props:[], leads:[], logs:[], mail:'' };
+
+(function load(){
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){ raw = null; }
+  if (raw && typeof raw === 'object'){
+    db.props = Array.isArray(raw.props) ? raw.props : [];
+    db.leads = Array.isArray(raw.leads) ? raw.leads : [];
+    db.logs  = Array.isArray(raw.logs)  ? raw.logs  : [];
+    db.mail  = typeof raw.mail === 'string' ? raw.mail : '';
+  }
+})();
+
+function persist(){
+  try { localStorage.setItem(KEY, JSON.stringify(db)); }
+  catch(e){ toast('保存できませんでした。端末の空き容量を確認してください'); }
+}
+
+/* ===================== 決まった選択肢 ===================== */
+var STAGES = ['未接触','打診中','提案済','内見済','条件交渉','成約','見送り'];
+var KINDS  = ['電話','訪問','来店してもらった','メール','資料送付','内見','紹介','その他'];
+var PKINDS = ['土地','建物','区画'];
+var PSTATE = ['募集中','商談中','成約','停止'];
+var TEMPS  = [['A','A　熱い（前向き）'],['B','B　普通（検討中）'],['C','C　低い（様子見）']];
+
+/* ===================== 小道具 ===================== */
+var $ = function(id){ return document.getElementById(id); };
+var WD = ['日','月','火','水','木','金','土'];
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function two(n){ return n < 10 ? '0' + n : '' + n; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function ymd(d){ return d.getFullYear() + '-' + two(d.getMonth()+1) + '-' + two(d.getDate()); }
+function today(){ return ymd(new Date()); }
+function toDate(s){
+  if (!s) return null;
+  var p = String(s).split('-');
+  if (p.length !== 3) return null;
+  var d = new Date(+p[0], +p[1] - 1, +p[2]);
+  return isNaN(d.getTime()) ? null : d;
+}
+function fmtDate(s){
+  var d = toDate(s);
+  if (!d) return '';
+  return (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）';
+}
+function fmtDateY(s){
+  var d = toDate(s);
+  if (!d) return '';
+  return d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日（' + WD[d.getDay()] + '）';
+}
+/* a から b までの日数（b が後なら正） */
+function dayDiff(a, b){
+  var da = toDate(a), dbb = toDate(b);
+  if (!da || !dbb) return null;
+  return Math.round((dbb.getTime() - da.getTime()) / 86400000);
+}
+function agoText(s){
+  var n = dayDiff(s, today());
+  if (n == null) return '';
+  if (n <= 0) return 'きょう';
+  if (n === 1) return 'きのう';
+  return n + '日前';
+}
+function dueText(s){
+  var n = dayDiff(today(), s);
+  if (n == null) return '';
+  if (n < 0) return (-n) + '日すぎ';
+  if (n === 0) return 'きょう';
+  if (n === 1) return 'あす';
+  return 'あと' + n + '日';
+}
+
+var toastTimer = null;
+function toast(msg){
+  var el = document.querySelector('.toast');
+  if (!el){ el = document.createElement('div'); el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 2800);
+}
+
+/* ===================== 引き出し ===================== */
+function leadById(id){
+  for (var i = 0; i < db.leads.length; i++) if (db.leads[i].id === id) return db.leads[i];
+  return null;
+}
+function propById(id){
+  for (var i = 0; i < db.props.length; i++) if (db.props[i].id === id) return db.props[i];
+  return null;
+}
+function leadName(id){ var l = leadById(id); return l ? l.name : '（削除された候補先）'; }
+function propName(id){ var p = propById(id); return p ? p.name : ''; }
+
+function logsSorted(list){
+  return list.slice().sort(function(a, b){
+    if (a.date === b.date) return (b.ts || 0) - (a.ts || 0);
+    return a.date < b.date ? 1 : -1;
+  });
+}
+function logsOfLead(id){
+  return logsSorted(db.logs.filter(function(g){ return g.leadId === id; }));
+}
+function logsOfProp(id){
+  return logsSorted(db.logs.filter(function(g){ return g.propId === id; }));
+}
+function lastContact(id){
+  var l = logsOfLead(id);
+  return l.length ? l[0].date : '';
+}
+function isLive(l){ return l.stage !== '成約' && l.stage !== '見送り'; }
+function leadsOfProp(id){
+  return db.leads.filter(function(l){ return l.propId === id; });
+}
+function stageClass(s){
+  if (s === '成約') return 'done';
+  if (s === '見送り') return 'drop';
+  if (s === '未接触' || !s) return '';
+  return 'on';
+}
+
+/* ===================== 画面：動き ===================== */
+function tlRow(g){
+  var l = leadById(g.leadId);
+  var pn = g.propId ? propName(g.propId) : '';
+  var h = '<div class="tl">' +
+    '<div class="body">' +
+      '<div class="head">' +
+        '<span class="when">' + esc(fmtDate(g.date)) + '</span>' +
+        '<span class="kind">' + esc(g.kind || 'その他') + '</span>' +
+        '<span>' + esc(l ? l.name : '（削除された候補先）') + '</span>' +
+        (g.stage ? '<span class="bdg stage ' + stageClass(g.stage) + '">→ ' + esc(g.stage) + '</span>' : '') +
+      '</div>' +
+      (pn ? '<div class="to">物件：' + esc(pn) + '</div>' : '') +
+      (g.text ? '<div class="txt">' + esc(g.text) + '</div>' : '') +
+    '</div>' +
+    '<button class="edit" data-log="' + esc(g.id) + '">直す</button>' +
+  '</div>';
+  return h;
+}
+
+function leadRow(l){
+  var last = lastContact(l.id);
+  var pn = l.propId ? propName(l.propId) : '';
+  var meta = [];
+  if (l.cat) meta.push(esc(l.cat));
+  if (l.person) meta.push('担当 ' + esc(l.person));
+  meta.push(last ? '最終接触 ' + esc(agoText(last)) : '未接触');
+  var over = l.nextDate && dayDiff(today(), l.nextDate) <= 0;
+  return '<button class="item" data-lead="' + esc(l.id) + '">' +
+    '<div class="body">' +
+      '<div class="ttl">' + esc(l.name) +
+        '<span class="bdg ' + (l.temp || 'B').toLowerCase() + '">' + esc(l.temp || 'B') + '</span>' +
+        '<span class="bdg stage ' + stageClass(l.stage) + '">' + esc(l.stage || '未接触') + '</span>' +
+      '</div>' +
+      '<div class="meta">' + meta.join(' ・ ') + (pn ? ' ・ ' + esc(pn) : '') + '</div>' +
+      (l.nextDate ? '<div class="next' + (over ? ' over' : '') + '">次：' + esc(fmtDate(l.nextDate)) +
+        '（' + esc(dueText(l.nextDate)) + '）' + (l.nextText ? '　' + esc(l.nextText) : '') + '</div>' : '') +
+    '</div>' +
+    '<div class="chev">›</div>' +
+  '</button>';
+}
+
+function renderHome(){
+  var t = today();
+  var due = db.leads.filter(function(l){ return l.nextDate && isLive(l); })
+    .sort(function(a, b){ return a.nextDate < b.nextDate ? -1 : 1; });
+  var overdue = due.filter(function(l){ return dayDiff(t, l.nextDate) <= 0; });
+
+  var mstart = t.slice(0, 7);
+  var mlogs = db.logs.filter(function(g){ return String(g.date).slice(0, 7) === mstart; });
+
+  $('st-todo').textContent = overdue.length;
+  $('st-month').textContent = mlogs.length;
+  $('st-live').textContent = db.leads.filter(isLive).length;
+  $('st-prop').textContent = db.props.length;
+
+  var show = due.slice(0, 12);
+  $('n-todo').textContent = due.length ? due.length + '件' : '';
+  $('todo').innerHTML = show.length
+    ? show.map(leadRow).join('')
+    : '<div class="empty">予定はありません。<br>接触を記録するときに「次にやること」を入れておくと、ここに並びます。</div>';
+
+  var recent = logsSorted(db.logs).slice(0, 6);
+  $('n-recent').textContent = db.logs.length ? '全' + db.logs.length + '件' : '';
+  $('recent').innerHTML = recent.length
+    ? recent.map(tlRow).join('')
+    : '<div class="empty">まだ記録がありません。<br>上の「接触を記録」から始めてください。</div>';
+
+  var stale = db.leads.filter(function(l){
+    if (!isLive(l)) return false;
+    var last = lastContact(l.id);
+    if (!last) return true;
+    return dayDiff(last, t) >= 30;
+  }).sort(function(a, b){
+    var la = lastContact(a.id) || '0000-00-00', lb = lastContact(b.id) || '0000-00-00';
+    return la < lb ? -1 : 1;
+  });
+  $('n-stale').textContent = stale.length ? stale.length + '社' : '';
+  $('stale').innerHTML = stale.length
+    ? stale.slice(0, 6).map(leadRow).join('')
+    : '<div class="empty">30日以上あいている先はありません。</div>';
+
+  $('hdcount').textContent = '候補先 ' + db.leads.length + '社 ・ 物件 ' + db.props.length + '件';
+}
+
+/* ===================== 画面：候補先 ===================== */
+var leadFilter = 'all';
+
+function byActivity(a, b){
+  var la = lastContact(a.id), lb = lastContact(b.id);
+  if (la && lb) return la < lb ? 1 : (la > lb ? -1 : 0);
+  if (la) return -1;
+  if (lb) return 1;
+  return (b.ts || 0) - (a.ts || 0);
+}
+
+function matchLead(l, q){
+  if (!q) return true;
+  var hay = [l.name, l.cat, l.person, l.tel, l.mail, l.want, l.memo, propName(l.propId)].join(' ').toLowerCase();
+  return hay.indexOf(q) >= 0;
+}
+
+function passFilter(l){
+  var t = today();
+  switch (leadFilter){
+    case 'todo': return isLive(l) && !!l.nextDate && dayDiff(t, l.nextDate) <= 0;
+    case 'live': return isLive(l) && l.stage !== '未接触' && !!lastContact(l.id);
+    case 'new':  return !lastContact(l.id);
+    case 'A': case 'B': case 'C': return (l.temp || 'B') === leadFilter;
+    case 'done': return l.stage === '成約';
+    case 'drop': return l.stage === '見送り';
+    default: return true;
+  }
+}
+
+function renderLeads(){
+  var q = ($('q-lead').value || '').trim().toLowerCase();
+  var list = db.leads.filter(function(l){ return passFilter(l) && matchLead(l, q); }).sort(byActivity);
+  $('leads').innerHTML = list.length
+    ? list.map(leadRow).join('')
+    : (db.leads.length
+        ? '<div class="empty">この条件に合う候補先はありません。</div>'
+        : '<div class="empty">まだ候補先がありません。<br>下の「＋ 候補先を追加」か「まとめて追加」から登録してください。</div>');
+}
+
+/* ===================== 画面：物件 ===================== */
+function propRow(p){
+  var ls = leadsOfProp(p.id);
+  var live = ls.filter(isLive).length;
+  var done = ls.filter(function(l){ return l.stage === '成約'; }).length;
+  var lg = logsOfProp(p.id);
+  var meta = [];
+  if (p.addr) meta.push(esc(p.addr));
+  if (p.area) meta.push(esc(p.area));
+  if (p.rent) meta.push(esc(p.rent));
+  var line = '当たり ' + ls.length + '社';
+  if (live) line += '（進行中 ' + live + '）';
+  if (done) line += '（成約 ' + done + '）';
+  if (lg.length) line += ' ・ 直近の動き ' + fmtDate(lg[0].date);
+  return '<button class="item" data-prop="' + esc(p.id) + '">' +
+    '<div class="body">' +
+      '<div class="ttl">' + esc(p.name) +
+        '<span class="bdg ' + (p.kind === '土地' ? 'land' : 'bldg') + '">' + esc(p.kind || '物件') + '</span>' +
+        '<span class="bdg stage ' + (p.status === '成約' ? 'done' : (p.status === '停止' ? 'drop' : 'on')) + '">' +
+          esc(p.status || '募集中') + '</span>' +
+      '</div>' +
+      (meta.length ? '<div class="meta">' + meta.join(' ・ ') + '</div>' : '') +
+      '<div class="meta">' + line + '</div>' +
+    '</div>' +
+    '<div class="chev">›</div>' +
+  '</button>';
+}
+
+function renderProps(){
+  var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
+  $('props').innerHTML = list.length
+    ? '<div class="card">' + list.map(propRow).join('') + '</div>'
+    : '<div class="card"><div class="empty">まだ物件がありません。<br>下の「＋ 物件を追加」から、土地や空き物件を登録してください。</div></div>';
+}
+
+function renderAll(){
+  renderHome(); renderLeads(); renderProps();
+  if (!$('view-out').hidden) renderOutput();
+}
+
+/* ===================== 入力シート ===================== */
+function openSheet(html){
+  $('panel').innerHTML = html;
+  $('sheet').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('panel').scrollTop = 0;
+}
+function closeSheet(){
+  $('sheet').hidden = true;
+  $('panel').innerHTML = '';
+  document.body.style.overflow = '';
+}
+function opts(list, cur, blank){
+  var h = blank ? '<option value="">' + esc(blank) + '</option>' : '';
+  for (var i = 0; i < list.length; i++){
+    var v = list[i], t = list[i];
+    if (Object.prototype.toString.call(list[i]) === '[object Array]'){ v = list[i][0]; t = list[i][1]; }
+    h += '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(t) + '</option>';
+  }
+  return h;
+}
+function propOpts(cur){
+  var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
+  var h = '<option value="">（物件を決めていない）</option>';
+  for (var i = 0; i < list.length; i++){
+    h += '<option value="' + esc(list[i].id) + '"' + (list[i].id === cur ? ' selected' : '') + '>' +
+      esc(list[i].name) + '</option>';
+  }
+  return h;
+}
+function leadOpts(cur){
+  var list = db.leads.slice().sort(byActivity);
+  var h = '';
+  for (var i = 0; i < list.length; i++){
+    h += '<option value="' + esc(list[i].id) + '"' + (list[i].id === cur ? ' selected' : '') + '>' +
+      esc(list[i].name) + '</option>';
+  }
+  return h;
+}
+function logById(id){
+  for (var i = 0; i < db.logs.length; i++) if (db.logs[i].id === id) return db.logs[i];
+  return null;
+}
+
+/* --- 接触の記録 --- */
+function openLogSheet(id, presetLeadId){
+  if (!db.leads.length){
+    toast('先に候補先を1社登録してください');
+    openLeadSheet(null);
+    return;
+  }
+  var g = id ? logById(id) : null;
+  var leadId = g ? g.leadId : (presetLeadId || (db.leads.slice().sort(byActivity)[0] || {}).id);
+  var lead = leadById(leadId) || {};
+  var propId = g ? g.propId : (lead.propId || '');
+
+  openSheet(
+    '<h2>' + (g ? '記録を直す' : '接触を記録する') + '</h2>' +
+    '<label for="f-lead">どこと話したか</label>' +
+    '<select id="f-lead">' + leadOpts(leadId) + '</select>' +
+    '<div class="half">' +
+      '<div><label for="f-date">日付</label>' +
+        '<input type="date" id="f-date" value="' + esc(g ? g.date : today()) + '"></div>' +
+      '<div><label for="f-kind">やり方</label>' +
+        '<select id="f-kind">' + opts(KINDS, g ? g.kind : '電話') + '</select></div>' +
+    '</div>' +
+    '<label for="f-prop">対象の物件</label>' +
+    '<select id="f-prop">' + propOpts(propId) + '</select>' +
+    '<label for="f-text">話した内容・反応</label>' +
+    '<textarea id="f-text" placeholder="例：先方の出店担当に電話。30坪前後を探しており、駐車場が5台取れるなら前向きとのこと。">' +
+      esc(g ? g.text : '') + '</textarea>' +
+    '<label for="f-stage">進み具合</label>' +
+    '<select id="f-stage">' + opts(STAGES, g ? (g.stage || '') : '', '変えない（' + esc(lead.stage || '未接触') + 'のまま）') + '</select>' +
+    '<label for="f-next">次にやること　いつ</label>' +
+    '<input type="date" id="f-next" value="' + esc(lead.nextDate || '') + '">' +
+    '<label for="f-ntext">次にやること　なにを</label>' +
+    '<input type="text" id="f-ntext" value="' + esc(lead.nextText || '') + '" placeholder="例：図面と賃料表を送る">' +
+    '<button class="btn primary" id="f-save">保存する</button>' +
+    '<div class="row">' +
+      '<button class="btn" id="f-cancel">閉じる</button>' +
+      (g ? '<button class="btn danger" id="f-del">この記録を削除</button>' : '') +
+    '</div>'
+  );
+
+  /* 候補先を変えたら、その先の物件・進み具合・次回予定を出しなおす */
+  $('f-lead').addEventListener('change', function(){
+    var nl = leadById(this.value) || {};
+    if (!g){
+      $('f-prop').value = nl.propId || '';
+      $('f-next').value = nl.nextDate || '';
+      $('f-ntext').value = nl.nextText || '';
+      $('f-stage').options[0].textContent = '変えない（' + (nl.stage || '未接触') + 'のまま）';
+      $('f-stage').value = '';
+    }
+  });
+
+  $('f-save').addEventListener('click', function(){
+    var lid = $('f-lead').value;
+    var tgt = leadById(lid);
+    if (!tgt){ toast('候補先を選んでください'); return; }
+    var date = $('f-date').value || today();
+    var stage = $('f-stage').value;
+    var rec = g || { id:uid(), ts:Date.now() };
+    rec.leadId = lid;
+    rec.date = date;
+    rec.kind = $('f-kind').value;
+    rec.propId = $('f-prop').value;
+    rec.text = $('f-text').value.trim();
+    rec.stage = stage;
+    if (!g) db.logs.push(rec);
+
+    if (stage) tgt.stage = stage;
+    else if (!tgt.stage || tgt.stage === '未接触') tgt.stage = '打診中';
+    if (!tgt.propId && rec.propId) tgt.propId = rec.propId;
+    tgt.nextDate = $('f-next').value;
+    tgt.nextText = $('f-ntext').value.trim();
+
+    persist(); renderAll(); closeSheet();
+    toast(tgt.name + ' の記録を保存しました');
+  });
+
+  $('f-cancel').addEventListener('click', closeSheet);
+  if (g) $('f-del').addEventListener('click', function(){
+    if (!confirm('この記録を削除します。よろしいですか？')) return;
+    db.logs = db.logs.filter(function(x){ return x.id !== g.id; });
+    persist(); renderAll(); closeSheet();
+    toast('削除しました');
+  });
+}
+
+/* --- 候補先 --- */
+function openLeadSheet(id){
+  var l = id ? leadById(id) : null;
+  var hist = l ? logsOfLead(l.id) : [];
+  var last = l ? lastContact(l.id) : '';
+
+  openSheet(
+    '<h2>' + (l ? esc(l.name) : '候補先を追加する') + '</h2>' +
+    (l ? '<p class="sub">' + (last ? '最終接触 ' + esc(fmtDateY(last)) + '（' + esc(agoText(last)) + '）' : 'まだ接触していません') +
+      ' ・ 記録 ' + hist.length + '件</p>' : '') +
+    (l ? '<button class="btn primary" id="f-addlog">この先に接触を記録する</button>' : '') +
+    '<label for="f-name">会社名・店名</label>' +
+    '<input type="text" id="f-name" value="' + esc(l ? l.name : '') + '" placeholder="例：株式会社◯◯フーズ">' +
+    '<div class="half">' +
+      '<div><label for="f-cat">業種</label>' +
+        '<input type="text" id="f-cat" value="' + esc(l ? l.cat : '') + '" placeholder="例：飲食・物販" list="cats"></div>' +
+      '<div><label for="f-temp">温度感</label>' +
+        '<select id="f-temp">' + opts(TEMPS, l ? (l.temp || 'B') : 'B') + '</select></div>' +
+    '</div>' +
+    '<div class="half">' +
+      '<div><label for="f-person">先方の担当者</label>' +
+        '<input type="text" id="f-person" value="' + esc(l ? l.person : '') + '" placeholder="例：出店開発 山田様"></div>' +
+      '<div><label for="f-tel">電話</label>' +
+        '<input type="tel" id="f-tel" value="' + esc(l ? l.tel : '') + '" inputmode="tel"></div>' +
+    '</div>' +
+    '<label for="f-mail">メール</label>' +
+    '<input type="text" id="f-mail" value="' + esc(l ? l.mail : '') + '" inputmode="email">' +
+    '<label for="f-want">先方の希望条件</label>' +
+    '<input type="text" id="f-want" value="' + esc(l ? l.want : '') + '" placeholder="例：30〜40坪・駐車場5台・幹線道路沿い">' +
+    '<div class="half">' +
+      '<div><label for="f-stage2">進み具合</label>' +
+        '<select id="f-stage2">' + opts(STAGES, l ? (l.stage || '未接触') : '未接触') + '</select></div>' +
+      '<div><label for="f-prop2">対象の物件</label>' +
+        '<select id="f-prop2">' + propOpts(l ? l.propId : '') + '</select></div>' +
+    '</div>' +
+    '<div class="half">' +
+      '<div><label for="f-next2">次にやること　いつ</label>' +
+        '<input type="date" id="f-next2" value="' + esc(l ? (l.nextDate || '') : '') + '"></div>' +
+      '<div><label for="f-ntext2">なにを</label>' +
+        '<input type="text" id="f-ntext2" value="' + esc(l ? (l.nextText || '') : '') + '"></div>' +
+    '</div>' +
+    '<label for="f-memo">メモ（先方の事情・社内の申し送り）</label>' +
+    '<textarea id="f-memo" placeholder="例：本部決裁は月末。近隣の競合出店を気にしている。">' + esc(l ? l.memo : '') + '</textarea>' +
+    '<button class="btn primary" id="f-save2">保存する</button>' +
+    '<div class="row">' +
+      '<button class="btn" id="f-cancel2">閉じる</button>' +
+      (l ? '<button class="btn danger" id="f-del2">この候補先を削除</button>' : '') +
+    '</div>' +
+    (l ? '<div class="sec"><span>接触の記録</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
+      '<div class="card">' + (hist.length ? hist.map(tlRow).join('') :
+        '<div class="empty">まだ記録がありません。</div>') + '</div>' : '') +
+    '<datalist id="cats">' + catList() + '</datalist>'
+  );
+
+  if (l) $('f-addlog').addEventListener('click', function(){ openLogSheet(null, l.id); });
+
+  $('f-save2').addEventListener('click', function(){
+    var name = $('f-name').value.trim();
+    if (!name){ toast('会社名を入れてください'); $('f-name').focus(); return; }
+    var rec = l || { id:uid(), ts:Date.now() };
+    rec.name = name;
+    rec.cat = $('f-cat').value.trim();
+    rec.temp = $('f-temp').value;
+    rec.person = $('f-person').value.trim();
+    rec.tel = $('f-tel').value.trim();
+    rec.mail = $('f-mail').value.trim();
+    rec.want = $('f-want').value.trim();
+    rec.stage = $('f-stage2').value;
+    rec.propId = $('f-prop2').value;
+    rec.nextDate = $('f-next2').value;
+    rec.nextText = $('f-ntext2').value.trim();
+    rec.memo = $('f-memo').value.trim();
+    if (!l) db.leads.push(rec);
+    persist(); renderAll(); closeSheet();
+    toast(l ? '保存しました' : name + ' を追加しました');
+  });
+
+  $('f-cancel2').addEventListener('click', closeSheet);
+  if (l) $('f-del2').addEventListener('click', function(){
+    var n = logsOfLead(l.id).length;
+    if (!confirm(l.name + ' を削除します。' + (n ? '接触の記録 ' + n + '件も一緒に消えます。' : '') + '元に戻せません。よろしいですか？')) return;
+    db.leads = db.leads.filter(function(x){ return x.id !== l.id; });
+    db.logs  = db.logs.filter(function(g){ return g.leadId !== l.id; });
+    persist(); renderAll(); closeSheet();
+    toast('削除しました');
+  });
+}
+
+function catList(){
+  var seen = {}, h = '';
+  for (var i = 0; i < db.leads.length; i++){
+    var c = db.leads[i].cat;
+    if (c && !seen[c]){ seen[c] = 1; h += '<option value="' + esc(c) + '"></option>'; }
+  }
+  return h;
+}
+
+/* --- 物件 --- */
+function openPropSheet(id){
+  var p = id ? propById(id) : null;
+  var ls = p ? leadsOfProp(p.id).sort(byActivity) : [];
+  var hist = p ? logsOfProp(p.id) : [];
+
+  openSheet(
+    '<h2>' + (p ? esc(p.name) : '物件を追加する') + '</h2>' +
+    (p ? '<p class="sub">当たっている候補先 ' + ls.length + '社 ・ 記録 ' + hist.length + '件</p>' : '') +
+    '<label for="p-name">物件名（呼び名）</label>' +
+    '<input type="text" id="p-name" value="' + esc(p ? p.name : '') + '" placeholder="例：◯◯町3丁目 角地">' +
+    '<div class="half">' +
+      '<div><label for="p-kind">種別</label>' +
+        '<select id="p-kind">' + opts(PKINDS, p ? (p.kind || '土地') : '土地') + '</select></div>' +
+      '<div><label for="p-status">募集の状況</label>' +
+        '<select id="p-status">' + opts(PSTATE, p ? (p.status || '募集中') : '募集中') + '</select></div>' +
+    '</div>' +
+    '<label for="p-addr">所在地</label>' +
+    '<input type="text" id="p-addr" value="' + esc(p ? p.addr : '') + '" placeholder="例：◯◯市◯◯町3-1-2">' +
+    '<div class="half">' +
+      '<div><label for="p-area">広さ</label>' +
+        '<input type="text" id="p-area" value="' + esc(p ? p.area : '') + '" placeholder="例：120坪"></div>' +
+      '<div><label for="p-rent">想定条件</label>' +
+        '<input type="text" id="p-rent" value="' + esc(p ? p.rent : '') + '" placeholder="例：月30万＋税"></div>' +
+    '</div>' +
+    '<label for="p-memo">メモ（所有者の意向・制限・周辺）</label>' +
+    '<textarea id="p-memo" placeholder="例：地主は10年以上の定期借地を希望。市道側の間口12m。">' + esc(p ? p.memo : '') + '</textarea>' +
+    '<button class="btn primary" id="p-save">保存する</button>' +
+    '<div class="row">' +
+      '<button class="btn" id="p-cancel">閉じる</button>' +
+      (p ? '<button class="btn danger" id="p-del">この物件を削除</button>' : '') +
+    '</div>' +
+    (p ? '<div class="sec"><span>当たっている候補先</span><span class="line"></span><span class="n">' + ls.length + '社</span></div>' +
+      '<div class="card">' + (ls.length ? ls.map(leadRow).join('') :
+        '<div class="empty">まだありません。候補先の「対象の物件」でここを選ぶと並びます。</div>') + '</div>' +
+      '<div class="sec"><span>この物件の動き</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
+      '<div class="card">' + (hist.length ? hist.slice(0, 20).map(tlRow).join('') :
+        '<div class="empty">まだ記録がありません。</div>') + '</div>' : '')
+  );
+
+  $('p-save').addEventListener('click', function(){
+    var name = $('p-name').value.trim();
+    if (!name){ toast('物件名を入れてください'); $('p-name').focus(); return; }
+    var rec = p || { id:uid(), ts:Date.now() };
+    rec.name = name;
+    rec.kind = $('p-kind').value;
+    rec.status = $('p-status').value;
+    rec.addr = $('p-addr').value.trim();
+    rec.area = $('p-area').value.trim();
+    rec.rent = $('p-rent').value.trim();
+    rec.memo = $('p-memo').value.trim();
+    if (!p) db.props.push(rec);
+    persist(); renderAll(); closeSheet();
+    toast(p ? '保存しました' : name + ' を追加しました');
+  });
+
+  $('p-cancel').addEventListener('click', closeSheet);
+  if (p) $('p-del').addEventListener('click', function(){
+    if (!confirm(p.name + ' を削除します。候補先と接触の記録は残り、この物件との結びつきだけが外れます。よろしいですか？')) return;
+    db.props = db.props.filter(function(x){ return x.id !== p.id; });
+    db.leads.forEach(function(l){ if (l.propId === p.id) l.propId = ''; });
+    db.logs.forEach(function(g){ if (g.propId === p.id) g.propId = ''; });
+    persist(); renderAll(); closeSheet();
+    toast('削除しました');
+  });
+}
+
+/* --- 候補先のまとめて追加（Excelから貼り付け） --- */
+function openBulkSheet(){
+  openSheet(
+    '<h2>候補先をまとめて追加</h2>' +
+    '<p class="sub">1行に1社。Excelの表をそのまま貼り付けられます。</p>' +
+    '<label for="b-text">会社名 → 業種 → 担当者 → 電話　の順（タブかカンマで区切る）</label>' +
+    '<textarea id="b-text" style="min-height:180px" placeholder="株式会社◯◯フーズ,飲食,山田様,06-1234-5678&#10;△△ドラッグ,物販,,&#10;□□クリニック"></textarea>' +
+    '<label for="b-prop">まとめて結びつける物件（任意）</label>' +
+    '<select id="b-prop">' + propOpts('') + '</select>' +
+    '<button class="btn primary" id="b-save">この内容で追加する</button>' +
+    '<button class="btn" id="b-cancel">閉じる</button>'
+  );
+
+  $('b-save').addEventListener('click', function(){
+    var lines = $('b-text').value.split('\n');
+    var propId = $('b-prop').value;
+    var added = 0, skipped = 0;
+    for (var i = 0; i < lines.length; i++){
+      var line = lines[i].replace(/\r/g, '').trim();
+      if (!line) continue;
+      var f = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+      var name = (f[0] || '').trim();
+      if (!name){ continue; }
+      var dup = false;
+      for (var j = 0; j < db.leads.length; j++) if (db.leads[j].name === name) dup = true;
+      if (dup){ skipped++; continue; }
+      db.leads.push({
+        id:uid(), ts:Date.now() + i, name:name,
+        cat:(f[1] || '').trim(), person:(f[2] || '').trim(), tel:(f[3] || '').trim(),
+        mail:'', want:'', temp:'B', stage:'未接触', propId:propId,
+        nextDate:'', nextText:'', memo:''
+      });
+      added++;
+    }
+    if (!added && !skipped){ toast('追加できる行がありませんでした'); return; }
+    persist(); renderAll(); closeSheet();
+    toast(added + '社を追加しました' + (skipped ? '（同じ名前の' + skipped + '社は飛ばしました）' : ''));
+  });
+  $('b-cancel').addEventListener('click', closeSheet);
+}
+
+/* ===================== 報告・書き出し ===================== */
+function periodRange(){
+  var v = $('period').value, n = new Date();
+  var y = n.getFullYear(), m = n.getMonth();
+  function first(yy, mm){ return yy + '-' + two(mm + 1) + '-01'; }
+  function lastDay(yy, mm){ return ymd(new Date(yy, mm + 1, 0)); }
+  if (v === 'thism') return { s:first(y, m), e:lastDay(y, m), label:y + '年' + (m + 1) + '月' };
+  if (v === 'lastm'){
+    var d = new Date(y, m - 1, 1);
+    return { s:first(d.getFullYear(), d.getMonth()), e:lastDay(d.getFullYear(), d.getMonth()),
+      label:d.getFullYear() + '年' + (d.getMonth() + 1) + '月' };
+  }
+  if (v === '30d' || v === '7d'){
+    var days = v === '30d' ? 29 : 6;
+    var s = new Date(); s.setDate(s.getDate() - days);
+    return { s:ymd(s), e:today(), label:fmtDate(ymd(s)) + '〜' + fmtDate(today()) };
+  }
+  return { s:'0000-01-01', e:'9999-12-31', label:'すべての記録' };
+}
+
+function inRange(){
+  var r = periodRange();
+  return db.logs.filter(function(g){ return g.date >= r.s && g.date <= r.e; })
+    .sort(function(a, b){ return a.date < b.date ? -1 : (a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0)); });
+}
+
+function summarize(){
+  var list = inRange(), leads = {}, view = 0, deal = 0;
+  list.forEach(function(g){
+    leads[g.leadId] = 1;
+    if (g.kind === '内見') view++;
+    if (g.stage === '成約') deal++;
+  });
+  var n = 0;
+  for (var k in leads) if (leads.hasOwnProperty(k)) n++;
+  return { list:list, leads:n, view:view, deal:deal };
+}
+
+function buildText(){
+  var r = periodRange(), s = summarize();
+  var out = ['【テナント誘致 活動報告】' + r.label, ''];
+  out.push('■ 動いた数');
+  out.push('　接触 ' + s.list.length + '件 ／ 相手 ' + s.leads + '社 ／ 内見 ' + s.view + '件 ／ 成約 ' + s.deal + '件');
+
+  if (db.props.length){
+    out.push('');
+    out.push('■ 物件の状況');
+    db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
+      var ls = leadsOfProp(p.id);
+      var spec = [p.kind, p.area, p.rent].filter(function(x){ return !!x; }).join('／');
+      out.push('　・' + p.name + (spec ? '（' + spec + '）' : '') + '　' + (p.status || '募集中'));
+      var by = {};
+      ls.forEach(function(l){ var k = l.stage || '未接触'; by[k] = (by[k] || 0) + 1; });
+      var parts = STAGES.filter(function(st){ return by[st]; }).map(function(st){ return st + by[st]; });
+      out.push('　　当たり ' + ls.length + '社' + (parts.length ? '（' + parts.join('・') + '）' : ''));
+    });
+  }
+
+  out.push('');
+  out.push('■ 接触の記録');
+  if (!s.list.length){
+    out.push('　この期間の記録はありません。');
+  } else {
+    var day = '';
+    s.list.forEach(function(g){
+      if (g.date !== day){ day = g.date; out.push('　' + fmtDate(g.date)); }
+      var pn = g.propId ? propName(g.propId) : '';
+      out.push('　　' + (g.kind || '') + '　' + leadName(g.leadId) + (pn ? '　→ ' + pn : '') +
+        (g.stage ? '　［' + g.stage + '］' : ''));
+      if (g.text) out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
+    });
+  }
+
+  var due = db.leads.filter(function(l){ return l.nextDate && isLive(l); })
+    .sort(function(a, b){ return a.nextDate < b.nextDate ? -1 : 1; });
+  if (due.length){
+    out.push('');
+    out.push('■ 次にやること');
+    due.slice(0, 20).forEach(function(l){
+      var over = dayDiff(today(), l.nextDate) < 0 ? '（期限すぎ）' : '';
+      out.push('　' + over + fmtDate(l.nextDate) + '　' + l.name + (l.nextText ? '　' + l.nextText : ''));
+    });
+  }
+  return out.join('\n');
+}
+
+function csvQuote(rows){
+  return rows.map(function(row){
+    return row.map(function(c){
+      c = String(c == null ? '' : c);
+      return /[",\n\r]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c;
+    }).join(',');
+  }).join('\r\n');
+}
+
+function buildCSV(kind){
+  var rows;
+  if (kind === 'lead'){
+    rows = [['会社名','業種','担当者','電話','メール','希望条件','温度感','進み具合','対象物件','最終接触','次回予定','次にやること','記録件数','メモ']];
+    db.leads.slice().sort(byActivity).forEach(function(l){
+      rows.push([l.name, l.cat, l.person, l.tel, l.mail, l.want, l.temp || 'B', l.stage || '未接触',
+        propName(l.propId), lastContact(l.id), l.nextDate || '', l.nextText || '',
+        logsOfLead(l.id).length, l.memo]);
+    });
+  } else if (kind === 'prop'){
+    rows = [['物件名','種別','所在地','広さ','想定条件','募集状況','当たり社数','進行中','成約','メモ']];
+    db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
+      var ls = leadsOfProp(p.id);
+      rows.push([p.name, p.kind, p.addr, p.area, p.rent, p.status, ls.length,
+        ls.filter(isLive).length, ls.filter(function(l){ return l.stage === '成約'; }).length, p.memo]);
+    });
+  } else {
+    rows = [['日付','候補先','業種','対象物件','やり方','内容','進み具合']];
+    inRange().forEach(function(g){
+      var l = leadById(g.leadId) || {};
+      rows.push([g.date, l.name || '（削除済み）', l.cat || '', propName(g.propId), g.kind, g.text, g.stage || '']);
+    });
+  }
+  return csvQuote(rows);
+}
+
+function renderOutput(){
+  var s = summarize();
+  $('rp-log').textContent = s.list.length;
+  $('rp-lead').textContent = s.leads;
+  $('rp-view').textContent = s.view;
+  $('rp-deal').textContent = s.deal;
+  $('preview').textContent = buildText();
+}
+
+/* 公開ページ（claude.ai）ではファイル保存に downloads ケイパビリティが要る。
+   ブラウザで index.html を直接開いたときは window.claude が無いので通常の保存を使う。 */
+var savePromise = (window.claude && typeof window.claude.use === 'function')
+  ? window.claude.use('downloads').catch(function(){ return null; })
+  : null;
+
+function copyText(text, okMsg){
+  var fallback = function(){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : 'コピーできませんでした。本文を長押しして選択してください');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, fallback);
+  } else fallback();
+}
+
+function saveFile(name, data, mime){
+  if (savePromise){
+    toast('保存を準備しています…');
+    savePromise.then(function(dl){
+      if (!dl || !dl.save){ toast('この画面ではファイル保存を使えません。「コピー」をお使いください'); return; }
+      dl.save({ filename:name, data:data }).then(function(){ toast('保存しました'); }, function(err){
+        if (err && err.code === 'declined') return;
+        toast('保存できませんでした。「コピー」をお使いください');
+      });
+    });
+    return;
+  }
+  try {
+    var url = URL.createObjectURL(new Blob([data], { type:mime }));
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+    toast('保存しました');
+  } catch(e){
+    toast('保存できませんでした。「コピー」をお使いください');
+  }
+}
+
+function openExternal(url){
+  var a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+/* ===================== お試し用のサンプル ===================== */
+function loadSample(){
+  function back(n){ var x = new Date(); x.setDate(x.getDate() - n); return ymd(x); }
+  function fwd(n){ var x = new Date(); x.setDate(x.getDate() + n); return ymd(x); }
+  var now = Date.now();
+  var p1 = { id:uid(), ts:now+1, name:'◯◯町3丁目 角地', kind:'土地', status:'商談中',
+    addr:'◯◯市◯◯町3-1-2', area:'150坪', rent:'月28万＋税',
+    memo:'地主は10年以上の定期借地を希望。間口12m、幹線道路沿い。' };
+  var p2 = { id:uid(), ts:now+2, name:'駅前ビル 1階', kind:'建物', status:'募集中',
+    addr:'◯◯市駅前1-4', area:'32坪', rent:'月19万＋共益費2万',
+    memo:'前テナントは学習塾。スケルトン返し済み。' };
+  var p3 = { id:uid(), ts:now+3, name:'旧倉庫あと north', kind:'土地', status:'募集中',
+    addr:'◯◯市北町7', area:'340坪', rent:'相談', memo:'造成が要る。上下水は前面道路まで来ている。' };
+  db.props = [p1, p2, p3];
+
+  var l1 = { id:uid(), ts:now+11, name:'株式会社◯◯フーズ', cat:'飲食', person:'出店開発 山田様',
+    tel:'06-1234-5678', mail:'', want:'150坪前後・駐車場15台', temp:'A', stage:'条件交渉',
+    propId:p1.id, nextDate:fwd(3), nextText:'定期借地の年数を回答する', memo:'本部決裁は月末。' };
+  var l2 = { id:uid(), ts:now+12, name:'△△ドラッグ', cat:'物販', person:'開発部 佐藤様',
+    tel:'', mail:'sato@example.com', want:'300坪以上・車の出入りやすさ', temp:'B', stage:'内見済',
+    propId:p3.id, nextDate:back(2), nextText:'造成費の概算を出す', memo:'競合の出店状況を気にしている。' };
+  var l3 = { id:uid(), ts:now+13, name:'□□クリニック', cat:'医療', person:'院長',
+    tel:'', mail:'', want:'30坪・駅近', temp:'A', stage:'提案済',
+    propId:p2.id, nextDate:fwd(7), nextText:'内見の日程を決める', memo:'開業予定は来春。' };
+  var l4 = { id:uid(), ts:now+14, name:'カフェ ななつ', cat:'飲食', person:'店主',
+    tel:'', mail:'', want:'20〜30坪', temp:'C', stage:'打診中', propId:p2.id,
+    nextDate:'', nextText:'', memo:'2店舗目を検討中だが時期は未定。' };
+  var l5 = { id:uid(), ts:now+15, name:'株式会社◇◇物流', cat:'倉庫', person:'総務 田中様',
+    tel:'', mail:'', want:'300坪・大型車が入ること', temp:'B', stage:'未接触', propId:p3.id,
+    nextDate:'', nextText:'', memo:'知人からの紹介。まだ連絡していない。' };
+  db.leads = [l1, l2, l3, l4, l5];
+
+  db.logs = [
+    { id:uid(), ts:now+21, leadId:l1.id, propId:p1.id, date:back(24), kind:'電話',
+      text:'出店担当に初回の打診。150坪前後を探しており、資料を送ることになった。', stage:'打診中' },
+    { id:uid(), ts:now+22, leadId:l1.id, propId:p1.id, date:back(17), kind:'資料送付',
+      text:'図面・公図・賃料表を送付。', stage:'提案済' },
+    { id:uid(), ts:now+23, leadId:l1.id, propId:p1.id, date:back(9), kind:'内見',
+      text:'部長と担当の2名で現地確認。間口と視認性は高評価。駐車場15台が取れるかを確認したいとのこと。', stage:'内見済' },
+    { id:uid(), ts:now+24, leadId:l1.id, propId:p1.id, date:back(2), kind:'訪問',
+      text:'本社で条件のすり合わせ。賃料は月26万まで、定期借地なら15年を希望。', stage:'条件交渉' },
+    { id:uid(), ts:now+25, leadId:l2.id, propId:p3.id, date:back(30), kind:'メール',
+      text:'北町の土地を紹介。面積は合うが造成費の負担を気にしている。', stage:'提案済' },
+    { id:uid(), ts:now+26, leadId:l2.id, propId:p3.id, date:back(12), kind:'内見',
+      text:'現地を確認。大型車の進入は問題なし。造成の見積もりを待つ。', stage:'内見済' },
+    { id:uid(), ts:now+27, leadId:l3.id, propId:p2.id, date:back(6), kind:'電話',
+      text:'来春開業に向けて物件を探し中。駅前ビル1階の図面を送付した。', stage:'提案済' },
+    { id:uid(), ts:now+28, leadId:l4.id, propId:p2.id, date:back(41), kind:'来店してもらった',
+      text:'2店舗目の相談。時期は未定だが希望条件は聞けた。', stage:'打診中' }
+  ];
+  db.mail = db.mail || '';
+  persist(); renderAll();
+}
+
+/* ===================== 操作 ===================== */
+var tabs = [['tab-home','view-home'], ['tab-lead','view-lead'], ['tab-prop','view-prop'], ['tab-out','view-out']];
+function go(which){
+  tabs.forEach(function(p){
+    var on = p[0] === 'tab-' + which;
+    $(p[0]).setAttribute('aria-selected', on ? 'true' : 'false');
+    $(p[1]).hidden = !on;
+  });
+  if (which === 'out') renderOutput();
+  window.scrollTo(0, 0);
+}
+tabs.forEach(function(p){
+  $(p[0]).addEventListener('click', function(){ go(p[0].slice(4)); });
+});
+
+document.addEventListener('click', function(ev){
+  var t = ev.target;
+  if (!t || !t.closest) return;
+  var a = t.closest('[data-log]');  if (a){ openLogSheet(a.getAttribute('data-log')); return; }
+  var b = t.closest('[data-lead]'); if (b){ openLeadSheet(b.getAttribute('data-lead')); return; }
+  var c = t.closest('[data-prop]'); if (c){ openPropSheet(c.getAttribute('data-prop')); return; }
+});
+
+$('sheet').addEventListener('click', function(ev){ if (ev.target === this) closeSheet(); });
+document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && !$('sheet').hidden) closeSheet(); });
+
+$('btn-log').addEventListener('click', function(){ openLogSheet(null); });
+$('btn-add-lead').addEventListener('click', function(){ openLeadSheet(null); });
+$('btn-add-prop').addEventListener('click', function(){ openPropSheet(null); });
+$('btn-bulk').addEventListener('click', openBulkSheet);
+
+$('q-lead').addEventListener('input', renderLeads);
+$('chips-lead').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  leadFilter = b.getAttribute('data-f');
+  var all = this.querySelectorAll('.chip');
+  for (var i = 0; i < all.length; i++){
+    all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
+  }
+  renderLeads();
+});
+
+$('period').addEventListener('change', renderOutput);
+$('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本文をコピーしました'); });
+
+$('btn-mail').addEventListener('click', function(){
+  var full = buildText(), addr = $('mailto').value.trim();
+  var subject = 'テナント誘致 活動報告 ' + periodRange().label;
+  var body = full.length > 1600 ? full.slice(0, 1600) + '\n\n（長いため省略しました。全文は貼り付けてください）' : full;
+  copyText(full, 'メールを開きます（本文はコピー済み）');
+  openExternal('mailto:' + encodeURIComponent(addr) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+});
+
+$('btn-line').addEventListener('click', function(){
+  var full = buildText();
+  var body = full.length > 900 ? full.slice(0, 900) + '\n（以下省略）' : full;
+  copyText(full, 'LINEを開きます（本文はコピー済み）');
+  openExternal('https://line.me/R/msg/text/?' + encodeURIComponent(body));
+});
+
+$('btn-csv-copy').addEventListener('click', function(){
+  copyText(buildCSV($('csvkind').value), 'CSVをコピーしました');
+});
+$('btn-csv-save').addEventListener('click', function(){
+  var k = $('csvkind').value;
+  var nm = k === 'lead' ? '候補先一覧' : (k === 'prop' ? '物件一覧' : '接触履歴');
+  saveFile(nm + '_' + today() + '.csv', '﻿' + buildCSV(k), 'text/csv;charset=utf-8;');
+});
+
+$('btn-backup').addEventListener('click', function(){
+  var data = JSON.stringify({ app:'tenant-log', v:1, saved:new Date().toISOString(),
+    props:db.props, leads:db.leads, logs:db.logs, mail:db.mail }, null, 1);
+  saveFile('テナント誘致台帳_' + today() + '.json', data, 'application/json');
+});
+
+$('restore-file').addEventListener('change', function(){
+  var file = this.files && this.files[0];
+  var input = this;
+  if (!file) return;
+  var fr = new FileReader();
+  fr.onload = function(){
+    var obj = null;
+    try { obj = JSON.parse(String(fr.result)); } catch(e){ obj = null; }
+    if (!obj || !Array.isArray(obj.leads) || !Array.isArray(obj.logs)){
+      toast('このファイルは読み込めませんでした'); input.value = ''; return;
+    }
+    if (!confirm('いまの記録を、このファイルの内容で置きかえます。\n候補先 ' + obj.leads.length +
+      '社 ／ 記録 ' + obj.logs.length + '件\nよろしいですか？')){ input.value = ''; return; }
+    db.props = Array.isArray(obj.props) ? obj.props : [];
+    db.leads = obj.leads;
+    db.logs = obj.logs;
+    db.mail = typeof obj.mail === 'string' ? obj.mail : '';
+    persist(); $('mailto').value = db.mail; renderAll(); renderOutput();
+    input.value = '';
+    toast('復元しました');
+  };
+  fr.onerror = function(){ toast('ファイルを読めませんでした'); input.value = ''; };
+  fr.readAsText(file);
+});
+
+$('btn-wipe').addEventListener('click', function(){
+  if (!confirm('物件・候補先・接触の記録をすべて削除します。元に戻せません。よろしいですか？')) return;
+  db.props = []; db.leads = []; db.logs = [];
+  persist(); renderAll(); renderOutput();
+  toast('すべて削除しました');
+});
+
+$('btn-sample').addEventListener('click', function(){
+  if (db.props.length || db.leads.length || db.logs.length){
+    toast('記録があるときは入れられません。試すときは空の状態でどうぞ');
+    return;
+  }
+  if (!confirm('動きを試すための架空のデータを入れます。よろしいですか？')) return;
+  loadSample(); renderOutput();
+  toast('サンプルを入れました。「記録をすべて削除」で消せます');
+});
+
+$('mailto').value = db.mail;
+$('mailto').addEventListener('change', function(){ db.mail = this.value.trim(); persist(); });
+
+renderAll();
+})();
+</script>
+</body>
+</html>
