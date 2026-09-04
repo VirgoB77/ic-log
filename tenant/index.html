@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#24476f">
-<title>テナント誘致 推進表</title>
+<title>テナント誘致メモ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
@@ -54,9 +54,9 @@ body{
 
 .wrap{max-width:600px;margin:0 auto;padding:0 14px calc(46px + env(safe-area-inset-bottom))}
 
-header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max(12px,env(safe-area-inset-top))}
-.brand{display:flex;align-items:baseline;gap:9px;margin:0 2px 10px;flex-wrap:wrap}
-.brand h1{font-size:17px;font-weight:900;letter-spacing:.06em;margin:0}
+header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max(10px,env(safe-area-inset-top))}
+.brand{display:flex;align-items:baseline;gap:9px;margin:0 2px 9px;flex-wrap:wrap}
+.brand h1{font-size:16px;font-weight:900;letter-spacing:.06em;margin:0}
 .brand .count{font-size:11px;color:var(--sub);letter-spacing:.04em}
 
 nav{display:flex;gap:3px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
@@ -64,24 +64,50 @@ nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--su
 nav button[aria-selected="true"]{background:var(--key);color:var(--on-key)}
 nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
-.sec{display:flex;align-items:center;gap:9px;margin:24px 4px 7px;font-size:13px;font-weight:900;letter-spacing:.08em}
+.sec{display:flex;align-items:center;gap:9px;margin:22px 4px 7px;font-size:13px;font-weight:900;letter-spacing:.08em}
 .sec .line{flex:1;height:1px;background:var(--rule)}
 .sec .n{font-size:11px;color:var(--sub);font-weight:700}
 
 .card{background:var(--card);border:1px solid var(--rule);border-radius:13px;padding:4px 14px;margin-top:10px;box-shadow:var(--shadow)}
 .card.pad{padding:14px}
+.card.alert{border-color:var(--hot)}
+.banner{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font:inherit;font-size:13.5px;font-weight:700;
+  color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot);border-radius:11px;
+  padding:10px 13px;margin-top:10px;cursor:pointer}
+.banner .arw{margin-left:auto;font-size:16px}
+.banner:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
 
-.big{
+/* ===== メモを書くところ ===== */
+.pad-label{display:flex;align-items:center;gap:8px;margin:14px 2px 6px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em}
+.pad-label .now{margin-left:auto;font-family:"Roboto Mono",monospace;font-size:12px;color:var(--sub);letter-spacing:.02em}
+
+#memo{
+  width:100%;min-height:32vh;font-family:inherit;font-size:17px;line-height:1.85;color:var(--ink);
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:15px;
+  box-shadow:var(--shadow);resize:vertical;
+}
+#memo:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+#memo::placeholder{color:var(--sub);opacity:.7}
+
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 3px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
+  font-size:13px;font-weight:700;border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
+.chip.sm{font-size:12px;padding:5px 11px}
+.chip.ghost{border-style:dashed}
+.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+.save{
   position:relative;display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);
-  border-radius:14px;padding:20px 18px 17px;margin-top:14px;font:inherit;text-align:left;
+  border-radius:14px;padding:17px 18px;margin-top:11px;font:inherit;text-align:center;
   background:linear-gradient(168deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
   -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease;
 }
-.big:active{transform:scale(.985);filter:brightness(.93)}
-.big:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.big::after{content:"";position:absolute;inset:6px;border:2px solid rgba(255,255,255,.5);border-radius:9px;pointer-events:none}
-.big .verb{display:block;font-size:29px;font-weight:900;letter-spacing:.09em;line-height:1.2}
-.big .role{display:block;font-size:12px;font-weight:700;letter-spacing:.2em;opacity:.9;margin-top:3px}
+.save:active{transform:scale(.985);filter:brightness(.93)}
+.save:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.save .verb{display:block;font-size:22px;font-weight:900;letter-spacing:.14em;line-height:1.25}
+.save .who{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:2px}
 
 .stat{display:flex;gap:8px;margin-top:12px}
 .stat div{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:9px 3px;text-align:center;box-shadow:var(--shadow)}
@@ -101,7 +127,6 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .item .chev{flex:none;color:var(--sub);font-size:20px;line-height:1}
 
-/* 状態のバッジ（エクセルの色分けに合わせる） */
 .bdg{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:5px;padding:1px 6px;line-height:1.7;border:1px solid transparent;white-space:nowrap}
 .bdg.s-none{background:var(--field);color:var(--mute);border-color:var(--rule)}
 .bdg.s-wait{background:var(--key-soft);color:var(--key);border-color:var(--key)}
@@ -111,27 +136,28 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 .bdg.s-drop{background:var(--field);color:var(--mute);border-color:var(--rule);opacity:.85}
 .bdg.s-deal{background:var(--ok);color:#fff;border-color:var(--ok)}
 .bdg.plain{background:var(--field);color:var(--sub);border-color:var(--rule)}
+.bdg.ask{background:var(--hot-soft);color:var(--hot);border-color:var(--hot)}
 
-.tl{border-top:1px solid var(--rule);padding:11px 0;display:flex;gap:10px;align-items:flex-start}
+/* ===== メモの並び ===== */
+.day{display:flex;align-items:center;gap:9px;margin:18px 4px 4px}
+.day .date{font-size:13px;font-weight:900;letter-spacing:.06em}
+.day .line{flex:1;height:1px;background:var(--rule)}
+.day .n{font-size:11px;color:var(--sub);font-weight:700}
+
+.tl{border-top:1px solid var(--rule);padding:11px 0;display:flex;gap:10px;align-items:flex-start;
+  width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;border-left:0;border-right:0;border-bottom:0;cursor:pointer}
 .tl:first-child{border-top:0}
+.tl:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
+.tl .time{flex:none;width:42px;font-family:"Roboto Mono",monospace;font-size:12.5px;font-weight:700;color:var(--sub);padding-top:2px}
 .tl .body{flex:1;min-width:0}
-.tl .head{font-size:14.5px;font-weight:700;display:flex;gap:7px;align-items:center;flex-wrap:wrap;line-height:1.55}
-.tl .when{flex:none;font-family:"Roboto Mono",monospace;font-size:11.5px;color:var(--sub);font-weight:700}
-.tl .to{font-size:12px;color:var(--sub);margin-top:1px}
+.tl .head{font-size:14.5px;font-weight:700;display:flex;gap:6px;align-items:center;flex-wrap:wrap;line-height:1.55}
 .tl .txt{font-size:13.5px;margin-top:2px;white-space:pre-wrap;word-break:break-word}
-.tl .edit{flex:none;border:1px solid var(--rule);background:transparent;color:var(--sub);font:inherit;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 9px;cursor:pointer;align-self:flex-start}
-.tl .edit:hover{color:var(--ink);border-color:var(--sub)}
+.tl .chev{flex:none;color:var(--sub);font-size:18px;line-height:1;align-self:center}
 
 .tools{margin-top:12px}
-.chips{display:flex;gap:6px;overflow-x:auto;padding:9px 2px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
-  font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap}
-.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
-.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
 label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
-input[type=text],input[type=date],input[type=tel],input[type=search],select,textarea{
+input[type=text],input[type=date],input[type=datetime-local],input[type=tel],input[type=search],select,textarea{
   width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
   border:1px solid var(--rule);border-radius:9px;padding:11px 12px;
 }
@@ -148,6 +174,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .btn.line{background:#06c755;border-color:#06c755;color:#fff}
 .row{display:flex;gap:9px}
 
+.pick{display:flex;align-items:center;gap:9px;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:transparent;border:0;border-bottom:1px solid var(--rule);padding:12px 2px;cursor:pointer}
+.pick:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
+.pick .nm{flex:1;font-weight:700;font-size:15px;word-break:break-word}
+.pick .ds{font-size:11.5px;color:var(--sub);flex:none}
+.picklist{max-height:46vh;overflow:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
+
 .sheet{position:fixed;inset:0;z-index:50;background:rgba(10,14,20,.55);display:flex;align-items:flex-end;justify-content:center}
 .sheet .panel{background:var(--card);width:100%;max-width:600px;max-height:92vh;overflow:auto;
   border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
@@ -158,7 +191,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;background:var(--ink);color:var(--ground);
   font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
 
-.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:26px 12px;line-height:2}
+.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:24px 12px;line-height:2}
 .note-hint{font-size:12px;color:var(--sub);line-height:1.95;margin:18px 4px 0}
 .note-hint b{color:var(--ink);font-weight:700}
 .credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:26px 0 0;opacity:.75}
@@ -173,95 +206,106 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
 <div class="wrap">
 <header>
   <div class="brand">
-    <h1>テナント誘致 推進表</h1>
+    <h1>テナント誘致メモ</h1>
     <span class="count mono" id="hdcount"></span>
   </div>
   <nav role="tablist">
-    <button role="tab" id="tab-home" aria-selected="true">動き</button>
+    <button role="tab" id="tab-memo" aria-selected="true">メモ</button>
     <button role="tab" id="tab-push" aria-selected="false">推進</button>
-    <button role="tab" id="tab-prop" aria-selected="false">案件</button>
-    <button role="tab" id="tab-ten" aria-selected="false">名簿</button>
+    <button role="tab" id="tab-book" aria-selected="false">台帳</button>
     <button role="tab" id="tab-out" aria-selected="false">送る</button>
   </nav>
 </header>
 
-<section id="view-home">
-  <button class="big" id="btn-log">
-    <span class="verb">メモを記録</span>
-    <span class="role">連絡があったら その場で1行</span>
+<section id="view-memo">
+  <button class="banner" id="unassigned-note" hidden></button>
+
+  <div class="pad-label"><span>だれから</span><span class="now mono" id="now"></span></div>
+  <div class="chips" id="who-chips"></div>
+  <div id="prop-wrap" hidden>
+    <div class="pad-label"><span>どの案件</span></div>
+    <div class="chips" id="prop-chips"></div>
+  </div>
+  <div class="pad-label"><span>連絡のかたち</span></div>
+  <div class="chips" id="kind-chips"></div>
+
+  <textarea id="memo" placeholder="聞いたことをそのまま書く。
+例）出店担当の山田様から電話。伊丹寺本の件、賃料が坪1.2万なら前向き。駐車場15台が取れるか確認したいとのこと。折り返しは来週。"></textarea>
+
+  <button class="save" id="btn-save">
+    <span class="verb">保存する</span>
+    <span class="who" id="save-who">相手はあとから決められます</span>
   </button>
 
+  <div id="unassigned-list"></div>
+
+  <div class="sec"><span>これまでのメモ</span><span class="line"></span><span class="n" id="n-memo"></span></div>
+  <div id="timeline"></div>
+  <button class="btn" id="btn-more" hidden>もっと見る</button>
+
+  <p class="note-hint">
+    書いた時刻が自動で残ります。<b>相手が決まっていなくても保存できます</b>。
+    あとで上の「だれから」から決めれば、推進表にもつながります。<br>
+    書きかけの文は自動で預かるので、途中で画面を閉じても消えません。
+  </p>
+</section>
+
+<section id="view-push" hidden>
   <div class="stat">
     <div class="late"><b id="st-late">0</b><span>14日超</span></div>
     <div><b id="st-wait">0</b><span>返事待ち</span></div>
     <div class="good"><b id="st-good">0</b><span>前向き</span></div>
     <div><b id="st-talk">0</b><span>条件協議</span></div>
   </div>
-
-  <div class="sec"><span>返事が来ていない</span><span class="line"></span><span class="n" id="n-wait"></span></div>
-  <div class="card" id="waiting"></div>
-
-  <div class="sec"><span>最近のメモ</span><span class="line"></span><span class="n" id="n-recent"></span></div>
-  <div class="card" id="recent"></div>
-
-  <div class="sec"><span>まだ打診していない</span><span class="line"></span><span class="n" id="n-yet"></span></div>
-  <div class="card" id="yet"></div>
-
-  <p class="note-hint">
-    エクセルの<b>推進表</b>と同じ形です。1行＝<b>案件×テナント</b>。<br>
-    情報開示日を入れると「返事待ち ○日」に変わり、<b>14日を過ぎると赤</b>で出ます。<br>
-    メモは日付つきで、<b>新しいものが上</b>に積まれます。<br>
-    記録はこの端末の中だけに保存されます。「送る」タブでバックアップを取ってください。
-  </p>
-</section>
-
-<section id="view-push" hidden>
   <div class="tools">
     <input type="search" id="q-push" placeholder="テナント名・案件・担当者・メモで探す" autocomplete="off">
     <select id="filter-prop"></select>
     <div class="chips" id="chips-push">
-      <button class="chip" data-f="live" aria-pressed="true">進行中</button>
-      <button class="chip" data-f="late" aria-pressed="false">14日超</button>
-      <button class="chip" data-f="wait" aria-pressed="false">返事待ち</button>
-      <button class="chip" data-f="yet" aria-pressed="false">未打診</button>
-      <button class="chip" data-f="前向き" aria-pressed="false">前向き</button>
-      <button class="chip" data-f="条件協議中" aria-pressed="false">条件協議中</button>
-      <button class="chip" data-f="見送り" aria-pressed="false">見送り</button>
-      <button class="chip" data-f="deal" aria-pressed="false">成約</button>
-      <button class="chip" data-f="all" aria-pressed="false">すべて</button>
+      <button class="chip sm" data-f="live" aria-pressed="true">進行中</button>
+      <button class="chip sm" data-f="late" aria-pressed="false">14日超</button>
+      <button class="chip sm" data-f="wait" aria-pressed="false">返事待ち</button>
+      <button class="chip sm" data-f="yet" aria-pressed="false">未打診</button>
+      <button class="chip sm" data-f="前向き" aria-pressed="false">前向き</button>
+      <button class="chip sm" data-f="条件協議中" aria-pressed="false">条件協議中</button>
+      <button class="chip sm" data-f="見送り" aria-pressed="false">見送り</button>
+      <button class="chip sm" data-f="deal" aria-pressed="false">成約</button>
+      <button class="chip sm" data-f="all" aria-pressed="false">すべて</button>
     </div>
   </div>
   <div class="card" id="pushes"></div>
   <button class="btn primary" id="btn-add-push">＋ 打診する相手を足す</button>
   <p class="note-hint">
-    声をかけると決めた相手だけ行を作ります。<b>案件とテナントを選ぶだけ</b>で、
-    情報開示日はあとから入れられます。
+    エクセルの<b>推進表</b>と同じ、1行＝案件×テナント。情報開示日を入れると「返事待ち ○日」に変わり、
+    <b>14日を過ぎると赤</b>で出ます。メモはこの行にぶら下がります。
   </p>
 </section>
 
-<section id="view-prop" hidden>
-  <div id="props"></div>
-  <div class="row">
-    <button class="btn primary" id="btn-add-prop">＋ 案件を追加</button>
-    <button class="btn" id="btn-bulk-prop">まとめて追加</button>
+<section id="view-book" hidden>
+  <div class="chips" id="book-tabs">
+    <button class="chip" data-b="prop" aria-pressed="true">案件</button>
+    <button class="chip" data-b="ten" aria-pressed="false">テナント名簿</button>
   </div>
-  <p class="note-hint">
-    エクセルの<b>案件一覧</b>にあたります。所在地・面積・用途地域・賃料想定・地主・貸主まで持てます。
-  </p>
-</section>
 
-<section id="view-ten" hidden>
-  <div class="tools">
-    <input type="search" id="q-ten" placeholder="テナント名・業種・窓口会社で探す" autocomplete="off">
+  <div id="book-prop">
+    <div id="props"></div>
+    <div class="row">
+      <button class="btn primary" id="btn-add-prop">＋ 案件を追加</button>
+      <button class="btn" id="btn-bulk-prop">まとめて追加</button>
+    </div>
   </div>
-  <div class="card" id="tenants"></div>
-  <div class="row">
-    <button class="btn primary" id="btn-add-ten">＋ テナントを追加</button>
-    <button class="btn" id="btn-bulk-ten">まとめて追加</button>
+
+  <div id="book-ten" hidden>
+    <div class="tools"><input type="search" id="q-ten" placeholder="テナント名・業種・窓口会社で探す" autocomplete="off"></div>
+    <div class="card" id="tenants"></div>
+    <div class="row">
+      <button class="btn primary" id="btn-add-ten">＋ テナントを追加</button>
+      <button class="btn" id="btn-bulk-ten">まとめて追加</button>
+    </div>
   </div>
+
   <p class="note-hint">
-    エクセルの<b>テナント名簿</b>にあたります。<b>「まとめて追加」</b>に、いまの名簿の表を
-    そのまま貼り付ければ50社でも一度に入ります。
+    エクセルの<b>案件一覧</b>と<b>テナント名簿</b>にあたります。
+    「まとめて追加」に、いまの表をそのまま貼り付ければ一度に入ります。
   </p>
 </section>
 
@@ -294,6 +338,7 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
   <div class="card pad">
     <label for="csvkind">エクセルへ戻す（CSV・列の並びは元の表と同じ）</label>
     <select id="csvkind">
+      <option value="memo">メモ一覧（期間で絞る）</option>
       <option value="push">推進表</option>
       <option value="deal">成約</option>
       <option value="prop">案件一覧</option>
@@ -329,18 +374,31 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
 'use strict';
 
 /* ===================== 保存（端末内のみ） ===================== */
-var KEY = 'tenant-push.v1';
+var KEY = 'tenant-memo.v1', DKEY = 'tenant-memo.draft';
 var db = { props:[], tenants:[], rows:[], logs:[], mail:'' };
 
 (function load(){
   var raw = null;
   try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){ raw = null; }
+  if (!raw){ try { raw = JSON.parse(localStorage.getItem('tenant-push.v1') || 'null'); } catch(e){ raw = null; } }
   if (raw && typeof raw === 'object'){
     db.props   = Array.isArray(raw.props)   ? raw.props   : [];
     db.tenants = Array.isArray(raw.tenants) ? raw.tenants : [];
     db.rows    = Array.isArray(raw.rows)    ? raw.rows    : [];
     db.logs    = Array.isArray(raw.logs)    ? raw.logs    : [];
     db.mail    = typeof raw.mail === 'string' ? raw.mail : '';
+    /* 前の版のメモ（rowId でつないでいた）を、テナント＋案件のつなぎに直す */
+    for (var i = 0; i < db.logs.length; i++){
+      var g = db.logs[i];
+      if (g.rowId && !g.tenantId){
+        var r = null;
+        for (var j = 0; j < db.rows.length; j++) if (db.rows[j].id === g.rowId) r = db.rows[j];
+        if (r){ g.tenantId = r.tenantId; g.propId = r.propId; }
+        delete g.rowId;
+      }
+      if (!g.ts) g.ts = toDate(g.date) ? toDate(g.date).getTime() : Date.now();
+      if (!g.kind) g.kind = '';
+    }
   }
 })();
 
@@ -351,6 +409,7 @@ function persist(){
 
 /* エクセルと同じ選択肢 */
 var STATUS = ['前向き','条件協議中','見送り'];
+var KINDS = ['電話（先方）','電話（こちら）','メール','訪問','来店','現地','その他'];
 var LATE = 14;   /* 情報開示からこの日数を過ぎて返事がなければ赤 */
 
 /* ===================== 小道具 ===================== */
@@ -372,11 +431,22 @@ function toDate(s){
 }
 function md(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() : ''; }
 function fmtDate(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）' : ''; }
-function fmtDateY(s){ var d = toDate(s); return d ? d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日' : ''; }
+function hhmm(ts){ var d = new Date(ts); return two(d.getHours()) + ':' + two(d.getMinutes()); }
+function dayLabel(s){
+  var n = dayDiff(s, today());
+  if (n === 0) return 'きょう　' + fmtDate(s);
+  if (n === 1) return 'きのう　' + fmtDate(s);
+  var d = toDate(s);
+  return (d && d.getFullYear() !== new Date().getFullYear() ? d.getFullYear() + '年 ' : '') + fmtDate(s);
+}
 function dayDiff(a, b){
   var da = toDate(a), dbb = toDate(b);
   if (!da || !dbb) return null;
   return Math.round((dbb.getTime() - da.getTime()) / 86400000);
+}
+function forInput(ts){
+  var d = new Date(ts);
+  return d.getFullYear() + '-' + two(d.getMonth()+1) + '-' + two(d.getDate()) + 'T' + two(d.getHours()) + ':' + two(d.getMinutes());
 }
 
 var toastTimer = null;
@@ -398,8 +468,32 @@ function tenById(id){ return byId(db.tenants, id); }
 function rowById(id){ return byId(db.rows, id); }
 function logById(id){ return byId(db.logs, id); }
 function propName(id){ var p = propById(id); return p ? p.name : ''; }
-function tenName(id){ var t = tenById(id); return t ? t.name : '（削除されたテナント）'; }
-function rowTitle(r){ return tenName(r.tenantId) + '　／　' + (propName(r.propId) || '案件なし'); }
+function tenName(id){ var t = tenById(id); return t ? t.name : ''; }
+
+function rowOf(tenantId, propId){
+  if (!tenantId || !propId) return null;
+  for (var i = 0; i < db.rows.length; i++){
+    if (db.rows[i].tenantId === tenantId && db.rows[i].propId === propId) return db.rows[i];
+  }
+  return null;
+}
+function logsSorted(list){
+  return list.slice().sort(function(a, b){ return (b.ts || 0) - (a.ts || 0); });
+}
+function logsOfPair(tenantId, propId){
+  return logsSorted(db.logs.filter(function(g){ return g.tenantId === tenantId && g.propId === propId; }));
+}
+function logsOfRow(r){ return logsOfPair(r.tenantId, r.propId); }
+function logsOfTen(id){ return logsSorted(db.logs.filter(function(g){ return g.tenantId === id; })); }
+function logsOfProp(id){ return logsSorted(db.logs.filter(function(g){ return g.propId === id; })); }
+function unassigned(){ return logsSorted(db.logs.filter(function(g){ return !g.tenantId; })); }
+function memoBlock(tenantId, propId){
+  return logsOfPair(tenantId, propId).map(function(g){
+    return md(g.date) + ' ' + hhmm(g.ts) + ' ' + g.text.replace(/\n/g, ' ');
+  }).join('\n');
+}
+function rowsOfProp(id){ return db.rows.filter(function(r){ return r.propId === id; }); }
+function rowsOfTen(id){ return db.rows.filter(function(r){ return r.tenantId === id; }); }
 
 /* エクセルの「状態」列と同じ判定 */
 function stateOf(r){
@@ -417,25 +511,10 @@ function stateOf(r){
   return { k:'見送り', label:'見送り', cls:'s-drop', sort:7 };
 }
 function isLive(r){ var s = stateOf(r); return s.k !== 'deal' && s.k !== '見送り'; }
-
-function logsSorted(list){
-  return list.slice().sort(function(a, b){
-    if (a.date === b.date) return (b.ts || 0) - (a.ts || 0);
-    return a.date < b.date ? 1 : -1;
-  });
-}
-function logsOfRow(id){ return logsSorted(db.logs.filter(function(g){ return g.rowId === id; })); }
-function lastLog(id){ var l = logsOfRow(id); return l.length ? l[0] : null; }
-function memoBlock(id){
-  return logsOfRow(id).map(function(g){ return md(g.date) + ' ' + g.text; }).join('\n');
-}
-function rowsOfProp(id){ return db.rows.filter(function(r){ return r.propId === id; }); }
-function rowsOfTen(id){ return db.rows.filter(function(r){ return r.tenantId === id; }); }
-
-/* 動きの新しい順（最新メモ → 返事日 → 情報開示日） */
 function rowStamp(r){
-  var g = lastLog(r.id);
-  return (g && g.date) || r.replyDate || r.openDate || '';
+  var l = logsOfRow(r);
+  var a = l.length ? ymd(new Date(l[0].ts)) : '';
+  return a || r.replyDate || r.openDate || '';
 }
 function byActivity(a, b){
   var sa = rowStamp(a), sb = rowStamp(b);
@@ -445,10 +524,256 @@ function byActivity(a, b){
   return (b.ts || 0) - (a.ts || 0);
 }
 
-/* ===================== 行の描き方 ===================== */
+/* ===================== メモの画面 ===================== */
+var draft = { tenantId:'', propId:'', kind:KINDS[0] };
+var shown = 20;
+
+function loadDraft(){
+  var d = null;
+  try { d = JSON.parse(localStorage.getItem(DKEY) || 'null'); } catch(e){ d = null; }
+  if (!d) return;
+  if (typeof d.text === 'string') $('memo').value = d.text;
+  draft.tenantId = tenById(d.tenantId) ? d.tenantId : '';
+  draft.propId = propById(d.propId) ? d.propId : '';
+  if (KINDS.indexOf(d.kind) >= 0) draft.kind = d.kind;
+}
+function saveDraft(){
+  try {
+    localStorage.setItem(DKEY, JSON.stringify({ text:$('memo').value,
+      tenantId:draft.tenantId, propId:draft.propId, kind:draft.kind }));
+  } catch(e){}
+}
+function clearDraft(){ try { localStorage.removeItem(DKEY); } catch(e){} }
+
+function autoProp(tenantId){
+  var rs = rowsOfTen(tenantId).sort(byActivity);
+  for (var i = 0; i < rs.length; i++) if (isLive(rs[i])) return rs[i].propId;
+  return rs.length ? rs[0].propId : '';
+}
+
+function recentTenIds(n){
+  var seen = {}, out = [], i;
+  var ls = logsSorted(db.logs);
+  for (i = 0; i < ls.length && out.length < n; i++){
+    var id = ls[i].tenantId;
+    if (id && !seen[id] && tenById(id)){ seen[id] = 1; out.push(id); }
+  }
+  var rs = db.rows.slice().sort(byActivity);
+  for (i = 0; i < rs.length && out.length < n; i++){
+    if (!seen[rs[i].tenantId] && tenById(rs[i].tenantId)){ seen[rs[i].tenantId] = 1; out.push(rs[i].tenantId); }
+  }
+  for (i = 0; i < db.tenants.length && out.length < n; i++){
+    if (!seen[db.tenants[i].id]){ seen[db.tenants[i].id] = 1; out.push(db.tenants[i].id); }
+  }
+  return out;
+}
+
+function renderWhoChips(){
+  var ids = recentTenIds(6);
+  if (draft.tenantId && ids.indexOf(draft.tenantId) < 0) ids.unshift(draft.tenantId);
+  var h = '<button class="chip ghost" data-act="find">🔍 名簿から探す</button>';
+  ids.forEach(function(id){
+    h += '<button class="chip" data-ten="' + esc(id) + '" aria-pressed="' +
+      (id === draft.tenantId ? 'true' : 'false') + '">' + esc(tenName(id)) + '</button>';
+  });
+  if (!db.tenants.length) h += '<button class="chip ghost" data-act="newten">＋ テナントを登録</button>';
+  $('who-chips').innerHTML = h;
+
+  var wrap = $('prop-wrap');
+  if (!draft.tenantId){ wrap.hidden = true; }
+  else {
+    wrap.hidden = false;
+    var rs = rowsOfTen(draft.tenantId).sort(byActivity);
+    var ph = '<button class="chip" data-prop="" aria-pressed="' + (draft.propId ? 'false' : 'true') + '">決まっていない</button>';
+    var seen = {};
+    rs.forEach(function(r){
+      if (!r.propId || seen[r.propId]) return;
+      seen[r.propId] = 1;
+      ph += '<button class="chip" data-prop="' + esc(r.propId) + '" aria-pressed="' +
+        (r.propId === draft.propId ? 'true' : 'false') + '">' + esc(propName(r.propId)) +
+        '　<span class="bdg ' + stateOf(r).cls + '">' + esc(stateOf(r).label) + '</span></button>';
+    });
+    if (draft.propId && !seen[draft.propId]){
+      ph += '<button class="chip" data-prop="' + esc(draft.propId) + '" aria-pressed="true">' +
+        esc(propName(draft.propId)) + '</button>';
+    }
+    ph += '<button class="chip ghost" data-act="findprop">🔍 ほかの案件</button>';
+    $('prop-chips').innerHTML = ph;
+  }
+
+  var kh = '';
+  KINDS.forEach(function(k){
+    kh += '<button class="chip sm" data-kind="' + esc(k) + '" aria-pressed="' +
+      (k === draft.kind ? 'true' : 'false') + '">' + esc(k) + '</button>';
+  });
+  $('kind-chips').innerHTML = kh;
+
+  var who = draft.tenantId
+    ? tenName(draft.tenantId) + (draft.propId ? '　／　' + propName(draft.propId) : '　／　案件は決まっていない')
+    : '相手はあとから決められます';
+  $('save-who').textContent = who;
+}
+
+function memoRowHtml(g){
+  var head = g.tenantId
+    ? '<span>' + esc(tenName(g.tenantId)) + '</span>'
+    : '<span class="bdg ask">だれから？</span>';
+  if (g.propId) head += '<span class="bdg plain">' + esc(propName(g.propId)) + '</span>';
+  if (g.kind) head += '<span class="bdg plain">' + esc(g.kind) + '</span>';
+  return '<button class="tl" data-log="' + esc(g.id) + '">' +
+    '<div class="time">' + esc(hhmm(g.ts)) + '</div>' +
+    '<div class="body"><div class="head">' + head + '</div>' +
+      '<div class="txt">' + esc(g.text) + '</div></div>' +
+    '<div class="chev">›</div>' +
+  '</button>';
+}
+
+function renderTimeline(){
+  var ls = logsSorted(db.logs);
+  $('n-memo').textContent = ls.length ? '全' + ls.length + '件' : '';
+  if (!ls.length){
+    $('timeline').innerHTML = '<div class="card"><div class="empty">まだメモがありません。<br>上の枠に書いて「保存する」を押してください。</div></div>';
+    $('btn-more').hidden = true;
+    return;
+  }
+  var use = ls.slice(0, shown), h = '', day = '', buf = [];
+  function flush(){
+    if (!buf.length) return;
+    h += '<div class="day"><span class="date">' + esc(dayLabel(day)) + '</span>' +
+      '<span class="line"></span><span class="n">' + buf.length + '件</span></div>' +
+      '<div class="card">' + buf.join('') + '</div>';
+    buf = [];
+  }
+  use.forEach(function(g){
+    if (g.date !== day){ flush(); day = g.date; }
+    buf.push(memoRowHtml(g));
+  });
+  flush();
+  $('timeline').innerHTML = h;
+  $('btn-more').hidden = ls.length <= shown;
+}
+
+function renderUnassigned(){
+  var list = unassigned();
+  var note = $('unassigned-note'), box = $('unassigned-list');
+  if (!list.length){ note.hidden = true; note.innerHTML = ''; box.innerHTML = ''; return; }
+  note.hidden = false;
+  note.innerHTML = '<span>相手が決まっていないメモ　' + list.length + '件</span><span class="arw">↓</span>';
+  box.innerHTML = '<div class="sec"><span>相手が決まっていないメモ</span>' +
+    '<span class="line"></span><span class="n">' + list.length + '件</span></div>' +
+    '<div class="card alert">' + list.map(memoRowHtml).join('') +
+    '<p class="hint" style="padding-bottom:10px">タップして「だれから」を選ぶと、推進表にもつながります。</p></div>';
+}
+
+function renderMemoTab(){
+  renderWhoChips(); renderUnassigned(); renderTimeline();
+  var n = new Date();
+  $('now').textContent = (n.getMonth()+1) + '/' + n.getDate() + '（' + WD[n.getDay()] + '） ' + hhmm(n.getTime());
+}
+
+function saveMemo(){
+  var text = $('memo').value.trim();
+  if (!text){ toast('メモが空です'); $('memo').focus(); return; }
+  var rec = { id:uid(), ts:Date.now(), date:today(), tenantId:draft.tenantId,
+    propId:draft.tenantId ? draft.propId : '', kind:draft.kind, text:text };
+  db.logs.push(rec);
+
+  var made = false;
+  if (rec.tenantId && rec.propId && !rowOf(rec.tenantId, rec.propId)){
+    db.rows.push({ id:uid(), ts:Date.now(), propId:rec.propId, tenantId:rec.tenantId,
+      person:'', openDate:'', replyDate:'', status:'', closeDate:'' });
+    made = true;
+  }
+  $('memo').value = '';
+  draft.tenantId = ''; draft.propId = '';
+  clearDraft(); persist(); shown = Math.max(shown, 20); renderAll();
+  toast(rec.tenantId
+    ? tenName(rec.tenantId) + ' のメモを保存しました' + (made ? '（推進表に行を作りました）' : '')
+    : 'メモを保存しました（相手はあとで選べます）');
+  window.scrollTo(0, 0);
+}
+
+/* --- 名簿・案件から選ぶ --- */
+function openPicker(kind){
+  var isTen = kind === 'ten';
+  openSheet(
+    '<h2>' + (isTen ? 'だれから連絡があったか' : 'どの案件のことか') + '</h2>' +
+    '<label for="pk-q">' + (isTen ? 'テナント名・業種で探す' : '案件名・所在地で探す') + '</label>' +
+    '<input type="search" id="pk-q" placeholder="' + (isTen ? '例：吉野家' : '例：伊丹') + '" autocomplete="off">' +
+    '<div class="picklist" id="pk-list"></div>' +
+    '<div id="pk-new"></div>' +
+    '<button class="btn" id="pk-cancel">閉じる</button>'
+  );
+
+  function draw(){
+    var q = ($('pk-q').value || '').trim().toLowerCase();
+    var list, h = '';
+    if (isTen){
+      var order = recentTenIds(db.tenants.length);
+      list = order.map(function(id){ return tenById(id); }).filter(function(t){ return !!t; });
+      list = list.filter(function(t){
+        return !q || [t.name, t.cat, t.agency, t.person].join(' ').toLowerCase().indexOf(q) >= 0;
+      });
+      h = '<button class="pick" data-pick=""><span class="nm">相手を決めない</span>' +
+        '<span class="ds">あとで選ぶ</span></button>';
+      list.forEach(function(t){
+        var rs = rowsOfTen(t.id).filter(isLive).length;
+        h += '<button class="pick" data-pick="' + esc(t.id) + '"><span class="nm">' + esc(t.name) + '</span>' +
+          '<span class="ds">' + esc(t.cat || '') + (rs ? '　進行中' + rs : '') + '</span></button>';
+      });
+    } else {
+      list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).filter(function(p){
+        return !q || [p.name, p.addr, p.area].join(' ').toLowerCase().indexOf(q) >= 0;
+      });
+      h = '<button class="pick" data-pick=""><span class="nm">決まっていない</span>' +
+        '<span class="ds">案件なし</span></button>';
+      list.forEach(function(p){
+        h += '<button class="pick" data-pick="' + esc(p.id) + '"><span class="nm">' + esc(p.name) + '</span>' +
+          '<span class="ds">' + esc([p.area, p.rent].filter(function(x){ return !!x; }).join(' ')) + '</span></button>';
+      });
+    }
+    $('pk-list').innerHTML = h || '<div class="empty">見つかりませんでした。</div>';
+    var qq = ($('pk-q').value || '').trim();
+    var exists = false, all = isTen ? db.tenants : db.props;
+    for (var i = 0; i < all.length; i++) if (all[i].name === qq) exists = true;
+    $('pk-new').innerHTML = (qq && !exists)
+      ? '<button class="btn primary" id="pk-add">＋「' + esc(qq) + '」を' + (isTen ? '名簿' : '案件') + 'に追加</button>'
+      : '';
+    if (qq && !exists) $('pk-add').addEventListener('click', function(){
+      var rec = { id:uid(), ts:Date.now(), name:qq };
+      if (isTen){
+        rec.cat = ''; rec.agency = ''; rec.person = ''; rec.tel = ''; rec.wantArea = ''; rec.memo = '';
+        db.tenants.push(rec); draft.tenantId = rec.id; draft.propId = '';
+      } else {
+        rec.addr = ''; rec.area = ''; rec.zoning = ''; rec.rent = ''; rec.startDate = '';
+        rec.owner = ''; rec.ownerTel = ''; rec.lessor = ''; rec.lessorTel = ''; rec.memo = '';
+        db.props.push(rec); draft.propId = rec.id;
+      }
+      persist(); saveDraft(); renderAll(); closeSheet();
+      toast(qq + ' を追加しました');
+    });
+  }
+
+  $('pk-q').addEventListener('input', draw);
+  $('pk-list').addEventListener('click', function(ev){
+    var b = ev.target.closest ? ev.target.closest('[data-pick]') : null;
+    if (!b) return;
+    ev.stopPropagation();
+    var id = b.getAttribute('data-pick');
+    if (isTen){ draft.tenantId = id; draft.propId = id ? autoProp(id) : ''; }
+    else { draft.propId = id; }
+    saveDraft(); renderMemoTab(); closeSheet();
+  });
+  $('pk-cancel').addEventListener('click', closeSheet);
+  draw();
+}
+
+/* ===================== 画面：推進 ===================== */
+var pushFilter = 'live';
+
 function pushRow(r){
   var s = stateOf(r);
-  var g = lastLog(r.id);
+  var g = logsOfRow(r)[0];
   var meta = [];
   if (r.propId) meta.push(esc(propName(r.propId)));
   if (r.person) meta.push('担当 ' + esc(r.person));
@@ -457,7 +782,7 @@ function pushRow(r){
   if (r.closeDate) meta.push('成約 ' + esc(md(r.closeDate)));
   return '<button class="item" data-row="' + esc(r.id) + '">' +
     '<div class="body">' +
-      '<div class="ttl">' + esc(tenName(r.tenantId)) +
+      '<div class="ttl">' + esc(tenName(r.tenantId) || '（削除されたテナント）') +
         '<span class="bdg ' + s.cls + '">' + esc(s.label) + '</span></div>' +
       '<div class="meta">' + meta.join(' ・ ') + '</div>' +
       (g ? '<div class="memo">' + esc(md(g.date) + ' ' + g.text) + '</div>' : '') +
@@ -466,72 +791,11 @@ function pushRow(r){
   '</button>';
 }
 
-function tlRow(g){
-  var r = rowById(g.rowId);
-  return '<div class="tl">' +
-    '<div class="body">' +
-      '<div class="head">' +
-        '<span class="when">' + esc(fmtDate(g.date)) + '</span>' +
-        '<span>' + esc(r ? tenName(r.tenantId) : '（削除された行）') + '</span>' +
-        (r && r.propId ? '<span class="bdg plain">' + esc(propName(r.propId)) + '</span>' : '') +
-      '</div>' +
-      '<div class="txt">' + esc(g.text) + '</div>' +
-    '</div>' +
-    '<button class="edit" data-log="' + esc(g.id) + '">直す</button>' +
-  '</div>';
-}
-
-/* ===================== 画面：動き ===================== */
-function renderHome(){
-  var waiting = [], late = 0, good = 0, talk = 0, yet = [];
-  db.rows.forEach(function(r){
-    var s = stateOf(r);
-    if (s.k === 'wait' || s.k === 'late' || s.k === 'reply') waiting.push(r);
-    if (s.k === 'late') late++;
-    if (s.k === '前向き') good++;
-    if (s.k === '条件協議中') talk++;
-    if (s.k === 'yet') yet.push(r);
-  });
-  waiting.sort(function(a, b){
-    var da = stateOf(a).days, dbb = stateOf(b).days;
-    return (dbb == null ? -1 : dbb) - (da == null ? -1 : da);
-  });
-
-  $('st-late').textContent = late;
-  $('st-wait').textContent = waiting.length;
-  $('st-good').textContent = good;
-  $('st-talk').textContent = talk;
-
-  $('n-wait').textContent = waiting.length ? waiting.length + '件' : '';
-  $('waiting').innerHTML = waiting.length
-    ? waiting.slice(0, 8).map(pushRow).join('')
-    : '<div class="empty">返事待ちはありません。</div>';
-
-  var recent = logsSorted(db.logs).slice(0, 6);
-  $('n-recent').textContent = db.logs.length ? '全' + db.logs.length + '件' : '';
-  $('recent').innerHTML = recent.length
-    ? recent.map(tlRow).join('')
-    : '<div class="empty">まだメモがありません。<br>上の「メモを記録」から始めてください。</div>';
-
-  yet.sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
-  $('n-yet').textContent = yet.length ? yet.length + '件' : '';
-  $('yet').innerHTML = yet.length
-    ? yet.slice(0, 5).map(pushRow).join('')
-    : '<div class="empty">未打診の行はありません。</div>';
-
-  $('hdcount').textContent = '推進 ' + db.rows.length + '行 ・ 案件 ' + db.props.length +
-    '件 ・ 名簿 ' + db.tenants.length + '社';
-}
-
-/* ===================== 画面：推進 ===================== */
-var pushFilter = 'live';
-
 function matchRow(r, q){
   if (!q) return true;
   var t = tenById(r.tenantId) || {};
-  var hay = [tenName(r.tenantId), t.cat, t.agency, propName(r.propId), r.person, r.status,
-    memoBlock(r.id)].join(' ').toLowerCase();
-  return hay.indexOf(q) >= 0;
+  return [tenName(r.tenantId), t.cat, t.agency, propName(r.propId), r.person, r.status,
+    memoBlock(r.tenantId, r.propId)].join(' ').toLowerCase().indexOf(q) >= 0;
 }
 function passPush(r){
   var s = stateOf(r);
@@ -545,7 +809,6 @@ function passPush(r){
     default:     return s.k === pushFilter;
   }
 }
-
 function renderPushFilter(){
   var sel = $('filter-prop'), cur = sel.value;
   var h = '<option value="">すべての案件</option>';
@@ -555,8 +818,18 @@ function renderPushFilter(){
   sel.innerHTML = h;
   if (cur && propById(cur)) sel.value = cur;
 }
-
 function renderPushes(){
+  var late = 0, wait = 0, good = 0, talk = 0;
+  db.rows.forEach(function(r){
+    var k = stateOf(r).k;
+    if (k === 'late'){ late++; wait++; }
+    else if (k === 'wait' || k === 'reply') wait++;
+    else if (k === '前向き') good++;
+    else if (k === '条件協議中') talk++;
+  });
+  $('st-late').textContent = late; $('st-wait').textContent = wait;
+  $('st-good').textContent = good; $('st-talk').textContent = talk;
+
   var q = ($('q-push').value || '').trim().toLowerCase();
   var only = $('filter-prop').value;
   var list = db.rows.filter(function(r){
@@ -571,10 +844,10 @@ function renderPushes(){
     ? list.map(pushRow).join('')
     : (db.rows.length
         ? '<div class="empty">この条件に合う行はありません。</div>'
-        : '<div class="empty">まだ推進の行がありません。<br>案件とテナントを登録してから、<br>下の「＋ 打診する相手を足す」で作ります。</div>');
+        : '<div class="empty">まだ推進の行がありません。<br>メモで相手と案件を選んで保存すると、自動でここに行ができます。</div>');
 }
 
-/* ===================== 画面：案件 ===================== */
+/* ===================== 画面：台帳 ===================== */
 function propRow(p){
   var rs = rowsOfProp(p.id);
   var n = { good:0, talk:0, wait:0, late:0, yet:0, deal:0 };
@@ -598,13 +871,10 @@ function propRow(p){
     '<div class="body">' +
       '<div class="ttl">' + esc(p.name) +
         (n.late ? '<span class="bdg s-late">14日超 ' + n.late + '</span>' : '') +
-        (n.deal ? '<span class="bdg s-deal">成約</span>' : '') +
-      '</div>' +
+        (n.deal ? '<span class="bdg s-deal">成約</span>' : '') + '</div>' +
       (spec.length ? '<div class="meta">' + esc(spec.join(' ・ ')) + '</div>' : '') +
       '<div class="meta">打診 ' + rs.length + '社' + (parts.length ? '（' + parts.join('・') + '）' : '') + '</div>' +
-    '</div>' +
-    '<div class="chev">›</div>' +
-  '</button>';
+    '</div><div class="chev">›</div></button>';
 }
 function renderProps(){
   var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
@@ -612,25 +882,22 @@ function renderProps(){
     ? '<div class="card">' + list.map(propRow).join('') + '</div>'
     : '<div class="card"><div class="empty">まだ案件がありません。<br>下の「＋ 案件を追加」から登録してください。</div></div>';
 }
-
-/* ===================== 画面：名簿 ===================== */
 function tenRow(t){
   var rs = rowsOfTen(t.id);
   var live = rs.filter(isLive).length;
+  var ls = logsOfTen(t.id);
   var meta = [];
   if (t.cat) meta.push(esc(t.cat));
   if (t.agency) meta.push('窓口 ' + esc(t.agency));
   if (t.person) meta.push(esc(t.person));
   if (t.wantArea) meta.push('希望 ' + esc(t.wantArea));
-  var line = rs.length ? '打診 ' + rs.length + '件' + (live ? '（進行中 ' + live + '）' : '') : '打診なし';
+  var line = (rs.length ? '打診 ' + rs.length + '件' + (live ? '（進行中 ' + live + '）' : '') : '打診なし') +
+    (ls.length ? ' ・ メモ ' + ls.length + '件（最終 ' + md(ls[0].date) + '）' : '');
   return '<button class="item" data-ten="' + esc(t.id) + '">' +
-    '<div class="body">' +
-      '<div class="ttl">' + esc(t.name) + '</div>' +
+    '<div class="body"><div class="ttl">' + esc(t.name) + '</div>' +
       (meta.length ? '<div class="meta">' + meta.join(' ・ ') + '</div>' : '') +
       '<div class="meta">' + line + '</div>' +
-    '</div>' +
-    '<div class="chev">›</div>' +
-  '</button>';
+    '</div><div class="chev">›</div></button>';
 }
 function renderTenants(){
   var q = ($('q-ten').value || '').trim().toLowerCase();
@@ -650,7 +917,9 @@ function renderTenants(){
 }
 
 function renderAll(){
-  renderHome(); renderPushFilter(); renderPushes(); renderProps(); renderTenants();
+  renderMemoTab(); renderPushFilter(); renderPushes(); renderProps(); renderTenants();
+  $('hdcount').textContent = 'メモ ' + db.logs.length + '件 ・ 推進 ' + db.rows.length +
+    '行 ・ 名簿 ' + db.tenants.length + '社';
   if (!$('view-out').hidden) renderOutput();
 }
 
@@ -674,99 +943,67 @@ function opts(list, cur, blank){
   return h;
 }
 function propOpts(cur, blank){
-  var h = '<option value="">' + esc(blank || '（案件を選ぶ）') + '</option>';
+  var h = '<option value="">' + esc(blank || '（案件は決まっていない）') + '</option>';
   db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
     h += '<option value="' + esc(p.id) + '"' + (p.id === cur ? ' selected' : '') + '>' + esc(p.name) + '</option>';
   });
   return h;
 }
-function tenOpts(cur){
-  var h = '<option value="">（テナントを選ぶ）</option>';
+function tenOpts(cur, blank){
+  var h = '<option value="">' + esc(blank || '（テナントを選ぶ）') + '</option>';
   db.tenants.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(t){
     h += '<option value="' + esc(t.id) + '"' + (t.id === cur ? ' selected' : '') + '>' +
       esc(t.name) + (t.cat ? '（' + esc(t.cat) + '）' : '') + '</option>';
   });
   return h;
 }
-function rowOpts(cur){
-  var h = '';
-  db.rows.slice().sort(byActivity).forEach(function(r){
-    h += '<option value="' + esc(r.id) + '"' + (r.id === cur ? ' selected' : '') + '>' +
-      esc(rowTitle(r)) + '</option>';
-  });
-  return h;
-}
 
-/* --- メモを記録する（いちばん使うところ） --- */
-function openMemoSheet(id, presetRowId){
-  if (!db.rows.length){
-    toast('先に「打診する相手」を作ってください');
-    if (!db.props.length){ go('prop'); openPropSheet(null); }
-    else if (!db.tenants.length){ go('ten'); openTenSheet(null); }
-    else { go('push'); openRowSheet(null); }
-    return;
-  }
-  var g = id ? logById(id) : null;
-  var rowId = g ? g.rowId : (presetRowId || (db.rows.slice().sort(byActivity)[0] || {}).id);
-  var r = rowById(rowId) || {};
-
+/* --- メモ1件を直す --- */
+function openLogSheet(id){
+  var g = logById(id);
+  if (!g) return;
   openSheet(
-    '<h2>' + (g ? 'メモを直す' : 'メモを記録する') + '</h2>' +
-    '<label for="m-row">どの相手か　テナント／案件</label>' +
-    '<select id="m-row">' + rowOpts(rowId) + '</select>' +
+    '<h2>メモを直す</h2>' +
+    '<p class="sub">' + esc(fmtDate(g.date)) + ' ' + esc(hhmm(g.ts)) + ' に書いたメモ</p>' +
+    '<label for="g-ten">だれから</label>' +
+    '<select id="g-ten">' + tenOpts(g.tenantId, '（まだ決めていない）') + '</select>' +
+    '<label for="g-prop">どの案件</label>' +
+    '<select id="g-prop">' + propOpts(g.propId) + '</select>' +
     '<div class="half">' +
-      '<div><label for="m-date">日付</label>' +
-        '<input type="date" id="m-date" value="' + esc(g ? g.date : today()) + '"></div>' +
-      '<div><label for="m-status">状況</label>' +
-        '<select id="m-status">' + opts(STATUS, r.status || '', '（まだ返事なし）') + '</select></div>' +
+      '<div><label for="g-when">日時</label>' +
+        '<input type="datetime-local" id="g-when" value="' + esc(forInput(g.ts)) + '"></div>' +
+      '<div><label for="g-kind">連絡のかたち</label>' +
+        '<select id="g-kind">' + opts(KINDS, g.kind, '（なし）') + '</select></div>' +
     '</div>' +
-    '<label for="m-text">やりとりの中身</label>' +
-    '<textarea id="m-text" placeholder="例：賃料坪1.2万なら前向きと回答。図面を送ることになった。">' +
-      esc(g ? g.text : '') + '</textarea>' +
-    '<div class="half">' +
-      '<div><label for="m-open">情報開示日</label>' +
-        '<input type="date" id="m-open" value="' + esc(r.openDate || '') + '"></div>' +
-      '<div><label for="m-reply">返事日</label>' +
-        '<input type="date" id="m-reply" value="' + esc(r.replyDate || '') + '"></div>' +
-    '</div>' +
-    '<p class="hint">状況を選ぶと、返事日が空のときはこのメモの日付が入ります。<br>' +
-      '情報開示日を入れると「返事待ち ○日」に変わり、' + LATE + '日を過ぎると赤で出ます。</p>' +
-    '<button class="btn primary" id="m-save">保存する</button>' +
+    '<label for="g-text">メモ</label>' +
+    '<textarea id="g-text" style="min-height:150px">' + esc(g.text) + '</textarea>' +
+    '<button class="btn primary" id="g-save">保存する</button>' +
     '<div class="row">' +
-      '<button class="btn" id="m-cancel">閉じる</button>' +
-      (g ? '<button class="btn danger" id="m-del">このメモを削除</button>' : '') +
+      '<button class="btn" id="g-cancel">閉じる</button>' +
+      '<button class="btn danger" id="g-del">このメモを削除</button>' +
     '</div>'
   );
 
-  $('m-row').addEventListener('change', function(){
-    var nr = rowById(this.value) || {};
-    $('m-open').value = nr.openDate || '';
-    $('m-reply').value = nr.replyDate || '';
-    $('m-status').value = nr.status || '';
-  });
-
-  $('m-save').addEventListener('click', function(){
-    var rid = $('m-row').value, tgt = rowById(rid);
-    if (!tgt){ toast('相手を選んでください'); return; }
-    var date = $('m-date').value || today();
-    var text = $('m-text').value.trim();
-    if (!text && !g){ toast('やりとりの中身を入れてください'); $('m-text').focus(); return; }
-
-    var rec = g || { id:uid(), ts:Date.now() };
-    rec.rowId = rid; rec.date = date; rec.text = text;
-    if (!g) db.logs.push(rec);
-
-    tgt.openDate = $('m-open').value;
-    tgt.replyDate = $('m-reply').value;
-    var st = $('m-status').value;
-    tgt.status = st;
-    if (st && !tgt.replyDate) tgt.replyDate = date;
+  $('g-save').addEventListener('click', function(){
+    var text = $('g-text').value.trim();
+    if (!text){ toast('メモが空です'); return; }
+    g.tenantId = $('g-ten').value;
+    g.propId = g.tenantId ? $('g-prop').value : '';
+    g.kind = $('g-kind').value;
+    g.text = text;
+    var w = $('g-when').value;
+    if (w){ var d = new Date(w); if (!isNaN(d.getTime())){ g.ts = d.getTime(); g.date = ymd(d); } }
+    var made = false;
+    if (g.tenantId && g.propId && !rowOf(g.tenantId, g.propId)){
+      db.rows.push({ id:uid(), ts:Date.now(), propId:g.propId, tenantId:g.tenantId,
+        person:'', openDate:'', replyDate:'', status:'', closeDate:'' });
+      made = true;
+    }
     persist(); renderAll(); closeSheet();
-    toast(tenName(tgt.tenantId) + ' に記録しました');
+    toast('保存しました' + (made ? '（推進表に行を作りました）' : ''));
   });
-
-  $('m-cancel').addEventListener('click', closeSheet);
-  if (g) $('m-del').addEventListener('click', function(){
+  $('g-cancel').addEventListener('click', closeSheet);
+  $('g-del').addEventListener('click', function(){
     if (!confirm('このメモを削除します。よろしいですか？')) return;
     db.logs = db.logs.filter(function(x){ return x.id !== g.id; });
     persist(); renderAll(); closeSheet();
@@ -779,21 +1016,22 @@ function openRowSheet(id, preset){
   var r = id ? rowById(id) : null;
   if (!r && (!db.props.length || !db.tenants.length)){
     toast(!db.props.length ? '先に案件を登録してください' : '先にテナントを登録してください');
-    if (!db.props.length){ go('prop'); openPropSheet(null); } else { go('ten'); openTenSheet(null); }
+    if (!db.props.length){ go('book'); showBook('prop'); openPropSheet(null); }
+    else { go('book'); showBook('ten'); openTenSheet(null); }
     return;
   }
   var pre = preset || {};
-  var hist = r ? logsOfRow(r.id) : [];
+  var hist = r ? logsOfRow(r) : [];
   var s = r ? stateOf(r) : null;
 
   openSheet(
     '<h2>' + (r ? esc(tenName(r.tenantId)) : '打診する相手を足す') + '</h2>' +
     (r ? '<p class="sub"><span class="bdg ' + s.cls + '">' + esc(s.label) + '</span>　' +
       esc(propName(r.propId) || '案件なし') + '　メモ ' + hist.length + '件</p>' : '') +
-    (r ? '<button class="btn primary" id="r-addmemo">メモを足す</button>' : '') +
+    (r ? '<button class="btn primary" id="r-memo">この相手でメモを書く</button>' : '') +
     '<div class="half">' +
       '<div><label for="r-prop">案件</label>' +
-        '<select id="r-prop">' + propOpts(r ? r.propId : pre.propId) + '</select></div>' +
+        '<select id="r-prop">' + propOpts(r ? r.propId : pre.propId, '（案件を選ぶ）') + '</select></div>' +
       '<div><label for="r-ten">テナント</label>' +
         '<select id="r-ten">' + tenOpts(r ? r.tenantId : pre.tenantId) + '</select></div>' +
     '</div>' +
@@ -807,34 +1045,37 @@ function openRowSheet(id, preset){
     '</div>' +
     '<div class="half">' +
       '<div><label for="r-status">状況</label>' +
-        '<select id="r-status">' + opts(STATUS, r ? (r.status || '') : '', '（返事待ち）') + '</select></div>' +
+        '<select id="r-status">' + opts(STATUS, r ? (r.status || '') : '', '（まだ返事なし）') + '</select></div>' +
       '<div><label for="r-close">成約日</label>' +
         '<input type="date" id="r-close" value="' + esc(r ? (r.closeDate || '') : '') + '"></div>' +
     '</div>' +
     '<p class="hint">情報開示日が空なら「未打診」。入れると「返事待ち ○日」になり、' + LATE + '日を過ぎると赤。<br>' +
-      '成約日を入れると、この行は成約あつかいになり進行中の一覧から外れます。</p>' +
+      '成約日を入れると成約あつかいになり、進行中の一覧から外れます。</p>' +
     '<button class="btn primary" id="r-save">保存する</button>' +
     '<div class="row">' +
       '<button class="btn" id="r-cancel">閉じる</button>' +
       (r ? '<button class="btn danger" id="r-del">この行を削除</button>' : '') +
     '</div>' +
-    (r ? '<div class="sec"><span>メモ（新しい順）</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
-      '<div class="card">' + (hist.length ? hist.map(tlRow).join('') :
+    (r ? '<div class="sec"><span>この相手とのメモ</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
+      '<div class="card">' + (hist.length ? hist.map(memoRowHtml).join('') :
         '<div class="empty">まだメモがありません。</div>') + '</div>' : '')
   );
 
-  if (r) $('r-addmemo').addEventListener('click', function(){ openMemoSheet(null, r.id); });
+  if (r) $('r-memo').addEventListener('click', function(){
+    draft.tenantId = r.tenantId; draft.propId = r.propId;
+    saveDraft(); closeSheet(); go('memo'); renderMemoTab(); $('memo').focus();
+  });
 
   $('r-save').addEventListener('click', function(){
     var propId = $('r-prop').value, tenantId = $('r-ten').value;
     if (!tenantId){ toast('テナントを選んでください'); return; }
     if (!propId){ toast('案件を選んでください'); return; }
-    if (!r){
-      for (var i = 0; i < db.rows.length; i++){
-        if (db.rows[i].propId === propId && db.rows[i].tenantId === tenantId){
-          toast('この組み合わせの行はすでにあります'); return;
-        }
-      }
+    var other = rowOf(tenantId, propId);
+    if (other && (!r || other.id !== r.id)){ toast('この組み合わせの行はすでにあります'); return; }
+    if (r && (r.tenantId !== tenantId || r.propId !== propId)){
+      db.logs.forEach(function(g){
+        if (g.tenantId === r.tenantId && g.propId === r.propId){ g.tenantId = tenantId; g.propId = propId; }
+      });
     }
     var rec = r || { id:uid(), ts:Date.now() };
     rec.propId = propId; rec.tenantId = tenantId;
@@ -850,10 +1091,10 @@ function openRowSheet(id, preset){
 
   $('r-cancel').addEventListener('click', closeSheet);
   if (r) $('r-del').addEventListener('click', function(){
-    var n = logsOfRow(r.id).length;
-    if (!confirm('この行を削除します。' + (n ? 'メモ ' + n + '件も一緒に消えます。' : '') + 'よろしいですか？')) return;
+    var n = logsOfRow(r).length;
+    if (!confirm('この行を削除します。' + (n ? 'メモ ' + n + '件は「案件なし」として残ります。' : '') + 'よろしいですか？')) return;
+    db.logs.forEach(function(g){ if (g.tenantId === r.tenantId && g.propId === r.propId) g.propId = ''; });
     db.rows = db.rows.filter(function(x){ return x.id !== r.id; });
-    db.logs = db.logs.filter(function(x){ return x.rowId !== r.id; });
     persist(); renderAll(); closeSheet();
     toast('削除しました');
   });
@@ -863,10 +1104,11 @@ function openRowSheet(id, preset){
 function openPropSheet(id){
   var p = id ? propById(id) : null;
   var rs = p ? rowsOfProp(p.id).sort(byActivity) : [];
+  var ls = p ? logsOfProp(p.id) : [];
 
   openSheet(
     '<h2>' + (p ? esc(p.name) : '案件を追加する') + '</h2>' +
-    (p ? '<p class="sub">打診 ' + rs.length + '社</p>' : '') +
+    (p ? '<p class="sub">打診 ' + rs.length + '社 ・ メモ ' + ls.length + '件</p>' : '') +
     (p ? '<button class="btn primary" id="p-addrow">この案件に打診先を足す</button>' : '') +
     '<label for="p-name">案件名</label>' +
     '<input type="text" id="p-name" value="' + esc(p ? p.name : '') + '" placeholder="例：伊丹寺本">' +
@@ -932,13 +1174,14 @@ function openPropSheet(id){
 
   $('p-cancel').addEventListener('click', closeSheet);
   if (p) $('p-del').addEventListener('click', function(){
-    var n = rowsOfProp(p.id).length;
-    if (!confirm(p.name + ' を削除します。' + (n ? 'この案件の推進 ' + n + '行とメモも一緒に消えます。' : '') + 'よろしいですか？')) return;
-    var ids = rowsOfProp(p.id).map(function(r){ return r.id; });
-    db.props = db.props.filter(function(x){ return x.id !== p.id; });
+    var n = rowsOfProp(p.id).length, m = logsOfProp(p.id).length;
+    if (!confirm(p.name + ' を削除します。' + (n ? '推進 ' + n + '行が消えます。' : '') +
+      (m ? 'メモ ' + m + '件は「案件なし」として残ります。' : '') + 'よろしいですか？')) return;
+    db.logs.forEach(function(g){ if (g.propId === p.id) g.propId = ''; });
     db.rows = db.rows.filter(function(r){ return r.propId !== p.id; });
-    db.logs = db.logs.filter(function(g){ return ids.indexOf(g.rowId) < 0; });
-    persist(); renderAll(); closeSheet();
+    db.props = db.props.filter(function(x){ return x.id !== p.id; });
+    if (draft.propId === p.id) draft.propId = '';
+    persist(); saveDraft(); renderAll(); closeSheet();
     toast('削除しました');
   });
 }
@@ -947,11 +1190,12 @@ function openPropSheet(id){
 function openTenSheet(id){
   var t = id ? tenById(id) : null;
   var rs = t ? rowsOfTen(t.id).sort(byActivity) : [];
+  var ls = t ? logsOfTen(t.id) : [];
 
   openSheet(
     '<h2>' + (t ? esc(t.name) : 'テナントを追加する') + '</h2>' +
-    (t ? '<p class="sub">打診 ' + rs.length + '件</p>' : '') +
-    (t ? '<button class="btn primary" id="t-addrow">この先に案件を足す</button>' : '') +
+    (t ? '<p class="sub">打診 ' + rs.length + '件 ・ メモ ' + ls.length + '件</p>' : '') +
+    (t ? '<button class="btn primary" id="t-memo">この相手でメモを書く</button>' : '') +
     '<label for="t-name">テナント名</label>' +
     '<input type="text" id="t-name" value="' + esc(t ? t.name : '') + '" placeholder="例：㈱吉野家HD">' +
     '<label for="t-cat">業種</label>' +
@@ -977,11 +1221,17 @@ function openTenSheet(id){
     '</div>' +
     (t ? '<div class="sec"><span>この先への打診</span><span class="line"></span><span class="n">' + rs.length + '件</span></div>' +
       '<div class="card">' + (rs.length ? rs.map(pushRow).join('') :
-        '<div class="empty">まだ打診していません。</div>') + '</div>' : '') +
+        '<div class="empty">まだ打診していません。</div>') + '</div>' +
+      '<div class="sec"><span>この先とのメモ</span><span class="line"></span><span class="n">' + ls.length + '件</span></div>' +
+      '<div class="card">' + (ls.length ? ls.slice(0, 20).map(memoRowHtml).join('') :
+        '<div class="empty">まだメモがありません。</div>') + '</div>' : '') +
     '<datalist id="cats">' + catList() + '</datalist>'
   );
 
-  if (t) $('t-addrow').addEventListener('click', function(){ openRowSheet(null, { tenantId:t.id }); });
+  if (t) $('t-memo').addEventListener('click', function(){
+    draft.tenantId = t.id; draft.propId = autoProp(t.id);
+    saveDraft(); closeSheet(); go('memo'); renderMemoTab(); $('memo').focus();
+  });
 
   $('t-save').addEventListener('click', function(){
     var name = $('t-name').value.trim();
@@ -1001,13 +1251,14 @@ function openTenSheet(id){
 
   $('t-cancel').addEventListener('click', closeSheet);
   if (t) $('t-del').addEventListener('click', function(){
-    var n = rowsOfTen(t.id).length;
-    if (!confirm(t.name + ' を名簿から削除します。' + (n ? 'この先への推進 ' + n + '行とメモも一緒に消えます。' : '') + 'よろしいですか？')) return;
-    var ids = rowsOfTen(t.id).map(function(r){ return r.id; });
-    db.tenants = db.tenants.filter(function(x){ return x.id !== t.id; });
+    var n = rowsOfTen(t.id).length, m = logsOfTen(t.id).length;
+    if (!confirm(t.name + ' を名簿から削除します。' + (n ? '推進 ' + n + '行が消えます。' : '') +
+      (m ? 'メモ ' + m + '件は「相手なし」として残ります。' : '') + 'よろしいですか？')) return;
+    db.logs.forEach(function(g){ if (g.tenantId === t.id){ g.tenantId = ''; g.propId = ''; } });
     db.rows = db.rows.filter(function(r){ return r.tenantId !== t.id; });
-    db.logs = db.logs.filter(function(g){ return ids.indexOf(g.rowId) < 0; });
-    persist(); renderAll(); closeSheet();
+    db.tenants = db.tenants.filter(function(x){ return x.id !== t.id; });
+    if (draft.tenantId === t.id){ draft.tenantId = ''; draft.propId = ''; }
+    persist(); saveDraft(); renderAll(); closeSheet();
     toast('削除しました');
   });
 }
@@ -1026,11 +1277,7 @@ function normDate(s){
   s = String(s == null ? '' : s).trim();
   if (!s) return '';
   var m = s.match(/^(\d{4})[-\/年.](\d{1,2})[-\/月.](\d{1,2})/);
-  if (!m) return '';
-  return m[1] + '-' + two(+m[2]) + '-' + two(+m[3]);
-}
-function splitCells(line){
-  return line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+  return m ? m[1] + '-' + two(+m[2]) + '-' + two(+m[3]) : '';
 }
 function openBulkSheet(kind){
   var isTen = kind === 'ten';
@@ -1059,10 +1306,9 @@ function openBulkSheet(kind){
     for (var i = 0; i < lines.length; i++){
       var line = lines[i].replace(/\r/g, '');
       if (!line.trim()) continue;
-      var f = splitCells(line);
+      var f = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
       var name = (f[0] || '').trim();
-      if (!name) continue;
-      if (name === 'テナント名' || name === '案件名') continue;
+      if (!name || name === 'テナント名' || name === '案件名') continue;
       var list = isTen ? db.tenants : db.props, dup = false;
       for (var j = 0; j < list.length; j++) if (list[j].name === name) dup = true;
       if (dup){ skipped++; continue; }
@@ -1109,7 +1355,7 @@ function inRange(d){ var r = periodRange(); return !!d && d >= r.s && d <= r.e; 
 
 function summarize(){
   var logs = db.logs.filter(function(g){ return inRange(g.date); })
-    .sort(function(a, b){ return a.date < b.date ? -1 : (a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0)); });
+    .sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
   var open = 0, reply = 0, deal = 0;
   db.rows.forEach(function(r){
     if (inRange(r.openDate)) open++;
@@ -1121,10 +1367,25 @@ function summarize(){
 
 function buildText(){
   var r = periodRange(), s = summarize();
-  var out = ['【テナント誘致 推進報告】' + r.label, ''];
+  var out = ['【テナント誘致 活動報告】' + r.label, ''];
   out.push('■ 動いた数');
   out.push('　メモ ' + s.logs.length + '件 ／ 情報開示 ' + s.open + '件 ／ 返事あり ' + s.reply +
     '件 ／ 成約 ' + s.deal + '件');
+
+  out.push('');
+  out.push('■ 連絡の記録');
+  if (!s.logs.length){
+    out.push('　この期間のメモはありません。');
+  } else {
+    var day = '';
+    s.logs.forEach(function(g){
+      if (g.date !== day){ day = g.date; out.push('　' + fmtDate(g.date)); }
+      var who = g.tenantId ? tenName(g.tenantId) : '（相手なし）';
+      if (g.propId) who += '／' + propName(g.propId);
+      out.push('　　' + hhmm(g.ts) + '　' + who + (g.kind ? '　' + g.kind : ''));
+      out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
+    });
+  }
 
   var late = db.rows.filter(function(x){ return stateOf(x).k === 'late'; })
     .sort(function(a, b){ return stateOf(b).days - stateOf(a).days; });
@@ -1145,23 +1406,8 @@ function buildText(){
       var spec = [p.addr, p.area, p.rent].filter(function(x){ return !!x; }).join('／');
       out.push('　・' + p.name + (spec ? '（' + spec + '）' : '') + '　打診 ' + rs.length + '社');
       rs.slice().sort(function(a, b){ return stateOf(a).sort - stateOf(b).sort; }).forEach(function(x){
-        out.push('　　' + tenName(x.tenantId) + '　' + stateOf(x).label +
-          (x.person ? '　担当 ' + x.person : ''));
+        out.push('　　' + tenName(x.tenantId) + '　' + stateOf(x).label + (x.person ? '　担当 ' + x.person : ''));
       });
-    });
-  }
-
-  out.push('');
-  out.push('■ この期間のやりとり');
-  if (!s.logs.length){
-    out.push('　メモはありません。');
-  } else {
-    var day = '';
-    s.logs.forEach(function(g){
-      if (g.date !== day){ day = g.date; out.push('　' + fmtDate(g.date)); }
-      var x = rowById(g.rowId);
-      out.push('　　' + (x ? tenName(x.tenantId) + '／' + (propName(x.propId) || '案件なし') : '（削除された行）'));
-      out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
     });
   }
   return out.join('\n');
@@ -1178,7 +1424,12 @@ function csvQuote(rows){
 
 function buildCSV(kind){
   var rows;
-  if (kind === 'prop'){
+  if (kind === 'memo'){
+    rows = [['日付','時刻','テナント名','案件','連絡のかたち','メモ']];
+    summarize().logs.forEach(function(g){
+      rows.push([g.date, hhmm(g.ts), g.tenantId ? tenName(g.tenantId) : '', propName(g.propId), g.kind, g.text]);
+    });
+  } else if (kind === 'prop'){
     rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','備考']];
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
       rows.push([p.name, p.addr, p.area, p.zoning, p.rent, p.startDate, p.owner, p.ownerTel,
@@ -1195,7 +1446,7 @@ function buildCSV(kind){
       .sort(function(a, b){ return a.closeDate < b.closeDate ? -1 : 1; })
       .forEach(function(r){
         rows.push([propName(r.propId), tenName(r.tenantId), r.person, r.openDate, r.replyDate,
-          r.closeDate, memoBlock(r.id)]);
+          r.closeDate, memoBlock(r.tenantId, r.propId)]);
       });
   } else {
     rows = [['案件','テナント名','担当者','情報開示日','返事日','状況','状態','メモ']];
@@ -1207,7 +1458,7 @@ function buildCSV(kind){
       })
       .forEach(function(r){
         rows.push([propName(r.propId), tenName(r.tenantId), r.person, r.openDate, r.replyDate,
-          r.status, stateOf(r).label, memoBlock(r.id)]);
+          r.status, stateOf(r).label, memoBlock(r.tenantId, r.propId)]);
       });
   }
   return csvQuote(rows);
@@ -1276,15 +1527,20 @@ function openExternal(url){
 
 /* ===================== お試し用のサンプル ===================== */
 function loadSample(){
-  function back(n){ var x = new Date(); x.setDate(x.getDate() - n); return ymd(x); }
+  function at(back, h, m){
+    var d = new Date(); d.setDate(d.getDate() - back); d.setHours(h, m, 0, 0);
+    return { ts:d.getTime(), date:ymd(d) };
+  }
+  function dateBack(n){ var x = new Date(); x.setDate(x.getDate() - n); return ymd(x); }
   var now = Date.now();
+
   var p1 = { id:uid(), ts:now+1, name:'伊丹寺本', addr:'伊丹市寺本', area:'150坪', zoning:'準工業',
-    rent:'坪1.2万', startDate:back(60), owner:'寺本地主', ownerTel:'', lessor:'', lessorTel:'',
+    rent:'坪1.2万', startDate:dateBack(60), owner:'寺本地主', ownerTel:'', lessor:'', lessorTel:'',
     memo:'幹線道路沿い。間口12m。' };
   var p2 = { id:uid(), ts:now+2, name:'川西市', addr:'川西市栄町', area:'80坪', zoning:'商業',
-    rent:'坪1.5万', startDate:back(40), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'' };
+    rent:'坪1.5万', startDate:dateBack(40), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'' };
   var p3 = { id:uid(), ts:now+3, name:'小中島', addr:'尼崎市小中島', area:'340坪', zoning:'工業',
-    rent:'相談', startDate:back(20), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'造成が要る。' };
+    rent:'相談', startDate:dateBack(20), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'造成が要る。' };
   db.props = [p1, p2, p3];
 
   var t1 = { id:uid(), ts:now+11, name:'㈱吉野家HD', cat:'飲食（牛丼）', agency:'〇〇不動産',
@@ -1299,33 +1555,38 @@ function loadSample(){
     tel:'', wantArea:'60坪＋駐車場', memo:'' };
   db.tenants = [t1, t2, t3, t4, t5];
 
-  var r1 = { id:uid(), ts:now+21, propId:p1.id, tenantId:t1.id, person:'山田',
-    openDate:back(15), replyDate:back(7), status:'条件協議中', closeDate:'' };
-  var r2 = { id:uid(), ts:now+22, propId:p1.id, tenantId:t2.id, person:'',
-    openDate:back(21), replyDate:'', status:'', closeDate:'' };
-  var r3 = { id:uid(), ts:now+23, propId:p2.id, tenantId:t4.id, person:'佐藤',
-    openDate:back(5), replyDate:back(2), status:'前向き', closeDate:'' };
-  var r4 = { id:uid(), ts:now+24, propId:p3.id, tenantId:t3.id, person:'',
-    openDate:'', replyDate:'', status:'', closeDate:'' };
-  var r5 = { id:uid(), ts:now+25, propId:p2.id, tenantId:t5.id, person:'',
-    openDate:back(50), replyDate:back(35), status:'見送り', closeDate:'' };
-  db.rows = [r1, r2, r3, r4, r5];
-
-  db.logs = [
-    { id:uid(), ts:now+31, rowId:r1.id, date:back(15), text:'情報開示。図面と条件表を送付。' },
-    { id:uid(), ts:now+32, rowId:r1.id, date:back(7), text:'賃料坪1.2万なら前向きと回答。駐車場15台が取れるか確認したいとのこと。' },
-    { id:uid(), ts:now+33, rowId:r1.id, date:back(2), text:'本部決裁は今月末。造成の負担区分をこちらで整理する。' },
-    { id:uid(), ts:now+34, rowId:r2.id, date:back(21), text:'情報開示。担当者が異動したばかりで確認に時間がかかりそうとのこと。' },
-    { id:uid(), ts:now+35, rowId:r3.id, date:back(5), text:'情報開示。' },
-    { id:uid(), ts:now+36, rowId:r3.id, date:back(2), text:'前向きに検討したいと連絡あり。現地を見たいとのことで日程調整中。' },
-    { id:uid(), ts:now+37, rowId:r5.id, date:back(35), text:'駐車場が確保できないため今回は見送りと回答。' }
+  db.rows = [
+    { id:uid(), ts:now+21, propId:p1.id, tenantId:t1.id, person:'山田',
+      openDate:dateBack(15), replyDate:dateBack(7), status:'条件協議中', closeDate:'' },
+    { id:uid(), ts:now+22, propId:p1.id, tenantId:t2.id, person:'',
+      openDate:dateBack(21), replyDate:'', status:'', closeDate:'' },
+    { id:uid(), ts:now+23, propId:p2.id, tenantId:t4.id, person:'佐藤',
+      openDate:dateBack(5), replyDate:dateBack(2), status:'前向き', closeDate:'' },
+    { id:uid(), ts:now+24, propId:p3.id, tenantId:t3.id, person:'',
+      openDate:'', replyDate:'', status:'', closeDate:'' },
+    { id:uid(), ts:now+25, propId:p2.id, tenantId:t5.id, person:'',
+      openDate:dateBack(50), replyDate:dateBack(35), status:'見送り', closeDate:'' }
   ];
+
+  var L = [
+    [15, 10, 20, t1.id, p1.id, 'メール', '情報開示。図面と条件表を送付した。'],
+    [7, 14, 5, t1.id, p1.id, '電話（先方）', '賃料坪1.2万なら前向きと回答。駐車場15台が取れるか確認したいとのこと。'],
+    [2, 11, 40, t1.id, p1.id, '訪問', '本社で条件のすり合わせ。本部決裁は今月末。造成の負担区分をこちらで整理する。'],
+    [21, 9, 30, t2.id, p1.id, 'メール', '情報開示。担当者が異動したばかりで確認に時間がかかりそうとのこと。'],
+    [5, 16, 10, t4.id, p2.id, 'メール', '情報開示。'],
+    [2, 9, 15, t4.id, p2.id, '電話（先方）', '前向きに検討したいと連絡あり。現地を見たいとのことで日程調整中。'],
+    [35, 13, 0, t5.id, p2.id, '電話（先方）', '駐車場が確保できないため今回は見送りと回答。'],
+    [0, 8, 45, '', '', '電話（先方）', '駅前の物件について問い合わせ。会社名を聞きそびれた。折り返し番号は 06-0000-1111。']
+  ];
+  db.logs = L.map(function(a, i){
+    var t = at(a[0], a[1], a[2]);
+    return { id:uid(), ts:t.ts + i, date:t.date, tenantId:a[3], propId:a[4], kind:a[5], text:a[6] };
+  });
   persist(); renderAll();
 }
 
 /* ===================== 操作 ===================== */
-var tabs = [['tab-home','view-home'], ['tab-push','view-push'], ['tab-prop','view-prop'],
-            ['tab-ten','view-ten'], ['tab-out','view-out']];
+var tabs = [['tab-memo','view-memo'], ['tab-push','view-push'], ['tab-book','view-book'], ['tab-out','view-out']];
 function go(which){
   tabs.forEach(function(p){
     var on = p[0] === 'tab-' + which;
@@ -1338,11 +1599,73 @@ function go(which){
 tabs.forEach(function(p){
   $(p[0]).addEventListener('click', function(){ go(p[0].slice(4)); });
 });
+function showBook(which){
+  $('book-prop').hidden = which !== 'prop';
+  $('book-ten').hidden = which !== 'ten';
+  var all = $('book-tabs').querySelectorAll('.chip');
+  for (var i = 0; i < all.length; i++){
+    all[i].setAttribute('aria-pressed', all[i].getAttribute('data-b') === which ? 'true' : 'false');
+  }
+}
+$('book-tabs').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  showBook(b.getAttribute('data-b'));
+});
+
+/* メモ画面のチップ */
+$('who-chips').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  var act = b.getAttribute('data-act');
+  if (act === 'find'){ openPicker('ten'); return; }
+  if (act === 'newten'){ openTenSheet(null); return; }
+  var id = b.getAttribute('data-ten');
+  if (id == null) return;
+  if (draft.tenantId === id){ draft.tenantId = ''; draft.propId = ''; }
+  else { draft.tenantId = id; draft.propId = autoProp(id); }
+  saveDraft(); renderWhoChips();
+});
+$('prop-chips').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  if (b.getAttribute('data-act') === 'findprop'){ openPicker('prop'); return; }
+  var id = b.getAttribute('data-prop');
+  if (id == null) return;
+  draft.propId = id;
+  saveDraft(); renderWhoChips();
+});
+$('kind-chips').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  draft.kind = b.getAttribute('data-kind');
+  saveDraft(); renderWhoChips();
+});
+
+var draftTimer = null;
+$('memo').addEventListener('input', function(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(saveDraft, 400);
+});
+$('memo').addEventListener('keydown', function(ev){
+  if ((ev.metaKey || ev.ctrlKey) && ev.key === 'Enter'){ ev.preventDefault(); saveMemo(); }
+});
+$('btn-save').addEventListener('click', saveMemo);
+$('unassigned-note').addEventListener('click', function(){
+  var el = $('unassigned-list');
+  if (el.scrollIntoView) el.scrollIntoView({ behavior:'smooth', block:'start' });
+});
+$('btn-more').addEventListener('click', function(){ shown += 30; renderTimeline(); });
 
 document.addEventListener('click', function(ev){
   var t = ev.target;
   if (!t || !t.closest) return;
-  var a = t.closest('[data-log]');  if (a){ openMemoSheet(a.getAttribute('data-log')); return; }
+  if (t.closest('.chips')) return;            /* チップは各自で処理する */
+  var a = t.closest('[data-log]');  if (a){ openLogSheet(a.getAttribute('data-log')); return; }
   var b = t.closest('[data-row]');  if (b){ openRowSheet(b.getAttribute('data-row')); return; }
   var c = t.closest('[data-prop]'); if (c){ openPropSheet(c.getAttribute('data-prop')); return; }
   var d = t.closest('[data-ten]');  if (d){ openTenSheet(d.getAttribute('data-ten')); return; }
@@ -1351,7 +1674,6 @@ document.addEventListener('click', function(ev){
 $('sheet').addEventListener('click', function(ev){ if (ev.target === this) closeSheet(); });
 document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && !$('sheet').hidden) closeSheet(); });
 
-$('btn-log').addEventListener('click', function(){ openMemoSheet(null); });
 $('btn-add-push').addEventListener('click', function(){ openRowSheet(null); });
 $('btn-add-prop').addEventListener('click', function(){ openPropSheet(null); });
 $('btn-add-ten').addEventListener('click', function(){ openTenSheet(null); });
@@ -1364,6 +1686,7 @@ $('filter-prop').addEventListener('change', renderPushes);
 $('chips-push').addEventListener('click', function(ev){
   var b = ev.target.closest ? ev.target.closest('.chip') : null;
   if (!b) return;
+  ev.stopPropagation();
   pushFilter = b.getAttribute('data-f');
   var all = this.querySelectorAll('.chip');
   for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
@@ -1375,13 +1698,12 @@ $('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本�
 
 $('btn-mail').addEventListener('click', function(){
   var full = buildText(), addr = $('mailto').value.trim();
-  var subject = 'テナント誘致 推進報告 ' + periodRange().label;
+  var subject = 'テナント誘致 活動報告 ' + periodRange().label;
   var body = full.length > 1600 ? full.slice(0, 1600) + '\n\n（長いため省略しました。全文は貼り付けてください）' : full;
   copyText(full, 'メールを開きます（本文はコピー済み）');
   openExternal('mailto:' + encodeURIComponent(addr) + '?subject=' + encodeURIComponent(subject) +
     '&body=' + encodeURIComponent(body));
 });
-
 $('btn-line').addEventListener('click', function(){
   var full = buildText();
   var body = full.length > 900 ? full.slice(0, 900) + '\n（以下省略）' : full;
@@ -1394,14 +1716,15 @@ $('btn-csv-copy').addEventListener('click', function(){
 });
 $('btn-csv-save').addEventListener('click', function(){
   var k = $('csvkind').value;
-  var nm = k === 'prop' ? '案件一覧' : (k === 'ten' ? 'テナント名簿' : (k === 'deal' ? '成約' : '推進表'));
+  var nm = k === 'prop' ? '案件一覧' : (k === 'ten' ? 'テナント名簿' :
+    (k === 'deal' ? '成約' : (k === 'memo' ? 'メモ一覧' : '推進表')));
   saveFile(nm + '_' + today() + '.csv', '﻿' + buildCSV(k), 'text/csv;charset=utf-8;');
 });
 
 $('btn-backup').addEventListener('click', function(){
-  var data = JSON.stringify({ app:'tenant-push', v:1, saved:new Date().toISOString(),
+  var data = JSON.stringify({ app:'tenant-memo', v:2, saved:new Date().toISOString(),
     props:db.props, tenants:db.tenants, rows:db.rows, logs:db.logs, mail:db.mail }, null, 1);
-  saveFile('テナント誘致推進表_' + today() + '.json', data, 'application/json');
+  saveFile('テナント誘致メモ_' + today() + '.json', data, 'application/json');
 });
 
 $('restore-file').addEventListener('change', function(){
@@ -1411,17 +1734,26 @@ $('restore-file').addEventListener('change', function(){
   fr.onload = function(){
     var obj = null;
     try { obj = JSON.parse(String(fr.result)); } catch(e){ obj = null; }
-    if (!obj || !Array.isArray(obj.rows) || !Array.isArray(obj.tenants)){
+    if (!obj || !Array.isArray(obj.logs) || !Array.isArray(obj.tenants)){
       toast('このファイルは読み込めませんでした'); input.value = ''; return;
     }
-    if (!confirm('いまの記録を、このファイルの内容で置きかえます。\n推進 ' + obj.rows.length +
-      '行 ／ 名簿 ' + obj.tenants.length + '社\nよろしいですか？')){ input.value = ''; return; }
+    if (!confirm('いまの記録を、このファイルの内容で置きかえます。\nメモ ' + obj.logs.length +
+      '件 ／ 名簿 ' + obj.tenants.length + '社\nよろしいですか？')){ input.value = ''; return; }
     db.props = Array.isArray(obj.props) ? obj.props : [];
     db.tenants = obj.tenants;
-    db.rows = obj.rows;
-    db.logs = Array.isArray(obj.logs) ? obj.logs : [];
+    db.rows = Array.isArray(obj.rows) ? obj.rows : [];
+    db.logs = obj.logs;
     db.mail = typeof obj.mail === 'string' ? obj.mail : '';
-    persist(); $('mailto').value = db.mail; renderAll(); renderOutput();
+    db.logs.forEach(function(g){
+      if (g.rowId && !g.tenantId){
+        var r = rowById(g.rowId);
+        if (r){ g.tenantId = r.tenantId; g.propId = r.propId; }
+        delete g.rowId;
+      }
+      if (!g.ts) g.ts = toDate(g.date) ? toDate(g.date).getTime() : Date.now();
+    });
+    draft.tenantId = ''; draft.propId = '';
+    persist(); saveDraft(); $('mailto').value = db.mail; renderAll(); renderOutput();
     input.value = '';
     toast('復元しました');
   };
@@ -1430,14 +1762,15 @@ $('restore-file').addEventListener('change', function(){
 });
 
 $('btn-wipe').addEventListener('click', function(){
-  if (!confirm('案件・名簿・推進・メモをすべて削除します。元に戻せません。よろしいですか？')) return;
+  if (!confirm('メモ・推進・案件・名簿をすべて削除します。元に戻せません。よろしいですか？')) return;
   db.props = []; db.tenants = []; db.rows = []; db.logs = [];
-  persist(); renderAll(); renderOutput();
+  draft.tenantId = ''; draft.propId = '';
+  persist(); saveDraft(); renderAll(); renderOutput();
   toast('すべて削除しました');
 });
 
 $('btn-sample').addEventListener('click', function(){
-  if (db.props.length || db.tenants.length || db.rows.length){
+  if (db.props.length || db.tenants.length || db.logs.length){
     toast('記録があるときは入れられません。試すときは空の状態でどうぞ');
     return;
   }
@@ -1449,7 +1782,13 @@ $('btn-sample').addEventListener('click', function(){
 $('mailto').value = db.mail;
 $('mailto').addEventListener('change', function(){ db.mail = this.value.trim(); persist(); });
 
+loadDraft();
+showBook('prop');
 renderAll();
+setInterval(function(){
+  var n = new Date();
+  $('now').textContent = (n.getMonth()+1) + '/' + n.getDate() + '（' + WD[n.getDay()] + '） ' + hhmm(n.getTime());
+}, 20000);
 })();
 </script>
 </body>
