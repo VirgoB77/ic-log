@@ -54,7 +54,7 @@ https://virgob77.github.io/ic-log/
 | `tools/build.sh` | `src` と `data` から `index.html` を生成する |
 | `tools/fetch-ic.sh` | IC一覧を OpenStreetMap から取り直す |
 | `dist/artifact.html` | 公開用（`build.sh` が生成） |
-| `tenant/index.html` | もうひとつのアプリ（テナント誘致台帳）。単体で動く |
+| `tenant/index.html` | もうひとつのアプリ（テナント誘致 推進表）。単体で動く |
 
 ### 作り直すとき
 
@@ -68,9 +68,10 @@ bash tools/build.sh
 bash tools/fetch-ic.sh && bash tools/build.sh
 ```
 
-## もうひとつのアプリ：テナント誘致台帳
+## もうひとつのアプリ：テナント誘致 推進表
 
-土地・空き物件にテナントを誘致するときの、接触の記録と「次にやること」を残すアプリ。
+土地・空き物件へのテナント誘致を、エクセルの推進表（案件×テナントの1行＋日付つきメモ）
+と同じ形のままスマホで持ち歩くアプリ。移動中に連絡が来ても、その場で1行残せる。
 同じ作り（1ファイルで完結・端末内に保存・スマホ用）で `tenant/` に入れてある。
 
 - 使い方: [tenant/README.md](tenant/README.md)

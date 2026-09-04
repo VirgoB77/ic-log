@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#24476f">
-<title>テナント誘致台帳</title>
+<title>テナント誘致 推進表</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
@@ -14,7 +14,8 @@
   --ground:#f4f5f2; --card:#ffffff; --ink:#16191d; --sub:#616974; --rule:#dfe2dd; --field:#eef0ec;
   --key:#24476f; --key-deep:#193453; --key-soft:#e7ecf3; --on-key:#ffffff;
   --hot:#b0442a; --hot-soft:#f8e9e4;
-  --ok:#1d7048; --ok-soft:#e4efe8;
+  --ok:#1d7048; --ok-soft:#e2efe8;
+  --warn:#946412; --warn-soft:#f8efdd;
   --mute:#6f7883;
   --shadow:0 1px 2px rgba(16,22,30,.06), 0 10px 26px rgba(16,22,30,.09);
 }
@@ -25,6 +26,7 @@
     --key:#6d9cd6; --key-deep:#2c5788; --key-soft:#151f2c; --on-key:#ffffff;
     --hot:#e08a6d; --hot-soft:#2b1c16;
     --ok:#4faa7d; --ok-soft:#16241d;
+    --warn:#d4a344; --warn-soft:#2a2113;
     --mute:#8b949e;
     --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
   }
@@ -35,6 +37,7 @@
   --key:#6d9cd6; --key-deep:#2c5788; --key-soft:#151f2c; --on-key:#ffffff;
   --hot:#e08a6d; --hot-soft:#2b1c16;
   --ok:#4faa7d; --ok-soft:#16241d;
+  --warn:#d4a344; --warn-soft:#2a2113;
   --mute:#8b949e;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
 }
@@ -56,8 +59,8 @@ header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max
 .brand h1{font-size:17px;font-weight:900;letter-spacing:.06em;margin:0}
 .brand .count{font-size:11px;color:var(--sub);letter-spacing:.04em}
 
-nav{display:flex;gap:4px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
-nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;font-size:14px;font-weight:700;letter-spacing:.06em;padding:9px 4px;border-radius:8px;cursor:pointer}
+nav{display:flex;gap:3px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
+nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;font-size:13.5px;font-weight:700;letter-spacing:.04em;padding:9px 2px;border-radius:8px;cursor:pointer}
 nav button[aria-selected="true"]{background:var(--key);color:var(--on-key)}
 nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
@@ -68,7 +71,6 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 .card{background:var(--card);border:1px solid var(--rule);border-radius:13px;padding:4px 14px;margin-top:10px;box-shadow:var(--shadow)}
 .card.pad{padding:14px}
 
-/* 大ボタン */
 .big{
   position:relative;display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);
   border-radius:14px;padding:20px 18px 17px;margin-top:14px;font:inherit;text-align:left;
@@ -85,9 +87,9 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 .stat div{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:9px 3px;text-align:center;box-shadow:var(--shadow)}
 .stat b{display:block;font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums;font-size:21px;font-weight:700;line-height:1.3}
 .stat span{font-size:10.5px;color:var(--sub);letter-spacing:.04em}
-.stat .warn b{color:var(--hot)}
+.stat .late b{color:var(--hot)}
+.stat .good b{color:var(--ok)}
 
-/* 一覧の行 */
 .item{display:flex;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
   background:transparent;border:0;border-top:1px solid var(--rule);padding:12px 0;cursor:pointer}
 .item:first-child{border-top:0}
@@ -95,30 +97,28 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 .item .body{flex:1;min-width:0}
 .item .ttl{font-weight:700;font-size:15.5px;line-height:1.45;word-break:break-word;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .item .meta{font-size:12px;color:var(--sub);margin-top:1px;word-break:break-word}
-.item .next{font-size:12.5px;font-weight:700;color:var(--key);margin-top:3px;word-break:break-word}
-.item .next.over{color:var(--hot)}
+.item .memo{font-size:13px;color:var(--ink);margin-top:3px;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .item .chev{flex:none;color:var(--sub);font-size:20px;line-height:1}
 
-.bdg{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.06em;border-radius:5px;padding:1px 6px;line-height:1.7;border:1px solid transparent}
-.bdg.a{background:var(--hot-soft);color:var(--hot);border-color:var(--hot)}
-.bdg.b{background:var(--key-soft);color:var(--key);border-color:var(--key)}
-.bdg.c{background:var(--field);color:var(--mute);border-color:var(--rule)}
-.bdg.stage{background:var(--field);color:var(--sub);border-color:var(--rule)}
-.bdg.stage.on{background:var(--key-soft);color:var(--key);border-color:var(--key)}
-.bdg.stage.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
-.bdg.stage.drop{background:var(--field);color:var(--mute);border-color:var(--rule);opacity:.8}
-.bdg.land{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
-.bdg.bldg{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+/* 状態のバッジ（エクセルの色分けに合わせる） */
+.bdg{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:5px;padding:1px 6px;line-height:1.7;border:1px solid transparent;white-space:nowrap}
+.bdg.s-none{background:var(--field);color:var(--mute);border-color:var(--rule)}
+.bdg.s-wait{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+.bdg.s-late{background:var(--hot-soft);color:var(--hot);border-color:var(--hot)}
+.bdg.s-good{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.bdg.s-talk{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+.bdg.s-drop{background:var(--field);color:var(--mute);border-color:var(--rule);opacity:.85}
+.bdg.s-deal{background:var(--ok);color:#fff;border-color:var(--ok)}
+.bdg.plain{background:var(--field);color:var(--sub);border-color:var(--rule)}
 
-/* 履歴のタイムライン */
 .tl{border-top:1px solid var(--rule);padding:11px 0;display:flex;gap:10px;align-items:flex-start}
 .tl:first-child{border-top:0}
 .tl .body{flex:1;min-width:0}
 .tl .head{font-size:14.5px;font-weight:700;display:flex;gap:7px;align-items:center;flex-wrap:wrap;line-height:1.55}
 .tl .when{flex:none;font-family:"Roboto Mono",monospace;font-size:11.5px;color:var(--sub);font-weight:700}
-.tl .kind{font-size:10.5px;font-weight:700;letter-spacing:.06em;background:var(--key-soft);color:var(--key);border-radius:5px;padding:1px 6px}
-.tl .txt{font-size:13.5px;color:var(--ink);margin-top:2px;white-space:pre-wrap;word-break:break-word}
 .tl .to{font-size:12px;color:var(--sub);margin-top:1px}
+.tl .txt{font-size:13.5px;margin-top:2px;white-space:pre-wrap;word-break:break-word}
 .tl .edit{flex:none;border:1px solid var(--rule);background:transparent;color:var(--sub);font:inherit;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 9px;cursor:pointer;align-self:flex-start}
 .tl .edit:hover{color:var(--ink);border-color:var(--sub)}
 
@@ -131,7 +131,7 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 .chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
 label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
-input[type=text],input[type=date],input[type=tel],input[type=email],input[type=search],select,textarea{
+input[type=text],input[type=date],input[type=tel],input[type=search],select,textarea{
   width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
   border:1px solid var(--rule);border-radius:9px;padding:11px 12px;
 }
@@ -153,6 +153,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px soli
   border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
 .sheet h2{margin:2px 0 0;font-size:15.5px;font-weight:900;letter-spacing:.06em}
 .sheet .sub{font-size:12px;color:var(--sub);margin:4px 0 0}
+.hint{font-size:11.5px;color:var(--sub);line-height:1.8;margin:7px 2px 0}
 
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;background:var(--ink);color:var(--ground);
   font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
@@ -172,74 +173,95 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
 <div class="wrap">
 <header>
   <div class="brand">
-    <h1>テナント誘致台帳</h1>
+    <h1>テナント誘致 推進表</h1>
     <span class="count mono" id="hdcount"></span>
   </div>
   <nav role="tablist">
     <button role="tab" id="tab-home" aria-selected="true">動き</button>
-    <button role="tab" id="tab-lead" aria-selected="false">候補先</button>
-    <button role="tab" id="tab-prop" aria-selected="false">物件</button>
+    <button role="tab" id="tab-push" aria-selected="false">推進</button>
+    <button role="tab" id="tab-prop" aria-selected="false">案件</button>
+    <button role="tab" id="tab-ten" aria-selected="false">名簿</button>
     <button role="tab" id="tab-out" aria-selected="false">送る</button>
   </nav>
 </header>
 
 <section id="view-home">
   <button class="big" id="btn-log">
-    <span class="verb">接触を記録</span>
-    <span class="role">電話・訪問・内見・メール</span>
+    <span class="verb">メモを記録</span>
+    <span class="role">連絡があったら その場で1行</span>
   </button>
 
   <div class="stat">
-    <div class="warn"><b id="st-todo">0</b><span>要対応</span></div>
-    <div><b id="st-month">0</b><span>今月の接触</span></div>
-    <div><b id="st-live">0</b><span>進行中</span></div>
-    <div><b id="st-prop">0</b><span>物件</span></div>
+    <div class="late"><b id="st-late">0</b><span>14日超</span></div>
+    <div><b id="st-wait">0</b><span>返事待ち</span></div>
+    <div class="good"><b id="st-good">0</b><span>前向き</span></div>
+    <div><b id="st-talk">0</b><span>条件協議</span></div>
   </div>
 
-  <div class="sec"><span>次にやること</span><span class="line"></span><span class="n" id="n-todo"></span></div>
-  <div class="card" id="todo"></div>
+  <div class="sec"><span>返事が来ていない</span><span class="line"></span><span class="n" id="n-wait"></span></div>
+  <div class="card" id="waiting"></div>
 
-  <div class="sec"><span>最近の記録</span><span class="line"></span><span class="n" id="n-recent"></span></div>
+  <div class="sec"><span>最近のメモ</span><span class="line"></span><span class="n" id="n-recent"></span></div>
   <div class="card" id="recent"></div>
 
-  <div class="sec"><span>しばらく置いている先</span><span class="line"></span><span class="n" id="n-stale"></span></div>
-  <div class="card" id="stale"></div>
+  <div class="sec"><span>まだ打診していない</span><span class="line"></span><span class="n" id="n-yet"></span></div>
+  <div class="card" id="yet"></div>
 
   <p class="note-hint">
-    電話や訪問が終わったら、その場で<b>「接触を記録」</b>を押して一行だけ残してください。<br>
-    次にやることの日付を入れておくと、この画面の上に出てきます。<br>
-    記録は<b>この端末の中だけ</b>に保存されます。機種変更の前に「送る」タブでバックアップを取ってください。
+    エクセルの<b>推進表</b>と同じ形です。1行＝<b>案件×テナント</b>。<br>
+    情報開示日を入れると「返事待ち ○日」に変わり、<b>14日を過ぎると赤</b>で出ます。<br>
+    メモは日付つきで、<b>新しいものが上</b>に積まれます。<br>
+    記録はこの端末の中だけに保存されます。「送る」タブでバックアップを取ってください。
   </p>
 </section>
 
-<section id="view-lead" hidden>
+<section id="view-push" hidden>
   <div class="tools">
-    <input type="search" id="q-lead" placeholder="会社名・業種・担当者で探す" autocomplete="off">
-    <div class="chips" id="chips-lead">
-      <button class="chip" data-f="all" aria-pressed="true">すべて</button>
-      <button class="chip" data-f="todo" aria-pressed="false">要対応</button>
-      <button class="chip" data-f="live" aria-pressed="false">進行中</button>
-      <button class="chip" data-f="new" aria-pressed="false">未接触</button>
-      <button class="chip" data-f="A" aria-pressed="false">温度A</button>
-      <button class="chip" data-f="B" aria-pressed="false">温度B</button>
-      <button class="chip" data-f="C" aria-pressed="false">温度C</button>
-      <button class="chip" data-f="done" aria-pressed="false">成約</button>
-      <button class="chip" data-f="drop" aria-pressed="false">見送り</button>
+    <input type="search" id="q-push" placeholder="テナント名・案件・担当者・メモで探す" autocomplete="off">
+    <select id="filter-prop"></select>
+    <div class="chips" id="chips-push">
+      <button class="chip" data-f="live" aria-pressed="true">進行中</button>
+      <button class="chip" data-f="late" aria-pressed="false">14日超</button>
+      <button class="chip" data-f="wait" aria-pressed="false">返事待ち</button>
+      <button class="chip" data-f="yet" aria-pressed="false">未打診</button>
+      <button class="chip" data-f="前向き" aria-pressed="false">前向き</button>
+      <button class="chip" data-f="条件協議中" aria-pressed="false">条件協議中</button>
+      <button class="chip" data-f="見送り" aria-pressed="false">見送り</button>
+      <button class="chip" data-f="deal" aria-pressed="false">成約</button>
+      <button class="chip" data-f="all" aria-pressed="false">すべて</button>
     </div>
   </div>
-  <div class="card" id="leads"></div>
-  <div class="row">
-    <button class="btn primary" id="btn-add-lead">＋ 候補先を追加</button>
-    <button class="btn" id="btn-bulk">まとめて追加</button>
-  </div>
+  <div class="card" id="pushes"></div>
+  <button class="btn primary" id="btn-add-push">＋ 打診する相手を足す</button>
+  <p class="note-hint">
+    声をかけると決めた相手だけ行を作ります。<b>案件とテナントを選ぶだけ</b>で、
+    情報開示日はあとから入れられます。
+  </p>
 </section>
 
 <section id="view-prop" hidden>
   <div id="props"></div>
-  <button class="btn primary" id="btn-add-prop">＋ 物件を追加</button>
+  <div class="row">
+    <button class="btn primary" id="btn-add-prop">＋ 案件を追加</button>
+    <button class="btn" id="btn-bulk-prop">まとめて追加</button>
+  </div>
   <p class="note-hint">
-    土地・空き物件を1件ずつ登録します。候補先の<b>「対象物件」</b>で結びつけると、
-    どの物件に何社当たっているかがこの画面に出ます。
+    エクセルの<b>案件一覧</b>にあたります。所在地・面積・用途地域・賃料想定・地主・貸主まで持てます。
+  </p>
+</section>
+
+<section id="view-ten" hidden>
+  <div class="tools">
+    <input type="search" id="q-ten" placeholder="テナント名・業種・窓口会社で探す" autocomplete="off">
+  </div>
+  <div class="card" id="tenants"></div>
+  <div class="row">
+    <button class="btn primary" id="btn-add-ten">＋ テナントを追加</button>
+    <button class="btn" id="btn-bulk-ten">まとめて追加</button>
+  </div>
+  <p class="note-hint">
+    エクセルの<b>テナント名簿</b>にあたります。<b>「まとめて追加」</b>に、いまの名簿の表を
+    そのまま貼り付ければ50社でも一度に入ります。
   </p>
 </section>
 
@@ -254,10 +276,10 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
       <option value="all">すべて</option>
     </select>
     <div class="stat">
-      <div><b id="rp-log">0</b><span>接触件数</span></div>
-      <div><b id="rp-lead">0</b><span>接触した先</span></div>
-      <div><b id="rp-view">0</b><span>内見</span></div>
-      <div><b id="rp-deal">0</b><span>成約</span></div>
+      <div><b id="rp-memo">0</b><span>メモ件数</span></div>
+      <div><b id="rp-open">0</b><span>情報開示</span></div>
+      <div><b id="rp-reply">0</b><span>返事あり</span></div>
+      <div class="good"><b id="rp-deal">0</b><span>成約</span></div>
     </div>
     <pre class="out" id="preview"></pre>
     <div class="row">
@@ -270,23 +292,24 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
   </div>
 
   <div class="card pad">
-    <label for="csvkind">Excel用の書き出し（CSV）</label>
+    <label for="csvkind">エクセルへ戻す（CSV・列の並びは元の表と同じ）</label>
     <select id="csvkind">
-      <option value="log">接触履歴（期間で絞る）</option>
-      <option value="lead">候補先の一覧（すべて）</option>
-      <option value="prop">物件の一覧（すべて）</option>
+      <option value="push">推進表</option>
+      <option value="deal">成約</option>
+      <option value="prop">案件一覧</option>
+      <option value="ten">テナント名簿</option>
     </select>
     <div class="row">
       <button class="btn" id="btn-csv-copy">コピー</button>
       <button class="btn" id="btn-csv-save">ファイルに保存</button>
     </div>
+    <p class="hint">「コピー」してエクセルのA1に貼り付けると、元の表と同じ並びで入ります。</p>
   </div>
 
   <div class="card pad">
     <label>バックアップ（機種変更・端末の乗り換え用）</label>
-    <p class="note-hint" style="margin:0">
-      記録は端末の中にしかありません。<b>月に一度</b>ここから書き出しておくと、
-      別の端末やブラウザにそのまま移せます。
+    <p class="hint" style="margin-top:0">
+      記録は端末の中にしかありません。月に一度ここから書き出しておくと、別の端末にそのまま移せます。
     </p>
     <button class="btn" id="btn-backup">バックアップを保存（.json）</button>
     <label for="restore-file">バックアップから復元</label>
@@ -306,17 +329,18 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
 'use strict';
 
 /* ===================== 保存（端末内のみ） ===================== */
-var KEY = 'tenant-log.v1';
-var db = { props:[], leads:[], logs:[], mail:'' };
+var KEY = 'tenant-push.v1';
+var db = { props:[], tenants:[], rows:[], logs:[], mail:'' };
 
 (function load(){
   var raw = null;
   try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){ raw = null; }
   if (raw && typeof raw === 'object'){
-    db.props = Array.isArray(raw.props) ? raw.props : [];
-    db.leads = Array.isArray(raw.leads) ? raw.leads : [];
-    db.logs  = Array.isArray(raw.logs)  ? raw.logs  : [];
-    db.mail  = typeof raw.mail === 'string' ? raw.mail : '';
+    db.props   = Array.isArray(raw.props)   ? raw.props   : [];
+    db.tenants = Array.isArray(raw.tenants) ? raw.tenants : [];
+    db.rows    = Array.isArray(raw.rows)    ? raw.rows    : [];
+    db.logs    = Array.isArray(raw.logs)    ? raw.logs    : [];
+    db.mail    = typeof raw.mail === 'string' ? raw.mail : '';
   }
 })();
 
@@ -325,12 +349,9 @@ function persist(){
   catch(e){ toast('保存できませんでした。端末の空き容量を確認してください'); }
 }
 
-/* ===================== 決まった選択肢 ===================== */
-var STAGES = ['未接触','打診中','提案済','内見済','条件交渉','成約','見送り'];
-var KINDS  = ['電話','訪問','来店してもらった','メール','資料送付','内見','紹介','その他'];
-var PKINDS = ['土地','建物','区画'];
-var PSTATE = ['募集中','商談中','成約','停止'];
-var TEMPS  = [['A','A　熱い（前向き）'],['B','B　普通（検討中）'],['C','C　低い（様子見）']];
+/* エクセルと同じ選択肢 */
+var STATUS = ['前向き','条件協議中','見送り'];
+var LATE = 14;   /* 情報開示からこの日数を過ぎて返事がなければ赤 */
 
 /* ===================== 小道具 ===================== */
 var $ = function(id){ return document.getElementById(id); };
@@ -349,36 +370,13 @@ function toDate(s){
   var d = new Date(+p[0], +p[1] - 1, +p[2]);
   return isNaN(d.getTime()) ? null : d;
 }
-function fmtDate(s){
-  var d = toDate(s);
-  if (!d) return '';
-  return (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）';
-}
-function fmtDateY(s){
-  var d = toDate(s);
-  if (!d) return '';
-  return d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日（' + WD[d.getDay()] + '）';
-}
-/* a から b までの日数（b が後なら正） */
+function md(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() : ''; }
+function fmtDate(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）' : ''; }
+function fmtDateY(s){ var d = toDate(s); return d ? d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日' : ''; }
 function dayDiff(a, b){
   var da = toDate(a), dbb = toDate(b);
   if (!da || !dbb) return null;
   return Math.round((dbb.getTime() - da.getTime()) / 86400000);
-}
-function agoText(s){
-  var n = dayDiff(s, today());
-  if (n == null) return '';
-  if (n <= 0) return 'きょう';
-  if (n === 1) return 'きのう';
-  return n + '日前';
-}
-function dueText(s){
-  var n = dayDiff(today(), s);
-  if (n == null) return '';
-  if (n < 0) return (-n) + '日すぎ';
-  if (n === 0) return 'きょう';
-  if (n === 1) return 'あす';
-  return 'あと' + n + '日';
 }
 
 var toastTimer = null;
@@ -391,16 +389,34 @@ function toast(msg){
 }
 
 /* ===================== 引き出し ===================== */
-function leadById(id){
-  for (var i = 0; i < db.leads.length; i++) if (db.leads[i].id === id) return db.leads[i];
+function byId(list, id){
+  for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
   return null;
 }
-function propById(id){
-  for (var i = 0; i < db.props.length; i++) if (db.props[i].id === id) return db.props[i];
-  return null;
-}
-function leadName(id){ var l = leadById(id); return l ? l.name : '（削除された候補先）'; }
+function propById(id){ return byId(db.props, id); }
+function tenById(id){ return byId(db.tenants, id); }
+function rowById(id){ return byId(db.rows, id); }
+function logById(id){ return byId(db.logs, id); }
 function propName(id){ var p = propById(id); return p ? p.name : ''; }
+function tenName(id){ var t = tenById(id); return t ? t.name : '（削除されたテナント）'; }
+function rowTitle(r){ return tenName(r.tenantId) + '　／　' + (propName(r.propId) || '案件なし'); }
+
+/* エクセルの「状態」列と同じ判定 */
+function stateOf(r){
+  if (r.closeDate) return { k:'deal', label:'成約', cls:'s-deal', sort:6 };
+  if (!r.openDate) return { k:'yet', label:'未打診', cls:'s-none', sort:5 };
+  if (!r.replyDate){
+    var n = dayDiff(r.openDate, today());
+    if (n == null || n < 0) n = 0;
+    var late = n >= LATE;
+    return { k:late ? 'late' : 'wait', label:'返事待ち ' + n + '日', cls:late ? 's-late' : 's-wait', days:n, sort:late ? 0 : 3 };
+  }
+  if (!r.status) return { k:'reply', label:'返事あり（状況未入力）', cls:'s-wait', sort:1 };
+  if (r.status === '前向き') return { k:'前向き', label:'前向き', cls:'s-good', sort:2 };
+  if (r.status === '条件協議中') return { k:'条件協議中', label:'条件協議中', cls:'s-talk', sort:2 };
+  return { k:'見送り', label:'見送り', cls:'s-drop', sort:7 };
+}
+function isLive(r){ var s = stateOf(r); return s.k !== 'deal' && s.k !== '見送り'; }
 
 function logsSorted(list){
   return list.slice().sort(function(a, b){
@@ -408,189 +424,233 @@ function logsSorted(list){
     return a.date < b.date ? 1 : -1;
   });
 }
-function logsOfLead(id){
-  return logsSorted(db.logs.filter(function(g){ return g.leadId === id; }));
+function logsOfRow(id){ return logsSorted(db.logs.filter(function(g){ return g.rowId === id; })); }
+function lastLog(id){ var l = logsOfRow(id); return l.length ? l[0] : null; }
+function memoBlock(id){
+  return logsOfRow(id).map(function(g){ return md(g.date) + ' ' + g.text; }).join('\n');
 }
-function logsOfProp(id){
-  return logsSorted(db.logs.filter(function(g){ return g.propId === id; }));
+function rowsOfProp(id){ return db.rows.filter(function(r){ return r.propId === id; }); }
+function rowsOfTen(id){ return db.rows.filter(function(r){ return r.tenantId === id; }); }
+
+/* 動きの新しい順（最新メモ → 返事日 → 情報開示日） */
+function rowStamp(r){
+  var g = lastLog(r.id);
+  return (g && g.date) || r.replyDate || r.openDate || '';
 }
-function lastContact(id){
-  var l = logsOfLead(id);
-  return l.length ? l[0].date : '';
-}
-function isLive(l){ return l.stage !== '成約' && l.stage !== '見送り'; }
-function leadsOfProp(id){
-  return db.leads.filter(function(l){ return l.propId === id; });
-}
-function stageClass(s){
-  if (s === '成約') return 'done';
-  if (s === '見送り') return 'drop';
-  if (s === '未接触' || !s) return '';
-  return 'on';
+function byActivity(a, b){
+  var sa = rowStamp(a), sb = rowStamp(b);
+  if (sa && sb) return sa < sb ? 1 : (sa > sb ? -1 : 0);
+  if (sa) return -1;
+  if (sb) return 1;
+  return (b.ts || 0) - (a.ts || 0);
 }
 
-/* ===================== 画面：動き ===================== */
-function tlRow(g){
-  var l = leadById(g.leadId);
-  var pn = g.propId ? propName(g.propId) : '';
-  var h = '<div class="tl">' +
-    '<div class="body">' +
-      '<div class="head">' +
-        '<span class="when">' + esc(fmtDate(g.date)) + '</span>' +
-        '<span class="kind">' + esc(g.kind || 'その他') + '</span>' +
-        '<span>' + esc(l ? l.name : '（削除された候補先）') + '</span>' +
-        (g.stage ? '<span class="bdg stage ' + stageClass(g.stage) + '">→ ' + esc(g.stage) + '</span>' : '') +
-      '</div>' +
-      (pn ? '<div class="to">物件：' + esc(pn) + '</div>' : '') +
-      (g.text ? '<div class="txt">' + esc(g.text) + '</div>' : '') +
-    '</div>' +
-    '<button class="edit" data-log="' + esc(g.id) + '">直す</button>' +
-  '</div>';
-  return h;
-}
-
-function leadRow(l){
-  var last = lastContact(l.id);
-  var pn = l.propId ? propName(l.propId) : '';
+/* ===================== 行の描き方 ===================== */
+function pushRow(r){
+  var s = stateOf(r);
+  var g = lastLog(r.id);
   var meta = [];
-  if (l.cat) meta.push(esc(l.cat));
-  if (l.person) meta.push('担当 ' + esc(l.person));
-  meta.push(last ? '最終接触 ' + esc(agoText(last)) : '未接触');
-  var over = l.nextDate && dayDiff(today(), l.nextDate) <= 0;
-  return '<button class="item" data-lead="' + esc(l.id) + '">' +
+  if (r.propId) meta.push(esc(propName(r.propId)));
+  if (r.person) meta.push('担当 ' + esc(r.person));
+  if (r.openDate) meta.push('開示 ' + esc(md(r.openDate)));
+  if (r.replyDate) meta.push('返事 ' + esc(md(r.replyDate)));
+  if (r.closeDate) meta.push('成約 ' + esc(md(r.closeDate)));
+  return '<button class="item" data-row="' + esc(r.id) + '">' +
     '<div class="body">' +
-      '<div class="ttl">' + esc(l.name) +
-        '<span class="bdg ' + (l.temp || 'B').toLowerCase() + '">' + esc(l.temp || 'B') + '</span>' +
-        '<span class="bdg stage ' + stageClass(l.stage) + '">' + esc(l.stage || '未接触') + '</span>' +
-      '</div>' +
-      '<div class="meta">' + meta.join(' ・ ') + (pn ? ' ・ ' + esc(pn) : '') + '</div>' +
-      (l.nextDate ? '<div class="next' + (over ? ' over' : '') + '">次：' + esc(fmtDate(l.nextDate)) +
-        '（' + esc(dueText(l.nextDate)) + '）' + (l.nextText ? '　' + esc(l.nextText) : '') + '</div>' : '') +
+      '<div class="ttl">' + esc(tenName(r.tenantId)) +
+        '<span class="bdg ' + s.cls + '">' + esc(s.label) + '</span></div>' +
+      '<div class="meta">' + meta.join(' ・ ') + '</div>' +
+      (g ? '<div class="memo">' + esc(md(g.date) + ' ' + g.text) + '</div>' : '') +
     '</div>' +
     '<div class="chev">›</div>' +
   '</button>';
 }
 
+function tlRow(g){
+  var r = rowById(g.rowId);
+  return '<div class="tl">' +
+    '<div class="body">' +
+      '<div class="head">' +
+        '<span class="when">' + esc(fmtDate(g.date)) + '</span>' +
+        '<span>' + esc(r ? tenName(r.tenantId) : '（削除された行）') + '</span>' +
+        (r && r.propId ? '<span class="bdg plain">' + esc(propName(r.propId)) + '</span>' : '') +
+      '</div>' +
+      '<div class="txt">' + esc(g.text) + '</div>' +
+    '</div>' +
+    '<button class="edit" data-log="' + esc(g.id) + '">直す</button>' +
+  '</div>';
+}
+
+/* ===================== 画面：動き ===================== */
 function renderHome(){
-  var t = today();
-  var due = db.leads.filter(function(l){ return l.nextDate && isLive(l); })
-    .sort(function(a, b){ return a.nextDate < b.nextDate ? -1 : 1; });
-  var overdue = due.filter(function(l){ return dayDiff(t, l.nextDate) <= 0; });
+  var waiting = [], late = 0, good = 0, talk = 0, yet = [];
+  db.rows.forEach(function(r){
+    var s = stateOf(r);
+    if (s.k === 'wait' || s.k === 'late' || s.k === 'reply') waiting.push(r);
+    if (s.k === 'late') late++;
+    if (s.k === '前向き') good++;
+    if (s.k === '条件協議中') talk++;
+    if (s.k === 'yet') yet.push(r);
+  });
+  waiting.sort(function(a, b){
+    var da = stateOf(a).days, dbb = stateOf(b).days;
+    return (dbb == null ? -1 : dbb) - (da == null ? -1 : da);
+  });
 
-  var mstart = t.slice(0, 7);
-  var mlogs = db.logs.filter(function(g){ return String(g.date).slice(0, 7) === mstart; });
+  $('st-late').textContent = late;
+  $('st-wait').textContent = waiting.length;
+  $('st-good').textContent = good;
+  $('st-talk').textContent = talk;
 
-  $('st-todo').textContent = overdue.length;
-  $('st-month').textContent = mlogs.length;
-  $('st-live').textContent = db.leads.filter(isLive).length;
-  $('st-prop').textContent = db.props.length;
-
-  var show = due.slice(0, 12);
-  $('n-todo').textContent = due.length ? due.length + '件' : '';
-  $('todo').innerHTML = show.length
-    ? show.map(leadRow).join('')
-    : '<div class="empty">予定はありません。<br>接触を記録するときに「次にやること」を入れておくと、ここに並びます。</div>';
+  $('n-wait').textContent = waiting.length ? waiting.length + '件' : '';
+  $('waiting').innerHTML = waiting.length
+    ? waiting.slice(0, 8).map(pushRow).join('')
+    : '<div class="empty">返事待ちはありません。</div>';
 
   var recent = logsSorted(db.logs).slice(0, 6);
   $('n-recent').textContent = db.logs.length ? '全' + db.logs.length + '件' : '';
   $('recent').innerHTML = recent.length
     ? recent.map(tlRow).join('')
-    : '<div class="empty">まだ記録がありません。<br>上の「接触を記録」から始めてください。</div>';
+    : '<div class="empty">まだメモがありません。<br>上の「メモを記録」から始めてください。</div>';
 
-  var stale = db.leads.filter(function(l){
-    if (!isLive(l)) return false;
-    var last = lastContact(l.id);
-    if (!last) return true;
-    return dayDiff(last, t) >= 30;
-  }).sort(function(a, b){
-    var la = lastContact(a.id) || '0000-00-00', lb = lastContact(b.id) || '0000-00-00';
-    return la < lb ? -1 : 1;
-  });
-  $('n-stale').textContent = stale.length ? stale.length + '社' : '';
-  $('stale').innerHTML = stale.length
-    ? stale.slice(0, 6).map(leadRow).join('')
-    : '<div class="empty">30日以上あいている先はありません。</div>';
+  yet.sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
+  $('n-yet').textContent = yet.length ? yet.length + '件' : '';
+  $('yet').innerHTML = yet.length
+    ? yet.slice(0, 5).map(pushRow).join('')
+    : '<div class="empty">未打診の行はありません。</div>';
 
-  $('hdcount').textContent = '候補先 ' + db.leads.length + '社 ・ 物件 ' + db.props.length + '件';
+  $('hdcount').textContent = '推進 ' + db.rows.length + '行 ・ 案件 ' + db.props.length +
+    '件 ・ 名簿 ' + db.tenants.length + '社';
 }
 
-/* ===================== 画面：候補先 ===================== */
-var leadFilter = 'all';
+/* ===================== 画面：推進 ===================== */
+var pushFilter = 'live';
 
-function byActivity(a, b){
-  var la = lastContact(a.id), lb = lastContact(b.id);
-  if (la && lb) return la < lb ? 1 : (la > lb ? -1 : 0);
-  if (la) return -1;
-  if (lb) return 1;
-  return (b.ts || 0) - (a.ts || 0);
-}
-
-function matchLead(l, q){
+function matchRow(r, q){
   if (!q) return true;
-  var hay = [l.name, l.cat, l.person, l.tel, l.mail, l.want, l.memo, propName(l.propId)].join(' ').toLowerCase();
+  var t = tenById(r.tenantId) || {};
+  var hay = [tenName(r.tenantId), t.cat, t.agency, propName(r.propId), r.person, r.status,
+    memoBlock(r.id)].join(' ').toLowerCase();
   return hay.indexOf(q) >= 0;
 }
-
-function passFilter(l){
-  var t = today();
-  switch (leadFilter){
-    case 'todo': return isLive(l) && !!l.nextDate && dayDiff(t, l.nextDate) <= 0;
-    case 'live': return isLive(l) && l.stage !== '未接触' && !!lastContact(l.id);
-    case 'new':  return !lastContact(l.id);
-    case 'A': case 'B': case 'C': return (l.temp || 'B') === leadFilter;
-    case 'done': return l.stage === '成約';
-    case 'drop': return l.stage === '見送り';
-    default: return true;
+function passPush(r){
+  var s = stateOf(r);
+  switch (pushFilter){
+    case 'live': return s.k !== 'deal' && s.k !== '見送り';
+    case 'late': return s.k === 'late';
+    case 'wait': return s.k === 'wait' || s.k === 'late' || s.k === 'reply';
+    case 'yet':  return s.k === 'yet';
+    case 'deal': return s.k === 'deal';
+    case 'all':  return true;
+    default:     return s.k === pushFilter;
   }
 }
 
-function renderLeads(){
-  var q = ($('q-lead').value || '').trim().toLowerCase();
-  var list = db.leads.filter(function(l){ return passFilter(l) && matchLead(l, q); }).sort(byActivity);
-  $('leads').innerHTML = list.length
-    ? list.map(leadRow).join('')
-    : (db.leads.length
-        ? '<div class="empty">この条件に合う候補先はありません。</div>'
-        : '<div class="empty">まだ候補先がありません。<br>下の「＋ 候補先を追加」か「まとめて追加」から登録してください。</div>');
+function renderPushFilter(){
+  var sel = $('filter-prop'), cur = sel.value;
+  var h = '<option value="">すべての案件</option>';
+  db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
+    h += '<option value="' + esc(p.id) + '">' + esc(p.name) + '（' + rowsOfProp(p.id).length + '）</option>';
+  });
+  sel.innerHTML = h;
+  if (cur && propById(cur)) sel.value = cur;
 }
 
-/* ===================== 画面：物件 ===================== */
+function renderPushes(){
+  var q = ($('q-push').value || '').trim().toLowerCase();
+  var only = $('filter-prop').value;
+  var list = db.rows.filter(function(r){
+    return passPush(r) && matchRow(r, q) && (!only || r.propId === only);
+  }).sort(function(a, b){
+    var sa = stateOf(a), sb = stateOf(b);
+    if (sa.sort !== sb.sort) return sa.sort - sb.sort;
+    if (sa.days != null && sb.days != null && sa.days !== sb.days) return sb.days - sa.days;
+    return byActivity(a, b);
+  });
+  $('pushes').innerHTML = list.length
+    ? list.map(pushRow).join('')
+    : (db.rows.length
+        ? '<div class="empty">この条件に合う行はありません。</div>'
+        : '<div class="empty">まだ推進の行がありません。<br>案件とテナントを登録してから、<br>下の「＋ 打診する相手を足す」で作ります。</div>');
+}
+
+/* ===================== 画面：案件 ===================== */
 function propRow(p){
-  var ls = leadsOfProp(p.id);
-  var live = ls.filter(isLive).length;
-  var done = ls.filter(function(l){ return l.stage === '成約'; }).length;
-  var lg = logsOfProp(p.id);
-  var meta = [];
-  if (p.addr) meta.push(esc(p.addr));
-  if (p.area) meta.push(esc(p.area));
-  if (p.rent) meta.push(esc(p.rent));
-  var line = '当たり ' + ls.length + '社';
-  if (live) line += '（進行中 ' + live + '）';
-  if (done) line += '（成約 ' + done + '）';
-  if (lg.length) line += ' ・ 直近の動き ' + fmtDate(lg[0].date);
+  var rs = rowsOfProp(p.id);
+  var n = { good:0, talk:0, wait:0, late:0, yet:0, deal:0 };
+  rs.forEach(function(r){
+    var k = stateOf(r).k;
+    if (k === '前向き') n.good++;
+    else if (k === '条件協議中') n.talk++;
+    else if (k === 'wait' || k === 'reply') n.wait++;
+    else if (k === 'late'){ n.late++; n.wait++; }
+    else if (k === 'yet') n.yet++;
+    else if (k === 'deal') n.deal++;
+  });
+  var spec = [p.addr, p.area, p.rent].filter(function(x){ return !!x; });
+  var parts = [];
+  if (n.good) parts.push('前向き' + n.good);
+  if (n.talk) parts.push('条件協議' + n.talk);
+  if (n.wait) parts.push('返事待ち' + n.wait);
+  if (n.yet) parts.push('未打診' + n.yet);
+  if (n.deal) parts.push('成約' + n.deal);
   return '<button class="item" data-prop="' + esc(p.id) + '">' +
     '<div class="body">' +
       '<div class="ttl">' + esc(p.name) +
-        '<span class="bdg ' + (p.kind === '土地' ? 'land' : 'bldg') + '">' + esc(p.kind || '物件') + '</span>' +
-        '<span class="bdg stage ' + (p.status === '成約' ? 'done' : (p.status === '停止' ? 'drop' : 'on')) + '">' +
-          esc(p.status || '募集中') + '</span>' +
+        (n.late ? '<span class="bdg s-late">14日超 ' + n.late + '</span>' : '') +
+        (n.deal ? '<span class="bdg s-deal">成約</span>' : '') +
       '</div>' +
+      (spec.length ? '<div class="meta">' + esc(spec.join(' ・ ')) + '</div>' : '') +
+      '<div class="meta">打診 ' + rs.length + '社' + (parts.length ? '（' + parts.join('・') + '）' : '') + '</div>' +
+    '</div>' +
+    '<div class="chev">›</div>' +
+  '</button>';
+}
+function renderProps(){
+  var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
+  $('props').innerHTML = list.length
+    ? '<div class="card">' + list.map(propRow).join('') + '</div>'
+    : '<div class="card"><div class="empty">まだ案件がありません。<br>下の「＋ 案件を追加」から登録してください。</div></div>';
+}
+
+/* ===================== 画面：名簿 ===================== */
+function tenRow(t){
+  var rs = rowsOfTen(t.id);
+  var live = rs.filter(isLive).length;
+  var meta = [];
+  if (t.cat) meta.push(esc(t.cat));
+  if (t.agency) meta.push('窓口 ' + esc(t.agency));
+  if (t.person) meta.push(esc(t.person));
+  if (t.wantArea) meta.push('希望 ' + esc(t.wantArea));
+  var line = rs.length ? '打診 ' + rs.length + '件' + (live ? '（進行中 ' + live + '）' : '') : '打診なし';
+  return '<button class="item" data-ten="' + esc(t.id) + '">' +
+    '<div class="body">' +
+      '<div class="ttl">' + esc(t.name) + '</div>' +
       (meta.length ? '<div class="meta">' + meta.join(' ・ ') + '</div>' : '') +
       '<div class="meta">' + line + '</div>' +
     '</div>' +
     '<div class="chev">›</div>' +
   '</button>';
 }
-
-function renderProps(){
-  var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
-  $('props').innerHTML = list.length
-    ? '<div class="card">' + list.map(propRow).join('') + '</div>'
-    : '<div class="card"><div class="empty">まだ物件がありません。<br>下の「＋ 物件を追加」から、土地や空き物件を登録してください。</div></div>';
+function renderTenants(){
+  var q = ($('q-ten').value || '').trim().toLowerCase();
+  var list = db.tenants.filter(function(t){
+    if (!q) return true;
+    return [t.name, t.cat, t.agency, t.person, t.tel, t.wantArea, t.memo].join(' ').toLowerCase().indexOf(q) >= 0;
+  }).sort(function(a, b){
+    var la = rowsOfTen(a.id).length, lb = rowsOfTen(b.id).length;
+    if (!!la !== !!lb) return la ? -1 : 1;
+    return (a.ts || 0) - (b.ts || 0);
+  });
+  $('tenants').innerHTML = list.length
+    ? list.map(tenRow).join('')
+    : (db.tenants.length
+        ? '<div class="empty">見つかりませんでした。</div>'
+        : '<div class="empty">まだテナントがいません。<br>「まとめて追加」に名簿の表を貼り付けると早いです。</div>');
 }
 
 function renderAll(){
-  renderHome(); renderLeads(); renderProps();
+  renderHome(); renderPushFilter(); renderPushes(); renderProps(); renderTenants();
   if (!$('view-out').hidden) renderOutput();
 }
 
@@ -609,268 +669,261 @@ function closeSheet(){
 function opts(list, cur, blank){
   var h = blank ? '<option value="">' + esc(blank) + '</option>' : '';
   for (var i = 0; i < list.length; i++){
-    var v = list[i], t = list[i];
-    if (Object.prototype.toString.call(list[i]) === '[object Array]'){ v = list[i][0]; t = list[i][1]; }
-    h += '<option value="' + esc(v) + '"' + (v === cur ? ' selected' : '') + '>' + esc(t) + '</option>';
+    h += '<option value="' + esc(list[i]) + '"' + (list[i] === cur ? ' selected' : '') + '>' + esc(list[i]) + '</option>';
   }
   return h;
 }
-function propOpts(cur){
-  var list = db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); });
-  var h = '<option value="">（物件を決めていない）</option>';
-  for (var i = 0; i < list.length; i++){
-    h += '<option value="' + esc(list[i].id) + '"' + (list[i].id === cur ? ' selected' : '') + '>' +
-      esc(list[i].name) + '</option>';
-  }
+function propOpts(cur, blank){
+  var h = '<option value="">' + esc(blank || '（案件を選ぶ）') + '</option>';
+  db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
+    h += '<option value="' + esc(p.id) + '"' + (p.id === cur ? ' selected' : '') + '>' + esc(p.name) + '</option>';
+  });
   return h;
 }
-function leadOpts(cur){
-  var list = db.leads.slice().sort(byActivity);
+function tenOpts(cur){
+  var h = '<option value="">（テナントを選ぶ）</option>';
+  db.tenants.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(t){
+    h += '<option value="' + esc(t.id) + '"' + (t.id === cur ? ' selected' : '') + '>' +
+      esc(t.name) + (t.cat ? '（' + esc(t.cat) + '）' : '') + '</option>';
+  });
+  return h;
+}
+function rowOpts(cur){
   var h = '';
-  for (var i = 0; i < list.length; i++){
-    h += '<option value="' + esc(list[i].id) + '"' + (list[i].id === cur ? ' selected' : '') + '>' +
-      esc(list[i].name) + '</option>';
-  }
+  db.rows.slice().sort(byActivity).forEach(function(r){
+    h += '<option value="' + esc(r.id) + '"' + (r.id === cur ? ' selected' : '') + '>' +
+      esc(rowTitle(r)) + '</option>';
+  });
   return h;
-}
-function logById(id){
-  for (var i = 0; i < db.logs.length; i++) if (db.logs[i].id === id) return db.logs[i];
-  return null;
 }
 
-/* --- 接触の記録 --- */
-function openLogSheet(id, presetLeadId){
-  if (!db.leads.length){
-    toast('先に候補先を1社登録してください');
-    openLeadSheet(null);
+/* --- メモを記録する（いちばん使うところ） --- */
+function openMemoSheet(id, presetRowId){
+  if (!db.rows.length){
+    toast('先に「打診する相手」を作ってください');
+    if (!db.props.length){ go('prop'); openPropSheet(null); }
+    else if (!db.tenants.length){ go('ten'); openTenSheet(null); }
+    else { go('push'); openRowSheet(null); }
     return;
   }
   var g = id ? logById(id) : null;
-  var leadId = g ? g.leadId : (presetLeadId || (db.leads.slice().sort(byActivity)[0] || {}).id);
-  var lead = leadById(leadId) || {};
-  var propId = g ? g.propId : (lead.propId || '');
+  var rowId = g ? g.rowId : (presetRowId || (db.rows.slice().sort(byActivity)[0] || {}).id);
+  var r = rowById(rowId) || {};
 
   openSheet(
-    '<h2>' + (g ? '記録を直す' : '接触を記録する') + '</h2>' +
-    '<label for="f-lead">どこと話したか</label>' +
-    '<select id="f-lead">' + leadOpts(leadId) + '</select>' +
+    '<h2>' + (g ? 'メモを直す' : 'メモを記録する') + '</h2>' +
+    '<label for="m-row">どの相手か　テナント／案件</label>' +
+    '<select id="m-row">' + rowOpts(rowId) + '</select>' +
     '<div class="half">' +
-      '<div><label for="f-date">日付</label>' +
-        '<input type="date" id="f-date" value="' + esc(g ? g.date : today()) + '"></div>' +
-      '<div><label for="f-kind">やり方</label>' +
-        '<select id="f-kind">' + opts(KINDS, g ? g.kind : '電話') + '</select></div>' +
+      '<div><label for="m-date">日付</label>' +
+        '<input type="date" id="m-date" value="' + esc(g ? g.date : today()) + '"></div>' +
+      '<div><label for="m-status">状況</label>' +
+        '<select id="m-status">' + opts(STATUS, r.status || '', '（まだ返事なし）') + '</select></div>' +
     '</div>' +
-    '<label for="f-prop">対象の物件</label>' +
-    '<select id="f-prop">' + propOpts(propId) + '</select>' +
-    '<label for="f-text">話した内容・反応</label>' +
-    '<textarea id="f-text" placeholder="例：先方の出店担当に電話。30坪前後を探しており、駐車場が5台取れるなら前向きとのこと。">' +
+    '<label for="m-text">やりとりの中身</label>' +
+    '<textarea id="m-text" placeholder="例：賃料坪1.2万なら前向きと回答。図面を送ることになった。">' +
       esc(g ? g.text : '') + '</textarea>' +
-    '<label for="f-stage">進み具合</label>' +
-    '<select id="f-stage">' + opts(STAGES, g ? (g.stage || '') : '', '変えない（' + esc(lead.stage || '未接触') + 'のまま）') + '</select>' +
-    '<label for="f-next">次にやること　いつ</label>' +
-    '<input type="date" id="f-next" value="' + esc(lead.nextDate || '') + '">' +
-    '<label for="f-ntext">次にやること　なにを</label>' +
-    '<input type="text" id="f-ntext" value="' + esc(lead.nextText || '') + '" placeholder="例：図面と賃料表を送る">' +
-    '<button class="btn primary" id="f-save">保存する</button>' +
+    '<div class="half">' +
+      '<div><label for="m-open">情報開示日</label>' +
+        '<input type="date" id="m-open" value="' + esc(r.openDate || '') + '"></div>' +
+      '<div><label for="m-reply">返事日</label>' +
+        '<input type="date" id="m-reply" value="' + esc(r.replyDate || '') + '"></div>' +
+    '</div>' +
+    '<p class="hint">状況を選ぶと、返事日が空のときはこのメモの日付が入ります。<br>' +
+      '情報開示日を入れると「返事待ち ○日」に変わり、' + LATE + '日を過ぎると赤で出ます。</p>' +
+    '<button class="btn primary" id="m-save">保存する</button>' +
     '<div class="row">' +
-      '<button class="btn" id="f-cancel">閉じる</button>' +
-      (g ? '<button class="btn danger" id="f-del">この記録を削除</button>' : '') +
+      '<button class="btn" id="m-cancel">閉じる</button>' +
+      (g ? '<button class="btn danger" id="m-del">このメモを削除</button>' : '') +
     '</div>'
   );
 
-  /* 候補先を変えたら、その先の物件・進み具合・次回予定を出しなおす */
-  $('f-lead').addEventListener('change', function(){
-    var nl = leadById(this.value) || {};
-    if (!g){
-      $('f-prop').value = nl.propId || '';
-      $('f-next').value = nl.nextDate || '';
-      $('f-ntext').value = nl.nextText || '';
-      $('f-stage').options[0].textContent = '変えない（' + (nl.stage || '未接触') + 'のまま）';
-      $('f-stage').value = '';
-    }
+  $('m-row').addEventListener('change', function(){
+    var nr = rowById(this.value) || {};
+    $('m-open').value = nr.openDate || '';
+    $('m-reply').value = nr.replyDate || '';
+    $('m-status').value = nr.status || '';
   });
 
-  $('f-save').addEventListener('click', function(){
-    var lid = $('f-lead').value;
-    var tgt = leadById(lid);
-    if (!tgt){ toast('候補先を選んでください'); return; }
-    var date = $('f-date').value || today();
-    var stage = $('f-stage').value;
+  $('m-save').addEventListener('click', function(){
+    var rid = $('m-row').value, tgt = rowById(rid);
+    if (!tgt){ toast('相手を選んでください'); return; }
+    var date = $('m-date').value || today();
+    var text = $('m-text').value.trim();
+    if (!text && !g){ toast('やりとりの中身を入れてください'); $('m-text').focus(); return; }
+
     var rec = g || { id:uid(), ts:Date.now() };
-    rec.leadId = lid;
-    rec.date = date;
-    rec.kind = $('f-kind').value;
-    rec.propId = $('f-prop').value;
-    rec.text = $('f-text').value.trim();
-    rec.stage = stage;
+    rec.rowId = rid; rec.date = date; rec.text = text;
     if (!g) db.logs.push(rec);
 
-    if (stage) tgt.stage = stage;
-    else if (!tgt.stage || tgt.stage === '未接触') tgt.stage = '打診中';
-    if (!tgt.propId && rec.propId) tgt.propId = rec.propId;
-    tgt.nextDate = $('f-next').value;
-    tgt.nextText = $('f-ntext').value.trim();
-
+    tgt.openDate = $('m-open').value;
+    tgt.replyDate = $('m-reply').value;
+    var st = $('m-status').value;
+    tgt.status = st;
+    if (st && !tgt.replyDate) tgt.replyDate = date;
     persist(); renderAll(); closeSheet();
-    toast(tgt.name + ' の記録を保存しました');
+    toast(tenName(tgt.tenantId) + ' に記録しました');
   });
 
-  $('f-cancel').addEventListener('click', closeSheet);
-  if (g) $('f-del').addEventListener('click', function(){
-    if (!confirm('この記録を削除します。よろしいですか？')) return;
+  $('m-cancel').addEventListener('click', closeSheet);
+  if (g) $('m-del').addEventListener('click', function(){
+    if (!confirm('このメモを削除します。よろしいですか？')) return;
     db.logs = db.logs.filter(function(x){ return x.id !== g.id; });
     persist(); renderAll(); closeSheet();
     toast('削除しました');
   });
 }
 
-/* --- 候補先 --- */
-function openLeadSheet(id){
-  var l = id ? leadById(id) : null;
-  var hist = l ? logsOfLead(l.id) : [];
-  var last = l ? lastContact(l.id) : '';
+/* --- 推進の1行（案件×テナント） --- */
+function openRowSheet(id, preset){
+  var r = id ? rowById(id) : null;
+  if (!r && (!db.props.length || !db.tenants.length)){
+    toast(!db.props.length ? '先に案件を登録してください' : '先にテナントを登録してください');
+    if (!db.props.length){ go('prop'); openPropSheet(null); } else { go('ten'); openTenSheet(null); }
+    return;
+  }
+  var pre = preset || {};
+  var hist = r ? logsOfRow(r.id) : [];
+  var s = r ? stateOf(r) : null;
 
   openSheet(
-    '<h2>' + (l ? esc(l.name) : '候補先を追加する') + '</h2>' +
-    (l ? '<p class="sub">' + (last ? '最終接触 ' + esc(fmtDateY(last)) + '（' + esc(agoText(last)) + '）' : 'まだ接触していません') +
-      ' ・ 記録 ' + hist.length + '件</p>' : '') +
-    (l ? '<button class="btn primary" id="f-addlog">この先に接触を記録する</button>' : '') +
-    '<label for="f-name">会社名・店名</label>' +
-    '<input type="text" id="f-name" value="' + esc(l ? l.name : '') + '" placeholder="例：株式会社◯◯フーズ">' +
+    '<h2>' + (r ? esc(tenName(r.tenantId)) : '打診する相手を足す') + '</h2>' +
+    (r ? '<p class="sub"><span class="bdg ' + s.cls + '">' + esc(s.label) + '</span>　' +
+      esc(propName(r.propId) || '案件なし') + '　メモ ' + hist.length + '件</p>' : '') +
+    (r ? '<button class="btn primary" id="r-addmemo">メモを足す</button>' : '') +
     '<div class="half">' +
-      '<div><label for="f-cat">業種</label>' +
-        '<input type="text" id="f-cat" value="' + esc(l ? l.cat : '') + '" placeholder="例：飲食・物販" list="cats"></div>' +
-      '<div><label for="f-temp">温度感</label>' +
-        '<select id="f-temp">' + opts(TEMPS, l ? (l.temp || 'B') : 'B') + '</select></div>' +
+      '<div><label for="r-prop">案件</label>' +
+        '<select id="r-prop">' + propOpts(r ? r.propId : pre.propId) + '</select></div>' +
+      '<div><label for="r-ten">テナント</label>' +
+        '<select id="r-ten">' + tenOpts(r ? r.tenantId : pre.tenantId) + '</select></div>' +
+    '</div>' +
+    '<label for="r-person">担当者（先方の窓口）</label>' +
+    '<input type="text" id="r-person" value="' + esc(r ? r.person : '') + '" placeholder="例：山田">' +
+    '<div class="half">' +
+      '<div><label for="r-open">情報開示日</label>' +
+        '<input type="date" id="r-open" value="' + esc(r ? (r.openDate || '') : '') + '"></div>' +
+      '<div><label for="r-reply">返事日</label>' +
+        '<input type="date" id="r-reply" value="' + esc(r ? (r.replyDate || '') : '') + '"></div>' +
     '</div>' +
     '<div class="half">' +
-      '<div><label for="f-person">先方の担当者</label>' +
-        '<input type="text" id="f-person" value="' + esc(l ? l.person : '') + '" placeholder="例：出店開発 山田様"></div>' +
-      '<div><label for="f-tel">電話</label>' +
-        '<input type="tel" id="f-tel" value="' + esc(l ? l.tel : '') + '" inputmode="tel"></div>' +
+      '<div><label for="r-status">状況</label>' +
+        '<select id="r-status">' + opts(STATUS, r ? (r.status || '') : '', '（返事待ち）') + '</select></div>' +
+      '<div><label for="r-close">成約日</label>' +
+        '<input type="date" id="r-close" value="' + esc(r ? (r.closeDate || '') : '') + '"></div>' +
     '</div>' +
-    '<label for="f-mail">メール</label>' +
-    '<input type="text" id="f-mail" value="' + esc(l ? l.mail : '') + '" inputmode="email">' +
-    '<label for="f-want">先方の希望条件</label>' +
-    '<input type="text" id="f-want" value="' + esc(l ? l.want : '') + '" placeholder="例：30〜40坪・駐車場5台・幹線道路沿い">' +
-    '<div class="half">' +
-      '<div><label for="f-stage2">進み具合</label>' +
-        '<select id="f-stage2">' + opts(STAGES, l ? (l.stage || '未接触') : '未接触') + '</select></div>' +
-      '<div><label for="f-prop2">対象の物件</label>' +
-        '<select id="f-prop2">' + propOpts(l ? l.propId : '') + '</select></div>' +
-    '</div>' +
-    '<div class="half">' +
-      '<div><label for="f-next2">次にやること　いつ</label>' +
-        '<input type="date" id="f-next2" value="' + esc(l ? (l.nextDate || '') : '') + '"></div>' +
-      '<div><label for="f-ntext2">なにを</label>' +
-        '<input type="text" id="f-ntext2" value="' + esc(l ? (l.nextText || '') : '') + '"></div>' +
-    '</div>' +
-    '<label for="f-memo">メモ（先方の事情・社内の申し送り）</label>' +
-    '<textarea id="f-memo" placeholder="例：本部決裁は月末。近隣の競合出店を気にしている。">' + esc(l ? l.memo : '') + '</textarea>' +
-    '<button class="btn primary" id="f-save2">保存する</button>' +
+    '<p class="hint">情報開示日が空なら「未打診」。入れると「返事待ち ○日」になり、' + LATE + '日を過ぎると赤。<br>' +
+      '成約日を入れると、この行は成約あつかいになり進行中の一覧から外れます。</p>' +
+    '<button class="btn primary" id="r-save">保存する</button>' +
     '<div class="row">' +
-      '<button class="btn" id="f-cancel2">閉じる</button>' +
-      (l ? '<button class="btn danger" id="f-del2">この候補先を削除</button>' : '') +
+      '<button class="btn" id="r-cancel">閉じる</button>' +
+      (r ? '<button class="btn danger" id="r-del">この行を削除</button>' : '') +
     '</div>' +
-    (l ? '<div class="sec"><span>接触の記録</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
+    (r ? '<div class="sec"><span>メモ（新しい順）</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
       '<div class="card">' + (hist.length ? hist.map(tlRow).join('') :
-        '<div class="empty">まだ記録がありません。</div>') + '</div>' : '') +
-    '<datalist id="cats">' + catList() + '</datalist>'
+        '<div class="empty">まだメモがありません。</div>') + '</div>' : '')
   );
 
-  if (l) $('f-addlog').addEventListener('click', function(){ openLogSheet(null, l.id); });
+  if (r) $('r-addmemo').addEventListener('click', function(){ openMemoSheet(null, r.id); });
 
-  $('f-save2').addEventListener('click', function(){
-    var name = $('f-name').value.trim();
-    if (!name){ toast('会社名を入れてください'); $('f-name').focus(); return; }
-    var rec = l || { id:uid(), ts:Date.now() };
-    rec.name = name;
-    rec.cat = $('f-cat').value.trim();
-    rec.temp = $('f-temp').value;
-    rec.person = $('f-person').value.trim();
-    rec.tel = $('f-tel').value.trim();
-    rec.mail = $('f-mail').value.trim();
-    rec.want = $('f-want').value.trim();
-    rec.stage = $('f-stage2').value;
-    rec.propId = $('f-prop2').value;
-    rec.nextDate = $('f-next2').value;
-    rec.nextText = $('f-ntext2').value.trim();
-    rec.memo = $('f-memo').value.trim();
-    if (!l) db.leads.push(rec);
+  $('r-save').addEventListener('click', function(){
+    var propId = $('r-prop').value, tenantId = $('r-ten').value;
+    if (!tenantId){ toast('テナントを選んでください'); return; }
+    if (!propId){ toast('案件を選んでください'); return; }
+    if (!r){
+      for (var i = 0; i < db.rows.length; i++){
+        if (db.rows[i].propId === propId && db.rows[i].tenantId === tenantId){
+          toast('この組み合わせの行はすでにあります'); return;
+        }
+      }
+    }
+    var rec = r || { id:uid(), ts:Date.now() };
+    rec.propId = propId; rec.tenantId = tenantId;
+    rec.person = $('r-person').value.trim();
+    rec.openDate = $('r-open').value;
+    rec.replyDate = $('r-reply').value;
+    rec.status = $('r-status').value;
+    rec.closeDate = $('r-close').value;
+    if (!r) db.rows.push(rec);
     persist(); renderAll(); closeSheet();
-    toast(l ? '保存しました' : name + ' を追加しました');
+    toast(r ? '保存しました' : tenName(tenantId) + ' を追加しました');
   });
 
-  $('f-cancel2').addEventListener('click', closeSheet);
-  if (l) $('f-del2').addEventListener('click', function(){
-    var n = logsOfLead(l.id).length;
-    if (!confirm(l.name + ' を削除します。' + (n ? '接触の記録 ' + n + '件も一緒に消えます。' : '') + '元に戻せません。よろしいですか？')) return;
-    db.leads = db.leads.filter(function(x){ return x.id !== l.id; });
-    db.logs  = db.logs.filter(function(g){ return g.leadId !== l.id; });
+  $('r-cancel').addEventListener('click', closeSheet);
+  if (r) $('r-del').addEventListener('click', function(){
+    var n = logsOfRow(r.id).length;
+    if (!confirm('この行を削除します。' + (n ? 'メモ ' + n + '件も一緒に消えます。' : '') + 'よろしいですか？')) return;
+    db.rows = db.rows.filter(function(x){ return x.id !== r.id; });
+    db.logs = db.logs.filter(function(x){ return x.rowId !== r.id; });
     persist(); renderAll(); closeSheet();
     toast('削除しました');
   });
 }
 
-function catList(){
-  var seen = {}, h = '';
-  for (var i = 0; i < db.leads.length; i++){
-    var c = db.leads[i].cat;
-    if (c && !seen[c]){ seen[c] = 1; h += '<option value="' + esc(c) + '"></option>'; }
-  }
-  return h;
-}
-
-/* --- 物件 --- */
+/* --- 案件（エクセルの「案件一覧」） --- */
 function openPropSheet(id){
   var p = id ? propById(id) : null;
-  var ls = p ? leadsOfProp(p.id).sort(byActivity) : [];
-  var hist = p ? logsOfProp(p.id) : [];
+  var rs = p ? rowsOfProp(p.id).sort(byActivity) : [];
 
   openSheet(
-    '<h2>' + (p ? esc(p.name) : '物件を追加する') + '</h2>' +
-    (p ? '<p class="sub">当たっている候補先 ' + ls.length + '社 ・ 記録 ' + hist.length + '件</p>' : '') +
-    '<label for="p-name">物件名（呼び名）</label>' +
-    '<input type="text" id="p-name" value="' + esc(p ? p.name : '') + '" placeholder="例：◯◯町3丁目 角地">' +
-    '<div class="half">' +
-      '<div><label for="p-kind">種別</label>' +
-        '<select id="p-kind">' + opts(PKINDS, p ? (p.kind || '土地') : '土地') + '</select></div>' +
-      '<div><label for="p-status">募集の状況</label>' +
-        '<select id="p-status">' + opts(PSTATE, p ? (p.status || '募集中') : '募集中') + '</select></div>' +
-    '</div>' +
+    '<h2>' + (p ? esc(p.name) : '案件を追加する') + '</h2>' +
+    (p ? '<p class="sub">打診 ' + rs.length + '社</p>' : '') +
+    (p ? '<button class="btn primary" id="p-addrow">この案件に打診先を足す</button>' : '') +
+    '<label for="p-name">案件名</label>' +
+    '<input type="text" id="p-name" value="' + esc(p ? p.name : '') + '" placeholder="例：伊丹寺本">' +
     '<label for="p-addr">所在地</label>' +
-    '<input type="text" id="p-addr" value="' + esc(p ? p.addr : '') + '" placeholder="例：◯◯市◯◯町3-1-2">' +
+    '<input type="text" id="p-addr" value="' + esc(p ? p.addr : '') + '">' +
     '<div class="half">' +
-      '<div><label for="p-area">広さ</label>' +
-        '<input type="text" id="p-area" value="' + esc(p ? p.area : '') + '" placeholder="例：120坪"></div>' +
-      '<div><label for="p-rent">想定条件</label>' +
-        '<input type="text" id="p-rent" value="' + esc(p ? p.rent : '') + '" placeholder="例：月30万＋税"></div>' +
+      '<div><label for="p-area">面積</label>' +
+        '<input type="text" id="p-area" value="' + esc(p ? p.area : '') + '" placeholder="例：150坪"></div>' +
+      '<div><label for="p-zoning">用途地域</label>' +
+        '<input type="text" id="p-zoning" value="' + esc(p ? p.zoning : '') + '" placeholder="例：準工業"></div>' +
     '</div>' +
-    '<label for="p-memo">メモ（所有者の意向・制限・周辺）</label>' +
-    '<textarea id="p-memo" placeholder="例：地主は10年以上の定期借地を希望。市道側の間口12m。">' + esc(p ? p.memo : '') + '</textarea>' +
+    '<div class="half">' +
+      '<div><label for="p-rent">賃料想定</label>' +
+        '<input type="text" id="p-rent" value="' + esc(p ? p.rent : '') + '" placeholder="例：坪1.2万"></div>' +
+      '<div><label for="p-start">募集開始日</label>' +
+        '<input type="date" id="p-start" value="' + esc(p ? (p.startDate || '') : '') + '"></div>' +
+    '</div>' +
+    '<div class="half">' +
+      '<div><label for="p-owner">地主（所有者）</label>' +
+        '<input type="text" id="p-owner" value="' + esc(p ? p.owner : '') + '"></div>' +
+      '<div><label for="p-ownertel">地主連絡先</label>' +
+        '<input type="tel" id="p-ownertel" value="' + esc(p ? p.ownerTel : '') + '" inputmode="tel"></div>' +
+    '</div>' +
+    '<div class="half">' +
+      '<div><label for="p-lessor">貸主</label>' +
+        '<input type="text" id="p-lessor" value="' + esc(p ? p.lessor : '') + '"></div>' +
+      '<div><label for="p-lessortel">貸主連絡先</label>' +
+        '<input type="tel" id="p-lessortel" value="' + esc(p ? p.lessorTel : '') + '" inputmode="tel"></div>' +
+    '</div>' +
+    '<label for="p-memo">備考</label>' +
+    '<textarea id="p-memo">' + esc(p ? p.memo : '') + '</textarea>' +
     '<button class="btn primary" id="p-save">保存する</button>' +
     '<div class="row">' +
       '<button class="btn" id="p-cancel">閉じる</button>' +
-      (p ? '<button class="btn danger" id="p-del">この物件を削除</button>' : '') +
+      (p ? '<button class="btn danger" id="p-del">この案件を削除</button>' : '') +
     '</div>' +
-    (p ? '<div class="sec"><span>当たっている候補先</span><span class="line"></span><span class="n">' + ls.length + '社</span></div>' +
-      '<div class="card">' + (ls.length ? ls.map(leadRow).join('') :
-        '<div class="empty">まだありません。候補先の「対象の物件」でここを選ぶと並びます。</div>') + '</div>' +
-      '<div class="sec"><span>この物件の動き</span><span class="line"></span><span class="n">' + hist.length + '件</span></div>' +
-      '<div class="card">' + (hist.length ? hist.slice(0, 20).map(tlRow).join('') :
-        '<div class="empty">まだ記録がありません。</div>') + '</div>' : '')
+    (p ? '<div class="sec"><span>この案件の推進</span><span class="line"></span><span class="n">' + rs.length + '社</span></div>' +
+      '<div class="card">' + (rs.length ? rs.map(pushRow).join('') :
+        '<div class="empty">まだ打診先がありません。</div>') + '</div>' : '')
   );
+
+  if (p) $('p-addrow').addEventListener('click', function(){ openRowSheet(null, { propId:p.id }); });
 
   $('p-save').addEventListener('click', function(){
     var name = $('p-name').value.trim();
-    if (!name){ toast('物件名を入れてください'); $('p-name').focus(); return; }
+    if (!name){ toast('案件名を入れてください'); $('p-name').focus(); return; }
     var rec = p || { id:uid(), ts:Date.now() };
     rec.name = name;
-    rec.kind = $('p-kind').value;
-    rec.status = $('p-status').value;
     rec.addr = $('p-addr').value.trim();
     rec.area = $('p-area').value.trim();
+    rec.zoning = $('p-zoning').value.trim();
     rec.rent = $('p-rent').value.trim();
+    rec.startDate = $('p-start').value;
+    rec.owner = $('p-owner').value.trim();
+    rec.ownerTel = $('p-ownertel').value.trim();
+    rec.lessor = $('p-lessor').value.trim();
+    rec.lessorTel = $('p-lessortel').value.trim();
     rec.memo = $('p-memo').value.trim();
     if (!p) db.props.push(rec);
     persist(); renderAll(); closeSheet();
@@ -879,52 +932,156 @@ function openPropSheet(id){
 
   $('p-cancel').addEventListener('click', closeSheet);
   if (p) $('p-del').addEventListener('click', function(){
-    if (!confirm(p.name + ' を削除します。候補先と接触の記録は残り、この物件との結びつきだけが外れます。よろしいですか？')) return;
+    var n = rowsOfProp(p.id).length;
+    if (!confirm(p.name + ' を削除します。' + (n ? 'この案件の推進 ' + n + '行とメモも一緒に消えます。' : '') + 'よろしいですか？')) return;
+    var ids = rowsOfProp(p.id).map(function(r){ return r.id; });
     db.props = db.props.filter(function(x){ return x.id !== p.id; });
-    db.leads.forEach(function(l){ if (l.propId === p.id) l.propId = ''; });
-    db.logs.forEach(function(g){ if (g.propId === p.id) g.propId = ''; });
+    db.rows = db.rows.filter(function(r){ return r.propId !== p.id; });
+    db.logs = db.logs.filter(function(g){ return ids.indexOf(g.rowId) < 0; });
     persist(); renderAll(); closeSheet();
     toast('削除しました');
   });
 }
 
-/* --- 候補先のまとめて追加（Excelから貼り付け） --- */
-function openBulkSheet(){
+/* --- テナント（エクセルの「テナント名簿」） --- */
+function openTenSheet(id){
+  var t = id ? tenById(id) : null;
+  var rs = t ? rowsOfTen(t.id).sort(byActivity) : [];
+
   openSheet(
-    '<h2>候補先をまとめて追加</h2>' +
-    '<p class="sub">1行に1社。Excelの表をそのまま貼り付けられます。</p>' +
-    '<label for="b-text">会社名 → 業種 → 担当者 → 電話　の順（タブかカンマで区切る）</label>' +
-    '<textarea id="b-text" style="min-height:180px" placeholder="株式会社◯◯フーズ,飲食,山田様,06-1234-5678&#10;△△ドラッグ,物販,,&#10;□□クリニック"></textarea>' +
-    '<label for="b-prop">まとめて結びつける物件（任意）</label>' +
-    '<select id="b-prop">' + propOpts('') + '</select>' +
+    '<h2>' + (t ? esc(t.name) : 'テナントを追加する') + '</h2>' +
+    (t ? '<p class="sub">打診 ' + rs.length + '件</p>' : '') +
+    (t ? '<button class="btn primary" id="t-addrow">この先に案件を足す</button>' : '') +
+    '<label for="t-name">テナント名</label>' +
+    '<input type="text" id="t-name" value="' + esc(t ? t.name : '') + '" placeholder="例：㈱吉野家HD">' +
+    '<label for="t-cat">業種</label>' +
+    '<input type="text" id="t-cat" value="' + esc(t ? t.cat : '') + '" placeholder="例：飲食（牛丼）" list="cats">' +
+    '<div class="half">' +
+      '<div><label for="t-agency">窓口会社</label>' +
+        '<input type="text" id="t-agency" value="' + esc(t ? t.agency : '') + '" placeholder="例：〇〇不動産"></div>' +
+      '<div><label for="t-person">代表担当者</label>' +
+        '<input type="text" id="t-person" value="' + esc(t ? t.person : '') + '"></div>' +
+    '</div>' +
+    '<div class="half">' +
+      '<div><label for="t-tel">連絡先</label>' +
+        '<input type="tel" id="t-tel" value="' + esc(t ? t.tel : '') + '" inputmode="tel"></div>' +
+      '<div><label for="t-want">希望面積</label>' +
+        '<input type="text" id="t-want" value="' + esc(t ? t.wantArea : '') + '" placeholder="例：40〜60坪"></div>' +
+    '</div>' +
+    '<label for="t-memo">備考</label>' +
+    '<textarea id="t-memo" placeholder="例：駅前立地を優先">' + esc(t ? t.memo : '') + '</textarea>' +
+    '<button class="btn primary" id="t-save">保存する</button>' +
+    '<div class="row">' +
+      '<button class="btn" id="t-cancel">閉じる</button>' +
+      (t ? '<button class="btn danger" id="t-del">このテナントを削除</button>' : '') +
+    '</div>' +
+    (t ? '<div class="sec"><span>この先への打診</span><span class="line"></span><span class="n">' + rs.length + '件</span></div>' +
+      '<div class="card">' + (rs.length ? rs.map(pushRow).join('') :
+        '<div class="empty">まだ打診していません。</div>') + '</div>' : '') +
+    '<datalist id="cats">' + catList() + '</datalist>'
+  );
+
+  if (t) $('t-addrow').addEventListener('click', function(){ openRowSheet(null, { tenantId:t.id }); });
+
+  $('t-save').addEventListener('click', function(){
+    var name = $('t-name').value.trim();
+    if (!name){ toast('テナント名を入れてください'); $('t-name').focus(); return; }
+    var rec = t || { id:uid(), ts:Date.now() };
+    rec.name = name;
+    rec.cat = $('t-cat').value.trim();
+    rec.agency = $('t-agency').value.trim();
+    rec.person = $('t-person').value.trim();
+    rec.tel = $('t-tel').value.trim();
+    rec.wantArea = $('t-want').value.trim();
+    rec.memo = $('t-memo').value.trim();
+    if (!t) db.tenants.push(rec);
+    persist(); renderAll(); closeSheet();
+    toast(t ? '保存しました' : name + ' を追加しました');
+  });
+
+  $('t-cancel').addEventListener('click', closeSheet);
+  if (t) $('t-del').addEventListener('click', function(){
+    var n = rowsOfTen(t.id).length;
+    if (!confirm(t.name + ' を名簿から削除します。' + (n ? 'この先への推進 ' + n + '行とメモも一緒に消えます。' : '') + 'よろしいですか？')) return;
+    var ids = rowsOfTen(t.id).map(function(r){ return r.id; });
+    db.tenants = db.tenants.filter(function(x){ return x.id !== t.id; });
+    db.rows = db.rows.filter(function(r){ return r.tenantId !== t.id; });
+    db.logs = db.logs.filter(function(g){ return ids.indexOf(g.rowId) < 0; });
+    persist(); renderAll(); closeSheet();
+    toast('削除しました');
+  });
+}
+
+function catList(){
+  var seen = {}, h = '';
+  for (var i = 0; i < db.tenants.length; i++){
+    var c = db.tenants[i].cat;
+    if (c && !seen[c]){ seen[c] = 1; h += '<option value="' + esc(c) + '"></option>'; }
+  }
+  return h;
+}
+
+/* --- エクセルから貼り付けてまとめて追加 --- */
+function normDate(s){
+  s = String(s == null ? '' : s).trim();
+  if (!s) return '';
+  var m = s.match(/^(\d{4})[-\/年.](\d{1,2})[-\/月.](\d{1,2})/);
+  if (!m) return '';
+  return m[1] + '-' + two(+m[2]) + '-' + two(+m[3]);
+}
+function splitCells(line){
+  return line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+}
+function openBulkSheet(kind){
+  var isTen = kind === 'ten';
+  var cols = isTen
+    ? 'テナント名 → 業種 → 窓口会社 → 代表担当者 → 連絡先 → 希望面積 → 備考'
+    : '案件名 → 所在地 → 面積 → 用途地域 → 賃料想定 → 募集開始日 → 地主 → 地主連絡先 → 貸主 → 貸主連絡先 → 備考';
+  var ph = isTen
+    ? '㈱吉野家HD\t飲食（牛丼）\t〇〇不動産\t田中\t06-0000-0000\t40〜60坪\t駅前立地を優先\n松屋フーズ\t飲食（牛丼）\n㈱ゼンショー\t飲食（すき家ほか）'
+    : '伊丹寺本\t伊丹市寺本\t150坪\t準工業\t坪1.2万\n川西市\n小中島';
+
+  openSheet(
+    '<h2>' + (isTen ? 'テナントをまとめて追加' : '案件をまとめて追加') + '</h2>' +
+    '<p class="sub">エクセルの' + (isTen ? '「テナント名簿」' : '「案件一覧」') +
+      'の表をそのまま貼り付けられます。見出し行が入っていても大丈夫です。</p>' +
+    '<label for="b-text">1行に1件　' + esc(cols) + '</label>' +
+    '<textarea id="b-text" style="min-height:200px" placeholder="' + esc(ph) + '"></textarea>' +
+    '<p class="hint">タブ区切り（エクセルからのコピー）でも、カンマ区切りでも読めます。<br>' +
+      '同じ名前がすでにあるものは飛ばします。</p>' +
     '<button class="btn primary" id="b-save">この内容で追加する</button>' +
     '<button class="btn" id="b-cancel">閉じる</button>'
   );
 
   $('b-save').addEventListener('click', function(){
     var lines = $('b-text').value.split('\n');
-    var propId = $('b-prop').value;
     var added = 0, skipped = 0;
     for (var i = 0; i < lines.length; i++){
-      var line = lines[i].replace(/\r/g, '').trim();
-      if (!line) continue;
-      var f = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
+      var line = lines[i].replace(/\r/g, '');
+      if (!line.trim()) continue;
+      var f = splitCells(line);
       var name = (f[0] || '').trim();
-      if (!name){ continue; }
-      var dup = false;
-      for (var j = 0; j < db.leads.length; j++) if (db.leads[j].name === name) dup = true;
+      if (!name) continue;
+      if (name === 'テナント名' || name === '案件名') continue;
+      var list = isTen ? db.tenants : db.props, dup = false;
+      for (var j = 0; j < list.length; j++) if (list[j].name === name) dup = true;
       if (dup){ skipped++; continue; }
-      db.leads.push({
-        id:uid(), ts:Date.now() + i, name:name,
-        cat:(f[1] || '').trim(), person:(f[2] || '').trim(), tel:(f[3] || '').trim(),
-        mail:'', want:'', temp:'B', stage:'未接触', propId:propId,
-        nextDate:'', nextText:'', memo:''
-      });
+      if (isTen){
+        db.tenants.push({ id:uid(), ts:Date.now() + i, name:name,
+          cat:(f[1] || '').trim(), agency:(f[2] || '').trim(), person:(f[3] || '').trim(),
+          tel:(f[4] || '').trim(), wantArea:(f[5] || '').trim(), memo:(f[6] || '').trim() });
+      } else {
+        db.props.push({ id:uid(), ts:Date.now() + i, name:name,
+          addr:(f[1] || '').trim(), area:(f[2] || '').trim(), zoning:(f[3] || '').trim(),
+          rent:(f[4] || '').trim(), startDate:normDate(f[5]), owner:(f[6] || '').trim(),
+          ownerTel:(f[7] || '').trim(), lessor:(f[8] || '').trim(), lessorTel:(f[9] || '').trim(),
+          memo:(f[10] || '').trim() });
+      }
       added++;
     }
     if (!added && !skipped){ toast('追加できる行がありませんでした'); return; }
     persist(); renderAll(); closeSheet();
-    toast(added + '社を追加しました' + (skipped ? '（同じ名前の' + skipped + '社は飛ばしました）' : ''));
+    toast(added + '件を追加しました' + (skipped ? '（同じ名前の' + skipped + '件は飛ばしました）' : ''));
   });
   $('b-cancel').addEventListener('click', closeSheet);
 }
@@ -943,73 +1100,68 @@ function periodRange(){
   }
   if (v === '30d' || v === '7d'){
     var days = v === '30d' ? 29 : 6;
-    var s = new Date(); s.setDate(s.getDate() - days);
-    return { s:ymd(s), e:today(), label:fmtDate(ymd(s)) + '〜' + fmtDate(today()) };
+    var st = new Date(); st.setDate(st.getDate() - days);
+    return { s:ymd(st), e:today(), label:fmtDate(ymd(st)) + '〜' + fmtDate(today()) };
   }
   return { s:'0000-01-01', e:'9999-12-31', label:'すべての記録' };
 }
-
-function inRange(){
-  var r = periodRange();
-  return db.logs.filter(function(g){ return g.date >= r.s && g.date <= r.e; })
-    .sort(function(a, b){ return a.date < b.date ? -1 : (a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0)); });
-}
+function inRange(d){ var r = periodRange(); return !!d && d >= r.s && d <= r.e; }
 
 function summarize(){
-  var list = inRange(), leads = {}, view = 0, deal = 0;
-  list.forEach(function(g){
-    leads[g.leadId] = 1;
-    if (g.kind === '内見') view++;
-    if (g.stage === '成約') deal++;
+  var logs = db.logs.filter(function(g){ return inRange(g.date); })
+    .sort(function(a, b){ return a.date < b.date ? -1 : (a.date > b.date ? 1 : (a.ts || 0) - (b.ts || 0)); });
+  var open = 0, reply = 0, deal = 0;
+  db.rows.forEach(function(r){
+    if (inRange(r.openDate)) open++;
+    if (inRange(r.replyDate)) reply++;
+    if (inRange(r.closeDate)) deal++;
   });
-  var n = 0;
-  for (var k in leads) if (leads.hasOwnProperty(k)) n++;
-  return { list:list, leads:n, view:view, deal:deal };
+  return { logs:logs, open:open, reply:reply, deal:deal };
 }
 
 function buildText(){
   var r = periodRange(), s = summarize();
-  var out = ['【テナント誘致 活動報告】' + r.label, ''];
+  var out = ['【テナント誘致 推進報告】' + r.label, ''];
   out.push('■ 動いた数');
-  out.push('　接触 ' + s.list.length + '件 ／ 相手 ' + s.leads + '社 ／ 内見 ' + s.view + '件 ／ 成約 ' + s.deal + '件');
+  out.push('　メモ ' + s.logs.length + '件 ／ 情報開示 ' + s.open + '件 ／ 返事あり ' + s.reply +
+    '件 ／ 成約 ' + s.deal + '件');
+
+  var late = db.rows.filter(function(x){ return stateOf(x).k === 'late'; })
+    .sort(function(a, b){ return stateOf(b).days - stateOf(a).days; });
+  if (late.length){
+    out.push('');
+    out.push('■ 返事が来ていない（' + LATE + '日超）');
+    late.forEach(function(x){
+      out.push('　' + tenName(x.tenantId) + '／' + (propName(x.propId) || '案件なし') +
+        '　' + stateOf(x).label + '（開示 ' + md(x.openDate) + '）');
+    });
+  }
 
   if (db.props.length){
     out.push('');
-    out.push('■ 物件の状況');
+    out.push('■ 案件ごとの推進');
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
-      var ls = leadsOfProp(p.id);
-      var spec = [p.kind, p.area, p.rent].filter(function(x){ return !!x; }).join('／');
-      out.push('　・' + p.name + (spec ? '（' + spec + '）' : '') + '　' + (p.status || '募集中'));
-      var by = {};
-      ls.forEach(function(l){ var k = l.stage || '未接触'; by[k] = (by[k] || 0) + 1; });
-      var parts = STAGES.filter(function(st){ return by[st]; }).map(function(st){ return st + by[st]; });
-      out.push('　　当たり ' + ls.length + '社' + (parts.length ? '（' + parts.join('・') + '）' : ''));
+      var rs = rowsOfProp(p.id);
+      var spec = [p.addr, p.area, p.rent].filter(function(x){ return !!x; }).join('／');
+      out.push('　・' + p.name + (spec ? '（' + spec + '）' : '') + '　打診 ' + rs.length + '社');
+      rs.slice().sort(function(a, b){ return stateOf(a).sort - stateOf(b).sort; }).forEach(function(x){
+        out.push('　　' + tenName(x.tenantId) + '　' + stateOf(x).label +
+          (x.person ? '　担当 ' + x.person : ''));
+      });
     });
   }
 
   out.push('');
-  out.push('■ 接触の記録');
-  if (!s.list.length){
-    out.push('　この期間の記録はありません。');
+  out.push('■ この期間のやりとり');
+  if (!s.logs.length){
+    out.push('　メモはありません。');
   } else {
     var day = '';
-    s.list.forEach(function(g){
+    s.logs.forEach(function(g){
       if (g.date !== day){ day = g.date; out.push('　' + fmtDate(g.date)); }
-      var pn = g.propId ? propName(g.propId) : '';
-      out.push('　　' + (g.kind || '') + '　' + leadName(g.leadId) + (pn ? '　→ ' + pn : '') +
-        (g.stage ? '　［' + g.stage + '］' : ''));
-      if (g.text) out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
-    });
-  }
-
-  var due = db.leads.filter(function(l){ return l.nextDate && isLive(l); })
-    .sort(function(a, b){ return a.nextDate < b.nextDate ? -1 : 1; });
-  if (due.length){
-    out.push('');
-    out.push('■ 次にやること');
-    due.slice(0, 20).forEach(function(l){
-      var over = dayDiff(today(), l.nextDate) < 0 ? '（期限すぎ）' : '';
-      out.push('　' + over + fmtDate(l.nextDate) + '　' + l.name + (l.nextText ? '　' + l.nextText : ''));
+      var x = rowById(g.rowId);
+      out.push('　　' + (x ? tenName(x.tenantId) + '／' + (propName(x.propId) || '案件なし') : '（削除された行）'));
+      out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
     });
   }
   return out.join('\n');
@@ -1026,35 +1178,46 @@ function csvQuote(rows){
 
 function buildCSV(kind){
   var rows;
-  if (kind === 'lead'){
-    rows = [['会社名','業種','担当者','電話','メール','希望条件','温度感','進み具合','対象物件','最終接触','次回予定','次にやること','記録件数','メモ']];
-    db.leads.slice().sort(byActivity).forEach(function(l){
-      rows.push([l.name, l.cat, l.person, l.tel, l.mail, l.want, l.temp || 'B', l.stage || '未接触',
-        propName(l.propId), lastContact(l.id), l.nextDate || '', l.nextText || '',
-        logsOfLead(l.id).length, l.memo]);
-    });
-  } else if (kind === 'prop'){
-    rows = [['物件名','種別','所在地','広さ','想定条件','募集状況','当たり社数','進行中','成約','メモ']];
+  if (kind === 'prop'){
+    rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','備考']];
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
-      var ls = leadsOfProp(p.id);
-      rows.push([p.name, p.kind, p.addr, p.area, p.rent, p.status, ls.length,
-        ls.filter(isLive).length, ls.filter(function(l){ return l.stage === '成約'; }).length, p.memo]);
+      rows.push([p.name, p.addr, p.area, p.zoning, p.rent, p.startDate, p.owner, p.ownerTel,
+        p.lessor, p.lessorTel, p.memo]);
     });
+  } else if (kind === 'ten'){
+    rows = [['テナント名','業種','窓口会社','代表担当者','連絡先','希望面積','備考']];
+    db.tenants.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(t){
+      rows.push([t.name, t.cat, t.agency, t.person, t.tel, t.wantArea, t.memo]);
+    });
+  } else if (kind === 'deal'){
+    rows = [['案件','テナント名','担当者','情報開示日','返事日','成約日','メモ']];
+    db.rows.filter(function(r){ return !!r.closeDate; })
+      .sort(function(a, b){ return a.closeDate < b.closeDate ? -1 : 1; })
+      .forEach(function(r){
+        rows.push([propName(r.propId), tenName(r.tenantId), r.person, r.openDate, r.replyDate,
+          r.closeDate, memoBlock(r.id)]);
+      });
   } else {
-    rows = [['日付','候補先','業種','対象物件','やり方','内容','進み具合']];
-    inRange().forEach(function(g){
-      var l = leadById(g.leadId) || {};
-      rows.push([g.date, l.name || '（削除済み）', l.cat || '', propName(g.propId), g.kind, g.text, g.stage || '']);
-    });
+    rows = [['案件','テナント名','担当者','情報開示日','返事日','状況','状態','メモ']];
+    db.rows.filter(function(r){ return !r.closeDate; })
+      .sort(function(a, b){
+        var pa = propName(a.propId), pb = propName(b.propId);
+        if (pa !== pb) return pa < pb ? -1 : 1;
+        return stateOf(a).sort - stateOf(b).sort;
+      })
+      .forEach(function(r){
+        rows.push([propName(r.propId), tenName(r.tenantId), r.person, r.openDate, r.replyDate,
+          r.status, stateOf(r).label, memoBlock(r.id)]);
+      });
   }
   return csvQuote(rows);
 }
 
 function renderOutput(){
   var s = summarize();
-  $('rp-log').textContent = s.list.length;
-  $('rp-lead').textContent = s.leads;
-  $('rp-view').textContent = s.view;
+  $('rp-memo').textContent = s.logs.length;
+  $('rp-open').textContent = s.open;
+  $('rp-reply').textContent = s.reply;
   $('rp-deal').textContent = s.deal;
   $('preview').textContent = buildText();
 }
@@ -1114,59 +1277,55 @@ function openExternal(url){
 /* ===================== お試し用のサンプル ===================== */
 function loadSample(){
   function back(n){ var x = new Date(); x.setDate(x.getDate() - n); return ymd(x); }
-  function fwd(n){ var x = new Date(); x.setDate(x.getDate() + n); return ymd(x); }
   var now = Date.now();
-  var p1 = { id:uid(), ts:now+1, name:'◯◯町3丁目 角地', kind:'土地', status:'商談中',
-    addr:'◯◯市◯◯町3-1-2', area:'150坪', rent:'月28万＋税',
-    memo:'地主は10年以上の定期借地を希望。間口12m、幹線道路沿い。' };
-  var p2 = { id:uid(), ts:now+2, name:'駅前ビル 1階', kind:'建物', status:'募集中',
-    addr:'◯◯市駅前1-4', area:'32坪', rent:'月19万＋共益費2万',
-    memo:'前テナントは学習塾。スケルトン返し済み。' };
-  var p3 = { id:uid(), ts:now+3, name:'旧倉庫あと north', kind:'土地', status:'募集中',
-    addr:'◯◯市北町7', area:'340坪', rent:'相談', memo:'造成が要る。上下水は前面道路まで来ている。' };
+  var p1 = { id:uid(), ts:now+1, name:'伊丹寺本', addr:'伊丹市寺本', area:'150坪', zoning:'準工業',
+    rent:'坪1.2万', startDate:back(60), owner:'寺本地主', ownerTel:'', lessor:'', lessorTel:'',
+    memo:'幹線道路沿い。間口12m。' };
+  var p2 = { id:uid(), ts:now+2, name:'川西市', addr:'川西市栄町', area:'80坪', zoning:'商業',
+    rent:'坪1.5万', startDate:back(40), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'' };
+  var p3 = { id:uid(), ts:now+3, name:'小中島', addr:'尼崎市小中島', area:'340坪', zoning:'工業',
+    rent:'相談', startDate:back(20), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'造成が要る。' };
   db.props = [p1, p2, p3];
 
-  var l1 = { id:uid(), ts:now+11, name:'株式会社◯◯フーズ', cat:'飲食', person:'出店開発 山田様',
-    tel:'06-1234-5678', mail:'', want:'150坪前後・駐車場15台', temp:'A', stage:'条件交渉',
-    propId:p1.id, nextDate:fwd(3), nextText:'定期借地の年数を回答する', memo:'本部決裁は月末。' };
-  var l2 = { id:uid(), ts:now+12, name:'△△ドラッグ', cat:'物販', person:'開発部 佐藤様',
-    tel:'', mail:'sato@example.com', want:'300坪以上・車の出入りやすさ', temp:'B', stage:'内見済',
-    propId:p3.id, nextDate:back(2), nextText:'造成費の概算を出す', memo:'競合の出店状況を気にしている。' };
-  var l3 = { id:uid(), ts:now+13, name:'□□クリニック', cat:'医療', person:'院長',
-    tel:'', mail:'', want:'30坪・駅近', temp:'A', stage:'提案済',
-    propId:p2.id, nextDate:fwd(7), nextText:'内見の日程を決める', memo:'開業予定は来春。' };
-  var l4 = { id:uid(), ts:now+14, name:'カフェ ななつ', cat:'飲食', person:'店主',
-    tel:'', mail:'', want:'20〜30坪', temp:'C', stage:'打診中', propId:p2.id,
-    nextDate:'', nextText:'', memo:'2店舗目を検討中だが時期は未定。' };
-  var l5 = { id:uid(), ts:now+15, name:'株式会社◇◇物流', cat:'倉庫', person:'総務 田中様',
-    tel:'', mail:'', want:'300坪・大型車が入ること', temp:'B', stage:'未接触', propId:p3.id,
-    nextDate:'', nextText:'', memo:'知人からの紹介。まだ連絡していない。' };
-  db.leads = [l1, l2, l3, l4, l5];
+  var t1 = { id:uid(), ts:now+11, name:'㈱吉野家HD', cat:'飲食（牛丼）', agency:'〇〇不動産',
+    person:'田中', tel:'06-0000-0000', wantArea:'40〜60坪', memo:'駅前立地を優先' };
+  var t2 = { id:uid(), ts:now+12, name:'㈱ゼンショー', cat:'飲食（すき家ほか）', agency:'', person:'',
+    tel:'', wantArea:'50坪前後', memo:'' };
+  var t3 = { id:uid(), ts:now+13, name:'㈱富士薬品', cat:'ドラッグストア', agency:'', person:'',
+    tel:'', wantArea:'300坪以上', memo:'' };
+  var t4 = { id:uid(), ts:now+14, name:'ファミリーマート', cat:'コンビニ', agency:'', person:'',
+    tel:'', wantArea:'60〜80坪', memo:'' };
+  var t5 = { id:uid(), ts:now+15, name:'コメダ', cat:'飲食（カフェ）', agency:'', person:'',
+    tel:'', wantArea:'60坪＋駐車場', memo:'' };
+  db.tenants = [t1, t2, t3, t4, t5];
+
+  var r1 = { id:uid(), ts:now+21, propId:p1.id, tenantId:t1.id, person:'山田',
+    openDate:back(15), replyDate:back(7), status:'条件協議中', closeDate:'' };
+  var r2 = { id:uid(), ts:now+22, propId:p1.id, tenantId:t2.id, person:'',
+    openDate:back(21), replyDate:'', status:'', closeDate:'' };
+  var r3 = { id:uid(), ts:now+23, propId:p2.id, tenantId:t4.id, person:'佐藤',
+    openDate:back(5), replyDate:back(2), status:'前向き', closeDate:'' };
+  var r4 = { id:uid(), ts:now+24, propId:p3.id, tenantId:t3.id, person:'',
+    openDate:'', replyDate:'', status:'', closeDate:'' };
+  var r5 = { id:uid(), ts:now+25, propId:p2.id, tenantId:t5.id, person:'',
+    openDate:back(50), replyDate:back(35), status:'見送り', closeDate:'' };
+  db.rows = [r1, r2, r3, r4, r5];
 
   db.logs = [
-    { id:uid(), ts:now+21, leadId:l1.id, propId:p1.id, date:back(24), kind:'電話',
-      text:'出店担当に初回の打診。150坪前後を探しており、資料を送ることになった。', stage:'打診中' },
-    { id:uid(), ts:now+22, leadId:l1.id, propId:p1.id, date:back(17), kind:'資料送付',
-      text:'図面・公図・賃料表を送付。', stage:'提案済' },
-    { id:uid(), ts:now+23, leadId:l1.id, propId:p1.id, date:back(9), kind:'内見',
-      text:'部長と担当の2名で現地確認。間口と視認性は高評価。駐車場15台が取れるかを確認したいとのこと。', stage:'内見済' },
-    { id:uid(), ts:now+24, leadId:l1.id, propId:p1.id, date:back(2), kind:'訪問',
-      text:'本社で条件のすり合わせ。賃料は月26万まで、定期借地なら15年を希望。', stage:'条件交渉' },
-    { id:uid(), ts:now+25, leadId:l2.id, propId:p3.id, date:back(30), kind:'メール',
-      text:'北町の土地を紹介。面積は合うが造成費の負担を気にしている。', stage:'提案済' },
-    { id:uid(), ts:now+26, leadId:l2.id, propId:p3.id, date:back(12), kind:'内見',
-      text:'現地を確認。大型車の進入は問題なし。造成の見積もりを待つ。', stage:'内見済' },
-    { id:uid(), ts:now+27, leadId:l3.id, propId:p2.id, date:back(6), kind:'電話',
-      text:'来春開業に向けて物件を探し中。駅前ビル1階の図面を送付した。', stage:'提案済' },
-    { id:uid(), ts:now+28, leadId:l4.id, propId:p2.id, date:back(41), kind:'来店してもらった',
-      text:'2店舗目の相談。時期は未定だが希望条件は聞けた。', stage:'打診中' }
+    { id:uid(), ts:now+31, rowId:r1.id, date:back(15), text:'情報開示。図面と条件表を送付。' },
+    { id:uid(), ts:now+32, rowId:r1.id, date:back(7), text:'賃料坪1.2万なら前向きと回答。駐車場15台が取れるか確認したいとのこと。' },
+    { id:uid(), ts:now+33, rowId:r1.id, date:back(2), text:'本部決裁は今月末。造成の負担区分をこちらで整理する。' },
+    { id:uid(), ts:now+34, rowId:r2.id, date:back(21), text:'情報開示。担当者が異動したばかりで確認に時間がかかりそうとのこと。' },
+    { id:uid(), ts:now+35, rowId:r3.id, date:back(5), text:'情報開示。' },
+    { id:uid(), ts:now+36, rowId:r3.id, date:back(2), text:'前向きに検討したいと連絡あり。現地を見たいとのことで日程調整中。' },
+    { id:uid(), ts:now+37, rowId:r5.id, date:back(35), text:'駐車場が確保できないため今回は見送りと回答。' }
   ];
-  db.mail = db.mail || '';
   persist(); renderAll();
 }
 
 /* ===================== 操作 ===================== */
-var tabs = [['tab-home','view-home'], ['tab-lead','view-lead'], ['tab-prop','view-prop'], ['tab-out','view-out']];
+var tabs = [['tab-home','view-home'], ['tab-push','view-push'], ['tab-prop','view-prop'],
+            ['tab-ten','view-ten'], ['tab-out','view-out']];
 function go(which){
   tabs.forEach(function(p){
     var on = p[0] === 'tab-' + which;
@@ -1183,29 +1342,32 @@ tabs.forEach(function(p){
 document.addEventListener('click', function(ev){
   var t = ev.target;
   if (!t || !t.closest) return;
-  var a = t.closest('[data-log]');  if (a){ openLogSheet(a.getAttribute('data-log')); return; }
-  var b = t.closest('[data-lead]'); if (b){ openLeadSheet(b.getAttribute('data-lead')); return; }
+  var a = t.closest('[data-log]');  if (a){ openMemoSheet(a.getAttribute('data-log')); return; }
+  var b = t.closest('[data-row]');  if (b){ openRowSheet(b.getAttribute('data-row')); return; }
   var c = t.closest('[data-prop]'); if (c){ openPropSheet(c.getAttribute('data-prop')); return; }
+  var d = t.closest('[data-ten]');  if (d){ openTenSheet(d.getAttribute('data-ten')); return; }
 });
 
 $('sheet').addEventListener('click', function(ev){ if (ev.target === this) closeSheet(); });
 document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape' && !$('sheet').hidden) closeSheet(); });
 
-$('btn-log').addEventListener('click', function(){ openLogSheet(null); });
-$('btn-add-lead').addEventListener('click', function(){ openLeadSheet(null); });
+$('btn-log').addEventListener('click', function(){ openMemoSheet(null); });
+$('btn-add-push').addEventListener('click', function(){ openRowSheet(null); });
 $('btn-add-prop').addEventListener('click', function(){ openPropSheet(null); });
-$('btn-bulk').addEventListener('click', openBulkSheet);
+$('btn-add-ten').addEventListener('click', function(){ openTenSheet(null); });
+$('btn-bulk-prop').addEventListener('click', function(){ openBulkSheet('prop'); });
+$('btn-bulk-ten').addEventListener('click', function(){ openBulkSheet('ten'); });
 
-$('q-lead').addEventListener('input', renderLeads);
-$('chips-lead').addEventListener('click', function(ev){
+$('q-push').addEventListener('input', renderPushes);
+$('q-ten').addEventListener('input', renderTenants);
+$('filter-prop').addEventListener('change', renderPushes);
+$('chips-push').addEventListener('click', function(ev){
   var b = ev.target.closest ? ev.target.closest('.chip') : null;
   if (!b) return;
-  leadFilter = b.getAttribute('data-f');
+  pushFilter = b.getAttribute('data-f');
   var all = this.querySelectorAll('.chip');
-  for (var i = 0; i < all.length; i++){
-    all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
-  }
-  renderLeads();
+  for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
+  renderPushes();
 });
 
 $('period').addEventListener('change', renderOutput);
@@ -1213,10 +1375,11 @@ $('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本�
 
 $('btn-mail').addEventListener('click', function(){
   var full = buildText(), addr = $('mailto').value.trim();
-  var subject = 'テナント誘致 活動報告 ' + periodRange().label;
+  var subject = 'テナント誘致 推進報告 ' + periodRange().label;
   var body = full.length > 1600 ? full.slice(0, 1600) + '\n\n（長いため省略しました。全文は貼り付けてください）' : full;
   copyText(full, 'メールを開きます（本文はコピー済み）');
-  openExternal('mailto:' + encodeURIComponent(addr) + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+  openExternal('mailto:' + encodeURIComponent(addr) + '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(body));
 });
 
 $('btn-line').addEventListener('click', function(){
@@ -1231,32 +1394,32 @@ $('btn-csv-copy').addEventListener('click', function(){
 });
 $('btn-csv-save').addEventListener('click', function(){
   var k = $('csvkind').value;
-  var nm = k === 'lead' ? '候補先一覧' : (k === 'prop' ? '物件一覧' : '接触履歴');
+  var nm = k === 'prop' ? '案件一覧' : (k === 'ten' ? 'テナント名簿' : (k === 'deal' ? '成約' : '推進表'));
   saveFile(nm + '_' + today() + '.csv', '﻿' + buildCSV(k), 'text/csv;charset=utf-8;');
 });
 
 $('btn-backup').addEventListener('click', function(){
-  var data = JSON.stringify({ app:'tenant-log', v:1, saved:new Date().toISOString(),
-    props:db.props, leads:db.leads, logs:db.logs, mail:db.mail }, null, 1);
-  saveFile('テナント誘致台帳_' + today() + '.json', data, 'application/json');
+  var data = JSON.stringify({ app:'tenant-push', v:1, saved:new Date().toISOString(),
+    props:db.props, tenants:db.tenants, rows:db.rows, logs:db.logs, mail:db.mail }, null, 1);
+  saveFile('テナント誘致推進表_' + today() + '.json', data, 'application/json');
 });
 
 $('restore-file').addEventListener('change', function(){
-  var file = this.files && this.files[0];
-  var input = this;
+  var file = this.files && this.files[0], input = this;
   if (!file) return;
   var fr = new FileReader();
   fr.onload = function(){
     var obj = null;
     try { obj = JSON.parse(String(fr.result)); } catch(e){ obj = null; }
-    if (!obj || !Array.isArray(obj.leads) || !Array.isArray(obj.logs)){
+    if (!obj || !Array.isArray(obj.rows) || !Array.isArray(obj.tenants)){
       toast('このファイルは読み込めませんでした'); input.value = ''; return;
     }
-    if (!confirm('いまの記録を、このファイルの内容で置きかえます。\n候補先 ' + obj.leads.length +
-      '社 ／ 記録 ' + obj.logs.length + '件\nよろしいですか？')){ input.value = ''; return; }
+    if (!confirm('いまの記録を、このファイルの内容で置きかえます。\n推進 ' + obj.rows.length +
+      '行 ／ 名簿 ' + obj.tenants.length + '社\nよろしいですか？')){ input.value = ''; return; }
     db.props = Array.isArray(obj.props) ? obj.props : [];
-    db.leads = obj.leads;
-    db.logs = obj.logs;
+    db.tenants = obj.tenants;
+    db.rows = obj.rows;
+    db.logs = Array.isArray(obj.logs) ? obj.logs : [];
     db.mail = typeof obj.mail === 'string' ? obj.mail : '';
     persist(); $('mailto').value = db.mail; renderAll(); renderOutput();
     input.value = '';
@@ -1267,14 +1430,14 @@ $('restore-file').addEventListener('change', function(){
 });
 
 $('btn-wipe').addEventListener('click', function(){
-  if (!confirm('物件・候補先・接触の記録をすべて削除します。元に戻せません。よろしいですか？')) return;
-  db.props = []; db.leads = []; db.logs = [];
+  if (!confirm('案件・名簿・推進・メモをすべて削除します。元に戻せません。よろしいですか？')) return;
+  db.props = []; db.tenants = []; db.rows = []; db.logs = [];
   persist(); renderAll(); renderOutput();
   toast('すべて削除しました');
 });
 
 $('btn-sample').addEventListener('click', function(){
-  if (db.props.length || db.leads.length || db.logs.length){
+  if (db.props.length || db.tenants.length || db.rows.length){
     toast('記録があるときは入れられません。試すときは空の状態でどうぞ');
     return;
   }
