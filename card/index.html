@@ -172,6 +172,31 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
 .credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--ground);
   font-size:14px;font-weight:700;padding:12px 20px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+/* ===== その場のカメラ（枠に合わせて撮る。シャッター音は鳴らない） ===== */
+.cam{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column}
+.cam .top{display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 10px;background:#000}
+.cam .top button{appearance:none;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);
+  color:#fff;font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer}
+.cam .top .sp{flex:1}
+.cam .stage{position:relative;flex:1;overflow:hidden;background:#000}
+.cam video{width:100%;height:100%;object-fit:cover;display:block}
+.cam .box{position:absolute;left:6%;width:88%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
+  border:2px solid rgba(255,255,255,.92);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+.cam .tip{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-size:13px;
+  font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none}
+.cam .ctl{display:flex;align-items:center;gap:12px;padding:16px 18px calc(20px + env(safe-area-inset-bottom));background:#000}
+.cam .ctl .side{flex:1;color:#fff;font:inherit;font-size:12.5px;font-weight:700;background:transparent;
+  border:0;cursor:pointer;text-decoration:underline;opacity:.85}
+.shutter{flex:none;width:74px;height:74px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.3);
+  cursor:pointer;-webkit-tap-highlight-color:transparent}
+.shutter:active{transform:scale(.94)}
+.cam .err{color:#fff;font-size:13.5px;line-height:1.9;padding:26px 22px;text-align:center}
+
+/* ===== 切り直し（四隅を動かす） ===== */
+.cropbox{position:relative;margin-top:14px;border-radius:11px;overflow:hidden;background:#0c0b0a;touch-action:none}
+.cropbox img{width:100%;display:block}
+.cropbox svg{position:absolute;inset:0;width:100%;height:100%}
+
 .busy{position:fixed;inset:0;z-index:90;background:rgba(20,14,10,.45);display:flex;align-items:center;justify-content:center}
 .busy span{background:var(--card);color:var(--ink);font-size:14px;font-weight:700;padding:15px 24px;border-radius:13px;box-shadow:var(--shadow)}
 </style>
@@ -210,6 +235,24 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
   <div id="none" hidden></div>
 
   <p class="credit">写真も記録もこの端末の中だけ。文字を読むのも端末の中で行います。</p>
+</div>
+
+<div class="cam" id="cam" hidden>
+  <div class="top">
+    <button id="cam-close">閉じる</button>
+    <span class="sp"></span>
+    <button id="cam-torch" hidden>ライト</button>
+  </div>
+  <div class="stage" id="cam-stage">
+    <video id="cam-video" playsinline muted autoplay></video>
+    <div class="box"></div>
+    <p class="tip">枠に名刺を合わせる。まわりの机が入っても切り取ります</p>
+  </div>
+  <div class="ctl">
+    <button class="side" id="cam-pick">写真から選ぶ</button>
+    <button class="shutter" id="cam-shot" aria-label="撮る"></button>
+    <span class="side"></span>
+  </div>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="panel" id="panel"></div></div>
@@ -361,18 +404,6 @@ function readImage(file, cb){
   im.onerror = function(){ URL.revokeObjectURL(url); cb(null); };
   im.src = url;
 }
-function scaleTo(src, maxEdge, q){
-  var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
-  if (!w || !h) return null;
-  var s = Math.min(1, maxEdge / Math.max(w, h));
-  var cw = Math.max(1, Math.round(w*s)), ch = Math.max(1, Math.round(h*s));
-  var cv = document.createElement('canvas');
-  cv.width = cw; cv.height = ch;
-  var cx = cv.getContext('2d');
-  cx.fillStyle = '#fff'; cx.fillRect(0, 0, cw, ch);
-  cx.drawImage(src, 0, 0, cw, ch);
-  return cv.toDataURL('image/jpeg', q);
-}
 /* 文字を読ませるための下ごしらえ：長辺2000pxまで拡大し、白黒にして濃淡を強める */
 function forOcr(src){
   var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
@@ -394,19 +425,156 @@ function forOcr(src){
   } catch(e){}
   return cv;
 }
-function rot90(dataUrl, cb){
-  var im = new Image();
-  im.onload = function(){
-    var cv = document.createElement('canvas');
-    cv.width = im.naturalHeight; cv.height = im.naturalWidth;
-    var cx = cv.getContext('2d');
-    cx.translate(cv.width/2, cv.height/2);
-    cx.rotate(Math.PI/2);
-    cx.drawImage(im, -im.naturalWidth/2, -im.naturalHeight/2);
-    cb(cv.toDataURL('image/jpeg', 0.85));
-  };
-  im.onerror = function(){ cb(null); };
-  im.src = dataUrl;
+function toCanvas(src, maxEdge){
+  var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
+  var sc = Math.min(1, maxEdge / Math.max(w, h));
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w * sc));
+  c.height = Math.max(1, Math.round(h * sc));
+  var x = c.getContext('2d');
+  x.imageSmoothingQuality = 'high';
+  x.drawImage(src, 0, 0, c.width, c.height);
+  return c;
+}
+function rotCanvas(src){
+  var c = document.createElement('canvas');
+  c.width = src.height; c.height = src.width;
+  var x = c.getContext('2d');
+  x.translate(c.width/2, c.height/2);
+  x.rotate(Math.PI/2);
+  x.drawImage(src, -src.width/2, -src.height/2);
+  return c;
+}
+
+/* ===== 名刺の四隅をさがす =====
+   写真ぜんぶを読ませると、机まで含めて文字が小さくなり読みちがえる。
+   明るい紙のかたまりを中心から塗り広げて見つけ、その四隅を返す。 */
+function findQuad(src){
+  var w = 360, h = Math.max(1, Math.round(src.height * w / src.width));
+  var c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  c.getContext('2d').drawImage(src, 0, 0, w, h);
+  var d;
+  try { d = c.getContext('2d').getImageData(0, 0, w, h).data; } catch(e){ return null; }
+  var g = new Uint8Array(w*h), hist = [];
+  for (var i = 0; i < 256; i++) hist[i] = 0;
+  for (var i2 = 0, j = 0; i2 < d.length; i2 += 4, j++){
+    var v = (0.299*d[i2] + 0.587*d[i2+1] + 0.114*d[i2+2]) | 0;
+    g[j] = v; hist[v]++;
+  }
+  var tot = w*h, sum = 0;
+  for (var t = 0; t < 256; t++) sum += t*hist[t];
+  var sB = 0, wB = 0, best = 0, thr = 128;
+  for (var t2 = 0; t2 < 256; t2++){
+    wB += hist[t2]; if (!wB) continue;
+    var wF = tot - wB; if (!wF) break;
+    sB += t2*hist[t2];
+    var mB = sB/wB, mF = (sum-sB)/wF, val = wB*wF*(mB-mF)*(mB-mF);
+    if (val > best){ best = val; thr = t2; }
+  }
+  var start = (w>>1) + (h>>1)*w;
+  if (g[start] <= thr){
+    var bi = start, bv = -1;
+    for (var yy = (h*0.35)|0; yy < h*0.65; yy++)
+      for (var xx = (w*0.35)|0; xx < w*0.65; xx++){
+        var k0 = yy*w + xx; if (g[k0] > bv){ bv = g[k0]; bi = k0; }
+      }
+    start = bi;
+  }
+  var seen = new Uint8Array(w*h), q = [start], n = 0, pts = [];
+  seen[start] = 1;
+  var minx = w, maxx = 0, miny = h, maxy = 0;
+  while (q.length){
+    var k = q.pop(), px = k % w, py = (k/w)|0;
+    n++; pts.push(px, py);
+    if (px < minx) minx = px;
+    if (px > maxx) maxx = px;
+    if (py < miny) miny = py;
+    if (py > maxy) maxy = py;
+    var nb = [k-1, k+1, k-w, k+w];
+    for (var a = 0; a < 4; a++){
+      var m = nb[a];
+      if (m < 0 || m >= w*h || seen[m]) continue;
+      if (a === 0 && k % w === 0) continue;
+      if (a === 1 && k % w === w-1) continue;
+      if (g[m] > thr){ seen[m] = 1; q.push(m); }
+    }
+  }
+  var area = n/(w*h), bw = maxx-minx, bh = maxy-miny;
+  if (!bw || !bh) return null;
+  var ar = Math.max(bw, bh) / Math.min(bw, bh);
+  if (area < 0.06 || area > 0.96 || ar < 1.15 || ar > 2.7) return null;
+  var tl = [1e9,0,0], br = [-1e9,0,0], tr = [-1e9,0,0], bl = [1e9,0,0];
+  for (var i3 = 0; i3 < pts.length; i3 += 2){
+    var X = pts[i3], Y = pts[i3+1], sm = X+Y, df = X-Y;
+    if (sm < tl[0]) tl = [sm, X, Y];
+    if (sm > br[0]) br = [sm, X, Y];
+    if (df > tr[0]) tr = [df, X, Y];
+    if (df < bl[0]) bl = [df, X, Y];
+  }
+  var kk = src.width / w;
+  return [[tl[1]*kk, tl[2]*kk], [tr[1]*kk, tr[2]*kk], [br[1]*kk, br[2]*kk], [bl[1]*kk, bl[2]*kk]];
+}
+function fullQuad(c){ return [[0,0], [c.width,0], [c.width,c.height], [0,c.height]]; }
+function quadSize(qd){
+  function dist(a, b){ return Math.sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1])); }
+  return { w: (dist(qd[0],qd[1]) + dist(qd[3],qd[2])) / 2,
+           h: (dist(qd[0],qd[3]) + dist(qd[1],qd[2])) / 2 };
+}
+/* ===== 四隅から、まっすぐな長方形に直す（斜めから撮っても正面になる） ===== */
+function solve8(A, b){
+  for (var i = 0; i < 8; i++){
+    var pv = i;
+    for (var r = i+1; r < 8; r++) if (Math.abs(A[r][i]) > Math.abs(A[pv][i])) pv = r;
+    var ta = A[i]; A[i] = A[pv]; A[pv] = ta;
+    var tb = b[i]; b[i] = b[pv]; b[pv] = tb;
+    if (Math.abs(A[i][i]) < 1e-12) return null;
+    for (var r2 = 0; r2 < 8; r2++){
+      if (r2 === i) continue;
+      var f = A[r2][i] / A[i][i];
+      for (var c2 = i; c2 < 8; c2++) A[r2][c2] -= f * A[i][c2];
+      b[r2] -= f * b[i];
+    }
+  }
+  var out = [];
+  for (var i4 = 0; i4 < 8; i4++) out.push(b[i4] / A[i4][i4]);
+  return out;
+}
+function warp(src, qd, outW, outH){
+  var dst = [[0,0], [outW,0], [outW,outH], [0,outH]], A = [], b = [];
+  for (var i = 0; i < 4; i++){
+    var X = dst[i][0], Y = dst[i][1], u = qd[i][0], v = qd[i][1];
+    A.push([X, Y, 1, 0, 0, 0, -X*u, -Y*u]); b.push(u);
+    A.push([0, 0, 0, X, Y, 1, -X*v, -Y*v]); b.push(v);
+  }
+  var hh = solve8(A, b);
+  if (!hh) return null;
+  var sc = toCanvas(src, Math.max(src.width, src.height));
+  var sd;
+  try { sd = sc.getContext('2d').getImageData(0, 0, sc.width, sc.height); } catch(e){ return null; }
+  var sp = sd.data, sw = sc.width, sh = sc.height;
+  var oc = document.createElement('canvas');
+  oc.width = outW; oc.height = outH;
+  var octx = oc.getContext('2d'), od = octx.createImageData(outW, outH), op = od.data;
+  for (var y = 0; y < outH; y++){
+    for (var x = 0; x < outW; x++){
+      var den = hh[6]*x + hh[7]*y + 1;
+      var u2 = (hh[0]*x + hh[1]*y + hh[2]) / den, v2 = (hh[3]*x + hh[4]*y + hh[5]) / den;
+      var o = (y*outW + x) * 4;
+      if (u2 < 0 || v2 < 0 || u2 >= sw-1 || v2 >= sh-1){
+        op[o] = op[o+1] = op[o+2] = 255; op[o+3] = 255; continue;
+      }
+      var x0 = u2|0, y0 = v2|0, fx = u2-x0, fy = v2-y0;
+      var i00 = (y0*sw + x0)*4, i10 = i00+4, i01 = i00 + sw*4, i11 = i01+4;
+      for (var ch = 0; ch < 3; ch++){
+        op[o+ch] = (sp[i00+ch]*(1-fx)*(1-fy) + sp[i10+ch]*fx*(1-fy) +
+                    sp[i01+ch]*(1-fx)*fy + sp[i11+ch]*fx*fy) | 0;
+      }
+      op[o+3] = 255;
+    }
+  }
+  octx.putImageData(od, 0, 0);
+  return oc;
 }
 function putShot(id, shot){
   return IDB.put({ id:id, full:shot.full, thumb:shot.thumb }).then(function(){
@@ -732,7 +900,10 @@ function renderCards(){
 
 /* ===================== 撮ってからしまうまで ===================== */
 var pend = null;        /* まだしまっていない写真 { full, thumb } */
-var pendImg = null;     /* 文字を読ませるための元画像 */
+var pendRaw = null;     /* 撮ったままの写真（切り直しに使う） */
+var pendQuad = null;    /* 名刺の四隅 */
+var pendCard = null;    /* 切り出してまっすぐにした名刺 */
+var pendCropped = false;
 var pendCand = [];      /* 読み取った文字の候補 */
 var touched = {};       /* 人が手で直した欄は、読み直しても上書きしない */
 var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','memo'];
@@ -777,8 +948,9 @@ function saveSheetHtml(){
     '<label for="s-memo">ひとことメモ</label>' +
     '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのこと。"></textarea>' +
     '<button class="btn primary" id="s-save">名刺箱にしまう</button>' +
-    '<div class="row"><button class="btn" id="s-rot">回して読み直す</button>' +
-    '<button class="btn danger" id="s-cancel">やめる</button></div>';
+    '<div class="row"><button class="btn" id="s-crop">切り直す</button>' +
+    '<button class="btn" id="s-rot">回す</button></div>' +
+    '<button class="btn danger" id="s-cancel">やめる</button>';
 }
 function setCands(){
   var h = pendCand.map(function(t){
@@ -825,7 +997,9 @@ function runOcr(img){
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
     $('s-read').textContent = any ? '読めた。ちがうところは直す。' : '文字をうまく読めなかった。手で入れる。';
-    $('s-lead').textContent = any ? '押すだけで直せる候補を、欄の下に並べてある。' : '写真は残るので、名前だけ入れておけばよい。';
+    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
+                                   : '写真は残るので、名前だけ入れておけばよい。') +
+      (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
   }, function(err){
     if (!$('s-read')) return;
     $('s-bar').hidden = true;
@@ -835,15 +1009,24 @@ function runOcr(img){
       '写真は残るので、名前だけ手で入れてしまってよい。</div>';
   });
 }
-function openSave(){
-  touched = {}; pendCand = [];
+function grabForm(){
+  var o = {};
+  SF.forEach(function(k){ if ($('s-' + k)) o[k] = $('s-' + k).value; });
+  return o;
+}
+function clearPend(){ pend = null; pendRaw = null; pendQuad = null; pendCard = null; }
+function openSave(restore){
+  if (!restore){ touched = {}; pendCand = []; }
   openSheet(saveSheetHtml(), function(){
     $('s-img').src = pend.full;
     $('s-pic').addEventListener('click', function(){ showBig(pend.full); });
     SF.forEach(function(k){
       var el = $('s-' + k);
-      if (el) el.addEventListener('input', function(){ touched[k] = 1; });
+      if (!el) return;
+      el.addEventListener('input', function(){ touched[k] = 1; });
+      if (restore && restore[k] != null) el.value = restore[k];
     });
+    if (restore) setCands();
     $('s-cand-name').addEventListener('click', function(ev){ pickCand(ev, 's-name', 'name'); });
     $('s-cand-co').addEventListener('click', function(ev){ pickCand(ev, 's-company', 'company'); });
     if ($('s-where-chips')) $('s-where-chips').addEventListener('click', function(ev){
@@ -852,11 +1035,12 @@ function openSave(){
       $('s-where').value = b.getAttribute('data-w');
       touched.where = 1;
     });
+    $('s-crop').addEventListener('click', openRecrop);
     $('s-rot').addEventListener('click', rotateAndRead);
     $('s-save').addEventListener('click', doSave);
     $('s-cancel').addEventListener('click', function(){
       if (!confirm('この名刺をやめますか？　写真も残りません。')) return;
-      pend = null; pendImg = null; closeSheet();
+      clearPend(); closeSheet();
     });
   });
 }
@@ -866,20 +1050,45 @@ function pickCand(ev, inputId, key){
   $(inputId).value = b.getAttribute('data-v');
   touched[key] = 1;
 }
+/* 四隅から切り出して、しまう用の写真を作る */
+function buildPend(){
+  var a = quadSize(pendQuad);
+  var outW = 2100, outH = Math.round(outW * a.h / Math.max(1, a.w));
+  if (outH < 200) outH = 200;
+  if (outH > 2400){ outH = 2400; outW = Math.max(200, Math.round(outH * a.w / Math.max(1, a.h))); }
+  pendCard = warp(pendRaw, pendQuad, outW, outH) || pendRaw;
+  pend = { full: toCanvas(pendCard, 1400).toDataURL('image/jpeg', 0.72),
+           thumb: toCanvas(pendCard, 320).toDataURL('image/jpeg', 0.62) };
+}
+function processRaw(raw){
+  busy(true, '名刺を切り出しています…');
+  setTimeout(function(){
+    try {
+      pendRaw = raw;
+      var qd = findQuad(raw);
+      pendCropped = !!qd;
+      pendQuad = qd || fullQuad(raw);
+      buildPend();
+    } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
+    busy(false);
+    openSave();
+    runOcr(pendCard);
+  }, 30);
+}
 function rotateAndRead(){
-  if (!pend) return;
+  if (!pendRaw) return;
+  var keep = grabForm();
   busy(true, '回しています…');
-  rot90(pend.full, function(full){
-    if (!full){ busy(false); toast('回せませんでした'); return; }
-    rot90(pend.thumb, function(thumb){
-      busy(false);
-      pend = { full:full, thumb:thumb || pend.thumb };
-      if ($('s-img')) $('s-img').src = pend.full;
-      var im = new Image();
-      im.onload = function(){ pendImg = im; runOcr(im); };
-      im.src = full;
-    });
-  });
+  setTimeout(function(){
+    pendRaw = rotCanvas(pendRaw);
+    var qd = findQuad(pendRaw);
+    pendCropped = !!qd;
+    pendQuad = qd || fullQuad(pendRaw);
+    buildPend();
+    busy(false);
+    openSave(keep);
+    runOcr(pendCard);
+  }, 30);
 }
 function startCapture(file){
   if (!file) return;
@@ -887,13 +1096,120 @@ function startCapture(file){
   readImage(file, function(im){
     busy(false);
     if (!im){ toast('写真を読み込めませんでした'); return; }
-    var full = scaleTo(im, 1400, 0.72), thumb = scaleTo(im, 320, 0.62);
-    if (!full){ toast('写真を読み込めませんでした'); return; }
-    pend = { full:full, thumb:thumb };
-    pendImg = im;
-    openSave();
-    runOcr(im);
+    processRaw(toCanvas(im, 2400));
   });
+}
+
+/* ===== 切り直し：四隅を手で合わせる ===== */
+function openRecrop(){
+  if (!pendRaw) return;
+  var keep = grabForm();
+  var W = pendRaw.width, H = pendRaw.height;
+  var url = toCanvas(pendRaw, 1100).toDataURL('image/jpeg', 0.82);
+  var q = pendQuad.map(function(pp){ return [pp[0], pp[1]]; });
+  var rr = Math.max(9, W/55), sw = Math.max(2, W/280);
+  var h = '<h2>四隅を合わせる</h2>' +
+    '<p class="lead">白い丸をつまんで、名刺の角に置く。合わせたら読み直す。</p>' +
+    '<div class="cropbox" id="cb"><img src="' + url + '" alt="撮った写真">' +
+    '<svg id="cb-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+    '<polygon id="cb-poly" fill="rgba(120,200,120,.16)" stroke="#fff" stroke-width="' + sw + '"></polygon>' +
+    '<g id="cb-dots"></g></svg></div>' +
+    '<button class="btn primary" id="cb-ok">これで読み直す</button>' +
+    '<div class="row"><button class="btn" id="cb-all">写真ぜんぶを使う</button>' +
+    '<button class="btn" id="cb-cancel">やめる</button></div>';
+  openSheet(h, function(){
+    var svg = $('cb-svg'), poly = $('cb-poly'), dots = $('cb-dots'), active = -1;
+    function draw(){
+      poly.setAttribute('points', q.map(function(pp){ return pp[0] + ',' + pp[1]; }).join(' '));
+      var g = '';
+      for (var i = 0; i < 4; i++)
+        g += '<circle cx="' + q[i][0] + '" cy="' + q[i][1] + '" r="' + rr +
+             '" fill="#fff" stroke="#3a6b34" stroke-width="' + sw + '"></circle>';
+      dots.innerHTML = g;
+    }
+    function at(ev){
+      var r = svg.getBoundingClientRect();
+      return [(ev.clientX - r.left) / r.width * W, (ev.clientY - r.top) / r.height * H];
+    }
+    function put(pnt){
+      q[active] = [Math.max(0, Math.min(W, pnt[0])), Math.max(0, Math.min(H, pnt[1]))];
+      draw();
+    }
+    svg.addEventListener('pointerdown', function(ev){
+      var pnt = at(ev), bi = 0, bd = 1e18;
+      for (var i = 0; i < 4; i++){
+        var d = (q[i][0]-pnt[0])*(q[i][0]-pnt[0]) + (q[i][1]-pnt[1])*(q[i][1]-pnt[1]);
+        if (d < bd){ bd = d; bi = i; }
+      }
+      active = bi; put(pnt); ev.preventDefault();
+    });
+    svg.addEventListener('pointermove', function(ev){
+      if (active < 0) return;
+      put(at(ev)); ev.preventDefault();
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(t){
+      svg.addEventListener(t, function(){ active = -1; });
+    });
+    draw();
+    function apply(qd){
+      pendQuad = qd; pendCropped = true;
+      busy(true, '切り出しています…');
+      setTimeout(function(){
+        buildPend(); busy(false); openSave(keep); runOcr(pendCard);
+      }, 30);
+    }
+    $('cb-ok').addEventListener('click', function(){ apply(q); });
+    $('cb-all').addEventListener('click', function(){ apply(fullQuad(pendRaw)); });
+    $('cb-cancel').addEventListener('click', function(){ openSave(keep); });
+  });
+}
+
+/* ===== アプリの中のカメラ（シャッター音は鳴らない） ===== */
+var camStream = null, camTrack = null, torchOn = false;
+function openCamera(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
+  $('cam').hidden = false;
+  document.body.style.overflow = 'hidden';
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: 'environment' }, width: { ideal: 3840 }, height: { ideal: 2160 } },
+    audio: false
+  }).then(function(st){
+    camStream = st;
+    camTrack = st.getVideoTracks()[0];
+    var v = $('cam-video');
+    v.srcObject = st;
+    var pl = v.play();
+    if (pl && pl['catch']) pl['catch'](function(){});
+    try {
+      if (camTrack.applyConstraints)
+        camTrack.applyConstraints({ advanced: [{ focusMode: 'continuous' }] })['catch'](function(){});
+      var cap = camTrack.getCapabilities ? camTrack.getCapabilities() : null;
+      $('cam-torch').hidden = !(cap && cap.torch);
+    } catch(e){}
+  }, function(){
+    closeCamera();
+    toast('カメラを使えませんでした。写真から選んでください');
+    $('file-pick').click();
+  });
+}
+function closeCamera(){
+  $('cam').hidden = true;
+  document.body.style.overflow = '';
+  if (camStream){
+    camStream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} });
+    camStream = null; camTrack = null;
+  }
+  try { $('cam-video').srcObject = null; } catch(e){}
+  torchOn = false;
+}
+function camCapture(){
+  var v = $('cam-video');
+  if (!v.videoWidth){ toast('もう少し待ってから押す'); return; }
+  var c = document.createElement('canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  closeCamera();
+  processRaw(toCanvas(c, 2400));
 }
 function doSave(){
   var c = { id:uid(), ts:Date.now(), shot: pend ? 1 : 0, met:today() };
@@ -902,7 +1218,7 @@ function doSave(){
   db.cards.unshift(c);
   persist();
   if (pend) putShot(c.id, pend);
-  pend = null; pendImg = null;
+  clearPend();
   closeSheet();
   renderCards();
   toast('しまった');
@@ -1287,7 +1603,16 @@ function loadSample(){
 }
 
 /* ===================== 配線 ===================== */
-$('btn-shoot').addEventListener('click', function(){ $('file-cam').click(); });
+$('btn-shoot').addEventListener('click', openCamera);
+$('cam-close').addEventListener('click', closeCamera);
+$('cam-shot').addEventListener('click', camCapture);
+$('cam-pick').addEventListener('click', function(){ closeCamera(); $('file-pick').click(); });
+$('cam-torch').addEventListener('click', function(){
+  if (!camTrack || !camTrack.applyConstraints) return;
+  torchOn = !torchOn;
+  camTrack.applyConstraints({ advanced: [{ torch: torchOn }] })['catch'](function(){ torchOn = false; });
+  $('cam-torch').textContent = torchOn ? 'ライト 切' : 'ライト';
+});
 $('btn-pick').addEventListener('click',  function(){ $('file-pick').click(); });
 $('file-cam').addEventListener('change',  function(){ startCapture(this.files[0]); this.value = ''; });
 $('file-pick').addEventListener('change', function(){ startCapture(this.files[0]); this.value = ''; });
