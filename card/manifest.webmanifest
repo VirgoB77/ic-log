@@ -1,13 +1,13 @@
 {
   "name": "めいしばこ",
   "short_name": "めいしばこ",
-  "description": "もらった名刺を撮ってしまう。あとから名前でも会社でも場所でも探せる。",
+  "description": "名刺を撮るだけ。名前も会社も電話も、端末の中で読みとる。",
   "lang": "ja",
   "start_url": "./",
   "scope": "./",
   "display": "browser",
-  "background_color": "#f4f5f2",
-  "theme_color": "#116a6a",
+  "background_color": "#f6f3ee",
+  "theme_color": "#c0432b",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },

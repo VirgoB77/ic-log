@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#116a6a">
+<meta name="theme-color" content="#c0432b">
 <meta name="apple-mobile-web-app-title" content="めいしばこ">
 <title>めいしばこ</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -12,468 +12,173 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap">
 <style>
 :root{
   color-scheme:light;
-  --ground:#f4f5f2; --card:#ffffff; --ink:#16191d; --sub:#616974; --rule:#dfe2dd; --field:#eef0ec;
-  --key:#116a6a; --key-deep:#0a4747; --key-soft:#e0efee; --on-key:#ffffff;
-  --hot:#b0442a; --hot-soft:#f8e9e4;
-  --ok:#1d7048; --ok-soft:#e2efe8;
-  --warn:#946412; --warn-soft:#f8efdd;
-  --mute:#6f7883;
-  --shadow:0 1px 2px rgba(16,22,30,.06), 0 10px 26px rgba(16,22,30,.09);
+  --ground:#f6f3ee; --card:#ffffff; --ink:#1c1a17; --sub:#77706a; --rule:#e5dfd5; --field:#f1ece4;
+  --key:#c0432b; --key-deep:#8f2f1d; --key-soft:#fbeae5; --on-key:#ffffff;
+  --ok:#2c6d4f; --mute:#8d857d;
+  --shadow:0 1px 2px rgba(40,30,20,.05), 0 10px 30px rgba(40,30,20,.08);
 }
 @media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
+  :root{
     color-scheme:dark;
-    --ground:#111316; --card:#191c20; --ink:#e7eaed; --sub:#97a0aa; --rule:#292f35; --field:#14171a;
-    --key:#4fb3ad; --key-deep:#1d5f5c; --key-soft:#0f2422; --on-key:#08211f;
-    --hot:#e08a6d; --hot-soft:#2b1c16;
-    --ok:#4faa7d; --ok-soft:#16241d;
-    --warn:#d4a344; --warn-soft:#2a2113;
-    --mute:#8b949e;
-    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
+    --ground:#141210; --card:#1f1c19; --ink:#ede7de; --sub:#a09890; --rule:#332e28; --field:#191614;
+    --key:#e2775e; --key-deep:#a8412c; --key-soft:#2a1a15; --on-key:#1a0f0c;
+    --ok:#5fae86; --mute:#8e857c;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
   }
 }
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --ground:#111316; --card:#191c20; --ink:#e7eaed; --sub:#97a0aa; --rule:#292f35; --field:#14171a;
-  --key:#4fb3ad; --key-deep:#1d5f5c; --key-soft:#0f2422; --on-key:#08211f;
-  --hot:#e08a6d; --hot-soft:#2b1c16;
-  --ok:#4faa7d; --ok-soft:#16241d;
-  --warn:#d4a344; --warn-soft:#2a2113;
-  --mute:#8b949e;
-  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px rgba(0,0,0,.4);
-}
-
-/* 「かわいい」表示：黒紫とピンクの配色（ゆうちメモと同じ） */
-:root[data-skin="cute"]{
-  --ground:#f8f4fc; --card:#ffffff; --ink:#241634; --sub:#6f6280; --rule:#ebe0f7; --field:#f4edfb;
-  --key:#5b3a86; --key-deep:#3a2358; --key-soft:#f0e6fb; --on-key:#ffffff;
-  --hot:#cf3b7e; --hot-soft:#fdeaf3;
-  --ok:#2e8b6b; --ok-soft:#e3f4ee;
-  --warn:#a0741f; --warn-soft:#fbf1dc;
-  --mute:#8c7f9c;
-  --shadow:0 1px 2px rgba(60,30,90,.07), 0 10px 26px rgba(60,30,90,.12);
-}
-@media (prefers-color-scheme:dark){
-  :root[data-skin="cute"]:not([data-theme="light"]){
-    --ground:#15111d; --card:#201a2c; --ink:#f2eafc; --sub:#a396b8; --rule:#332a44; --field:#1a1524;
-    --key:#7c4fd0; --key-deep:#4a2c86; --key-soft:#241a35; --on-key:#ffffff;
-    --hot:#f273ad; --hot-soft:#2e1524;
-    --ok:#54b48c; --ok-soft:#15251f;
-    --warn:#d9a94a; --warn-soft:#2a2113;
-    --mute:#9b8fae;
-    --shadow:0 1px 2px rgba(0,0,0,.55), 0 10px 26px rgba(20,0,40,.5);
-  }
-}
-:root[data-skin="cute"][data-theme="dark"]{
-  --ground:#15111d; --card:#201a2c; --ink:#f2eafc; --sub:#a396b8; --rule:#332a44; --field:#1a1524;
-  --key:#7c4fd0; --key-deep:#4a2c86; --key-soft:#241a35; --on-key:#ffffff;
-  --hot:#f273ad; --hot-soft:#2e1524;
-  --ok:#54b48c; --ok-soft:#15251f;
-  --warn:#d9a94a; --warn-soft:#2a2113;
-  --mute:#9b8fae;
-  --shadow:0 1px 2px rgba(0,0,0,.55), 0 10px 26px rgba(20,0,40,.5);
-}
-:root[data-skin="cute"] .card,
-:root[data-skin="cute"] nav,
-:root[data-skin="cute"] .shotbox,
-:root[data-skin="cute"] .save,
-:root[data-skin="cute"] .banner{border-radius:18px}
-:root[data-skin="cute"] .brand h1::after{content:"　✦";color:var(--hot);font-size:12px;vertical-align:2px}
-
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html,body{margin:0;padding:0}
 body{
   background:var(--ground); color:var(--ink);
   font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",Meiryo,sans-serif;
-  font-size:16px; line-height:1.65; -webkit-text-size-adjust:100%;
+  font-size:16px; line-height:1.7; -webkit-text-size-adjust:100%;
 }
-.mono{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.mincho{font-family:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
 
-.wrap{max-width:600px;margin:0 auto;padding:0 14px calc(46px + env(safe-area-inset-bottom))}
+.wrap{max-width:620px;margin:0 auto;padding:0 16px calc(56px + env(safe-area-inset-bottom))}
 
-header{position:sticky;top:0;z-index:20;background:var(--ground);padding-top:max(10px,env(safe-area-inset-top))}
-.brand{display:flex;align-items:baseline;gap:9px;margin:0 2px 9px;flex-wrap:wrap}
-.brand h1{font-size:16px;font-weight:900;letter-spacing:.06em;margin:0}
-.brand .count{font-size:11px;color:var(--sub);letter-spacing:.04em}
+header{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 2px 4px}
+header h1{font-family:"Zen Old Mincho",serif;font-size:19px;font-weight:900;letter-spacing:.1em;margin:0}
+header .n{font-size:12px;color:var(--sub);letter-spacing:.04em}
+header .sp{flex:1}
+.gear{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);
+  width:38px;height:38px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:none;box-shadow:var(--shadow)}
+.gear:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
-nav{display:flex;gap:3px;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:4px;box-shadow:var(--shadow)}
-nav button{flex:1;appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;font-size:13.5px;font-weight:700;letter-spacing:.04em;padding:9px 2px;border-radius:8px;cursor:pointer;position:relative}
-nav button[aria-selected="true"]{background:var(--key);color:var(--on-key)}
-nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-nav button .dot{position:absolute;top:5px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--hot)}
-nav button[aria-selected="true"] .dot{background:var(--on-key)}
+.shoot{display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);border-radius:18px;
+  padding:24px 18px;margin-top:12px;font:inherit;text-align:center;
+  background:linear-gradient(165deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
+  -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease}
+.shoot:active{transform:scale(.985);filter:brightness(.93)}
+.shoot:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.shoot b{display:block;font-size:23px;font-weight:900;letter-spacing:.16em;line-height:1.3}
+.shoot span{display:block;font-size:12.5px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:3px}
+.sub-act{display:block;width:100%;margin-top:8px;appearance:none;border:0;background:transparent;
+  color:var(--sub);font:inherit;font-size:13px;font-weight:700;padding:6px;cursor:pointer;text-decoration:underline}
 
-.sec{display:flex;align-items:center;gap:9px;margin:22px 4px 7px;font-size:13px;font-weight:900;letter-spacing:.08em}
-.sec .line{flex:1;height:1px;background:var(--rule)}
-.sec .n{font-size:11px;color:var(--sub);font-weight:700}
+.find{position:relative;margin-top:18px}
+.find input[type=search]{width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--card);
+  border:1px solid var(--rule);border-radius:12px;padding:13px 14px 13px 42px;box-shadow:var(--shadow);-webkit-appearance:none}
+.find input[type=search]:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+.find .mag{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:15px;pointer-events:none}
 
-.card{background:var(--card);border:1px solid var(--rule);border-radius:13px;padding:4px 14px;margin-top:10px;box-shadow:var(--shadow)}
-.card.pad{padding:14px}
-.banner{display:flex;align-items:center;gap:8px;width:100%;text-align:left;font:inherit;font-size:13.5px;font-weight:700;
-  color:var(--hot);background:var(--hot-soft);border:1px solid var(--hot);border-radius:11px;
-  padding:10px 13px;margin-top:10px;cursor:pointer}
-.banner .arw{margin-left:auto;font-size:16px}
-.banner:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.count{font-size:11.5px;color:var(--sub);letter-spacing:.08em;margin:18px 4px 0;font-weight:700}
 
-/* ===== 名刺の写真 ===== */
-.shotbox{position:relative;margin-top:10px;border-radius:13px;overflow:hidden;background:var(--field);
-  border:1px dashed var(--rule);aspect-ratio:91/55;display:flex;align-items:center;justify-content:center}
-.shotbox.on{border-style:solid;border-color:var(--rule);background:#0d0f10;box-shadow:var(--shadow)}
-.shotbox img{width:100%;height:100%;object-fit:contain;display:block}
-.shotbox .ph{color:var(--sub);font-size:13px;font-weight:700;letter-spacing:.08em;text-align:center;line-height:2}
-.shotbox .ph b{display:block;font-size:26px;font-weight:400;opacity:.5}
-
-.pad-label{display:flex;align-items:center;gap:8px;margin:14px 2px 6px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em}
-.pad-label .now{margin-left:auto;font-family:"Roboto Mono",monospace;font-size:12px;color:var(--sub);letter-spacing:.02em}
-
-.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 3px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chips.wrap2{flex-wrap:wrap;overflow:visible}
-.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
-  font-size:13px;font-weight:700;border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
-.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
-.chip.sm{font-size:12px;padding:5px 11px}
-.chip.ghost{border-style:dashed}
-.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-
-.save{
-  position:relative;display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);
-  border-radius:14px;padding:17px 18px;margin-top:11px;font:inherit;text-align:center;
-  background:linear-gradient(168deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
-  -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease;
-}
-.save:active{transform:scale(.985);filter:brightness(.93)}
-.save:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.save .verb{display:block;font-size:22px;font-weight:900;letter-spacing:.14em;line-height:1.25}
-.save .who{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:2px}
-
-.stat{display:flex;gap:8px;margin-top:12px}
-.stat div{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:9px 3px;text-align:center;box-shadow:var(--shadow)}
-.stat b{display:block;font-family:"Roboto Mono",monospace;font-variant-numeric:tabular-nums;font-size:21px;font-weight:700;line-height:1.3}
-.stat span{font-size:10.5px;color:var(--sub);letter-spacing:.04em}
-.stat .late b{color:var(--hot)}
-.stat .good b{color:var(--ok)}
-
-/* ===== 名刺の並び ===== */
-.item{display:flex;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
-  background:transparent;border:0;border-top:1px solid var(--rule);padding:11px 0;cursor:pointer}
-.item:first-child{border-top:0}
-.item:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
-.item .th{flex:none;width:58px;height:36px;border-radius:5px;object-fit:cover;display:block;
-  background:var(--field);border:1px solid var(--rule)}
-.item .th.none{display:flex;align-items:center;justify-content:center;font-size:9.5px;color:var(--mute);
-  font-weight:700;letter-spacing:.02em;line-height:1.3;text-align:center}
-.item .body{flex:1;min-width:0}
-.item .ttl{font-weight:700;font-size:15.5px;line-height:1.45;word-break:break-word;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.item .meta{font-size:12px;color:var(--sub);margin-top:1px;word-break:break-word}
-.item .memo{font-size:12.5px;color:var(--ink);margin-top:3px;word-break:break-word;
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:9px}
+@media (min-width:520px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+.tile{appearance:none;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
+.tile:focus-visible{outline:2px solid var(--key);outline-offset:3px;border-radius:12px}
+.tile .pic{aspect-ratio:91/55;border-radius:11px;overflow:hidden;background:var(--field);
+  border:1px solid var(--rule);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.tile .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.tile .pic .no{font-size:10.5px;color:var(--mute);font-weight:700;letter-spacing:.04em}
+.tile .nm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.45;margin-top:8px;word-break:break-word}
+.tile .co{font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:1px;word-break:break-word;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.item .chev{flex:none;color:var(--sub);font-size:20px;line-height:1}
 
-.bdg{flex:none;font-size:10.5px;font-weight:700;letter-spacing:.04em;border-radius:5px;padding:1px 6px;line-height:1.7;border:1px solid transparent;white-space:nowrap}
-.bdg.plain{background:var(--field);color:var(--sub);border-color:var(--rule)}
-.bdg.ask{background:var(--hot-soft);color:var(--hot);border-color:var(--hot)}
-.bdg.good{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
-.bdg.warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
-.bdg.key{background:var(--key-soft);color:var(--key);border-color:var(--key)}
+.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:34px 14px;line-height:2.1}
+.empty b{color:var(--ink)}
 
-.day{display:flex;align-items:center;gap:9px;margin:18px 4px 4px}
-.day .date{font-size:13px;font-weight:900;letter-spacing:.06em}
-.day .line{flex:1;height:1px;background:var(--rule)}
-.day .n{font-size:11px;color:var(--sub);font-weight:700}
+/* ===== 下から出る画面 ===== */
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(20,14,10,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--card);width:100%;max-width:620px;max-height:94vh;overflow:auto;
+  border-radius:20px 20px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+.sheet h2{font-family:"Zen Old Mincho",serif;margin:2px 0 0;font-size:22px;font-weight:900;letter-spacing:.05em;word-break:break-word}
+.sheet .lead{font-size:13px;color:var(--sub);margin:5px 0 0;word-break:break-word}
 
-/* ===== くわしい入力の開閉 ===== */
-details.more{margin-top:12px}
-details.more>summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--key);
-  letter-spacing:.06em;padding:8px 2px}
+.pic-big{display:block;width:100%;padding:0;border:1px solid var(--rule);border-radius:13px;overflow:hidden;
+  background:#0c0b0a;margin-top:14px;cursor:zoom-in}
+.pic-big img{width:100%;display:block}
+.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.viewer img{max-width:100%;max-height:100%;object-fit:contain}
+
+label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:17px 0 6px}
+input[type=text],input[type=date],input[type=tel],input[type=email],input[type=search],textarea,select{
+  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
+  border:1px solid var(--rule);border-radius:10px;padding:12px 13px;-webkit-appearance:none}
+textarea{line-height:1.75;resize:vertical;min-height:70px}
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+.name-in{font-family:"Zen Old Mincho",serif;font-size:21px !important;font-weight:700}
+.half{display:flex;gap:10px}
+.half>div{flex:1;min-width:0}
+
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 1px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
+  font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
+.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+.cap{font-size:10.5px;font-weight:700;color:var(--mute);letter-spacing:.08em;margin:11px 2px 0}
+
+details.more{margin-top:16px;border-top:1px solid var(--rule);padding-top:4px}
+details.more>summary{list-style:none;cursor:pointer;font-size:13px;font-weight:700;color:var(--key);
+  letter-spacing:.05em;padding:11px 2px}
 details.more>summary::-webkit-details-marker{display:none}
 details.more>summary::before{content:"＋ ";font-weight:900}
 details.more[open]>summary::before{content:"− "}
+details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
 
-label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
-input[type=text],input[type=date],input[type=tel],input[type=email],input[type=url],input[type=search],select,textarea{
-  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
-  border:1px solid var(--rule);border-radius:9px;padding:11px 12px;
-}
-input[type=search]{-webkit-appearance:none}
-textarea{line-height:1.7;resize:vertical;min-height:76px}
-input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--key);outline-offset:1px}
-.half{display:flex;gap:9px}
-.half > div{flex:1;min-width:0}
-.opt{display:flex;align-items:center;gap:9px;margin:14px 0 0;font-size:13.5px;font-weight:700;color:var(--ink);letter-spacing:0}
-.opt input{width:20px;height:20px;flex:none;accent-color:var(--key)}
-.big-name{font-size:19px !important;font-weight:700}
-
-.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14px;
-  font-weight:700;letter-spacing:.04em;border-radius:10px;padding:12px 14px;cursor:pointer;width:100%;margin-top:9px}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14.5px;
+  font-weight:700;letter-spacing:.04em;border-radius:11px;padding:13px 14px;cursor:pointer;width:100%;margin-top:10px}
 .btn:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-.btn.primary{background:var(--key);border-color:var(--key);color:var(--on-key)}
-.btn.danger{color:var(--hot);border-color:var(--hot)}
-.btn.line{background:#06c755;border-color:#06c755;color:#fff}
-.row{display:flex;gap:9px}
+.btn.primary{background:var(--key);border-color:var(--key);color:var(--on-key);font-size:16px;padding:15px}
+.btn.danger{color:var(--key);border-color:var(--key)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px}
 
-/* ===== 詳しい画面 ===== */
-.sheet{position:fixed;inset:0;z-index:50;background:rgba(10,14,20,.55);display:flex;align-items:flex-end;justify-content:center}
-.sheet .panel{background:var(--card);width:100%;max-width:600px;max-height:92vh;overflow:auto;
-  border-radius:16px 16px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
-.sheet h2{margin:2px 0 0;font-size:18px;font-weight:900;letter-spacing:.04em;word-break:break-word}
-.sheet .sub{font-size:12.5px;color:var(--sub);margin:4px 0 0;word-break:break-word}
-.hint{font-size:11.5px;color:var(--sub);line-height:1.8;margin:7px 2px 0}
-
-.bigshot{margin:12px 0 0;border-radius:11px;overflow:hidden;background:#0d0f10;border:1px solid var(--rule);
-  display:block;width:100%;padding:0;cursor:zoom-in}
-.bigshot img{width:100%;display:block}
-.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.94);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
-.viewer img{max-width:100%;max-height:100%;object-fit:contain}
-
-.facts{margin:14px 0 0;border-top:1px solid var(--rule)}
-.facts .f{display:flex;gap:10px;border-bottom:1px solid var(--rule);padding:10px 2px;align-items:baseline}
-.facts .k{flex:none;width:74px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.06em}
-.facts .v{flex:1;min-width:0;font-size:14.5px;word-break:break-word;white-space:pre-wrap}
+.facts{margin:16px 0 0;border-top:1px solid var(--rule)}
+.facts .f{display:flex;gap:12px;border-bottom:1px solid var(--rule);padding:11px 2px;align-items:baseline}
+.facts .k{flex:none;width:70px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.06em}
+.facts .v{flex:1;min-width:0;font-size:15px;word-break:break-word;white-space:pre-wrap}
 .facts .v a{color:var(--key);font-weight:700;text-decoration:none;border-bottom:1px solid var(--key)}
 
-.tl{border-top:1px solid var(--rule);padding:10px 0;display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left}
-.tl:first-child{border-top:0}
-.tl .time{flex:none;width:66px;font-family:"Roboto Mono",monospace;font-size:12px;font-weight:700;color:var(--sub);padding-top:2px}
-.tl .txt{flex:1;min-width:0;font-size:13.5px;white-space:pre-wrap;word-break:break-word}
+.bar{height:7px;background:var(--field);border-radius:99px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;background:var(--key);border-radius:99px;transition:width .3s ease}
+.reading{font-size:13px;color:var(--sub);margin:9px 2px 0;font-weight:700}
+.warn{font-size:12.5px;color:var(--key);background:var(--key-soft);border:1px solid var(--key);
+  border-radius:11px;padding:11px 13px;margin-top:12px;line-height:1.75}
 
-.picklist{max-height:52vh;overflow:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
-
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;background:var(--ink);color:var(--ground);
-  font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
-
-.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:24px 12px;line-height:2}
-.note-hint{font-size:12.5px;color:var(--sub);line-height:1.95;margin:18px 4px 0}
-.note-hint b{color:var(--ink);font-weight:700}
-.note-hint ul{margin:6px 0 0;padding-left:1.15em}
-.note-hint li{margin:3px 0}
-.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:26px 0 0;opacity:.75}
-
-pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-monospace,monospace;
-  font-size:11.5px;line-height:1.85;background:var(--field);border:1px solid var(--rule);
-  border-radius:9px;padding:12px;max-height:34vh;overflow:auto;margin:13px 0 0}
-.busy{position:fixed;inset:0;z-index:90;background:rgba(10,14,20,.4);display:flex;align-items:center;justify-content:center}
-.busy span{background:var(--card);color:var(--ink);font-size:14px;font-weight:700;padding:14px 22px;border-radius:12px;box-shadow:var(--shadow)}
+.hint{font-size:11.5px;color:var(--sub);line-height:1.85;margin:8px 2px 0}
+.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--ground);
+  font-size:14px;font-weight:700;padding:12px 20px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+.busy{position:fixed;inset:0;z-index:90;background:rgba(20,14,10,.45);display:flex;align-items:center;justify-content:center}
+.busy span{background:var(--card);color:var(--ink);font-size:14px;font-weight:700;padding:15px 24px;border-radius:13px;box-shadow:var(--shadow)}
 </style>
-<script>
-/* 表示のちらつきを防ぐため、描画の前に見た目を当てる */
-try {
-  if (localStorage.getItem('meishi.skin') === 'cute') {
-    document.documentElement.setAttribute('data-skin', 'cute');
-  }
-} catch(e){}
-</script>
 </head>
 <body>
 
 <div class="wrap">
-<header>
-  <div class="brand">
+  <header>
     <h1>めいしばこ</h1>
-    <span class="count mono" id="hdcount"></span>
-  </div>
-  <nav role="tablist">
-    <button role="tab" id="tab-add" aria-selected="true">とる</button>
-    <button role="tab" id="tab-find" aria-selected="false">さがす</button>
-    <button role="tab" id="tab-todo" aria-selected="false">あとで<span class="dot" id="todo-dot" hidden></span></button>
-    <button role="tab" id="tab-out" aria-selected="false">送る</button>
-  </nav>
-</header>
+    <span class="n" id="hdn"></span>
+    <span class="sp"></span>
+    <button class="gear" id="btn-gear" aria-label="設定">⚙</button>
+  </header>
 
-<!-- ===================== とる ===================== -->
-<section id="view-add">
-  <button class="banner" id="dup-note" hidden></button>
-  <p class="hint" id="noidb" hidden style="color:var(--hot);font-weight:700">
-    この開き方では名刺の写真を保存できません。文字だけなら保存できます。
-    写真も残したいときは、公開ページをブラウザで開いてください。
-  </p>
-
-  <div class="shotbox" id="shotbox">
-    <div class="ph" id="shot-ph"><b>▭</b>名刺の写真</div>
-    <img id="shot-img" alt="いま撮った名刺" hidden>
-  </div>
-  <div class="row">
-    <button class="btn primary" id="btn-cam">名刺を撮る</button>
-    <button class="btn" id="btn-pick">写真から選ぶ</button>
-  </div>
-  <div class="row" id="shot-tools" hidden>
-    <button class="btn" id="btn-rot">回す</button>
-    <button class="btn danger" id="btn-unshot">写真を消す</button>
-  </div>
+  <button class="shoot" id="btn-shoot">
+    <b>名刺を撮る</b>
+    <span>撮ると、名前や電話を自分で読みとります</span>
+  </button>
+  <button class="sub-act" id="btn-pick">写真から選ぶ</button>
   <input type="file" id="file-cam" accept="image/*" capture="environment" hidden>
   <input type="file" id="file-pick" accept="image/*" hidden>
 
-  <div class="pad-label"><span>だれの名刺</span><span class="now mono" id="now"></span></div>
-  <div class="card pad" style="padding-top:4px">
-    <label for="f-name">名前</label>
-    <input type="text" id="f-name" class="big-name" placeholder="例: 山田 太郎" autocomplete="off">
-    <label for="f-company">会社</label>
-    <input type="text" id="f-company" placeholder="例: 株式会社ヤマダ商事" autocomplete="off">
-
-    <details class="more" id="more">
-      <summary>電話・メールなども入れる</summary>
-      <label for="f-kana">よみ（五十音で並べるときに使う）</label>
-      <input type="text" id="f-kana" placeholder="例: やまだ たろう" autocomplete="off">
-      <div class="half">
-        <div><label for="f-dept">部署</label><input type="text" id="f-dept" placeholder="営業部" autocomplete="off"></div>
-        <div><label for="f-title">役職</label><input type="text" id="f-title" placeholder="課長" autocomplete="off"></div>
-      </div>
-      <div class="half">
-        <div><label for="f-tel">電話</label><input type="tel" id="f-tel" placeholder="03-1234-5678" autocomplete="off"></div>
-        <div><label for="f-mobile">携帯</label><input type="tel" id="f-mobile" placeholder="090-1234-5678" autocomplete="off"></div>
-      </div>
-      <label for="f-email">メール</label>
-      <input type="email" id="f-email" placeholder="taro@example.co.jp" autocomplete="off" inputmode="email">
-      <label for="f-url">会社のサイト</label>
-      <input type="url" id="f-url" placeholder="example.co.jp" autocomplete="off" inputmode="url">
-      <label for="f-addr">住所</label>
-      <input type="text" id="f-addr" placeholder="東京都千代田区…" autocomplete="off">
-    </details>
+  <div class="find">
+    <span class="mag">🔍</span>
+    <input type="search" id="q" placeholder="名前・会社・場所・メモ　どれでも" autocomplete="off">
   </div>
 
-  <div class="pad-label"><span>どこで会った</span></div>
-  <div class="chips" id="where-chips"></div>
-  <div class="card pad" style="padding-top:4px">
-    <label for="f-where">場所・きっかけ</label>
-    <input type="text" id="f-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">
-    <label for="f-met">会った日</label>
-    <input type="date" id="f-met">
-    <label for="f-memo">ひとことメモ（あとで思い出すための手がかり）</label>
-    <textarea id="f-memo" placeholder="例: 白髪でめがね。息子さんが野球をしている。うちの倉庫の件で見積がほしいとのこと。"></textarea>
-  </div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <div id="none" hidden></div>
 
-  <div class="pad-label"><span>この人にあとですること</span></div>
-  <div class="chips" id="todo-chips"></div>
-  <div class="card pad" style="padding-top:4px">
-    <input type="text" id="f-todo" placeholder="空のままでよい" autocomplete="off">
-  </div>
-
-  <button class="save" id="btn-save">
-    <span class="verb">しまう</span>
-    <span class="who" id="save-who">名刺箱に入れる</span>
-  </button>
-  <p class="hint" id="save-hint">写真だけでもしまえる。名前はあとから入れてよい。</p>
-
-  <div id="today-wrap" hidden>
-    <div class="sec"><span>きょうしまった名刺</span><span class="line"></span><span class="n mono" id="today-n"></span></div>
-    <div class="card" id="today-list"></div>
-  </div>
-
-  <div class="note-hint" id="first-help">
-    <b>輪ゴムの束と、ここが変わる。</b>
-    <ul>
-      <li>名前の一部でも、会社でも、「あの展示会の人」でも<b>すぐ出てくる</b>。</li>
-      <li>写真をそのまま残すので、<b>打ち込まなくても中身は消えない</b>。</li>
-      <li>会った日・場所・話したことが<b>名刺と一緒に</b>残る。紙には書けないところ。</li>
-      <li>電話番号をタップすればそのままかけられる。スマホの連絡先にも移せる。</li>
-    </ul>
-    まずは手元の1枚を撮って、名前だけ入れて「しまう」を押してみるとよい。
-  </div>
-
-  <p class="credit">写真も記録もこの端末の中だけ。サーバーには送られません。</p>
-</section>
-
-<!-- ===================== さがす ===================== -->
-<section id="view-find" hidden>
-  <div class="pad-label"><span>さがす</span></div>
-  <input type="search" id="q" placeholder="名前・会社・場所・メモ　どれでも" autocomplete="off">
-  <div class="chips" id="sort-chips" style="margin-top:8px">
-    <button class="chip" data-sort="new" aria-pressed="true">新しい順</button>
-    <button class="chip" data-sort="kana" aria-pressed="false">五十音</button>
-    <button class="chip" data-sort="company" aria-pressed="false">会社ごと</button>
-    <button class="chip" data-sort="met" aria-pressed="false">会った日順</button>
-  </div>
-  <div id="find-list"></div>
-</section>
-
-<!-- ===================== あとで ===================== -->
-<section id="view-todo" hidden>
-  <p class="hint" style="margin-top:14px">輪ゴムの束では気づけなかったことを、ここにまとめている。</p>
-  <div id="todo-body"></div>
-</section>
-
-<!-- ===================== 送る ===================== -->
-<section id="view-out" hidden>
-  <div class="card pad">
-    <div class="stat">
-      <div><b id="rp-all">0</b><span>名刺の数</span></div>
-      <div><b id="rp-shot">0</b><span>写真あり</span></div>
-      <div><b id="rp-co">0</b><span>会社の数</span></div>
-      <div class="late"><b id="rp-todo">0</b><span>あとで</span></div>
-    </div>
-    <p class="hint" id="usage"></p>
-  </div>
-
-  <div class="card pad">
-    <label>スマホの連絡先に入れる（.vcf）</label>
-    <p class="hint" style="margin-top:0">
-      書き出したファイルを開くと、iPhone・Android の連絡先アプリに登録できる。
-      1人ずつ入れたいときは、さがすタブでその人を開いて「連絡先に入れる」。
-    </p>
-    <button class="btn" id="btn-vcf-all">全員分を書き出す（写真なし）</button>
-  </div>
-
-  <div class="card pad">
-    <label for="csvkind">エクセルに出す（CSV）</label>
-    <select id="csvkind">
-      <option value="all">名簿ぜんぶ（項目すべて）</option>
-      <option value="post">宛名だけ（年賀状・案内状用）</option>
-      <option value="todo">あとですること</option>
-    </select>
-    <div class="row">
-      <button class="btn" id="btn-csv-copy">コピー</button>
-      <button class="btn" id="btn-csv-save">ファイルに保存</button>
-    </div>
-    <p class="hint">「コピー」してエクセルのA1に貼り付けると表になる。</p>
-  </div>
-
-  <div class="card pad">
-    <label>この名簿を人に送る</label>
-    <select id="sendkind">
-      <option value="all">名簿ぜんぶ</option>
-      <option value="recent">直近30日にもらった名刺</option>
-      <option value="todo">あとですることがある人</option>
-    </select>
-    <pre class="out" id="preview"></pre>
-    <div class="row">
-      <button class="btn primary" id="btn-mail">メールで送る</button>
-      <button class="btn line" id="btn-line">LINEで送る</button>
-    </div>
-    <button class="btn" id="btn-copy">本文をコピー</button>
-    <label for="mailto">送り先メールアドレス</label>
-    <input type="text" id="mailto" placeholder="例: taro@example.com" inputmode="email" autocomplete="email">
-  </div>
-
-  <div class="card pad">
-    <label>見た目</label>
-    <div class="chips" id="skin-chips">
-      <button class="chip" data-skin="" aria-pressed="true">ふつう</button>
-      <button class="chip" data-skin="cute" aria-pressed="false">かわいい</button>
-    </div>
-    <p class="hint">この端末だけの設定。記録には影響しない。</p>
-  </div>
-
-  <div class="card pad">
-    <label>バックアップ（機種変更・端末の乗り換え用）</label>
-    <p class="hint" style="margin-top:0">
-      名刺はこの端末の中にしかない。<b>月に一度</b>ここから書き出しておくこと。
-      写真つきは重いので、パソコンやクラウドに置いておくとよい。
-    </p>
-    <button class="btn" id="btn-backup-full">バックアップを保存（写真つき・.json）</button>
-    <button class="btn" id="btn-backup-lite">バックアップを保存（文字だけ・軽い）</button>
-    <label for="restore-file">バックアップから復元</label>
-    <input type="file" id="restore-file" accept=".json,application/json">
-    <button class="btn danger" id="btn-wipe">記録をすべて削除</button>
-    <button class="btn" id="btn-sample">お試し用のサンプルを入れる</button>
-  </div>
-
-  <p class="credit">写真も記録もサーバーに送られません。すべて端末の中で処理しています。</p>
-</section>
+  <p class="credit">写真も記録もこの端末の中だけ。文字を読むのも端末の中で行います。</p>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="panel" id="panel"></div></div>
@@ -483,15 +188,31 @@ try {
 (function(){
 'use strict';
 
-/* ===================== 保存（端末内のみ） =====================
-   文字の記録は localStorage、名刺の写真は IndexedDB に置く。
-   写真は大きいので localStorage には入りきらないため。            */
-var KEY = 'meishi.v1', DKEY = 'meishi.draft', SKINKEY = 'meishi.skin';
-var db = { cards:[], mail:'' };
+/* ===================== 文字を読む部品の置き場所 =====================
+   ふだんは CDN から取ってくる。自分で置きたいときは ?ocr=（置いた場所）を付けて開く。
+   置き場所には tesseract.min.js / worker.min.js / core/ / lang/ を入れておく。      */
+var OCRBASE = (function(){
+  var m = location.search.match(/[?&]ocr=([^&]+)/);
+  return m ? decodeURIComponent(m[1]).replace(/\/$/, '') : '';
+})();
+var OCR = OCRBASE ? {
+  lib:    OCRBASE + '/tesseract.min.js',
+  worker: OCRBASE + '/worker.min.js',
+  core:   OCRBASE + '/core',
+  lang:   OCRBASE + '/lang'
+} : {
+  lib:    'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',
+  worker: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js',
+  core:   'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1',
+  lang:   'https://cdn.jsdelivr.net/npm/@tesseract.js-data/jpn@1.0.0/4.0.0_best_int'
+};
 
+/* ===================== 保存（端末内のみ） ===================== */
+var KEY = 'meishi.v1';
+var db = { cards:[], mail:'' };
 (function load(){
   var raw = null;
-  try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){ raw = null; }
+  try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
   if (raw && typeof raw === 'object'){
     db.cards = Array.isArray(raw.cards) ? raw.cards : [];
     db.mail  = typeof raw.mail === 'string' ? raw.mail : '';
@@ -500,17 +221,14 @@ var db = { cards:[], mail:'' };
     var c = db.cards[i];
     if (!c.id) c.id = uid();
     if (!c.ts) c.ts = Date.now();
-    if (!Array.isArray(c.touches)) c.touches = [];
-    if (typeof c.todo !== 'string') c.todo = '';
   }
 })();
-
 function persist(){
   try { localStorage.setItem(KEY, JSON.stringify(db)); }
   catch(e){ toast('保存できませんでした。端末の空き容量を確認してください'); }
 }
 
-/* 名刺の写真をしまう箱（IndexedDB） */
+/* 名刺の写真は大きいので IndexedDB に置く */
 var IDB = (function(){
   var dbp = null;
   function open(){
@@ -532,8 +250,8 @@ var IDB = (function(){
       return new Promise(function(res, rej){
         var t = d.transaction('shots', mode), rq = fn(t.objectStore('shots'));
         t.oncomplete = function(){ res(rq ? rq.result : null); };
-        t.onerror    = function(){ rej(t.error); };
-        t.onabort    = function(){ rej(t.error); };
+        t.onerror = function(){ rej(t.error); };
+        t.onabort = function(){ rej(t.error); };
       });
     });
   }
@@ -545,54 +263,26 @@ var IDB = (function(){
     clear: function(){   return work('readwrite', function(s){ return s.clear(); }); }
   };
 })();
-
-/* 端末が勝手に消してしまわないように頼んでおく（Safari は使わないと消すことがある） */
 if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch(e){} }
 
 /* ===================== 小道具 ===================== */
 var $ = function(id){ return document.getElementById(id); };
 var WD = ['日','月','火','水','木','金','土'];
-var TODOS = ['お礼のメール','資料を送る','見積を出す','電話する','会いに行く'];
-var STALE = 180;   /* この日数より前が最後なら「ごぶさた」 */
-
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 function two(n){ return n < 10 ? '0' + n : '' + n; }
 function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
   return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 function trim(s){ return String(s == null ? '' : s).trim(); }
-
 function ymd(d){ return d.getFullYear() + '-' + two(d.getMonth()+1) + '-' + two(d.getDate()); }
 function today(){ return ymd(new Date()); }
 function toDate(s){
   if (!s) return null;
   var p = String(s).split('-');
   if (p.length !== 3) return null;
-  var d = new Date(+p[0], +p[1] - 1, +p[2]);
+  var d = new Date(+p[0], +p[1]-1, +p[2]);
   return isNaN(d.getTime()) ? null : d;
 }
 function fmtDate(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）' : ''; }
-function hhmm(ts){ var d = new Date(ts); return two(d.getHours()) + ':' + two(d.getMinutes()); }
-function dayDiff(a, b){
-  var da = toDate(a), dbb = toDate(b);
-  if (!da || !dbb) return null;
-  return Math.round((dbb.getTime() - da.getTime()) / 86400000);
-}
-function dayLabel(s){
-  var n = dayDiff(s, today());
-  if (n === 0) return 'きょう　' + fmtDate(s);
-  if (n === 1) return 'きのう　' + fmtDate(s);
-  var d = toDate(s);
-  return (d && d.getFullYear() !== new Date().getFullYear() ? d.getFullYear() + '年 ' : '') + fmtDate(s);
-}
-function agoWord(s){
-  var n = dayDiff(s, today());
-  if (n == null) return '';
-  if (n <= 0) return 'きょう';
-  if (n === 1) return 'きのう';
-  if (n < 31) return n + '日前';
-  if (n < 365) return Math.round(n/30) + 'か月前';
-  return Math.floor(n/365) + '年前';
-}
 
 var toastTimer = null;
 function toast(msg){
@@ -605,94 +295,38 @@ function toast(msg){
 function busy(on, msg){
   var el = document.querySelector('.busy');
   if (on){
-    if (!el){ el = document.createElement('div'); el.className = 'busy'; el.innerHTML = '<span></span>'; document.body.appendChild(el); }
+    if (!el){ el = document.createElement('div'); el.className='busy'; el.innerHTML='<span></span>'; document.body.appendChild(el); }
     el.firstChild.textContent = msg || 'しばらくお待ちください…';
-  } else if (el && el.parentNode){ el.parentNode.removeChild(el); }
+  } else if (el && el.parentNode) el.parentNode.removeChild(el);
 }
 
-/* ===================== 探すための正規化 =====================
-   大文字小文字・全角半角・カタカナひらがな・「株式会社」の有無を無視して比べる */
+/* 探すときは、大文字小文字・全角半角・カタカナひらがな・「株式会社」を区別しない */
 function norm(s){
   s = String(s == null ? '' : s).toLowerCase();
-  s = s.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(c){
-    return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
-  s = s.replace(/[ァ-ヶ]/g, function(c){
-    return String.fromCharCode(c.charCodeAt(0) - 0x60); });
+  s = s.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); });
+  s = s.replace(/[ァ-ヶ]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); });
   s = s.replace(/株式会社|有限会社|合同会社|一般社団法人|\(株\)|（株）|\(有\)|（有）/g, '');
-  s = s.replace(/[\s　・ー\-‐-―()（）.,、。]/g, '');
-  return s;
-}
-function hira(s){
-  s = String(s == null ? '' : s).replace(/[ァ-ヶ]/g, function(c){
-    return String.fromCharCode(c.charCodeAt(0) - 0x60); });
-  return s.replace(/^[\s　]+/, '');
-}
-var KANA_ROWS = [
-  ['あ','あいうえおぁぃぅぇぉ'], ['か','かきくけこがぎぐげご'],
-  ['さ','さしすせそざじずぜぞ'], ['た','たちつてとだぢづでどっ'],
-  ['な','なにぬねの'],           ['は','はひふへほばびぶべぼぱぴぷぺぽ'],
-  ['ま','まみむめも'],           ['や','やゆよゃゅょ'],
-  ['ら','らりるれろ'],           ['わ','わをんゎゐゑ']
-];
-function kanaRow(c){
-  var k = hira(c.kana || '') || hira(c.name || '');
-  var ch = k.charAt(0);
-  if (!ch) return 'その他';
-  for (var i = 0; i < KANA_ROWS.length; i++){
-    if (KANA_ROWS[i][1].indexOf(ch) >= 0) return KANA_ROWS[i][0];
-  }
-  if (/[a-zA-Z0-9]/.test(ch)) return '英数';
-  return 'その他';
-}
-function kanaKey(c){
-  var k = hira(c.kana || '');
-  if (!k) k = hira(c.name || '');
-  return k || '￿';
+  return s.replace(/[\s　・ー\-‐-―()（）.,、。]/g, '');
 }
 
-/* ===================== 名刺の引き出し ===================== */
-function cardById(id){
-  for (var i = 0; i < db.cards.length; i++) if (db.cards[i].id === id) return db.cards[i];
-  return null;
-}
-function fullName(c){ return trim(c.name) || (trim(c.company) ? trim(c.company) + ' の人' : '名前がまだ（写真だけ）'); }
-function orgLine(c){
-  var a = [trim(c.company), trim(c.dept), trim(c.title)].filter(Boolean);
-  return a.join(' ');
-}
-function lastAt(c){
-  var d = c.met || '';
-  var t = c.touches || [];
-  for (var i = 0; i < t.length; i++) if (t[i].date > d) d = t[i].date;
-  return d;
-}
-function needsName(c){ return !trim(c.name) && !trim(c.company); }
-function hasTodo(c){ return !!trim(c.todo); }
-function isStale(c){
-  var d = lastAt(c);
-  var n = dayDiff(d, today());
-  return n != null && n > STALE;
-}
+/* ===================== 名刺 ===================== */
+var F = ['name','kana','company','dept','title','tel','mobile','email','url','addr','met','where','memo'];
+function fullName(c){ return trim(c.name) || (trim(c.company) ? trim(c.company) : '名前がまだ'); }
+function orgLine(c){ return [trim(c.company), trim(c.dept), trim(c.title)].filter(Boolean).join(' '); }
 function matches(c, q){
   if (!q) return true;
-  var hay = norm([c.name, c.kana, c.company, c.dept, c.title, c.tel, c.mobile,
-                  c.email, c.url, c.addr, c.where, c.memo, c.todo,
-                  (c.touches || []).map(function(t){ return t.text; }).join(' ')].join(' '));
-  var terms = q.split(/[\s　]+/).filter(Boolean);
-  for (var i = 0; i < terms.length; i++){
-    if (hay.indexOf(norm(terms[i])) < 0) return false;
-  }
+  var hay = norm(F.map(function(k){ return c[k]; }).join(' '));
+  var t = q.split(/[\s　]+/).filter(Boolean);
+  for (var i = 0; i < t.length; i++) if (hay.indexOf(norm(t[i])) < 0) return false;
   return true;
 }
 
 /* ===================== 写真 ===================== */
-var thumbCache = {};        /* id -> サムネのデータURL */
-var pend = null;            /* いま撮ったばかりで、まだしまっていない写真 */
-
+var thumbCache = {};
 function readImage(file, cb){
   var url = URL.createObjectURL(file);
   var im = new Image();
-  im.onload  = function(){ cb(im); setTimeout(function(){ URL.revokeObjectURL(url); }, 2000); };
+  im.onload  = function(){ cb(im); setTimeout(function(){ URL.revokeObjectURL(url); }, 3000); };
   im.onerror = function(){ URL.revokeObjectURL(url); cb(null); };
   im.src = url;
 }
@@ -700,21 +334,34 @@ function scaleTo(src, maxEdge, q){
   var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
   if (!w || !h) return null;
   var s = Math.min(1, maxEdge / Math.max(w, h));
-  var cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(h * s));
+  var cw = Math.max(1, Math.round(w*s)), ch = Math.max(1, Math.round(h*s));
   var cv = document.createElement('canvas');
   cv.width = cw; cv.height = ch;
   var cx = cv.getContext('2d');
-  cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, cw, ch);
+  cx.fillStyle = '#fff'; cx.fillRect(0, 0, cw, ch);
   cx.drawImage(src, 0, 0, cw, ch);
   return cv.toDataURL('image/jpeg', q);
 }
-function makeShot(file, cb){
-  readImage(file, function(im){
-    if (!im){ cb(null); return; }
-    var full = scaleTo(im, 1400, 0.72);
-    var thumb = scaleTo(im, 320, 0.62);
-    cb(full && thumb ? { full:full, thumb:thumb } : null);
-  });
+/* 文字を読ませるための下ごしらえ：長辺2000pxまで拡大し、白黒にして濃淡を強める */
+function forOcr(src){
+  var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
+  var s = Math.min(3, 2000 / Math.max(w, h));
+  var cw = Math.max(1, Math.round(w*s)), ch = Math.max(1, Math.round(h*s));
+  var cv = document.createElement('canvas');
+  cv.width = cw; cv.height = ch;
+  var cx = cv.getContext('2d');
+  cx.imageSmoothingQuality = 'high';
+  cx.drawImage(src, 0, 0, cw, ch);
+  try {
+    var d = cx.getImageData(0, 0, cw, ch), p = d.data;
+    for (var i = 0; i < p.length; i += 4){
+      var g = 0.299*p[i] + 0.587*p[i+1] + 0.114*p[i+2];
+      g = g < 128 ? Math.max(0, (g-40)*1.6) : Math.min(255, (g-128)*1.6 + 150);
+      p[i] = p[i+1] = p[i+2] = g;
+    }
+    cx.putImageData(d, 0, 0);
+  } catch(e){}
+  return cv;
 }
 function rot90(dataUrl, cb){
   var im = new Image();
@@ -722,220 +369,251 @@ function rot90(dataUrl, cb){
     var cv = document.createElement('canvas');
     cv.width = im.naturalHeight; cv.height = im.naturalWidth;
     var cx = cv.getContext('2d');
-    cx.translate(cv.width / 2, cv.height / 2);
-    cx.rotate(Math.PI / 2);
-    cx.drawImage(im, -im.naturalWidth / 2, -im.naturalHeight / 2);
-    cb(cv.toDataURL('image/jpeg', 0.82));
+    cx.translate(cv.width/2, cv.height/2);
+    cx.rotate(Math.PI/2);
+    cx.drawImage(im, -im.naturalWidth/2, -im.naturalHeight/2);
+    cb(cv.toDataURL('image/jpeg', 0.85));
   };
   im.onerror = function(){ cb(null); };
   im.src = dataUrl;
 }
-function rotShot(shot, cb){
-  rot90(shot.full, function(f){
-    if (!f){ cb(null); return; }
-    rot90(shot.thumb, function(t){ cb(f && t ? { full:f, thumb:t } : null); });
-  });
-}
 function putShot(id, shot){
   return IDB.put({ id:id, full:shot.full, thumb:shot.thumb }).then(function(){
     thumbCache[id] = shot.thumb;
-  }, function(){
-    toast(idbOK ? '写真を保存できませんでした。端末の空き容量を確認してください'
-                : 'この開き方では写真を保存できません');
-  });
+  }, function(){ toast(idbOK ? '写真を保存できませんでした。空き容量を確認してください' : 'この開き方では写真を保存できません'); });
 }
-
-/* 写真の箱が使えるかどうかを、はじめに一度だけ確かめる */
-var idbOK = true;
-IDB.get('__probe__').then(function(){}, function(){
-  idbOK = false;
-  var el = document.getElementById('noidb');
-  if (el) el.hidden = false;
-});
 function getShot(id){ return IDB.get(id).catch(function(){ return null; }); }
 function delShot(id){ delete thumbCache[id]; return IDB.del(id).catch(function(){}); }
+var idbOK = true;
+IDB.get('__probe__').then(function(){}, function(){ idbOK = false; });
 
-/* 一覧に並べたサムネを、描いたあとから順に流し込む */
-function fillThumbs(root){
-  var imgs = (root || document).querySelectorAll('img[data-th]');
-  for (var i = 0; i < imgs.length; i++){
-    (function(el){
-      var id = el.getAttribute('data-th');
-      if (thumbCache[id]){ el.src = thumbCache[id]; return; }
-      getShot(id).then(function(s){
-        if (s && s.thumb){ thumbCache[id] = s.thumb; el.src = s.thumb; }
+/* ===================== 名刺の文字を読む =====================
+   Tesseract（オープンソースの文字読み取り）を端末の中で動かす。
+   写真はどこにも送らない。初回だけ部品の取り込みに数MBかかる。      */
+var tessScriptP = null, tessWorkerP = null, progressCb = null;
+
+function loadScript(src){
+  if (tessScriptP) return tessScriptP;
+  tessScriptP = new Promise(function(res, rej){
+    if (window.Tesseract) { res(); return; }
+    var s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload  = function(){ res(); };
+    s.onerror = function(){ tessScriptP = null; rej(new Error('部品を取り込めませんでした')); };
+    document.head.appendChild(s);
+  });
+  return tessScriptP;
+}
+function getWorker(){
+  if (tessWorkerP) return tessWorkerP;
+  tessWorkerP = loadScript(OCR.lib).then(function(){
+    if (!window.Tesseract) throw new Error('部品を取り込めませんでした');
+    return window.Tesseract.createWorker('jpn', 1, {
+      workerPath: OCR.worker, corePath: OCR.core, langPath: OCR.lang, gzip: true,
+      logger: function(m){ if (progressCb) progressCb(m); }
+    });
+  }).then(function(w){
+    return w.setParameters({ tessedit_pageseg_mode:'3', preserve_interword_spaces:'1' })
+            .then(function(){ return w; });
+  });
+  tessWorkerP['catch'](function(){ tessWorkerP = null; });
+  return tessWorkerP;
+}
+function readCard(img, onProg){
+  progressCb = onProg || null;
+  return getWorker().then(function(w){
+    return w.recognize(forOcr(img), {}, { blocks:true, text:true });
+  }).then(function(r){
+    progressCb = null;
+    return linesOf(r.data);
+  }, function(err){
+    progressCb = null;
+    throw err;
+  });
+}
+function linesOf(data){
+  var out = [];
+  (data.blocks || []).forEach(function(b){
+    (b.paragraphs || []).forEach(function(p){
+      (p.lines || []).forEach(function(l){
+        var t = String(l.text || '').replace(/[\s　]+/g, ' ').trim();
+        if (!t) return;
+        out.push({ t:t, h:Math.round(l.bbox.y1 - l.bbox.y0), c:Math.round(l.confidence), y:l.bbox.y0 });
       });
-    })(imgs[i]);
-  }
-}
-var BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-function thumbHtml(c){
-  if (c.shot) return '<img class="th" src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">';
-  return '<div class="th none">写真<br>なし</div>';
-}
-
-/* ===================== 「とる」画面 ===================== */
-var FIELDS = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','met','memo','todo'];
-function fv(k){ return trim($('f-' + k).value); }
-function setF(k, v){ $('f-' + k).value = v == null ? '' : v; }
-
-function loadDraft(){
-  var d = null;
-  try { d = JSON.parse(localStorage.getItem(DKEY) || 'null'); } catch(e){ d = null; }
-  if (d && typeof d === 'object'){
-    FIELDS.forEach(function(k){ if (typeof d[k] === 'string') setF(k, d[k]); });
-    if (d.more) $('more').open = true;
-  }
-  if (!fv('met')) setF('met', today());
-  /* 撮ったまま画面を閉じても、写真は預かっておく */
-  getShot('__draft__').then(function(s){
-    if (s && s.full){ pend = { full:s.full, thumb:s.thumb }; showPend(); }
+    });
   });
-  renderSaveWho();
-}
-var draftTimer = null;
-function saveDraft(){
-  clearTimeout(draftTimer);
-  draftTimer = setTimeout(function(){
-    var d = { more: $('more').open };
-    FIELDS.forEach(function(k){ d[k] = fv(k); });
-    try { localStorage.setItem(DKEY, JSON.stringify(d)); } catch(e){}
-  }, 400);
-}
-function clearDraft(keepPlace){
-  var w = keepPlace ? fv('where') : '', m = keepPlace ? fv('met') : today();
-  FIELDS.forEach(function(k){ setF(k, ''); });
-  setF('where', w); setF('met', m || today());
-  $('more').open = false;
-  try { localStorage.removeItem(DKEY); } catch(e){}
-  saveDraft();
-}
-
-function showPend(){
-  var on = !!pend;
-  $('shot-img').hidden = !on;
-  $('shot-ph').hidden = on;
-  $('shot-tools').hidden = !on;
-  $('shotbox').className = on ? 'shotbox on' : 'shotbox';
-  if (on) $('shot-img').src = pend.full;
-  renderSaveWho();
-}
-function takeShot(file){
-  if (!file) return;
-  busy(true, '名刺を取り込んでいます…');
-  makeShot(file, function(s){
-    busy(false);
-    if (!s){ toast('写真を読み込めませんでした'); return; }
-    pend = s;
-    putShot('__draft__', s);
-    showPend();
-    toast('撮れた。名前を入れて「しまう」を押す');
-  });
-}
-
-function recentWheres(n){
-  var seen = {}, out = [];
-  for (var i = 0; i < db.cards.length && out.length < n; i++){
-    var w = trim(db.cards[i].where);
-    if (w && !seen[w]){ seen[w] = 1; out.push(w); }
+  if (!out.length && data.text){
+    String(data.text).split('\n').forEach(function(t){
+      t = t.replace(/[\s　]+/g,' ').trim();
+      if (t) out.push({ t:t, h:0, c:80, y:0 });
+    });
   }
   return out;
 }
-function renderWhereChips(){
-  var cur = fv('where'), list = recentWheres(6), h = '';
-  list.forEach(function(w){
-    h += '<button class="chip" data-w="' + esc(w) + '" aria-pressed="' + (w === cur ? 'true' : 'false') + '">' + esc(w) + '</button>';
+
+/* ===================== 読んだ文字を項目に割りふる ===================== */
+function han(s){
+  return String(s == null ? '' : s).replace(/[！-～]/g, function(c){
+    return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/　/g, ' ');
+}
+function dashes(s){ return String(s).replace(/[‐‑‒–—―ー−ｰ]/g, '-'); }
+function digitsFix(s){
+  return String(s).replace(/[Ｏｏ○〇oO]/g, '0').replace(/[lI!|]/g, '1')
+                  .replace(/[Ss]/g, '5').replace(/[Bb]/g, '8');
+}
+var RE_MAIL  = /[A-Za-z0-9][A-Za-z0-9._%+\-]*@[A-Za-z0-9][A-Za-z0-9\-]*(?:\.[A-Za-z0-9][A-Za-z0-9\-]*)+/;
+var RE_LOCAL = /^[A-Za-z0-9][A-Za-z0-9._%+\-]*$/;
+var RE_TEL   = /0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4}/g;
+var RE_CO    = /株式会社|有限会社|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
+var RE_TITLE = /代表取締役|取締役|代表社員|代表者|代表|会長|社長|専務|常務|本部長|統括|部長|次長|課長|係長|主任|主査|主幹|店主|店長|所長|支店長|工場長|室長|局長|主宰|オーナー|女将|チーフ|マネージャ|リーダー|顧問|参与|参事|理事|監査役|技師|税理士|公認会計士|弁護士|社会保険労務士|司法書士|行政書士|建築士|ディレクター|プランナー|コンサルタント/;
+var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|部|課|室|係|局)$/;
+var RE_ADDR  = /[都道府県]|[市区町村郡]/;
+
+var RE_MLABEL = /(^|[\s　(（])(?:E[\s\-_]?mail|EMAIL|MAIL|Mail|mail|メール|Ｅメール|アドレス)[\s　\-]*[:：]?/gi;
+function cleanMail(a){
+  return a.replace(/^e[\-_]?mail(?=[A-Za-z0-9._%+\-])/i, '').replace(/^[.\-_]+/, '');
+}
+function pickEmail(line){
+  var t = han(line).replace(RE_MLABEL, ' ').replace(/[\s　]/g, '');
+  var m = t.match(RE_MAIL);
+  if (m) return cleanMail(m[0]).toLowerCase().replace(/[.,;:]+$/, '');
+  /* @ が Q・G・© に化けることが多い。e や o は本物の字のことが多いので触らない */
+  var pos = [];
+  for (var i = 1; i < t.length - 3; i++) if ('QGＱ©®'.indexOf(t.charAt(i)) >= 0) pos.push(i);
+  for (var j = pos.length - 1; j >= 0; j--){
+    var a = t.slice(0, pos[j]), b = t.slice(pos[j] + 1);
+    var mb = b.match(/^[A-Za-z0-9][A-Za-z0-9.\-]*\.[A-Za-z]{2,}/);
+    if (mb && a.length >= 2 && RE_LOCAL.test(a)) return cleanMail(a + '@' + mb[0]).toLowerCase();
+  }
+  return '';
+}
+function pickUrl(line){
+  var t = han(line).replace(/[\s　]/g, '');
+  if (t.indexOf('@') >= 0) return '';
+  var m = t.match(/https?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+/i);
+  if (m) return m[0].replace(/[.,;:]+$/, '').toLowerCase();
+  m = t.match(/(?:www\.)[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/i);
+  if (m) return m[0].replace(/[.,;:]+$/, '').toLowerCase();
+  return '';
+}
+function pickPhones(lines){
+  var tel = '', mobile = '';
+  lines.forEach(function(L){
+    var t = dashes(han(L.t));
+    t.split(/(?=FAX|Fax|fax|ファックス)/).forEach(function(seg){
+      if (/^(FAX|Fax|fax|ファックス)/.test(seg)) return;
+      var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM\./.test(seg);
+      var ms = seg.match(RE_TEL);
+      if (!ms) return;
+      ms.forEach(function(n){
+        var num = n.replace(/\s/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        var d = num.replace(/\D/g, '');
+        if (d.length < 10 || d.length > 11) return;
+        if (isMob || /^0[789]0/.test(d)){ if (!mobile) mobile = num; }
+        else if (!tel) tel = num;
+      });
+    });
   });
-  if (!list.length) h = '<span class="hint" style="margin:6px 2px">はじめのうちは下の欄に直接書く。次からはここに並ぶ。</span>';
-  $('where-chips').innerHTML = h;
+  return { tel:tel, mobile:mobile };
 }
-function renderTodoChips(){
-  var cur = fv('todo'), h = '';
-  TODOS.forEach(function(t){
-    h += '<button class="chip" data-t="' + esc(t) + '" aria-pressed="' + (t === cur ? 'true' : 'false') + '">' + esc(t) + '</button>';
+function pickZipAddr(lines){
+  var zip = '', addr = '';
+  lines.forEach(function(L){
+    if (/TEL|FAX|PHONE|MOBILE/i.test(L.t) || /電話|携帯|ファックス/.test(L.t) || /@/.test(L.t)) return;
+    var t = dashes(han(L.t));
+    if (!zip && (/〒/.test(t) || /^[T干][^ELel]/.test(t) || RE_ADDR.test(L.t))){
+      var m = t.match(/[〒T干]?\s*([0-9lI!Oo]{3})\s*-\s*([0-9lI!Oo]{4})/);
+      if (m){
+        var a = digitsFix(m[1]), b = digitsFix(m[2]);
+        if (/^\d{3}$/.test(a) && /^\d{4}$/.test(b)) zip = a + '-' + b;
+      }
+    }
+    if (!RE_ADDR.test(L.t)) return;
+    var body = L.t.replace(/[〒T干]?\s*[0-9lI!Oo]{3}\s*[-‐]\s*[0-9lI!Oo]{4}\s*/g, ' ')
+                  .replace(/^[^ぁ-んァ-ヶ一-龥0-9]+/, '')
+                  .replace(/[\s　]+/g, ' ').trim();
+    if (body.length > addr.length) addr = body;
   });
-  $('todo-chips').innerHTML = h;
+  return { zip:zip, addr:addr };
 }
-function renderSaveWho(){
-  var nm = fv('name'), co = fv('company');
-  var t = nm && co ? nm + '　' + co : (nm || co || (pend ? '写真だけしまう（名前はあとで）' : '名刺箱に入れる'));
-  $('save-who').textContent = t;
+function parseCard(lines){
+  var got = { name:'', kana:'', company:'', dept:'', title:'', tel:'', mobile:'', email:'', url:'', addr:'' };
+  var used = {};
+  lines.forEach(function(L, i){
+    if (!got.email){ var e = pickEmail(L.t); if (e){ got.email = e; used[i] = 1; } }
+  });
+  lines.forEach(function(L, i){
+    if (used[i] || got.url) return;
+    var u = pickUrl(L.t); if (u){ got.url = u; used[i] = 1; }
+  });
+  var ph = pickPhones(lines);
+  got.tel = ph.tel; got.mobile = ph.mobile;
+  lines.forEach(function(L, i){ if (RE_TEL.test(han(L.t))) used[i] = 1; RE_TEL.lastIndex = 0; });
+
+  var za = pickZipAddr(lines);
+  got.addr = (za.zip ? '〒' + za.zip + ' ' : '') + za.addr;
+  if (!za.addr && !za.zip) got.addr = '';
+  lines.forEach(function(L, i){ if (RE_ADDR.test(L.t) && !/@/.test(L.t)) used[i] = 1; });
+
+  /* 会社：会社らしい語を含み、いちばん大きい行 */
+  var co = null;
+  lines.forEach(function(L, i){
+    if (used[i]) return;
+    if (!RE_CO.test(L.t)) return;
+    if (L.c < 40) return;
+    if (!co || L.h > co.h) co = { L:L, i:i };
+  });
+  if (co){ got.company = co.L.t; used[co.i] = 1; }
+
+  /* 部署と役職：名前と同じ行に並んでいることも多いので、余った語は名前の候補に回す */
+  var residual = {};
+  lines.forEach(function(L, i){
+    if (used[i]) return;
+    if (L.c < 40) return;
+    var parts = L.t.split(/[\s　\/／・|]+/).filter(Boolean);
+    var rest = [], hit = false;
+    parts.forEach(function(w){
+      if (!got.title && RE_TITLE.test(w)){ got.title = w; hit = true; }
+      else if (!got.dept && RE_DEPT.test(w) && w.length <= 12){ got.dept = w; hit = true; }
+      else rest.push(w);
+    });
+    if (!hit) return;
+    if (rest.length) residual[i] = rest.join(' ');
+    else used[i] = 1;
+  });
+
+  /* 名前：残った行のうち、いちばん字が大きいもの */
+  var best = null;
+  lines.forEach(function(L, i){
+    if (used[i] || L.c < 55) return;
+    var t = residual[i] != null ? residual[i] : L.t;
+    if (t.length < 2 || t.length > 14) return;
+    if (/[0-9@]/.test(han(t))) return;
+    if (!/[一-龥ぁ-んァ-ヶ]/.test(t)) return;
+    if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t)) return;
+    if (!best || L.h > best.L.h) best = { L:L, i:i, t:t };
+  });
+  if (best){ got.name = best.t; used[best.i] = 1; }
+
+  /* よみ：ひらがなだけの短い行 */
+  lines.forEach(function(L, i){
+    if (used[i] || got.kana) return;
+    if (/^[ぁ-んー\s]{3,16}$/.test(L.t)){ got.kana = L.t; used[i] = 1; }
+  });
+  return got;
 }
-
-function cardRowHtml(c, opt){
-  opt = opt || {};
-  var bdg = '';
-  if (hasTodo(c))    bdg += '<span class="bdg warn">' + esc(c.todo) + '</span>';
-  if (opt.stale)     bdg += '<span class="bdg plain">' + esc(agoWord(lastAt(c))) + '</span>';
-  var meta = [orgLine(c), (c.met ? fmtDate(c.met) + (c.where ? '　' + c.where : '') : '')].filter(Boolean).join('<br>');
-  return '<button class="item" data-id="' + esc(c.id) + '">' +
-    thumbHtml(c) +
-    '<span class="body">' +
-      '<span class="ttl">' + esc(fullName(c)) + bdg + '</span>' +
-      (meta ? '<span class="meta">' + meta + '</span>' : '') +
-      (trim(c.memo) ? '<span class="memo">' + esc(c.memo) + '</span>' : '') +
-    '</span><span class="chev">›</span></button>';
-}
-
-function renderToday(){
-  var t = today();
-  var list = db.cards.filter(function(c){ return ymd(new Date(c.ts)) === t; });
-  $('today-wrap').hidden = !list.length;
-  $('first-help').hidden = db.cards.length > 0;
-  if (!list.length) return;
-  $('today-n').textContent = list.length + '枚';
-  $('today-list').innerHTML = list.map(function(c){ return cardRowHtml(c); }).join('');
-  fillThumbs($('today-list'));
-}
-
-var dupIds = [];
-function saveCard(){
-  if (!pend && !fv('name') && !fv('company')){
-    toast('写真を撮るか、名前か会社を入れてください');
-    return;
-  }
-  var c = { id:uid(), ts:Date.now(), touches:[], shot: pend ? 1 : 0 };
-  FIELDS.forEach(function(k){ c[k] = fv(k); });
-  if (!c.met) c.met = today();
-  db.cards.unshift(c);
-  persist();
-
-  var shot = pend;
-  pend = null;
-  if (shot){
-    putShot(c.id, shot);
-    delShot('__draft__');
-  }
-
-  /* 同じ名前の名刺がすでにあれば知らせる（2枚目・肩書きが変わった、など） */
-  dupIds = [];
-  if (trim(c.name)){
-    var n = norm(c.name);
-    dupIds = db.cards.filter(function(o){ return o.id !== c.id && trim(o.name) && norm(o.name) === n; })
-                     .map(function(o){ return o.id; });
-  }
-  showDup(c);
-
-  clearDraft(true);
-  showPend();
-  renderAll();
-  toast(fv('where') ? 'しまった。場所と日付はそのまま残してある' : 'しまった');
-  window.scrollTo(0, 0);
-}
-function showDup(c){
-  var b = $('dup-note');
-  if (!dupIds.length){ b.hidden = true; return; }
-  b.hidden = false;
-  b.innerHTML = '<span>' + esc(trim(c.name)) + ' さんの名刺は、これで ' + (dupIds.length + 1) +
-    ' 枚目。前のと見くらべますか</span><span class="arw">›</span>';
-  b.setAttribute('data-name', trim(c.name));
-}
-
-function renderAdd(){
-  renderWhereChips(); renderTodoChips(); renderToday(); renderSaveWho();
+function candidates(lines){
+  var seen = {}, out = [];
+  lines.slice().sort(function(a, b){ return b.h - a.h; }).forEach(function(L){
+    var t = L.t.trim();
+    if (!t || t.length > 30 || L.c < 40) return;
+    if (seen[t]) return;
+    seen[t] = 1; out.push(t);
+  });
+  return out.slice(0, 10);
 }
 
-/* ===================== シート（下から出る画面） ===================== */
+/* ===================== 下から出る画面 ===================== */
 function openSheet(html, wire){
   $('panel').innerHTML = html;
   $('sheet').hidden = false;
@@ -950,224 +628,305 @@ function closeSheet(){
 }
 $('sheet').addEventListener('click', function(ev){ if (ev.target === $('sheet')) closeSheet(); });
 $('viewer').addEventListener('click', function(){ $('viewer').hidden = true; $('viewer-img').src = ''; });
+function showBig(src){ if (!src) return; $('viewer-img').src = src; $('viewer').hidden = false; }
 
-/* ===================== 「さがす」画面 ===================== */
-var sortMode = 'new';
-
-function sortedCards(){
+/* ===================== 一覧 ===================== */
+var BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+function tileHtml(c){
+  var pic = c.shot
+    ? '<img src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
+    : '<span class="no">写真なし</span>';
+  return '<button class="tile" data-id="' + esc(c.id) + '">' +
+    '<span class="pic">' + pic + '</span>' +
+    '<span class="nm">' + esc(fullName(c)) + '</span>' +
+    (orgLine(c) ? '<span class="co">' + esc(orgLine(c)) + '</span>' : '') +
+    '</button>';
+}
+function fillThumbs(root){
+  var imgs = (root || document).querySelectorAll('img[data-th]');
+  for (var i = 0; i < imgs.length; i++){
+    (function(el){
+      var id = el.getAttribute('data-th');
+      if (thumbCache[id]){ el.src = thumbCache[id]; return; }
+      getShot(id).then(function(s){ if (s && s.thumb){ thumbCache[id] = s.thumb; el.src = s.thumb; } });
+    })(imgs[i]);
+  }
+}
+function renderGrid(){
   var q = trim($('q').value);
-  var list = db.cards.filter(function(c){ return matches(c, q); });
-  if (sortMode === 'kana'){
-    list.sort(function(a, b){
-      var ka = kanaKey(a), kb = kanaKey(b);
-      return ka < kb ? -1 : ka > kb ? 1 : b.ts - a.ts;
-    });
-  } else if (sortMode === 'company'){
-    list.sort(function(a, b){
-      var ca = norm(a.company) || '￿', cb = norm(b.company) || '￿';
-      if (ca !== cb) return ca < cb ? -1 : 1;
-      var ka = kanaKey(a), kb = kanaKey(b);
-      return ka < kb ? -1 : ka > kb ? 1 : 0;
-    });
-  } else if (sortMode === 'met'){
-    list.sort(function(a, b){ return (lastAt(b) || '') < (lastAt(a) || '') ? -1 : 1; });
-  } else {
-    list.sort(function(a, b){ return b.ts - a.ts; });
-  }
-  return list;
-}
-function groupOf(c){
-  if (sortMode === 'kana')    return kanaRow(c) + ' の人';
-  if (sortMode === 'company') return trim(c.company) || '会社を入れていない';
-  if (sortMode === 'met')     return lastAt(c) ? dayLabel(lastAt(c)) : '会った日がない';
-  return dayLabel(ymd(new Date(c.ts)));
-}
-function renderFind(){
-  var list = sortedCards(), h = '', last = null;
+  var list = db.cards.filter(function(c){ return matches(c, q); }).sort(function(a, b){ return b.ts - a.ts; });
+  $('hdn').textContent = db.cards.length ? db.cards.length + '枚' : '';
+  $('grid').innerHTML = list.map(tileHtml).join('');
+  fillThumbs($('grid'));
+  var none = $('none');
   if (!db.cards.length){
-    h = '<p class="empty">まだ1枚も入っていない。<br>「とる」タブから名刺を撮ると、ここに並ぶ。</p>';
+    $('count').textContent = '';
+    none.hidden = false;
+    none.innerHTML = '<p class="empty">まだ1枚も入っていない。<br>' +
+      '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみる。<br>' +
+      '名前も会社も電話も、写真から自分で読みとる。</p>';
   } else if (!list.length){
-    h = '<p class="empty">見つからなかった。<br>ことばを減らすか、ひらがなだけで探してみる。</p>';
+    $('count').textContent = '';
+    none.hidden = false;
+    none.innerHTML = '<p class="empty">見つからなかった。<br>ことばを減らすか、ひらがなだけで探してみる。</p>';
   } else {
-    for (var i = 0; i < list.length; i++){
-      var g = groupOf(list[i]);
-      if (g !== last){
-        if (last !== null) h += '</div>';
-        h += '<div class="day"><span class="date">' + esc(g) + '</span><span class="line"></span></div><div class="card">';
-        last = g;
-      }
-      h += cardRowHtml(list[i]);
-    }
-    h += '</div>';
+    $('count').textContent = q ? list.length + '枚 見つかった' : '新しい順';
+    none.hidden = true;
   }
-  $('find-list').innerHTML = h;
-  fillThumbs($('find-list'));
+}
+
+/* ===================== 撮ってからしまうまで ===================== */
+var pend = null;        /* まだしまっていない写真 { full, thumb } */
+var pendImg = null;     /* 文字を読ませるための元画像 */
+var pendCand = [];      /* 読み取った文字の候補 */
+var touched = {};       /* 人が手で直した欄は、読み直しても上書きしない */
+var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','memo'];
+
+function recentWheres(n){
+  var seen = {}, out = [];
+  var sorted = db.cards.slice().sort(function(a, b){ return b.ts - a.ts; });
+  for (var i = 0; i < sorted.length && out.length < n; i++){
+    var w = trim(sorted[i].where);
+    if (w && !seen[w]){ seen[w] = 1; out.push(w); }
+  }
+  return out;
+}
+function saveSheetHtml(){
+  var wh = recentWheres(5).map(function(w){
+    return '<button class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+  return '<h2>新しい名刺</h2>' +
+    '<p class="lead" id="s-lead">写真から文字を読んでいます。ちがうところは直せます。</p>' +
+    '<button class="pic-big" id="s-pic"><img id="s-img" alt="いま撮った名刺"></button>' +
+    '<div class="bar" id="s-bar"><i style="width:6%"></i></div>' +
+    '<p class="reading" id="s-read">準備しています…</p>' +
+    '<div id="s-err"></div>' +
+    '<label for="s-name">名前</label>' +
+    '<input type="text" class="name-in" id="s-name" placeholder="読めなければ手で入れる" autocomplete="off">' +
+    '<div class="chips" id="s-cand-name"></div>' +
+    '<label for="s-company">会社</label>' +
+    '<input type="text" id="s-company" autocomplete="off">' +
+    '<div class="chips" id="s-cand-co"></div>' +
+    '<details class="more" id="s-more"><summary>電話・メール・住所など<span class="got" id="s-got"></span></summary>' +
+      '<div class="half"><div><label for="s-tel">電話</label><input type="tel" id="s-tel" autocomplete="off"></div>' +
+      '<div><label for="s-mobile">携帯</label><input type="tel" id="s-mobile" autocomplete="off"></div></div>' +
+      '<label for="s-email">メール</label><input type="email" id="s-email" autocomplete="off" inputmode="email">' +
+      '<div class="half"><div><label for="s-dept">部署</label><input type="text" id="s-dept" autocomplete="off"></div>' +
+      '<div><label for="s-title">役職</label><input type="text" id="s-title" autocomplete="off"></div></div>' +
+      '<label for="s-addr">住所</label><input type="text" id="s-addr" autocomplete="off">' +
+      '<label for="s-url">サイト</label><input type="text" id="s-url" autocomplete="off">' +
+      '<label for="s-kana">よみ</label><input type="text" id="s-kana" autocomplete="off">' +
+    '</details>' +
+    '<label for="s-where">どこで会った</label>' +
+    (wh ? '<div class="chips" id="s-where-chips">' + wh + '</div>' : '') +
+    '<input type="text" id="s-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">' +
+    '<label for="s-memo">ひとことメモ</label>' +
+    '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのこと。"></textarea>' +
+    '<button class="btn primary" id="s-save">名刺箱にしまう</button>' +
+    '<div class="row"><button class="btn" id="s-rot">回して読み直す</button>' +
+    '<button class="btn danger" id="s-cancel">やめる</button></div>';
+}
+function setCands(){
+  var h = pendCand.map(function(t){
+    return '<button class="chip" data-v="' + esc(t) + '">' + esc(t) + '</button>'; }).join('');
+  if (!$('s-cand-name')) return;
+  $('s-cand-name').innerHTML = h;
+  $('s-cand-co').innerHTML = h;
+}
+function fillFrom(got){
+  var n = 0;
+  SF.forEach(function(k){
+    var el = $('s-' + k);
+    if (!el || touched[k] || !got[k]) return;
+    el.value = got[k];
+  });
+  ['tel','mobile','email','dept','title','addr','url','kana'].forEach(function(k){
+    if ($('s-' + k) && trim($('s-' + k).value)) n++;
+  });
+  $('s-got').textContent = n ? '（' + n + '件 入りました）' : '';
+  if (n && !$('s-more').open) $('s-more').open = false;
+}
+function ocrProgress(m){
+  var bar = $('s-bar'), rd = $('s-read');
+  if (!bar || !rd) return;
+  var names = {
+    'loading tesseract core':'文字を読む部品を用意しています',
+    'loading language traineddata':'日本語の辞書を取り込んでいます（初回だけ）',
+    'initializing tesseract':'準備しています',
+    'initializing api':'準備しています',
+    'recognizing text':'文字を読んでいます'
+  };
+  var pct = Math.max(4, Math.round((m.progress || 0) * 100));
+  bar.firstChild.style.width = (m.status === 'recognizing text' ? pct : Math.min(40, pct)) + '%';
+  rd.textContent = (names[m.status] || '準備しています') + '　' + pct + '%';
+}
+function runOcr(img){
+  if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
+  readCard(img, ocrProgress).then(function(lines){
+    if (!$('s-name')) return;
+    $('s-bar').hidden = true;
+    pendCand = candidates(lines);
+    setCands();
+    var got = parseCard(lines);
+    fillFrom(got);
+    var any = got.name || got.company || got.tel || got.email;
+    $('s-read').textContent = any ? '読めた。ちがうところは直す。' : '文字をうまく読めなかった。手で入れる。';
+    $('s-lead').textContent = any ? '押すだけで直せる候補を、欄の下に並べてある。' : '写真は残るので、名前だけ入れておけばよい。';
+  }, function(err){
+    if (!$('s-read')) return;
+    $('s-bar').hidden = true;
+    $('s-read').hidden = true;
+    $('s-err').innerHTML = '<div class="warn">文字を読む部品を取り込めなかった。' +
+      '初めて使うときは電波のあるところで開く必要がある。<br>' +
+      '写真は残るので、名前だけ手で入れてしまってよい。</div>';
+  });
+}
+function openSave(){
+  touched = {}; pendCand = [];
+  openSheet(saveSheetHtml(), function(){
+    $('s-img').src = pend.full;
+    $('s-pic').addEventListener('click', function(){ showBig(pend.full); });
+    SF.forEach(function(k){
+      var el = $('s-' + k);
+      if (el) el.addEventListener('input', function(){ touched[k] = 1; });
+    });
+    $('s-cand-name').addEventListener('click', function(ev){ pickCand(ev, 's-name', 'name'); });
+    $('s-cand-co').addEventListener('click', function(ev){ pickCand(ev, 's-company', 'company'); });
+    if ($('s-where-chips')) $('s-where-chips').addEventListener('click', function(ev){
+      var b = ev.target.closest ? ev.target.closest('.chip') : null;
+      if (!b) return;
+      $('s-where').value = b.getAttribute('data-w');
+      touched.where = 1;
+    });
+    $('s-rot').addEventListener('click', rotateAndRead);
+    $('s-save').addEventListener('click', doSave);
+    $('s-cancel').addEventListener('click', function(){
+      if (!confirm('この名刺をやめますか？　写真も残りません。')) return;
+      pend = null; pendImg = null; closeSheet();
+    });
+  });
+}
+function pickCand(ev, inputId, key){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  $(inputId).value = b.getAttribute('data-v');
+  touched[key] = 1;
+}
+function rotateAndRead(){
+  if (!pend) return;
+  busy(true, '回しています…');
+  rot90(pend.full, function(full){
+    if (!full){ busy(false); toast('回せませんでした'); return; }
+    rot90(pend.thumb, function(thumb){
+      busy(false);
+      pend = { full:full, thumb:thumb || pend.thumb };
+      if ($('s-img')) $('s-img').src = pend.full;
+      var im = new Image();
+      im.onload = function(){ pendImg = im; runOcr(im); };
+      im.src = full;
+    });
+  });
+}
+function startCapture(file){
+  if (!file) return;
+  busy(true, '写真を取り込んでいます…');
+  readImage(file, function(im){
+    busy(false);
+    if (!im){ toast('写真を読み込めませんでした'); return; }
+    var full = scaleTo(im, 1400, 0.72), thumb = scaleTo(im, 320, 0.62);
+    if (!full){ toast('写真を読み込めませんでした'); return; }
+    pend = { full:full, thumb:thumb };
+    pendImg = im;
+    openSave();
+    runOcr(im);
+  });
+}
+function doSave(){
+  var c = { id:uid(), ts:Date.now(), shot: pend ? 1 : 0, met:today() };
+  SF.forEach(function(k){ c[k] = $('s-' + k) ? trim($('s-' + k).value) : ''; });
+  if (!pend && !c.name && !c.company){ toast('名前か会社を入れてください'); return; }
+  db.cards.unshift(c);
+  persist();
+  if (pend) putShot(c.id, pend);
+  pend = null; pendImg = null;
+  closeSheet();
+  renderGrid();
+  toast('しまった');
+  window.scrollTo(0, 0);
 }
 
 /* ===================== 名刺1枚の画面 ===================== */
-function factRow(k, v, html){
+function cardById(id){
+  for (var i = 0; i < db.cards.length; i++) if (db.cards[i].id === id) return db.cards[i];
+  return null;
+}
+function siteUrl(u){ u = trim(u); return u ? (/^https?:\/\//i.test(u) ? u : 'https://' + u) : ''; }
+function telLink(v){ return '<a href="tel:' + esc(String(v).replace(/[^0-9+]/g, '')) + '">' + esc(v) + '</a>'; }
+function fact(k, v, html){
   if (!trim(v)) return '';
   return '<div class="f"><div class="k">' + esc(k) + '</div><div class="v">' + (html || esc(v)) + '</div></div>';
 }
-function telLink(v){
-  var t = String(v).replace(/[^0-9+]/g, '');
-  return '<a href="tel:' + esc(t) + '">' + esc(v) + '</a>';
-}
-function siteUrl(u){
-  u = trim(u);
-  if (!u) return '';
-  return /^https?:\/\//i.test(u) ? u : 'https://' + u;
-}
-
 function openCard(id){
   var c = cardById(id);
   if (!c) return;
-  var touches = (c.touches || []).slice().sort(function(a, b){ return a.date < b.date ? 1 : -1; });
-  var tl = touches.map(function(t){
-    return '<div class="tl"><div class="time mono">' + esc(fmtDate(t.date)) + '</div><div class="txt">' + esc(t.text || 'また会った') + '</div></div>';
-  }).join('');
-
-  var h = '';
-  h += '<h2>' + esc(fullName(c)) + '</h2>';
-  h += '<p class="sub">' + esc(orgLine(c) || '会社を入れていない') + '</p>';
-  if (c.shot) h += '<button class="bigshot" id="det-shot"><img id="det-img" alt="名刺"></button>';
-  if (hasTodo(c)) h += '<button class="banner" id="det-donetodo"><span>あとで：' + esc(c.todo) + '</span><span class="arw">済にする</span></button>';
-
+  var h = '<h2>' + esc(fullName(c)) + '</h2>';
+  if (orgLine(c)) h += '<p class="lead">' + esc(orgLine(c)) + '</p>';
+  if (c.shot) h += '<button class="pic-big" id="d-pic"><img id="d-img" alt="名刺"></button>';
   h += '<div class="facts">';
-  h += factRow('よみ', c.kana);
-  h += factRow('電話', c.tel, c.tel ? telLink(c.tel) : '');
-  h += factRow('携帯', c.mobile, c.mobile ? telLink(c.mobile) : '');
-  h += factRow('メール', c.email, c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
-  h += factRow('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '');
-  h += factRow('住所', c.addr, c.addr ? esc(c.addr) + '　<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.addr) + '" target="_blank" rel="noopener">地図</a>' : '');
-  h += factRow('会った日', c.met ? fmtDate(c.met) + '（' + agoWord(c.met) + '）' : '');
-  h += factRow('どこで', c.where);
-  h += factRow('メモ', c.memo);
-  h += factRow('しまった日', fmtDate(ymd(new Date(c.ts))) + ' ' + hhmm(c.ts));
+  h += fact('よみ', c.kana);
+  h += fact('電話', c.tel, c.tel ? telLink(c.tel) : '');
+  h += fact('携帯', c.mobile, c.mobile ? telLink(c.mobile) : '');
+  h += fact('メール', c.email, c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
+  h += fact('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '');
+  h += fact('住所', c.addr, c.addr ? esc(c.addr) + '　<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.addr) + '" target="_blank" rel="noopener">地図</a>' : '');
+  h += fact('会った日', c.met ? fmtDate(c.met) : '');
+  h += fact('どこで', c.where);
+  h += fact('メモ', c.memo);
   h += '</div>';
-
-  if (tl){
-    h += '<div class="sec" style="margin-top:18px"><span>そのあと</span><span class="line"></span><span class="n mono">' + touches.length + '回</span></div>';
-    h += '<div class="card">' + tl + '</div>';
-  }
-
-  h += '<button class="btn primary" id="det-touch">また会った・連絡した</button>';
-  h += '<div class="row"><button class="btn" id="det-edit">直す</button><button class="btn" id="det-vcf">連絡先に入れる</button></div>';
-  h += '<div class="row"><button class="btn" id="det-share">この人を送る</button><button class="btn danger" id="det-del">捨てる</button></div>';
-  h += '<button class="btn" id="det-close">閉じる</button>';
-
+  h += '<div class="row"><button class="btn" id="d-edit">直す</button>' +
+       '<button class="btn" id="d-vcf">連絡先に入れる</button></div>';
+  h += '<div class="row"><button class="btn" id="d-share">この人を送る</button>' +
+       '<button class="btn danger" id="d-del">捨てる</button></div>';
+  h += '<button class="btn" id="d-close">閉じる</button>';
   openSheet(h, function(){
     if (c.shot){
-      getShot(c.id).then(function(s){
-        if (s && s.full && $('det-img')) $('det-img').src = s.full;
-      });
-      $('det-shot').addEventListener('click', function(){
-        var src = $('det-img').src;
-        if (!src) return;
-        $('viewer-img').src = src;
-        $('viewer').hidden = false;
-      });
+      getShot(c.id).then(function(s){ if (s && s.full && $('d-img')) $('d-img').src = s.full; });
+      $('d-pic').addEventListener('click', function(){ showBig($('d-img').src); });
     }
-    if ($('det-donetodo')) $('det-donetodo').addEventListener('click', function(){
-      c.todo = ''; persist(); renderAll(); closeSheet(); toast('片づいた');
-    });
-    $('det-touch').addEventListener('click', function(){ openTouchSheet(c.id); });
-    $('det-edit').addEventListener('click',  function(){ openEditSheet(c.id); });
-    $('det-vcf').addEventListener('click',   function(){ saveVcf(c); });
-    $('det-share').addEventListener('click', function(){ shareCard(c); });
-    $('det-del').addEventListener('click',   function(){
+    $('d-edit').addEventListener('click',  function(){ openEdit(id); });
+    $('d-vcf').addEventListener('click',   function(){ saveVcf(c); });
+    $('d-share').addEventListener('click', function(){ shareCard(c); });
+    $('d-del').addEventListener('click',   function(){
       if (!confirm(fullName(c) + ' の名刺を捨てます。よろしいですか？')) return;
       db.cards = db.cards.filter(function(o){ return o.id !== c.id; });
-      persist(); delShot(c.id); renderAll(); closeSheet(); toast('捨てた');
+      persist(); delShot(c.id); renderGrid(); closeSheet(); toast('捨てた');
     });
-    $('det-close').addEventListener('click', closeSheet);
+    $('d-close').addEventListener('click', closeSheet);
   });
 }
-
-/* 「また会った」を1行足す */
-function openTouchSheet(id){
+function openEdit(id){
   var c = cardById(id);
   if (!c) return;
-  var h = '<h2>また会った・連絡した</h2><p class="sub">' + esc(fullName(c)) + '</p>' +
-    '<label for="t-date">いつ</label><input type="date" id="t-date" value="' + today() + '">' +
-    '<label for="t-text">なにを（空でもよい）</label>' +
-    '<textarea id="t-text" placeholder="例: 見積を持って訪問。倉庫の件は来月あらためて。"></textarea>' +
-    '<button class="btn primary" id="t-ok">足す</button><button class="btn" id="t-cancel">やめる</button>';
-  openSheet(h, function(){
-    $('t-ok').addEventListener('click', function(){
-      c.touches = c.touches || [];
-      c.touches.push({ date: $('t-date').value || today(), text: trim($('t-text').value) });
-      persist(); renderAll(); openCard(id); toast('足した');
-    });
-    $('t-cancel').addEventListener('click', function(){ openCard(id); });
-  });
-}
-
-/* 名刺を直す */
-function openEditSheet(id){
-  var c = cardById(id);
-  if (!c) return;
-  function row(k, lab, type, ph){
+  function row(k, lab, type){
     return '<label for="e-' + k + '">' + lab + '</label><input type="' + (type || 'text') +
-      '" id="e-' + k + '" value="' + esc(c[k] || '') + '" placeholder="' + esc(ph || '') + '" autocomplete="off">';
+      '" id="e-' + k + '" value="' + esc(c[k] || '') + '" autocomplete="off">';
   }
-  var h = '<h2>名刺を直す</h2>';
-  h += row('name', '名前', 'text', '山田 太郎');
-  h += row('kana', 'よみ', 'text', 'やまだ たろう');
-  h += row('company', '会社');
-  h += '<div class="half"><div>' + row('dept', '部署') + '</div><div>' + row('title', '役職') + '</div></div>';
-  h += '<div class="half"><div>' + row('tel', '電話', 'tel') + '</div><div>' + row('mobile', '携帯', 'tel') + '</div></div>';
-  h += row('email', 'メール', 'email');
-  h += row('url', 'サイト', 'text');
-  h += row('addr', '住所');
-  h += row('met', '会った日', 'date');
-  h += row('where', 'どこで');
-  h += '<label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea>';
-  h += row('todo', 'あとですること');
-  h += '<button class="btn primary" id="e-ok">直した</button><button class="btn" id="e-cancel">やめる</button>';
+  var h = '<h2>名刺を直す</h2>' +
+    '<label for="e-name">名前</label><input type="text" class="name-in" id="e-name" value="' + esc(c.name || '') + '" autocomplete="off">' +
+    row('kana', 'よみ') + row('company', '会社') +
+    '<div class="half"><div>' + row('dept', '部署') + '</div><div>' + row('title', '役職') + '</div></div>' +
+    '<div class="half"><div>' + row('tel', '電話', 'tel') + '</div><div>' + row('mobile', '携帯', 'tel') + '</div></div>' +
+    row('email', 'メール', 'email') + row('url', 'サイト') + row('addr', '住所') +
+    row('met', '会った日', 'date') + row('where', 'どこで') +
+    '<label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea>' +
+    '<button class="btn primary" id="e-ok">直した</button><button class="btn" id="e-cancel">やめる</button>';
   openSheet(h, function(){
     $('e-ok').addEventListener('click', function(){
-      ['name','kana','company','dept','title','tel','mobile','email','url','addr','met','where','todo'].forEach(function(k){
-        c[k] = trim($('e-' + k).value);
-      });
+      F.forEach(function(k){ if ($('e-' + k)) c[k] = trim($('e-' + k).value); });
       c.memo = trim($('e-memo').value);
-      persist(); renderAll(); openCard(id); toast('直した');
+      persist(); renderGrid(); openCard(id); toast('直した');
     });
     $('e-cancel').addEventListener('click', function(){ openCard(id); });
   });
-}
-
-/* ===================== 「あとで」画面 ===================== */
-function todoGroups(){
-  var noName = db.cards.filter(needsName);
-  var todos  = db.cards.filter(hasTodo);
-  var stale  = db.cards.filter(function(c){ return isStale(c) && !hasTodo(c) && !needsName(c); })
-                       .sort(function(a, b){ return (lastAt(a) || '') < (lastAt(b) || '') ? -1 : 1; })
-                       .slice(0, 20);
-  return { noName:noName, todos:todos, stale:stale };
-}
-function renderTodo(){
-  var g = todoGroups(), h = '';
-  function block(title, note, list, opt){
-    if (!list.length) return '';
-    return '<div class="sec"><span>' + esc(title) + '</span><span class="line"></span><span class="n mono">' +
-      list.length + '人</span></div>' +
-      '<p class="hint" style="margin:0 4px">' + esc(note) + '</p>' +
-      '<div class="card">' + list.map(function(c){ return cardRowHtml(c, opt); }).join('') + '</div>';
-  }
-  h += block('やること', 'この人にすると決めたこと。名刺を開いて「済にする」で片づく。', g.todos);
-  h += block('名前がまだ', '写真だけしまってある名刺。開いて「直す」で名前を入れる。', g.noName);
-  h += block('ごぶさた', '最後に会ってから半年以上たっている人。年賀状や暑中見舞いのきっかけに。', g.stale, { stale:true });
-  if (!h){
-    h = '<p class="empty">' + (db.cards.length ? 'いまのところ、やることはない。' :
-      'まだ名刺が入っていない。<br>「とる」タブから1枚しまってみる。') + '</p>';
-  }
-  $('todo-body').innerHTML = h;
-  fillThumbs($('todo-body'));
-}
-function updateDot(){
-  var g = todoGroups();
-  $('todo-dot').hidden = !(g.todos.length || g.noName.length);
 }
 
 /* ===================== 連絡先ファイル（vCard） ===================== */
@@ -1181,7 +940,7 @@ function foldB64(prefix, b64){
   while (rest.length){ out += '\r\n ' + rest.slice(0, 71); rest = rest.slice(71); }
   return out;
 }
-function vcard(c, photoDataUrl){
+function vcard(c, photo){
   var L = ['BEGIN:VCARD', 'VERSION:3.0'];
   var nm = trim(c.name) || trim(c.company) || '名刺';
   var p = nm.split(/[\s　]+/);
@@ -1200,131 +959,86 @@ function vcard(c, photoDataUrl){
   if (trim(c.url))    L.push('URL:' + ve(siteUrl(c.url)));
   if (trim(c.addr))   L.push('ADR;TYPE=WORK:;;' + ve(c.addr) + ';;;;');
   var note = [];
-  if (c.met)   note.push('会った日 ' + c.met + (trim(c.where) ? '（' + trim(c.where) + '）' : ''));
+  if (c.met) note.push('会った日 ' + c.met + (trim(c.where) ? '（' + trim(c.where) + '）' : ''));
   else if (trim(c.where)) note.push('どこで ' + trim(c.where));
   if (trim(c.memo)) note.push(trim(c.memo));
   if (note.length) L.push('NOTE:' + ve(note.join('\n')));
   var body = L.join('\r\n');
-  if (photoDataUrl){
-    var i = photoDataUrl.indexOf(',');
-    if (i > 0) body += '\r\n' + foldB64('PHOTO;ENCODING=b;TYPE=JPEG:', photoDataUrl.slice(i + 1));
+  if (photo){
+    var i = photo.indexOf(',');
+    if (i > 0) body += '\r\n' + foldB64('PHOTO;ENCODING=b;TYPE=JPEG:', photo.slice(i + 1));
   }
   return body + '\r\nEND:VCARD\r\n';
 }
 function safeName(s){ return String(s || '名刺').replace(/[\\\/:*?"<>|]/g, '_').slice(0, 40); }
 function saveVcf(c){
-  if (c.shot){
-    busy(true, '書き出しています…');
-    getShot(c.id).then(function(s){
-      busy(false);
-      saveFile(safeName(fullName(c)) + '.vcf', vcard(c, s && s.full), 'text/vcard;charset=utf-8');
-    }, function(){ busy(false); saveFile(safeName(fullName(c)) + '.vcf', vcard(c, null), 'text/vcard;charset=utf-8'); });
-  } else {
-    saveFile(safeName(fullName(c)) + '.vcf', vcard(c, null), 'text/vcard;charset=utf-8');
-  }
+  if (!c.shot){ saveFile(safeName(fullName(c)) + '.vcf', vcard(c, null), 'text/vcard;charset=utf-8'); return; }
+  busy(true, '書き出しています…');
+  getShot(c.id).then(function(s){
+    busy(false);
+    saveFile(safeName(fullName(c)) + '.vcf', vcard(c, s && s.full), 'text/vcard;charset=utf-8');
+  });
 }
 function saveVcfAll(){
   var list = db.cards.filter(function(c){ return trim(c.name) || trim(c.company); });
   if (!list.length){ toast('書き出せる名刺がありません'); return; }
-  var all = list.map(function(c){ return vcard(c, null); }).join('');
-  saveFile('めいしばこ_連絡先_' + today() + '.vcf', all, 'text/vcard;charset=utf-8');
+  saveFile('めいしばこ_連絡先_' + today() + '.vcf',
+    list.map(function(c){ return vcard(c, null); }).join(''), 'text/vcard;charset=utf-8');
 }
-
-/* ===================== 人に送る本文 ===================== */
-function sendList(){
-  var k = $('sendkind').value;
-  if (k === 'todo')   return db.cards.filter(hasTodo);
-  if (k === 'recent') return db.cards.filter(function(c){
-    var n = dayDiff(ymd(new Date(c.ts)), today()); return n != null && n <= 30; });
-  return db.cards.slice();
-}
-function buildText(){
-  var list = sendList();
-  var head = { all:'名刺の一覧', recent:'直近30日にもらった名刺', todo:'あとですることがある人' }[$('sendkind').value];
-  var out = ['【' + head + '】 ' + fmtDate(today()) + '　' + list.length + '件', ''];
-  if (!list.length) out.push('（ありません）');
-  list.forEach(function(c){
-    var l = '■ ' + fullName(c);
-    if (orgLine(c)) l += '　' + orgLine(c);
-    out.push(l);
-    var t = [];
-    if (trim(c.tel))    t.push('TEL ' + trim(c.tel));
-    if (trim(c.mobile)) t.push('携帯 ' + trim(c.mobile));
-    if (trim(c.email))  t.push(trim(c.email));
-    if (t.length) out.push('　' + t.join(' / '));
-    if (c.met) out.push('　' + fmtDate(c.met) + (trim(c.where) ? '　' + trim(c.where) : ''));
-    if (trim(c.memo)) out.push('　' + trim(c.memo).replace(/\n/g, ' '));
-    if (trim(c.todo)) out.push('　→ あとで: ' + trim(c.todo));
-    out.push('');
-  });
-  return out.join('\n');
+function shareCard(c){
+  var t = [fullName(c)];
+  if (orgLine(c)) t.push(orgLine(c));
+  if (trim(c.tel))    t.push('TEL ' + trim(c.tel));
+  if (trim(c.mobile)) t.push('携帯 ' + trim(c.mobile));
+  if (trim(c.email))  t.push(trim(c.email));
+  if (trim(c.addr))   t.push(trim(c.addr));
+  if (c.met) t.push(fmtDate(c.met) + (trim(c.where) ? '　' + trim(c.where) : '') + ' に会った');
+  var text = t.join('\n');
+  if (navigator.share) navigator.share({ text:text })['catch'](function(){ copyText(text, 'コピーしました'); });
+  else copyText(text, 'コピーしました。メールやLINEに貼り付けられる');
 }
 
 /* ===================== CSV ===================== */
-function csvQuote(rows){
-  return rows.map(function(row){
-    return row.map(function(c){
-      c = String(c == null ? '' : c);
-      return /[",\n\r]/.test(c) ? '"' + c.replace(/"/g, '""') + '"' : c;
+function buildCSV(){
+  var rows = [['名前','よみ','会社','部署','役職','電話','携帯','メール','サイト','住所','会った日','どこで','メモ','しまった日']];
+  db.cards.forEach(function(c){
+    rows.push([trim(c.name), trim(c.kana), trim(c.company), trim(c.dept), trim(c.title),
+      trim(c.tel), trim(c.mobile), trim(c.email), trim(c.url), trim(c.addr),
+      c.met || '', trim(c.where), trim(c.memo), ymd(new Date(c.ts))]);
+  });
+  return rows.map(function(r){
+    return r.map(function(v){
+      v = String(v == null ? '' : v);
+      return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
     }).join(',');
   }).join('\r\n');
 }
-function buildCSV(kind){
-  var rows;
-  if (kind === 'post'){
-    rows = [['名前','会社','部署','役職','住所']];
-    db.cards.forEach(function(c){
-      if (!trim(c.addr)) return;
-      rows.push([trim(c.name), trim(c.company), trim(c.dept), trim(c.title), trim(c.addr)]);
-    });
-  } else if (kind === 'todo'){
-    rows = [['名前','会社','あとですること','会った日','どこで','メモ']];
-    db.cards.filter(hasTodo).forEach(function(c){
-      rows.push([trim(c.name), trim(c.company), trim(c.todo), c.met, trim(c.where), trim(c.memo)]);
-    });
-  } else {
-    rows = [['名前','よみ','会社','部署','役職','電話','携帯','メール','サイト','住所',
-             '会った日','どこで','メモ','あとですること','最後の接触','しまった日時','写真']];
-    db.cards.forEach(function(c){
-      rows.push([trim(c.name), trim(c.kana), trim(c.company), trim(c.dept), trim(c.title),
-        trim(c.tel), trim(c.mobile), trim(c.email), trim(c.url), trim(c.addr),
-        c.met, trim(c.where), trim(c.memo), trim(c.todo), lastAt(c),
-        ymd(new Date(c.ts)) + ' ' + hhmm(c.ts), c.shot ? 'あり' : '']);
-    });
-  }
-  return csvQuote(rows);
-}
 
 /* ===================== 書き出し・コピー ===================== */
-/* 公開ページ（claude.ai）ではファイル保存に downloads ケイパビリティが要る。
-   ブラウザで index.html を直接開いたときは window.claude が無いので通常の保存を使う。 */
 var savePromise = (window.claude && typeof window.claude.use === 'function')
-  ? window.claude.use('downloads').catch(function(){ return null; })
-  : null;
-
+  ? window.claude.use('downloads')['catch'](function(){ return null; }) : null;
 function copyText(text, okMsg){
   var fallback = function(){
     var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
     document.body.appendChild(ta); ta.focus(); ta.select();
     var ok = false;
     try { ok = document.execCommand('copy'); } catch(e){}
     document.body.removeChild(ta);
-    toast(ok ? okMsg : 'コピーできませんでした。本文を長押しして選択してください');
+    toast(ok ? okMsg : 'コピーできませんでした');
   };
-  if (navigator.clipboard && navigator.clipboard.writeText){
+  if (navigator.clipboard && navigator.clipboard.writeText)
     navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, fallback);
-  } else fallback();
+  else fallback();
 }
 function saveFile(name, data, mime){
   if (savePromise){
     toast('保存を準備しています…');
     savePromise.then(function(dl){
-      if (!dl || !dl.save){ toast('この画面ではファイル保存を使えません。「コピー」をお使いください'); return; }
+      if (!dl || !dl.save){ toast('この画面ではファイル保存を使えません'); return; }
       dl.save({ filename:name, data:data }).then(function(){ toast('保存しました'); }, function(err){
         if (err && err.code === 'declined') return;
-        toast('保存できませんでした。「コピー」をお使いください');
+        toast('保存できませんでした');
       });
     });
     return;
@@ -1336,34 +1050,88 @@ function saveFile(name, data, mime){
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
     toast('保存しました');
-  } catch(e){
-    toast('保存できませんでした。「コピー」をお使いください');
-  }
+  } catch(e){ toast('保存できませんでした'); }
 }
-function openExternal(url){
-  var a = document.createElement('a');
-  a.href = url; a.target = '_blank'; a.rel = 'noopener';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-}
-function shareCard(c){
-  var t = [fullName(c)];
-  if (orgLine(c)) t.push(orgLine(c));
-  if (trim(c.tel))    t.push('TEL ' + trim(c.tel));
-  if (trim(c.mobile)) t.push('携帯 ' + trim(c.mobile));
-  if (trim(c.email))  t.push(trim(c.email));
-  if (trim(c.addr))   t.push(trim(c.addr));
-  if (c.met) t.push(fmtDate(c.met) + (trim(c.where) ? '　' + trim(c.where) : '') + ' に会った');
-  var text = t.join('\n');
-  if (navigator.share){
-    navigator.share({ text:text }).catch(function(){ copyText(text, 'コピーしました'); });
-  } else {
-    copyText(text, 'コピーしました。メールやLINEに貼り付けられる');
-  }
+
+/* ===================== 設定 ===================== */
+function openSettings(){
+  var h = '<h2>設定</h2>' +
+    '<p class="lead" id="g-usage"></p>' +
+    '<label>スマホの連絡先に入れる</label>' +
+    '<p class="hint" style="margin-top:0">書き出したファイルを開くと、連絡先アプリに登録できる。' +
+    '1人だけなら、その名刺を開いて「連絡先に入れる」。</p>' +
+    '<button class="btn" id="g-vcf">全員分を書き出す（.vcf）</button>' +
+    '<label>エクセルに出す</label>' +
+    '<div class="row"><button class="btn" id="g-csv-copy">コピー</button>' +
+    '<button class="btn" id="g-csv-save">CSVで保存</button></div>' +
+    '<label>バックアップ（機種変更・端末の乗り換え用）</label>' +
+    '<p class="hint" style="margin-top:0">名刺はこの端末の中にしかない。<b>月に一度</b>ここから書き出しておくこと。</p>' +
+    '<button class="btn" id="g-bk-full">写真つきで保存（.json）</button>' +
+    '<button class="btn" id="g-bk-lite">文字だけ保存（軽い）</button>' +
+    '<label for="g-restore">バックアップから復元</label>' +
+    '<input type="file" id="g-restore" accept=".json,application/json">' +
+    '<label>文字を読む準備</label>' +
+    '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込む。' +
+    'ここで先にすませておくと、外で撮るときに待たない。一度すめば次からは要らない。</p>' +
+    '<button class="btn" id="g-warm">いま準備しておく</button>' +
+    '<p class="hint" id="g-warm-state"></p>' +
+    '<label>お試し</label>' +
+    '<button class="btn" id="g-sample">お試し用のサンプルを入れる</button>' +
+    '<button class="btn danger" id="g-wipe">記録をすべて削除</button>' +
+    '<button class="btn" id="g-close">閉じる</button>';
+  openSheet(h, function(){
+    if (navigator.storage && navigator.storage.estimate){
+      navigator.storage.estimate().then(function(e){
+        if (e && e.usage && $('g-usage'))
+          $('g-usage').textContent = '名刺 ' + db.cards.length + '枚、写真をふくめて ' +
+            (e.usage / 1048576).toFixed(1) + ' MB 使っている。';
+      }, function(){});
+    } else $('g-usage').textContent = '名刺 ' + db.cards.length + '枚。';
+    $('g-vcf').addEventListener('click', saveVcfAll);
+    $('g-csv-copy').addEventListener('click', function(){ copyText(buildCSV(), 'CSVをコピーしました'); });
+    $('g-csv-save').addEventListener('click', function(){
+      saveFile('めいしばこ_名簿_' + today() + '.csv', '﻿' + buildCSV(), 'text/csv;charset=utf-8;'); });
+    $('g-bk-full').addEventListener('click', function(){ doBackup(true); });
+    $('g-bk-lite').addEventListener('click', function(){ doBackup(false); });
+    $('g-restore').addEventListener('change', function(){
+      if (this.files && this.files[0]) doRestore(this.files[0]);
+      this.value = '';
+    });
+    $('g-warm').addEventListener('click', function(){
+      var st = $('g-warm-state');
+      st.textContent = '取り込んでいます…';
+      progressCb = function(m){
+        if (!$('g-warm-state')) return;
+        $('g-warm-state').textContent = m.status + '　' + Math.round((m.progress || 0) * 100) + '%';
+      };
+      getWorker().then(function(){
+        progressCb = null;
+        if ($('g-warm-state')) $('g-warm-state').textContent = '準備できた。次からは待たずに読める。';
+      }, function(){
+        progressCb = null;
+        if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めなかった。電波のあるところでもう一度。';
+      });
+    });
+    $('g-sample').addEventListener('click', function(){
+      if (db.cards.length){ toast('名刺があるときは入れられません'); return; }
+      if (!confirm('動きを試すための架空の名刺を5枚入れます。よろしいですか？')) return;
+      loadSample();
+    });
+    $('g-wipe').addEventListener('click', function(){
+      if (!confirm('名刺も写真もすべて消えます。取り消せません。よろしいですか？')) return;
+      if (!confirm('本当に削除しますか？')) return;
+      db.cards = []; db.mail = '';
+      persist(); thumbCache = {};
+      IDB.clear()['catch'](function(){});
+      renderGrid(); closeSheet(); toast('すべて削除しました');
+    });
+    $('g-close').addEventListener('click', closeSheet);
+  });
 }
 
 /* ===================== バックアップ ===================== */
 function doBackup(withPhotos){
-  var base = { app:'meishibako', v:1, at:new Date().toISOString(), cards:db.cards, mail:db.mail };
+  var base = { app:'meishibako', v:2, at:new Date().toISOString(), cards:db.cards };
   if (!withPhotos){
     saveFile('めいしばこ_バックアップ_文字だけ_' + today() + '.json', JSON.stringify(base), 'application/json');
     return;
@@ -1371,46 +1139,35 @@ function doBackup(withPhotos){
   busy(true, '写真をまとめています…');
   IDB.all().then(function(rows){
     busy(false);
-    base.shots = (rows || []).filter(function(r){ return r.id !== '__draft__'; });
+    base.shots = (rows || []).filter(function(r){ return r && r.id && r.id.indexOf('__') !== 0; });
     saveFile('めいしばこ_バックアップ_' + today() + '.json', JSON.stringify(base), 'application/json');
-  }, function(){
-    busy(false);
-    toast('写真を読み出せませんでした。文字だけのバックアップをお使いください');
-  });
+  }, function(){ busy(false); toast('写真を読み出せませんでした'); });
 }
 function doRestore(file){
   var r = new FileReader();
   r.onload = function(){
     var raw = null;
-    try { raw = JSON.parse(String(r.result)); } catch(e){ raw = null; }
+    try { raw = JSON.parse(String(r.result)); } catch(e){}
     if (!raw || !Array.isArray(raw.cards)){ toast('このファイルは読めませんでした'); return; }
-    var n = raw.cards.length, ns = (raw.shots || []).length;
-    if (!confirm('名刺 ' + n + '枚' + (ns ? '（写真 ' + ns + '枚）' : '（写真なし）') +
-        ' を読み込みます。いまの記録は置きかわります。よろしいですか？')) return;
+    var ns = (raw.shots || []).length;
+    if (!confirm('名刺 ' + raw.cards.length + '枚' + (ns ? '（写真 ' + ns + '枚）' : '（写真なし）') +
+      ' を読み込みます。いまの記録は置きかわります。よろしいですか？')) return;
     db.cards = raw.cards;
-    db.mail = typeof raw.mail === 'string' ? raw.mail : '';
-    for (var i = 0; i < db.cards.length; i++){
-      if (!db.cards[i].id) db.cards[i].id = uid();
-      if (!Array.isArray(db.cards[i].touches)) db.cards[i].touches = [];
-      if (typeof db.cards[i].todo !== 'string') db.cards[i].todo = '';
-    }
+    db.cards.forEach(function(c){ if (!c.id) c.id = uid(); if (!c.ts) c.ts = Date.now(); });
     persist();
     thumbCache = {};
     busy(true, '写真をもどしています…');
     IDB.clear().then(function(){
-      var shots = raw.shots || [];
       var chain = Promise.resolve();
-      shots.forEach(function(s){
+      (raw.shots || []).forEach(function(s){
         if (!s || !s.id) return;
         chain = chain.then(function(){ return IDB.put({ id:s.id, full:s.full, thumb:s.thumb }); });
       });
       return chain;
     }).then(function(){
-      busy(false); renderAll(); renderOutput();
-      toast('もどしました');
+      busy(false); renderGrid(); closeSheet(); toast('もどしました');
     }, function(){
-      busy(false); renderAll(); renderOutput();
-      toast('文字はもどりましたが、写真はもどせませんでした');
+      busy(false); renderGrid(); closeSheet(); toast('文字はもどったが、写真はもどせなかった');
     });
   };
   r.onerror = function(){ toast('ファイルを読めませんでした'); };
@@ -1422,14 +1179,14 @@ function fakeShot(name, company, sub){
   var cv = document.createElement('canvas');
   cv.width = 728; cv.height = 440;
   var cx = cv.getContext('2d');
-  var F = '"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif';
-  cx.fillStyle = '#fbfaf6'; cx.fillRect(0, 0, 728, 440);
-  cx.fillStyle = '#116a6a'; cx.fillRect(0, 0, 728, 13);
-  cx.fillStyle = '#e6e2d8'; cx.fillRect(48, 268, 300, 2);
-  cx.fillStyle = '#4a5560'; cx.font = '600 27px ' + F; cx.fillText(company, 48, 92);
-  cx.fillStyle = '#9aa3ad'; cx.font = '500 19px ' + F; cx.fillText(sub, 48, 128);
-  cx.fillStyle = '#16191d'; cx.font = '700 52px ' + F; cx.fillText(name, 48, 232);
-  cx.fillStyle = '#6b7280'; cx.font = '500 18px ' + F;
+  var FF = '"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",IPAGothic,sans-serif';
+  cx.fillStyle = '#fdfcf9'; cx.fillRect(0, 0, 728, 440);
+  cx.fillStyle = '#c0432b'; cx.fillRect(0, 0, 728, 12);
+  cx.fillStyle = '#e6e0d6'; cx.fillRect(48, 268, 300, 2);
+  cx.fillStyle = '#3f4750'; cx.font = '600 27px ' + FF; cx.fillText(company, 48, 92);
+  cx.fillStyle = '#9aa3ad'; cx.font = '500 19px ' + FF; cx.fillText(sub, 48, 128);
+  cx.fillStyle = '#16191d'; cx.font = '700 52px ' + FF; cx.fillText(name, 48, 232);
+  cx.fillStyle = '#6b7280'; cx.font = '500 18px ' + FF;
   cx.fillText('TEL 03-5555-0000 / FAX 03-5555-0001', 48, 320);
   cx.fillText('東京都千代田区丸の内1-1-1', 48, 352);
   cx.fillText('www.example.co.jp', 48, 384);
@@ -1439,251 +1196,59 @@ function fakeShot(name, company, sub){
   return { full: cv.toDataURL('image/jpeg', 0.8), thumb: t.toDataURL('image/jpeg', 0.62) };
 }
 function loadSample(){
-  function back(n){ var d = new Date(); d.setDate(d.getDate() - n); return ymd(d); }
-  function at(n){ var d = new Date(); d.setDate(d.getDate() - n); d.setHours(14, 20, 0, 0); return d.getTime(); }
+  function back(n){ var d = new Date(); d.setDate(d.getDate() - n); return d; }
   var S = [
     { name:'山田 太郎', kana:'やまだ たろう', company:'株式会社ヤマダ商事', dept:'営業部', title:'課長',
-      tel:'03-5555-0000', mobile:'090-1111-2222', email:'yamada@example.co.jp', url:'example.co.jp',
-      addr:'東京都千代田区丸の内1-1-1', met:back(3), where:'東京ビッグサイトの展示会',
-      memo:'白髪でめがね。息子さんが野球をしている。うちの倉庫の件で見積がほしいとのこと。',
-      todo:'見積を出す', d:3, shot:1 },
+      tel:'03-5555-0000', mobile:'090-1111-2222', email:'yamada@example.co.jp', url:'www.example.co.jp',
+      addr:'〒100-0005 東京都千代田区丸の内1-1-1', where:'東京ビッグサイトの展示会', d:3,
+      memo:'白髪でめがね。息子さんが野球をしている。うちの倉庫の件で見積がほしいとのこと。' },
     { name:'鈴木 花子', kana:'すずき はなこ', company:'鈴木不動産株式会社', dept:'仲介部', title:'主任',
       tel:'03-5555-1000', mobile:'090-3333-4444', email:'suzuki@example.com',
-      addr:'東京都港区新橋2-2-2', met:back(3), where:'東京ビッグサイトの展示会',
-      memo:'名刺の裏に地図。テナントの話ならこの人。', todo:'お礼のメール', d:3, shot:1 },
+      addr:'東京都港区新橋2-2-2', where:'東京ビッグサイトの展示会', d:3,
+      memo:'名刺の裏に地図。テナントの話ならこの人。' },
     { name:'佐藤 健一', kana:'さとう けんいち', company:'株式会社ヤマダ商事', dept:'総務部',
-      tel:'03-5555-0002', email:'sato@example.co.jp', met:back(3), where:'東京ビッグサイトの展示会',
-      memo:'山田さんの部下。請求の窓口はこちら。', d:3, shot:1 },
-    { name:'田中 みどり', kana:'たなか みどり', company:'みどり印刷', title:'代表',
-      mobile:'080-5555-6666', email:'tanaka@midori.example', met:back(40), where:'商工会の新年会',
-      memo:'チラシと封筒はここに頼んでいる。小ロットも受けてくれる。', d:40, shot:1 },
+      tel:'03-5555-0002', email:'sato@example.co.jp', where:'東京ビッグサイトの展示会', d:3,
+      memo:'山田さんの部下。請求の窓口はこちら。' },
+    { name:'田中 みどり', kana:'たなか みどり', company:'みどり印刷有限会社', title:'代表取締役',
+      mobile:'080-5555-6666', email:'midori@midori-print.jp',
+      addr:'〒460-0008 愛知県名古屋市中区栄3-2-1', where:'商工会の新年会', d:40,
+      memo:'チラシと封筒はここに頼んでいる。小ロットも受けてくれる。' },
     { name:'高橋 学', kana:'たかはし まなぶ', company:'高橋建設株式会社', dept:'工務部', title:'部長',
-      tel:'042-555-7777', met:back(210), where:'現場で紹介された', 
-      memo:'倉庫の改修の見積をもらったことがある。話が早い。', d:210, shot:0 },
-    { name:'渡辺 京子', kana:'わたなべ きょうこ', company:'わたなべ会計事務所', title:'税理士',
-      tel:'03-5555-8888', email:'watanabe@example.net', met:back(320), where:'知人の紹介',
-      memo:'決算のときに相談した。', d:320, shot:0 },
-    { name:'', company:'', met:back(3), where:'東京ビッグサイトの展示会',
-      memo:'ブースで話した人。名刺を撮っただけ。', d:3, shot:1 }
+      tel:'042-555-7777', where:'現場で紹介された', d:210,
+      memo:'倉庫の改修の見積をもらったことがある。話が早い。' }
   ];
   var chain = Promise.resolve();
   S.forEach(function(s, i){
-    var c = { id:uid() + i, ts:at(s.d), touches:[], shot:s.shot ? 1 : 0 };
-    ['name','kana','company','dept','title','tel','mobile','email','url','addr','met','where','memo','todo']
-      .forEach(function(k){ c[k] = s[k] || ''; });
+    var d = back(s.d); d.setHours(14, 20, 0, 0);
+    var c = { id:uid() + i, ts:d.getTime(), shot:1, met:ymd(d) };
+    F.forEach(function(k){ if (k !== 'met') c[k] = s[k] || ''; });
     db.cards.push(c);
-    if (s.shot){
-      var sh = fakeShot(c.name || 'ブースの人', c.company || '会社名がここに入る', c.dept || '');
-      chain = chain.then(function(){ return putShot(c.id, sh); });
-    }
+    var sh = fakeShot(c.name, c.company, [c.dept, c.title].filter(Boolean).join(' '));
+    chain = chain.then(function(){ return putShot(c.id, sh); });
   });
-  db.cards[3].touches = [{ date: back(12), text:'封筒の増刷を電話で依頼。来週あがる。' }];
   db.cards.sort(function(a, b){ return b.ts - a.ts; });
   persist();
-  chain.then(function(){ renderAll(); renderOutput(); });
+  chain.then(function(){ renderGrid(); closeSheet(); toast('サンプルを入れました'); });
 }
 
-/* ===================== 「送る」画面 ===================== */
-function renderOutput(){
-  var co = {}, shot = 0;
-  db.cards.forEach(function(c){
-    if (trim(c.company)) co[norm(c.company)] = 1;
-    if (c.shot) shot++;
-  });
-  $('rp-all').textContent  = db.cards.length;
-  $('rp-shot').textContent = shot;
-  $('rp-co').textContent   = Object.keys(co).length;
-  $('rp-todo').textContent = db.cards.filter(hasTodo).length;
-  $('preview').textContent = buildText();
-  if (navigator.storage && navigator.storage.estimate){
-    navigator.storage.estimate().then(function(e){
-      if (!e || !e.usage) return;
-      $('usage').textContent = '写真をふくめて ' + (e.usage / 1048576).toFixed(1) + ' MB 使っている。';
-    }, function(){});
-  }
-}
-
-/* ===================== 画面の切り替えと配線 ===================== */
-var tabs = [['tab-add','view-add'], ['tab-find','view-find'], ['tab-todo','view-todo'], ['tab-out','view-out']];
-function go(which){
-  tabs.forEach(function(p){
-    var on = p[0] === 'tab-' + which;
-    $(p[0]).setAttribute('aria-selected', on ? 'true' : 'false');
-    $(p[1]).hidden = !on;
-  });
-  if (which === 'out') renderOutput();
-  window.scrollTo(0, 0);
-}
-tabs.forEach(function(p){
-  $(p[0]).addEventListener('click', function(){ go(p[0].slice(4)); });
-});
-
-function renderAll(){
-  $('hdcount').textContent = db.cards.length ? db.cards.length + '枚' : '';
-  renderAdd(); renderFind(); renderTodo(); updateDot();
-}
-
-/* 名刺を開く（どの一覧からでも） */
+/* ===================== 配線 ===================== */
+$('btn-shoot').addEventListener('click', function(){ $('file-cam').click(); });
+$('btn-pick').addEventListener('click',  function(){ $('file-pick').click(); });
+$('file-cam').addEventListener('change',  function(){ startCapture(this.files[0]); this.value = ''; });
+$('file-pick').addEventListener('change', function(){ startCapture(this.files[0]); this.value = ''; });
+$('btn-gear').addEventListener('click', openSettings);
+var qT = null;
+$('q').addEventListener('input', function(){ clearTimeout(qT); qT = setTimeout(renderGrid, 120); });
 document.addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.item[data-id]') : null;
-  if (!b) return;
-  openCard(b.getAttribute('data-id'));
+  var b = ev.target.closest ? ev.target.closest('.tile[data-id]') : null;
+  if (b) openCard(b.getAttribute('data-id'));
 });
-
-/* --- 写真 --- */
-$('btn-cam').addEventListener('click', function(){ $('file-cam').click(); });
-$('btn-pick').addEventListener('click', function(){ $('file-pick').click(); });
-$('file-cam').addEventListener('change', function(){ takeShot(this.files[0]); this.value = ''; });
-$('file-pick').addEventListener('change', function(){ takeShot(this.files[0]); this.value = ''; });
-$('shotbox').addEventListener('click', function(){ if (!pend) $('file-cam').click(); });
-$('btn-rot').addEventListener('click', function(){
-  if (!pend) return;
-  busy(true, '回しています…');
-  rotShot(pend, function(s){
-    busy(false);
-    if (!s){ toast('回せませんでした'); return; }
-    pend = s; putShot('__draft__', s); showPend();
-  });
-});
-$('btn-unshot').addEventListener('click', function(){
-  pend = null; delShot('__draft__'); showPend(); toast('写真を消した');
-});
-
-/* --- 入力 --- */
-FIELDS.forEach(function(k){
-  $('f-' + k).addEventListener('input', function(){
-    saveDraft();
-    if (k === 'name' || k === 'company') renderSaveWho();
-    if (k === 'where') renderWhereChips();
-    if (k === 'todo')  renderTodoChips();
-  });
-});
-$('more').addEventListener('toggle', saveDraft);
-$('where-chips').addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.chip') : null;
-  if (!b) return;
-  var w = b.getAttribute('data-w');
-  setF('where', fv('where') === w ? '' : w);
-  saveDraft(); renderWhereChips();
-});
-$('todo-chips').addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.chip') : null;
-  if (!b) return;
-  var t = b.getAttribute('data-t');
-  setF('todo', fv('todo') === t ? '' : t);
-  saveDraft(); renderTodoChips();
-});
-$('btn-save').addEventListener('click', saveCard);
 document.addEventListener('keydown', function(ev){
-  if ((ev.metaKey || ev.ctrlKey) && ev.key === 'Enter' && !$('view-add').hidden && $('sheet').hidden) saveCard();
-  if (ev.key === 'Escape'){
-    if (!$('viewer').hidden){ $('viewer').hidden = true; $('viewer-img').src = ''; }
-    else if (!$('sheet').hidden) closeSheet();
-  }
+  if (ev.key !== 'Escape') return;
+  if (!$('viewer').hidden){ $('viewer').hidden = true; $('viewer-img').src = ''; }
+  else if (!$('sheet').hidden && !pend) closeSheet();
 });
-$('dup-note').addEventListener('click', function(){
-  $('q').value = this.getAttribute('data-name') || '';
-  sortMode = 'new';
-  renderFind(); go('find');
-});
-
-/* --- さがす --- */
-var qTimer = null;
-$('q').addEventListener('input', function(){
-  clearTimeout(qTimer);
-  qTimer = setTimeout(renderFind, 120);
-});
-$('sort-chips').addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.chip') : null;
-  if (!b) return;
-  sortMode = b.getAttribute('data-sort');
-  var all = this.querySelectorAll('.chip');
-  for (var i = 0; i < all.length; i++){
-    all[i].setAttribute('aria-pressed', all[i].getAttribute('data-sort') === sortMode ? 'true' : 'false');
-  }
-  renderFind();
-});
-
-/* --- 送る --- */
-$('btn-vcf-all').addEventListener('click', saveVcfAll);
-$('sendkind').addEventListener('change', renderOutput);
-$('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本文をコピーしました'); });
-$('btn-mail').addEventListener('click', function(){
-  var to = trim($('mailto').value);
-  openExternal('mailto:' + encodeURIComponent(to) +
-    '?subject=' + encodeURIComponent('名刺の一覧 ' + today()) +
-    '&body=' + encodeURIComponent(buildText()));
-});
-$('btn-line').addEventListener('click', function(){
-  copyText(buildText(), '本文をコピーしました。LINEに貼り付けてください');
-  openExternal('https://line.me/R/share?text=' + encodeURIComponent(buildText().slice(0, 900)));
-});
-$('btn-csv-copy').addEventListener('click', function(){
-  copyText(buildCSV($('csvkind').value), 'CSVをコピーしました');
-});
-$('btn-csv-save').addEventListener('click', function(){
-  var k = $('csvkind').value;
-  var nm = { all:'名簿', post:'宛名', todo:'あとですること' }[k] || '名簿';
-  saveFile('めいしばこ_' + nm + '_' + today() + '.csv', '﻿' + buildCSV(k), 'text/csv;charset=utf-8;');
-});
-$('mailto').value = db.mail;
-$('mailto').addEventListener('change', function(){ db.mail = trim(this.value); persist(); });
-
-$('btn-backup-full').addEventListener('click', function(){ doBackup(true); });
-$('btn-backup-lite').addEventListener('click', function(){ doBackup(false); });
-$('restore-file').addEventListener('change', function(){
-  if (this.files && this.files[0]) doRestore(this.files[0]);
-  this.value = '';
-});
-$('btn-wipe').addEventListener('click', function(){
-  if (!confirm('名刺も写真もすべて消えます。取り消せません。よろしいですか？')) return;
-  if (!confirm('本当に削除しますか？')) return;
-  db.cards = []; db.mail = '';
-  persist(); thumbCache = {}; pend = null;
-  IDB.clear().catch(function(){});
-  clearDraft(false); showPend(); renderAll(); renderOutput();
-  toast('すべて削除しました');
-});
-$('btn-sample').addEventListener('click', function(){
-  if (db.cards.length){ toast('名刺があるときは入れられません。空の状態でどうぞ'); return; }
-  if (!confirm('動きを試すための架空の名刺を7枚入れます。よろしいですか？')) return;
-  loadSample();
-  toast('サンプルを入れました。「記録をすべて削除」で消せます');
-});
-
-/* --- 見た目 --- */
-function applySkin(v){
-  if (v === 'cute') document.documentElement.setAttribute('data-skin', 'cute');
-  else document.documentElement.removeAttribute('data-skin');
-  var all = $('skin-chips').querySelectorAll('.chip');
-  for (var i = 0; i < all.length; i++){
-    all[i].setAttribute('aria-pressed', all[i].getAttribute('data-skin') === v ? 'true' : 'false');
-  }
-}
-$('skin-chips').addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.chip') : null;
-  if (!b) return;
-  var v = b.getAttribute('data-skin');
-  try { localStorage.setItem(SKINKEY, v); } catch(e){}
-  applySkin(v);
-});
-(function(){
-  var v = '';
-  try { v = localStorage.getItem(SKINKEY) || ''; } catch(e){}
-  applySkin(v === 'cute' ? 'cute' : '');
-})();
-
-/* --- 立ち上げ --- */
-loadDraft();
-renderAll();
-setInterval(function(){
-  var n = new Date();
-  $('now').textContent = (n.getMonth()+1) + '/' + n.getDate() + '（' + WD[n.getDay()] + '） ' + hhmm(n.getTime());
-}, 20000);
-(function(){
-  var n = new Date();
-  $('now').textContent = (n.getMonth()+1) + '/' + n.getDate() + '（' + WD[n.getDay()] + '） ' + hhmm(n.getTime());
-})();
+renderGrid();
 })();
 </script>
 </body>
