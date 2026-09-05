@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#c0432b">
+<meta name="theme-color" content="#4f7042">
 <meta name="apple-mobile-web-app-title" content="めいしばこ">
 <title>めいしばこ</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -16,17 +16,17 @@
 <style>
 :root{
   color-scheme:light;
-  --ground:#f6f3ee; --card:#ffffff; --ink:#1c1a17; --sub:#77706a; --rule:#e5dfd5; --field:#f1ece4;
-  --key:#c0432b; --key-deep:#8f2f1d; --key-soft:#fbeae5; --on-key:#ffffff;
-  --ok:#2c6d4f; --mute:#8d857d;
-  --shadow:0 1px 2px rgba(40,30,20,.05), 0 10px 30px rgba(40,30,20,.08);
+  --ground:#f5f4ec; --card:#ffffff; --ink:#1b1d17; --sub:#6f7568; --rule:#e1e2d4; --field:#eef0e6;
+  --key:#4f7042; --key-deep:#33502b; --key-soft:#e7efe1; --on-key:#ffffff;
+  --ok:#3c7a4e; --mute:#868c7d;
+  --shadow:0 1px 2px rgba(30,36,22,.05), 0 10px 30px rgba(30,36,22,.08);
 }
 @media (prefers-color-scheme:dark){
   :root{
     color-scheme:dark;
-    --ground:#141210; --card:#1f1c19; --ink:#ede7de; --sub:#a09890; --rule:#332e28; --field:#191614;
-    --key:#e2775e; --key-deep:#a8412c; --key-soft:#2a1a15; --on-key:#1a0f0c;
-    --ok:#5fae86; --mute:#8e857c;
+    --ground:#131510; --card:#1d201a; --ink:#e8ebdf; --sub:#98a08d; --rule:#2f332a; --field:#171a14;
+    --key:#8dba6f; --key-deep:#456b34; --key-soft:#1a2416; --on-key:#12200c;
+    --ok:#7cc48f; --mute:#848b78;
     --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
   }
 }
@@ -67,7 +67,32 @@ header .sp{flex:1}
 .find input[type=search]:focus-visible{outline:2px solid var(--key);outline-offset:1px}
 .find .mag{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:15px;pointer-events:none}
 
-.count{font-size:11.5px;color:var(--sub);letter-spacing:.08em;margin:18px 4px 0;font-weight:700}
+.listhead{display:flex;align-items:center;gap:10px;margin:18px 2px 0}
+.count{font-size:11.5px;color:var(--sub);letter-spacing:.08em;font-weight:700;flex:1}
+.viewsw{display:flex;gap:3px;background:var(--field);border:1px solid var(--rule);border-radius:9px;padding:3px;flex:none}
+.viewsw button{appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;
+  font-size:12px;font-weight:700;padding:5px 13px;border-radius:7px;cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,36,22,.12)}
+.viewsw button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+/* 文字で見る一覧。メモまで出るので、ぱっと見て思い出せる */
+.listwrap{background:var(--card);border:1px solid var(--rule);border-radius:13px;
+  box-shadow:var(--shadow);padding:0 13px;margin-top:9px}
+.lrow{display:flex;gap:11px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:transparent;border:0;border-top:1px solid var(--rule);padding:11px 0;cursor:pointer}
+.lrow:first-child{border-top:0}
+.lrow:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
+.lth{flex:none;width:54px;height:33px;border-radius:5px;object-fit:cover;display:block;
+  background:var(--field);border:1px solid var(--rule)}
+.lth.no{display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mute);
+  font-weight:700;letter-spacing:.02em}
+.lbody{flex:1;min-width:0}
+.lnm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.4;word-break:break-word}
+.lco{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11.5px;font-weight:700;color:var(--sub);margin-left:7px}
+.lmemo,.lmeta{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lmemo{font-size:12.5px;color:var(--ink);line-height:1.55;margin-top:1px}
+.lmeta{font-size:11px;color:var(--sub);line-height:1.5}
+.lrow .chev{flex:none;color:var(--sub);font-size:19px;line-height:1}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:9px}
 @media (min-width:520px){ .grid{grid-template-columns:1fr 1fr 1fr} }
@@ -174,8 +199,14 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
     <input type="search" id="q" placeholder="名前・会社・場所・メモ　どれでも" autocomplete="off">
   </div>
 
-  <p class="count" id="count"></p>
-  <div class="grid" id="grid"></div>
+  <div class="listhead" id="listhead" hidden>
+    <span class="count" id="count"></span>
+    <div class="viewsw" id="viewsw">
+      <button data-v="grid" aria-pressed="true">写真</button>
+      <button data-v="list" aria-pressed="false">一覧</button>
+    </div>
+  </div>
+  <div id="cards"></div>
   <div id="none" hidden></div>
 
   <p class="credit">写真も記録もこの端末の中だけ。文字を読むのも端末の中で行います。</p>
@@ -652,25 +683,49 @@ function fillThumbs(root){
     })(imgs[i]);
   }
 }
-function renderGrid(){
+function rowHtml(c){
+  var pic = c.shot
+    ? '<img class="lth" src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
+    : '<span class="lth no">写真<br>なし</span>';
+  var meta = [c.met ? fmtDate(c.met) : '', trim(c.where)].filter(Boolean).join('　');
+  return '<button class="lrow" data-id="' + esc(c.id) + '">' + pic +
+    '<span class="lbody">' +
+      '<span class="lnm">' + esc(fullName(c)) +
+        (orgLine(c) ? '<span class="lco">' + esc(orgLine(c)) + '</span>' : '') + '</span>' +
+      (trim(c.memo) ? '<span class="lmemo">' + esc(c.memo.replace(/\n/g, ' ')) + '</span>' : '') +
+      (meta ? '<span class="lmeta">' + esc(meta) + '</span>' : '') +
+    '</span><span class="chev">›</span></button>';
+}
+var VKEY = 'meishi.view', view = 'grid';
+try { if (localStorage.getItem(VKEY) === 'list') view = 'list'; } catch(e){}
+function applyView(){
+  var all = $('viewsw').querySelectorAll('button');
+  for (var i = 0; i < all.length; i++)
+    all[i].setAttribute('aria-pressed', all[i].getAttribute('data-v') === view ? 'true' : 'false');
+}
+function renderCards(){
   var q = trim($('q').value);
   var list = db.cards.filter(function(c){ return matches(c, q); }).sort(function(a, b){ return b.ts - a.ts; });
   $('hdn').textContent = db.cards.length ? db.cards.length + '枚' : '';
-  $('grid').innerHTML = list.map(tileHtml).join('');
-  fillThumbs($('grid'));
+  var box = $('cards');
+  box.className = view === 'list' ? 'listwrap' : 'grid';
+  box.innerHTML = list.map(view === 'list' ? rowHtml : tileHtml).join('');
+  if (!list.length) box.className = '';
+  fillThumbs(box);
   var none = $('none');
+  $('listhead').hidden = !list.length;
+  applyView();
   if (!db.cards.length){
-    $('count').textContent = '';
     none.hidden = false;
     none.innerHTML = '<p class="empty">まだ1枚も入っていない。<br>' +
       '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみる。<br>' +
       '名前も会社も電話も、写真から自分で読みとる。</p>';
   } else if (!list.length){
-    $('count').textContent = '';
     none.hidden = false;
     none.innerHTML = '<p class="empty">見つからなかった。<br>ことばを減らすか、ひらがなだけで探してみる。</p>';
   } else {
-    $('count').textContent = q ? list.length + '枚 見つかった' : '新しい順';
+    $('count').textContent = (q ? list.length + '枚 見つかった' : '新しい順') +
+      (view === 'list' ? '（メモまで出る）' : '');
     none.hidden = true;
   }
 }
@@ -849,7 +904,7 @@ function doSave(){
   if (pend) putShot(c.id, pend);
   pend = null; pendImg = null;
   closeSheet();
-  renderGrid();
+  renderCards();
   toast('しまった');
   window.scrollTo(0, 0);
 }
@@ -898,7 +953,7 @@ function openCard(id){
     $('d-del').addEventListener('click',   function(){
       if (!confirm(fullName(c) + ' の名刺を捨てます。よろしいですか？')) return;
       db.cards = db.cards.filter(function(o){ return o.id !== c.id; });
-      persist(); delShot(c.id); renderGrid(); closeSheet(); toast('捨てた');
+      persist(); delShot(c.id); renderCards(); closeSheet(); toast('捨てた');
     });
     $('d-close').addEventListener('click', closeSheet);
   });
@@ -923,7 +978,7 @@ function openEdit(id){
     $('e-ok').addEventListener('click', function(){
       F.forEach(function(k){ if ($('e-' + k)) c[k] = trim($('e-' + k).value); });
       c.memo = trim($('e-memo').value);
-      persist(); renderGrid(); openCard(id); toast('直した');
+      persist(); renderCards(); openCard(id); toast('直した');
     });
     $('e-cancel').addEventListener('click', function(){ openCard(id); });
   });
@@ -1123,7 +1178,7 @@ function openSettings(){
       db.cards = []; db.mail = '';
       persist(); thumbCache = {};
       IDB.clear()['catch'](function(){});
-      renderGrid(); closeSheet(); toast('すべて削除しました');
+      renderCards(); closeSheet(); toast('すべて削除しました');
     });
     $('g-close').addEventListener('click', closeSheet);
   });
@@ -1165,9 +1220,9 @@ function doRestore(file){
       });
       return chain;
     }).then(function(){
-      busy(false); renderGrid(); closeSheet(); toast('もどしました');
+      busy(false); renderCards(); closeSheet(); toast('もどしました');
     }, function(){
-      busy(false); renderGrid(); closeSheet(); toast('文字はもどったが、写真はもどせなかった');
+      busy(false); renderCards(); closeSheet(); toast('文字はもどったが、写真はもどせなかった');
     });
   };
   r.onerror = function(){ toast('ファイルを読めませんでした'); };
@@ -1181,7 +1236,7 @@ function fakeShot(name, company, sub){
   var cx = cv.getContext('2d');
   var FF = '"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",IPAGothic,sans-serif';
   cx.fillStyle = '#fdfcf9'; cx.fillRect(0, 0, 728, 440);
-  cx.fillStyle = '#c0432b'; cx.fillRect(0, 0, 728, 12);
+  cx.fillStyle = '#4f7042'; cx.fillRect(0, 0, 728, 12);
   cx.fillStyle = '#e6e0d6'; cx.fillRect(48, 268, 300, 2);
   cx.fillStyle = '#3f4750'; cx.font = '600 27px ' + FF; cx.fillText(company, 48, 92);
   cx.fillStyle = '#9aa3ad'; cx.font = '500 19px ' + FF; cx.fillText(sub, 48, 128);
@@ -1228,7 +1283,7 @@ function loadSample(){
   });
   db.cards.sort(function(a, b){ return b.ts - a.ts; });
   persist();
-  chain.then(function(){ renderGrid(); closeSheet(); toast('サンプルを入れました'); });
+  chain.then(function(){ renderCards(); closeSheet(); toast('サンプルを入れました'); });
 }
 
 /* ===================== 配線 ===================== */
@@ -1238,17 +1293,24 @@ $('file-cam').addEventListener('change',  function(){ startCapture(this.files[0]
 $('file-pick').addEventListener('change', function(){ startCapture(this.files[0]); this.value = ''; });
 $('btn-gear').addEventListener('click', openSettings);
 var qT = null;
-$('q').addEventListener('input', function(){ clearTimeout(qT); qT = setTimeout(renderGrid, 120); });
+$('q').addEventListener('input', function(){ clearTimeout(qT); qT = setTimeout(renderCards, 120); });
 document.addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.tile[data-id]') : null;
+  var b = ev.target.closest ? ev.target.closest('.tile[data-id],.lrow[data-id]') : null;
   if (b) openCard(b.getAttribute('data-id'));
+});
+$('viewsw').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('button[data-v]') : null;
+  if (!b) return;
+  view = b.getAttribute('data-v');
+  try { localStorage.setItem(VKEY, view); } catch(e){}
+  renderCards();
 });
 document.addEventListener('keydown', function(ev){
   if (ev.key !== 'Escape') return;
   if (!$('viewer').hidden){ $('viewer').hidden = true; $('viewer-img').src = ''; }
   else if (!$('sheet').hidden && !pend) closeSheet();
 });
-renderGrid();
+renderCards();
 })();
 </script>
 </body>
