@@ -173,6 +173,9 @@ input[type=text],input[type=date],input[type=datetime-local],input[type=tel],inp
 textarea{line-height:1.7;resize:vertical;min-height:84px}
 input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--key);outline-offset:1px}
 .half{display:flex;gap:9px}
+.opt{display:flex;align-items:center;gap:9px;margin:14px 0 0;font-size:13.5px;font-weight:700;
+  color:var(--ink);letter-spacing:0}
+.opt input{width:20px;height:20px;flex:none;accent-color:var(--key)}
 .half > div{flex:1;min-width:0}
 
 .btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14px;
@@ -268,10 +271,6 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
   </div>
   <div class="card" id="pushes"></div>
   <button class="btn primary" id="btn-add-push">＋ 打診する相手を足す</button>
-  <p class="note-hint">
-    エクセルの<b>推進表</b>と同じ、1行＝案件×テナント。情報開示日を入れると「返事待ち ○日」に変わり、
-    <b>14日を過ぎると赤</b>で出ます。<b>急ぐものが上</b>に並び、見送り・成約は下にまわります。
-  </p>
 </section>
 
 <section id="view-book" hidden>
@@ -851,7 +850,7 @@ function propRow(p){
     else if (k === 'yet') n.yet++;
     else if (k === 'deal') n.deal++;
   });
-  var spec = [p.addr, p.area, p.rent].filter(function(x){ return !!x; });
+  var spec = [p.addr, p.area, p.rent, p.zoning, p.staff ? '担当 ' + p.staff : ''].filter(function(x){ return !!x; });
   var parts = [];
   if (n.good) parts.push('前向き' + n.good);
   if (n.talk) parts.push('条件協議' + n.talk);
@@ -1129,6 +1128,8 @@ function openPropSheet(id){
       '<div><label for="p-lessortel">貸主連絡先</label>' +
         '<input type="tel" id="p-lessortel" value="' + esc(p ? p.lessorTel : '') + '" inputmode="tel"></div>' +
     '</div>' +
+    '<label for="p-staff">社内の担当</label>' +
+    '<input type="text" id="p-staff" value="' + esc(p ? p.staff : '') + '" placeholder="例：藤井さん">' +
     '<label for="p-memo">備考</label>' +
     '<textarea id="p-memo">' + esc(p ? p.memo : '') + '</textarea>' +
     '<button class="btn primary" id="p-save">保存する</button>' +
@@ -1157,6 +1158,7 @@ function openPropSheet(id){
     rec.ownerTel = $('p-ownertel').value.trim();
     rec.lessor = $('p-lessor').value.trim();
     rec.lessorTel = $('p-lessortel').value.trim();
+    rec.staff = $('p-staff').value.trim();
     rec.memo = $('p-memo').value.trim();
     if (!p) db.props.push(rec);
     persist(); renderAll(); closeSheet();
@@ -1274,10 +1276,10 @@ function openBulkSheet(kind){
   var isTen = kind === 'ten';
   var cols = isTen
     ? 'テナント名 → 業種 → 窓口会社 → 代表担当者 → 連絡先 → 希望面積 → 備考'
-    : '案件名 → 所在地 → 面積 → 用途地域 → 賃料想定 → 募集開始日 → 地主 → 地主連絡先 → 貸主 → 貸主連絡先 → 備考';
+    : '案件名 → 所在地 → 面積 → 用途地域 → 賃料想定 → 募集開始日 → 地主 → 地主連絡先 → 貸主 → 貸主連絡先 → 社内の担当 → 備考';
   var ph = isTen
     ? '㈱吉野家HD\t飲食（牛丼）\t〇〇不動産\t田中\t06-0000-0000\t40〜60坪\t駅前立地を優先\n松屋フーズ\t飲食（牛丼）\n㈱ゼンショー\t飲食（すき家ほか）'
-    : '伊丹寺本\t伊丹市寺本\t150坪\t準工業\t坪1.2万\n川西市\n小中島';
+    : '伊丹寺本\t寺本6丁目1番・2番\t1272.15㎡（384.83坪）\t準工業地域\t\t2026-08-01\t村上恭子・喜久治\t\t村上恭子・喜久治\t\t藤川さん\n川西市\t\t\t\t\t2026-08-01\t\t\t\t\t中村さん';
 
   openSheet(
     '<h2>' + (isTen ? 'テナントをまとめて追加' : '案件をまとめて追加') + '</h2>' +
@@ -1287,38 +1289,66 @@ function openBulkSheet(kind){
     '<textarea id="b-text" style="min-height:200px" placeholder="' + esc(ph) + '"></textarea>' +
     '<p class="hint">タブ区切り（エクセルからのコピー）でも、カンマ区切りでも読めます。<br>' +
       '同じ名前がすでにあるものは飛ばします。</p>' +
+    '<label class="opt"><input type="checkbox" id="b-clear">' +
+      '<span>先にいまの' + (isTen ? 'テナント名簿' : '案件一覧') + 'を消してから入れる</span></label>' +
     '<button class="btn primary" id="b-save">この内容で追加する</button>' +
     '<button class="btn" id="b-cancel">閉じる</button>'
   );
 
   $('b-save').addEventListener('click', function(){
     var lines = $('b-text').value.split('\n');
-    var added = 0, skipped = 0;
-    for (var i = 0; i < lines.length; i++){
+    var add = [], seen = {}, i, j;
+    for (i = 0; i < lines.length; i++){
       var line = lines[i].replace(/\r/g, '');
       if (!line.trim()) continue;
       var f = line.indexOf('\t') >= 0 ? line.split('\t') : line.split(',');
       var name = (f[0] || '').trim();
       if (!name || name === 'テナント名' || name === '案件名') continue;
-      var list = isTen ? db.tenants : db.props, dup = false;
-      for (var j = 0; j < list.length; j++) if (list[j].name === name) dup = true;
-      if (dup){ skipped++; continue; }
-      if (isTen){
-        db.tenants.push({ id:uid(), ts:Date.now() + i, name:name,
-          cat:(f[1] || '').trim(), agency:(f[2] || '').trim(), person:(f[3] || '').trim(),
-          tel:(f[4] || '').trim(), wantArea:(f[5] || '').trim(), memo:(f[6] || '').trim() });
-      } else {
-        db.props.push({ id:uid(), ts:Date.now() + i, name:name,
-          addr:(f[1] || '').trim(), area:(f[2] || '').trim(), zoning:(f[3] || '').trim(),
-          rent:(f[4] || '').trim(), startDate:normDate(f[5]), owner:(f[6] || '').trim(),
-          ownerTel:(f[7] || '').trim(), lessor:(f[8] || '').trim(), lessorTel:(f[9] || '').trim(),
-          memo:(f[10] || '').trim() });
-      }
-      added++;
+      if (seen[name]) continue;                       /* 貼り付けの中の重複 */
+      seen[name] = 1;
+      add.push(isTen
+        ? { id:uid(), ts:Date.now() + i, name:name,
+            cat:(f[1] || '').trim(), agency:(f[2] || '').trim(), person:(f[3] || '').trim(),
+            tel:(f[4] || '').trim(), wantArea:(f[5] || '').trim(), memo:(f[6] || '').trim() }
+        : { id:uid(), ts:Date.now() + i, name:name,
+            addr:(f[1] || '').trim(), area:(f[2] || '').trim(), zoning:(f[3] || '').trim(),
+            rent:(f[4] || '').trim(), startDate:normDate(f[5]), owner:(f[6] || '').trim(),
+            ownerTel:(f[7] || '').trim(), lessor:(f[8] || '').trim(), lessorTel:(f[9] || '').trim(),
+            staff:(f[10] || '').trim(), memo:(f[11] || '').trim() });
     }
-    if (!added && !skipped){ toast('追加できる行がありませんでした'); return; }
+    if (!add.length){ toast('追加できる行がありませんでした'); return; }
+
+    if ($('b-clear').checked){
+      var msg = isTen
+        ? 'いまのテナント名簿 ' + db.tenants.length + '社をすべて消してから、' + add.length + '社を入れます。'
+        : 'いまの案件一覧 ' + db.props.length + '件をすべて消してから、' + add.length + '件を入れます。';
+      if (db.rows.length) msg += '\n推進の ' + db.rows.length + '行も消えます。';
+      if (db.logs.length) msg += '\nメモ ' + db.logs.length + '件は' +
+        (isTen ? '「相手なし」' : '「案件なし」') + 'として残ります。';
+      msg += '\n元に戻せません。よろしいですか？';
+      if (!confirm(msg)) return;
+      if (isTen){
+        db.logs.forEach(function(g){ g.tenantId = ''; g.propId = ''; });
+        db.rows = []; db.tenants = [];
+        draft.tenantId = ''; draft.propId = '';
+      } else {
+        db.logs.forEach(function(g){ g.propId = ''; });
+        db.rows = []; db.props = [];
+        draft.propId = '';
+      }
+      saveDraft();
+    }
+
+    var list = isTen ? db.tenants : db.props;
+    var added = 0, skipped = 0;
+    for (i = 0; i < add.length; i++){
+      var dup = false;
+      for (j = 0; j < list.length; j++) if (list[j].name === add[i].name) dup = true;
+      if (dup){ skipped++; continue; }
+      list.push(add[i]); added++;
+    }
     persist(); renderAll(); closeSheet();
-    toast(added + '件を追加しました' + (skipped ? '（同じ名前の' + skipped + '件は飛ばしました）' : ''));
+    toast(added + '件を入れました' + (skipped ? '（同じ名前の' + skipped + '件は飛ばしました）' : ''));
   });
   $('b-cancel').addEventListener('click', closeSheet);
 }
@@ -1421,10 +1451,10 @@ function buildCSV(kind){
       rows.push([g.date, hhmm(g.ts), g.tenantId ? tenName(g.tenantId) : '', propName(g.propId), g.kind, g.text]);
     });
   } else if (kind === 'prop'){
-    rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','備考']];
+    rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','社内の担当','備考']];
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
       rows.push([p.name, p.addr, p.area, p.zoning, p.rent, p.startDate, p.owner, p.ownerTel,
-        p.lessor, p.lessorTel, p.memo]);
+        p.lessor, p.lessorTel, p.staff, p.memo]);
     });
   } else if (kind === 'ten'){
     rows = [['テナント名','業種','窓口会社','代表担当者','連絡先','希望面積','備考']];
