@@ -1,0 +1,16 @@
+{
+  "name": "ゆうちメモ",
+  "short_name": "ゆうちメモ",
+  "description": "テナント誘致の連絡メモ。電話が来たらその場で書く。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#15111d",
+  "theme_color": "#5b3a86",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

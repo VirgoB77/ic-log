@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#24476f">
-<title>テナント誘致メモ</title>
+<meta name="theme-color" content="#5b3a86">
+<meta name="apple-mobile-web-app-title" content="ゆうちメモ">
+<title>ゆうちメモ</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Roboto+Mono:wght@500;700&display=swap">
@@ -265,7 +270,7 @@ try {
 <div class="wrap">
 <header>
   <div class="brand">
-    <h1>テナント誘致メモ</h1>
+    <h1>ゆうちメモ</h1>
     <span class="count mono" id="hdcount"></span>
   </div>
   <nav role="tablist">
@@ -1833,7 +1838,7 @@ $('btn-csv-save').addEventListener('click', function(){
 $('btn-backup').addEventListener('click', function(){
   var data = JSON.stringify({ app:'tenant-memo', v:2, saved:new Date().toISOString(),
     props:db.props, tenants:db.tenants, rows:db.rows, logs:db.logs, mail:db.mail }, null, 1);
-  saveFile('テナント誘致メモ_' + today() + '.json', data, 'application/json');
+  saveFile('ゆうちメモ_バックアップ_' + today() + '.json', data, 'application/json');
 });
 
 $('restore-file').addEventListener('change', function(){

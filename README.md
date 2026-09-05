@@ -54,7 +54,7 @@ https://virgob77.github.io/ic-log/
 | `tools/build.sh` | `src` と `data` から `index.html` を生成する |
 | `tools/fetch-ic.sh` | IC一覧を OpenStreetMap から取り直す |
 | `dist/artifact.html` | 公開用（`build.sh` が生成） |
-| `tenant/index.html` | もうひとつのアプリ（テナント誘致メモ）。単体で動く |
+| `tenant/` | もうひとつのアプリ「ゆうちメモ」（テナント誘致の連絡メモ）。単体で動く |
 
 ### 作り直すとき
 
@@ -68,7 +68,7 @@ bash tools/build.sh
 bash tools/fetch-ic.sh && bash tools/build.sh
 ```
 
-## もうひとつのアプリ：テナント誘致メモ
+## もうひとつのアプリ：ゆうちメモ（テナント誘致）
 
 電話が来たらその場で書くためのメモ帳。書いた時刻が自動で残り、
 誰から・いつ・どんな連絡があったかがそのまま記録になる。
