@@ -238,6 +238,10 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
     <div class="pad-label"><span>どの案件</span></div>
     <div class="chips" id="prop-chips"></div>
   </div>
+  <div id="via-wrap" hidden>
+    <div class="pad-label"><span>話した相手</span></div>
+    <div class="chips" id="via-chips"></div>
+  </div>
   <div class="pad-label"><span>連絡のかたち</span></div>
   <div class="chips" id="kind-chips"></div>
 
@@ -280,20 +284,20 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
   </div>
 
   <div id="book-prop">
-    <div id="props"></div>
     <div class="row">
       <button class="btn primary" id="btn-add-prop">＋ 案件を追加</button>
       <button class="btn" id="btn-bulk-prop">まとめて追加</button>
     </div>
+    <div id="props"></div>
   </div>
 
   <div id="book-ten" hidden>
     <div class="tools"><input type="search" id="q-ten" placeholder="テナント名・業種・窓口会社で探す" autocomplete="off"></div>
-    <div class="card" id="tenants"></div>
     <div class="row">
       <button class="btn primary" id="btn-add-ten">＋ テナントを追加</button>
       <button class="btn" id="btn-bulk-ten">まとめて追加</button>
     </div>
+    <div class="card" id="tenants"></div>
   </div>
 
   <p class="note-hint">
@@ -518,7 +522,7 @@ function byActivity(a, b){
 }
 
 /* ===================== メモの画面 ===================== */
-var draft = { tenantId:'', propId:'', kind:KINDS[0] };
+var draft = { tenantId:'', propId:'', via:'', kind:KINDS[0] };
 var shown = 20;
 
 function loadDraft(){
@@ -528,16 +532,22 @@ function loadDraft(){
   if (typeof d.text === 'string') $('memo').value = d.text;
   draft.tenantId = tenById(d.tenantId) ? d.tenantId : '';
   draft.propId = propById(d.propId) ? d.propId : '';
+  draft.via = draft.tenantId && typeof d.via === 'string' ? d.via : '';
   if (KINDS.indexOf(d.kind) >= 0) draft.kind = d.kind;
 }
 function saveDraft(){
   try {
     localStorage.setItem(DKEY, JSON.stringify({ text:$('memo').value,
-      tenantId:draft.tenantId, propId:draft.propId, kind:draft.kind }));
+      tenantId:draft.tenantId, propId:draft.propId, via:draft.via, kind:draft.kind }));
   } catch(e){}
 }
 function clearDraft(){ try { localStorage.removeItem(DKEY); } catch(e){} }
 
+/* 窓口会社が登録されていれば、既定の話し相手はそこにする */
+function autoVia(tenantId){
+  var t = tenById(tenantId);
+  return t && t.agency ? t.agency : '';
+}
 function autoProp(tenantId){
   var rs = rowsOfTen(tenantId).sort(byActivity);
   for (var i = 0; i < rs.length; i++) if (isLive(rs[i])) return rs[i].propId;
@@ -594,6 +604,18 @@ function renderWhoChips(){
     $('prop-chips').innerHTML = ph;
   }
 
+  var t = tenById(draft.tenantId);
+  var vwrap = $('via-wrap');
+  if (!t || !t.agency){ vwrap.hidden = true; }
+  else {
+    vwrap.hidden = false;
+    $('via-chips').innerHTML =
+      '<button class="chip" data-via="" aria-pressed="' + (draft.via ? 'false' : 'true') + '">' +
+        esc(t.name) + '　直接</button>' +
+      '<button class="chip" data-via="' + esc(t.agency) + '" aria-pressed="' +
+        (draft.via ? 'true' : 'false') + '">窓口　' + esc(t.agency) + '</button>';
+  }
+
   var kh = '';
   KINDS.forEach(function(k){
     kh += '<button class="chip sm" data-kind="' + esc(k) + '" aria-pressed="' +
@@ -602,7 +624,8 @@ function renderWhoChips(){
   $('kind-chips').innerHTML = kh;
 
   var who = draft.tenantId
-    ? tenName(draft.tenantId) + (draft.propId ? '　／　' + propName(draft.propId) : '　／　案件は決まっていない')
+    ? tenName(draft.tenantId) + (draft.via ? '（窓口 ' + draft.via + '）' : '') +
+      (draft.propId ? '　／　' + propName(draft.propId) : '　／　案件は決まっていない')
     : '相手はあとから決められます';
   $('save-who').textContent = who;
 
@@ -633,6 +656,7 @@ function memoRowHtml(g){
   var head = g.tenantId
     ? '<span>' + esc(tenName(g.tenantId)) + '</span>'
     : '<span class="bdg ask">だれから？</span>';
+  if (g.via) head += '<span class="bdg plain">窓口 ' + esc(g.via) + '</span>';
   if (g.propId) head += '<span class="bdg plain">' + esc(propName(g.propId)) + '</span>';
   if (g.kind) head += '<span class="bdg plain">' + esc(g.kind) + '</span>';
   return '<button class="tl" data-log="' + esc(g.id) + '">' +
@@ -690,7 +714,8 @@ function saveMemo(){
   var text = $('memo').value.trim();
   if (!text){ toast('メモが空です'); $('memo').focus(); return; }
   var rec = { id:uid(), ts:Date.now(), date:today(), tenantId:draft.tenantId,
-    propId:draft.tenantId ? draft.propId : '', kind:draft.kind, text:text };
+    propId:draft.tenantId ? draft.propId : '', via:draft.tenantId ? draft.via : '',
+    kind:draft.kind, text:text };
   db.logs.push(rec);
 
   var made = false;
@@ -700,7 +725,7 @@ function saveMemo(){
     made = true;
   }
   $('memo').value = '';
-  draft.tenantId = ''; draft.propId = '';
+  draft.tenantId = ''; draft.propId = ''; draft.via = '';
   clearDraft(); persist(); shown = Math.max(shown, 20); renderAll();
   toast(rec.tenantId
     ? tenName(rec.tenantId) + ' のメモを保存しました' + (made ? '（推進表に行を作りました）' : '')
@@ -758,7 +783,7 @@ function openPicker(kind){
       var rec = { id:uid(), ts:Date.now(), name:qq };
       if (isTen){
         rec.cat = ''; rec.agency = ''; rec.person = ''; rec.tel = ''; rec.wantArea = ''; rec.memo = '';
-        db.tenants.push(rec); draft.tenantId = rec.id; draft.propId = '';
+        db.tenants.push(rec); draft.tenantId = rec.id; draft.propId = ''; draft.via = '';
       } else {
         rec.addr = ''; rec.area = ''; rec.zoning = ''; rec.rent = ''; rec.startDate = '';
         rec.owner = ''; rec.ownerTel = ''; rec.lessor = ''; rec.lessorTel = ''; rec.memo = '';
@@ -775,7 +800,7 @@ function openPicker(kind){
     if (!b) return;
     ev.stopPropagation();
     var id = b.getAttribute('data-pick');
-    if (isTen){ draft.tenantId = id; draft.propId = id ? autoProp(id) : ''; }
+    if (isTen){ draft.tenantId = id; draft.propId = id ? autoProp(id) : ''; draft.via = id ? autoVia(id) : ''; }
     else { draft.propId = id; }
     saveDraft(); renderMemoTab(); closeSheet();
   });
@@ -807,7 +832,8 @@ function pushRow(r){
 function matchRow(r, q){
   if (!q) return true;
   var t = tenById(r.tenantId) || {};
-  return [tenName(r.tenantId), t.cat, t.agency, propName(r.propId), r.person, r.status,
+  var via = logsOfPair(r.tenantId, r.propId).map(function(g){ return g.via || ''; }).join(' ');
+  return [tenName(r.tenantId), t.cat, t.agency, via, propName(r.propId), r.person, r.status,
     memoBlock(r.tenantId, r.propId)].join(' ').toLowerCase().indexOf(q) >= 0;
 }
 function renderPushFilter(){
@@ -959,6 +985,8 @@ function openLogSheet(id){
     '<select id="g-ten">' + tenOpts(g.tenantId, '（まだ決めていない）') + '</select>' +
     '<label for="g-prop">どの案件</label>' +
     '<select id="g-prop">' + propOpts(g.propId) + '</select>' +
+    '<label for="g-via">話した相手（窓口会社。直接なら空のまま）</label>' +
+    '<input type="text" id="g-via" value="' + esc(g.via || '') + '" placeholder="例：〇〇不動産">' +
     '<div class="half">' +
       '<div><label for="g-when">日時</label>' +
         '<input type="datetime-local" id="g-when" value="' + esc(forInput(g.ts)) + '"></div>' +
@@ -979,6 +1007,7 @@ function openLogSheet(id){
     if (!text){ toast('メモが空です'); return; }
     g.tenantId = $('g-ten').value;
     g.propId = g.tenantId ? $('g-prop').value : '';
+    g.via = g.tenantId ? $('g-via').value.trim() : '';
     g.kind = $('g-kind').value;
     g.text = text;
     var w = $('g-when').value;
@@ -1402,6 +1431,7 @@ function buildText(){
     s.logs.forEach(function(g){
       if (g.date !== day){ day = g.date; out.push('　' + fmtDate(g.date)); }
       var who = g.tenantId ? tenName(g.tenantId) : '（相手なし）';
+      if (g.via) who += '（窓口 ' + g.via + '）';
       if (g.propId) who += '／' + propName(g.propId);
       out.push('　　' + hhmm(g.ts) + '　' + who + (g.kind ? '　' + g.kind : ''));
       out.push('　　　' + g.text.replace(/\n/g, '\n　　　'));
@@ -1446,9 +1476,10 @@ function csvQuote(rows){
 function buildCSV(kind){
   var rows;
   if (kind === 'memo'){
-    rows = [['日付','時刻','テナント名','案件','連絡のかたち','メモ']];
+    rows = [['日付','時刻','テナント名','窓口会社','案件','連絡のかたち','メモ']];
     summarize().logs.forEach(function(g){
-      rows.push([g.date, hhmm(g.ts), g.tenantId ? tenName(g.tenantId) : '', propName(g.propId), g.kind, g.text]);
+      rows.push([g.date, hhmm(g.ts), g.tenantId ? tenName(g.tenantId) : '', g.via || '',
+        propName(g.propId), g.kind, g.text]);
     });
   } else if (kind === 'prop'){
     rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','社内の担当','備考']];
@@ -1648,8 +1679,8 @@ $('who-chips').addEventListener('click', function(ev){
   if (act === 'newten'){ openTenSheet(null); return; }
   var id = b.getAttribute('data-ten');
   if (id == null) return;
-  if (draft.tenantId === id){ draft.tenantId = ''; draft.propId = ''; }
-  else { draft.tenantId = id; draft.propId = autoProp(id); }
+  if (draft.tenantId === id){ draft.tenantId = ''; draft.propId = ''; draft.via = ''; }
+  else { draft.tenantId = id; draft.propId = autoProp(id); draft.via = autoVia(id); }
   saveDraft(); renderWhoChips();
 });
 $('prop-chips').addEventListener('click', function(ev){
@@ -1660,6 +1691,13 @@ $('prop-chips').addEventListener('click', function(ev){
   var id = b.getAttribute('data-prop');
   if (id == null) return;
   draft.propId = id;
+  saveDraft(); renderWhoChips();
+});
+$('via-chips').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  ev.stopPropagation();
+  draft.via = b.getAttribute('data-via') || '';
   saveDraft(); renderWhoChips();
 });
 $('kind-chips').addEventListener('click', function(ev){
