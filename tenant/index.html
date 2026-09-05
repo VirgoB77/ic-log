@@ -156,6 +156,15 @@ nav button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
 
 .tools{margin-top:12px}
 
+/* 相手を選んだときに出る、前回までのやりとり */
+.recall{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:2px 13px 4px;
+  margin-top:6px;box-shadow:var(--shadow)}
+.recall .cap{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--sub);
+  letter-spacing:.08em;padding:9px 0 3px}
+.recall .cap .line{flex:1;height:1px;background:var(--rule)}
+.recall .tl{padding:9px 0}
+.recall .tl .txt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
 label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:15px 0 6px}
 input[type=text],input[type=date],input[type=datetime-local],input[type=tel],input[type=search],select,textarea{
   width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
@@ -229,6 +238,8 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
   <div class="pad-label"><span>連絡のかたち</span></div>
   <div class="chips" id="kind-chips"></div>
 
+  <div class="recall" id="recall" hidden></div>
+
   <textarea id="memo" placeholder="聞いたことをそのまま書く。
 例）出店担当の山田様から電話。伊丹寺本の件、賃料が坪1.2万なら前向き。駐車場15台が取れるか確認したいとのこと。折り返しは来週。"></textarea>
 
@@ -251,32 +262,15 @@ pre.out{white-space:pre-wrap;word-break:break-word;font-family:"Roboto Mono",ui-
 </section>
 
 <section id="view-push" hidden>
-  <div class="stat">
-    <div class="late"><b id="st-late">0</b><span>14日超</span></div>
-    <div><b id="st-wait">0</b><span>返事待ち</span></div>
-    <div class="good"><b id="st-good">0</b><span>前向き</span></div>
-    <div><b id="st-talk">0</b><span>条件協議</span></div>
-  </div>
   <div class="tools">
     <input type="search" id="q-push" placeholder="テナント名・案件・担当者・メモで探す" autocomplete="off">
     <select id="filter-prop"></select>
-    <div class="chips" id="chips-push">
-      <button class="chip sm" data-f="live" aria-pressed="true">進行中</button>
-      <button class="chip sm" data-f="late" aria-pressed="false">14日超</button>
-      <button class="chip sm" data-f="wait" aria-pressed="false">返事待ち</button>
-      <button class="chip sm" data-f="yet" aria-pressed="false">未打診</button>
-      <button class="chip sm" data-f="前向き" aria-pressed="false">前向き</button>
-      <button class="chip sm" data-f="条件協議中" aria-pressed="false">条件協議中</button>
-      <button class="chip sm" data-f="見送り" aria-pressed="false">見送り</button>
-      <button class="chip sm" data-f="deal" aria-pressed="false">成約</button>
-      <button class="chip sm" data-f="all" aria-pressed="false">すべて</button>
-    </div>
   </div>
   <div class="card" id="pushes"></div>
   <button class="btn primary" id="btn-add-push">＋ 打診する相手を足す</button>
   <p class="note-hint">
     エクセルの<b>推進表</b>と同じ、1行＝案件×テナント。情報開示日を入れると「返事待ち ○日」に変わり、
-    <b>14日を過ぎると赤</b>で出ます。メモはこの行にぶら下がります。
+    <b>14日を過ぎると赤</b>で出ます。<b>急ぐものが上</b>に並び、見送り・成約は下にまわります。
   </p>
 </section>
 
@@ -612,6 +606,28 @@ function renderWhoChips(){
     ? tenName(draft.tenantId) + (draft.propId ? '　／　' + propName(draft.propId) : '　／　案件は決まっていない')
     : '相手はあとから決められます';
   $('save-who').textContent = who;
+
+  renderRecall();
+}
+
+/* 相手を選んだら、その先との直近のやりとりを出す（電話中に前回の話が見える） */
+function renderRecall(){
+  var box = $('recall');
+  if (!draft.tenantId){ box.hidden = true; box.innerHTML = ''; return; }
+  var ls = logsOfTen(draft.tenantId).slice(0, 2);
+  if (!ls.length){ box.hidden = true; box.innerHTML = ''; return; }
+  box.hidden = false;
+  box.innerHTML = '<div class="cap"><span>' + esc(tenName(draft.tenantId)) +
+    ' との前回までのやりとり</span><span class="line"></span></div>' +
+    ls.map(function(g){
+      return '<button class="tl" data-log="' + esc(g.id) + '">' +
+        '<div class="time">' + esc(md(g.date)) + '</div>' +
+        '<div class="body"><div class="head">' +
+          (g.propId ? '<span class="bdg plain">' + esc(propName(g.propId)) + '</span>' : '') +
+          (g.kind ? '<span class="bdg plain">' + esc(g.kind) + '</span>' : '') +
+        '</div><div class="txt">' + esc(g.text) + '</div></div>' +
+        '<div class="chev">›</div></button>';
+    }).join('');
 }
 
 function memoRowHtml(g){
@@ -769,8 +785,6 @@ function openPicker(kind){
 }
 
 /* ===================== 画面：推進 ===================== */
-var pushFilter = 'live';
-
 function pushRow(r){
   var s = stateOf(r);
   var g = logsOfRow(r)[0];
@@ -797,18 +811,6 @@ function matchRow(r, q){
   return [tenName(r.tenantId), t.cat, t.agency, propName(r.propId), r.person, r.status,
     memoBlock(r.tenantId, r.propId)].join(' ').toLowerCase().indexOf(q) >= 0;
 }
-function passPush(r){
-  var s = stateOf(r);
-  switch (pushFilter){
-    case 'live': return s.k !== 'deal' && s.k !== '見送り';
-    case 'late': return s.k === 'late';
-    case 'wait': return s.k === 'wait' || s.k === 'late' || s.k === 'reply';
-    case 'yet':  return s.k === 'yet';
-    case 'deal': return s.k === 'deal';
-    case 'all':  return true;
-    default:     return s.k === pushFilter;
-  }
-}
 function renderPushFilter(){
   var sel = $('filter-prop'), cur = sel.value;
   var h = '<option value="">すべての案件</option>';
@@ -819,21 +821,10 @@ function renderPushFilter(){
   if (cur && propById(cur)) sel.value = cur;
 }
 function renderPushes(){
-  var late = 0, wait = 0, good = 0, talk = 0;
-  db.rows.forEach(function(r){
-    var k = stateOf(r).k;
-    if (k === 'late'){ late++; wait++; }
-    else if (k === 'wait' || k === 'reply') wait++;
-    else if (k === '前向き') good++;
-    else if (k === '条件協議中') talk++;
-  });
-  $('st-late').textContent = late; $('st-wait').textContent = wait;
-  $('st-good').textContent = good; $('st-talk').textContent = talk;
-
   var q = ($('q-push').value || '').trim().toLowerCase();
   var only = $('filter-prop').value;
   var list = db.rows.filter(function(r){
-    return passPush(r) && matchRow(r, q) && (!only || r.propId === only);
+    return matchRow(r, q) && (!only || r.propId === only);
   }).sort(function(a, b){
     var sa = stateOf(a), sb = stateOf(b);
     if (sa.sort !== sb.sort) return sa.sort - sb.sort;
@@ -1576,10 +1567,13 @@ function loadSample(){
     [5, 16, 10, t4.id, p2.id, 'メール', '情報開示。'],
     [2, 9, 15, t4.id, p2.id, '電話（先方）', '前向きに検討したいと連絡あり。現地を見たいとのことで日程調整中。'],
     [35, 13, 0, t5.id, p2.id, '電話（先方）', '駐車場が確保できないため今回は見送りと回答。'],
-    [0, 8, 45, '', '', '電話（先方）', '駅前の物件について問い合わせ。会社名を聞きそびれた。折り返し番号は 06-0000-1111。']
+    [0, null, null, '', '', '電話（先方）', '駅前の物件について問い合わせ。会社名を聞きそびれた。折り返し番号は 06-0000-1111。']
   ];
   db.logs = L.map(function(a, i){
-    var t = at(a[0], a[1], a[2]);
+    /* 時刻が null のものは「90分前」。試す時刻によって未来の記録にならないようにする */
+    var t = a[1] == null
+      ? (function(){ var d = new Date(Date.now() - 90 * 60000); return { ts:d.getTime(), date:ymd(d) }; })()
+      : at(a[0], a[1], a[2]);
     return { id:uid(), ts:t.ts + i, date:t.date, tenantId:a[3], propId:a[4], kind:a[5], text:a[6] };
   });
   persist(); renderAll();
@@ -1683,15 +1677,6 @@ $('btn-bulk-ten').addEventListener('click', function(){ openBulkSheet('ten'); })
 $('q-push').addEventListener('input', renderPushes);
 $('q-ten').addEventListener('input', renderTenants);
 $('filter-prop').addEventListener('change', renderPushes);
-$('chips-push').addEventListener('click', function(ev){
-  var b = ev.target.closest ? ev.target.closest('.chip') : null;
-  if (!b) return;
-  ev.stopPropagation();
-  pushFilter = b.getAttribute('data-f');
-  var all = this.querySelectorAll('.chip');
-  for (var i = 0; i < all.length; i++) all[i].setAttribute('aria-pressed', all[i] === b ? 'true' : 'false');
-  renderPushes();
-});
 
 $('period').addEventListener('change', renderOutput);
 $('btn-copy').addEventListener('click', function(){ copyText(buildText(), '本文をコピーしました'); });
