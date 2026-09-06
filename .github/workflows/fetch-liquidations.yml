@@ -9,6 +9,7 @@ on:
     paths:
       - ".github/workflows/fetch-liquidations.yml"
       - "stoploss/fetch_liquidations.py"
+      - "stoploss/fetch_coinglass.py"
   workflow_dispatch:
     inputs:
       start:
@@ -18,6 +19,10 @@ on:
       end:
         description: "いつまで取るか (YYYY-MM-DD)。空なら昨日まで"
         default: ""
+        required: false
+      coinglass_start:
+        description: "Coinglass はいつからさかのぼるか (YYYY-MM-DD)"
+        default: "2020-01-01"
         required: false
   schedule:
     - cron: "0 1 * * *"   # 毎日 01:00 UTC = 日本時間 10:00（main に入ってから動き始める）
@@ -47,7 +52,12 @@ jobs:
       - name: 部品を入れる
         run: pip install --quiet pandas requests
 
-      - name: 取りに行く
+      - name: Coinglass から取りに行く（鍵が Secrets に入っているときだけ）
+        env:
+          COINGLASS_API_KEY: ${{ secrets.COINGLASS_API_KEY }}
+        run: python3 stoploss/fetch_coinglass.py --start ${{ github.event.inputs.coinglass_start || '2020-01-01' }}
+
+      - name: Binance の無料データを取りに行く
         run: |
           ARGS="--start ${{ github.event.inputs.start || '2023-01-01' }}"
           if [ -n "${{ github.event.inputs.end }}" ]; then ARGS="$ARGS --end ${{ github.event.inputs.end }}"; fi

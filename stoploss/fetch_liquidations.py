@@ -10,14 +10,13 @@ GitHub Actions（GitHub のコンピュータ）で動かす前提。手元の�
   2. Binance 先物 BTCUSDT の建玉・ロングショート比率（5分ごと） … 無料公開。今日まで続いている
        https://data.binance.vision/data/futures/um/daily/metrics/BTCUSDT/BTCUSDT-metrics-YYYY-MM-DD.zip
      → 1時間ごとの終わりの値にまとめる。建玉が急に減った所＝清算の目印
-  3. 直近の清算（OKX と Bybit の公開窓口、鍵なし） … 毎日取りに行って積み上げる
+  3. 直近の清算（OKX の公開窓口、鍵なし） … 毎日取りに行って積み上げる
 
 出力（すべて小さい CSV）
   data/liq/binance_liq_BTCUSDT_1h.csv     1時間ごとの清算
   data/liq/binance_liq_BTCUSDT_1d.csv     1日ごとの清算
   data/liq/binance_metrics_BTCUSDT_1h.csv 1時間ごとの建玉など
   data/liq/recent_liq_okx.csv             OKX の直近清算（積み上げ）
-  data/liq/recent_liq_bybit.csv           Bybit の直近清算（積み上げ）
   data/liq/state.json                     どこまで取ったかの覚え書き
 
 使い方
@@ -117,9 +116,9 @@ def fetch_binance_daily(kind, start, end, state, parse_day, out_name):
         ds = d.isoformat()
         if ds in done:
             continue
-        if ds in missing and last_ok and ds < last_ok:
-            continue  # 過去の穴は取り直さない
-        if last_ok and ds > last_ok and consecutive_missing >= GIVE_UP_AFTER:
+        if ds in missing and (d < end - dt.timedelta(days=GIVE_UP_AFTER)):
+            continue  # 昔の「無かった日」は取り直さない（直近だけ見直す）
+        if consecutive_missing >= GIVE_UP_AFTER and (last_ok is None or ds > last_ok):
             print(f"  {kind}: {GIVE_UP_AFTER}日続けて無いので、ここで打ち切り ({ds})")
             break
         url = f"{BASE}/{kind}/{SYMBOL}/{SYMBOL}-{kind}-{ds}.zip"
@@ -179,18 +178,7 @@ def fetch_recent():
         append_recent("recent_liq_okx.csv", rows, ["time", "side", "price", "size_contracts"])
     except Exception as e:
         print(f"  ! OKX: {e}")
-    # Bybit: 鍵なし。直近の清算記録
-    try:
-        r = requests.get("https://api.bybit.com/v5/market/recent-liq-records",
-                         params={"category": "linear", "symbol": "BTCUSDT", "limit": "1000"}, timeout=60, headers=UA)
-        r.raise_for_status()
-        rows = []
-        for d in r.json().get("result", {}).get("list", []):
-            rows.append({"time": pd.to_datetime(int(d["time"]), unit="ms"), "side": d.get("side"),
-                         "price": float(d.get("price", 0) or 0), "size": float(d.get("size", 0) or 0)})
-        append_recent("recent_liq_bybit.csv", rows, ["time", "side", "price", "size"])
-    except Exception as e:
-        print(f"  ! Bybit: {e}")
+    # Bybit の窓口は GitHub のコンピュータからだと 403 で拒まれるので外した
 
 
 def append_recent(name, rows, key):
@@ -230,7 +218,7 @@ def main():
         fetch_binance_daily("metrics", start, end, state, metrics_hourly_from_day, f"binance_metrics_{SYMBOL}_1h.csv")
         save_state(state)
     if not a.skip_recent:
-        print("== 直近の清算（OKX / Bybit）")
+        print("== 直近の清算（OKX）")
         fetch_recent()
     state["last_run"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     save_state(state)

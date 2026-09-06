@@ -78,9 +78,9 @@ Coinglass のような清算の画面は、Claude の作業場所からは読め
 
 | ファイル | 中身 | 期間 |
 | --- | --- | --- |
-| `binance_liq_BTCUSDT_1h.csv` / `_1d.csv` | Binance 先物の強制清算をロング・ショート別に金額と件数でまとめたもの | 2023年〜2024年3月末（Binance の公開が止まっている） |
+| `binance_liq_BTCUSDT_1h.csv` / `_1d.csv` | Binance 先物の強制清算をロング・ショート別に金額と件数でまとめたもの | Binance 側でファイルが消えていて、2026年9月時点では1日も取れなかった |
 | `binance_metrics_BTCUSDT_1h.csv` | 建玉（ポジションの総量）とロングショート比率。建玉が急に減った所が清算の目印 | 2023年〜今日 |
-| `recent_liq_okx.csv` / `recent_liq_bybit.csv` | OKX・Bybit の直近の清算。毎日取りに行って積み上げる | 動かし始めてから |
+| `recent_liq_okx.csv` | OKX の直近の清算。毎日取りに行って積み上げる | 動かし始めてから |
 
 動かし方:
 
@@ -88,6 +88,56 @@ Coinglass のような清算の画面は、Claude の作業場所からは読め
 2. 手で動かすときは GitHub の画面 → **Actions** → 左の「清算データを取りに行く」 → 右の **Run workflow** →
    ブランチを選んで **Run workflow**。10〜30分で終わり、`data/liq/` にコミットが増える。
 3. `main` に入れると、毎日 日本時間の朝10時にも自動で動いて積み上がる。
+
+## Coinglass から取る（鍵が要る）
+
+Binance の無料データは 2024年3月で止まっているので、今日までの清算は Coinglass から取る。
+Coinglass の API（プログラム向けの窓口）は有料で、鍵（API キー）が要る。
+鍵は GitHub の「Secrets」という金庫に入れ、取りに行く係だけが使う。チャットや
+ファイルに鍵を書かないこと。
+
+### プランと取れるもの（公式の説明書より）
+
+| プラン | 月額 | 1分あたりの回数 | 清算の履歴で取れる細かさ | 1時間足 | 日足 |
+| --- | --- | --- | --- | --- | --- |
+| Hobbyist | 29ドル | 30回 | 4時間足以上（4時間足は直近180日） | 取れない | 全期間 |
+| Startup | 79ドル | 80回 | 30分足以上（1時間足は直近180日） | 直近180日 | 全期間 |
+| Standard | 299ドル | 300回 | 制限なし（1時間足は直近360日） | 直近360日 | 全期間 |
+
+前回の検証でプラスが出たのは日足だったので、**Hobbyist（月29ドル）で足りる**。
+1時間足の清算を何年分も取ることは、どのプランでもできない。無料プランは無い。
+
+### 鍵を手に入れる
+
+1. https://www.coinglass.com/ でアカウントを作ってログインする。
+2. 画面上の「API」（または https://www.coinglass.com/CryptoApi ）から、プランを選んで申し込む。
+   清算の履歴が取れるいちばん安いプランでよい（料金と制限は下の表）。
+3. 申し込むと「API Key」という長い文字列が出る。これを控える（誰にも見せない）。
+
+### GitHub の金庫に入れる
+
+1. GitHub でこのリポジトリを開く → 上の **Settings**。
+2. 左の **Secrets and variables** → **Actions**。
+3. 緑の **New repository secret**。
+4. Name に `COINGLASS_API_KEY`、Secret に控えた文字列を貼って **Add secret**。
+
+これだけで、次に「清算データを取りに行く」が動いたときから Coinglass のぶんも取れる。
+手で動かすときは Actions → 「清算データを取りに行く」 → Run workflow。
+
+### 取るもの（`fetch_coinglass.py` の DATASETS）
+
+| ファイル | 中身 |
+| --- | --- |
+| `coinglass_aggregated_liq_1d.csv` | 全取引所を合わせた BTC の清算（ロング・ショート別、日ごと、全期間） |
+| `coinglass_aggregated_liq_4h.csv` | 同じものの4時間ごと（Hobbyist は直近180日） |
+| `coinglass_aggregated_liq_1h.csv` | 同じものの1時間ごと（Startup 以上。Hobbyist では飛ばされる） |
+| `coinglass_binance_btcusdt_liq_1d.csv` | Binance の BTCUSDT だけの清算（日ごと） |
+| `coinglass_aggregated_oi_1d.csv` / `_4h.csv` | 全取引所を合わせた建玉（日ごと・4時間ごと） |
+| `raw/coinglass_*_page1.json` | 返ってきた生の返事の見本（項目名を確かめる用） |
+| `coinglass_state.json` | どこまで取ったか・最後のエラー |
+
+返ってきた項目は名前を変えずに CSV に残す。プランが足りない窓口はエラーを記録して飛ばす。
+回数制限（1分あたりの回数）は `COINGLASS_RPM` で控えめに決めてある。
 
 ## 検証の限界
 
