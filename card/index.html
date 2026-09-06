@@ -719,6 +719,7 @@ function unionLines(a, b){
     for (var i = 0; i < out.length; i++){
       var P = out[i];
       if (!P.bb) continue;
+      if (norm(P.t) === norm(L.t) && norm(L.t)){ hit = i; break; }   /* 同じ文字なら同じ行 */
       var ov = Math.min(P.bb.y1, L.bb.y1) - Math.max(P.bb.y0, L.bb.y0);
       var xo = Math.min(P.bb.x1, L.bb.x1) - Math.max(P.bb.x0, L.bb.x0);
       if (ov > Math.min(P.h, L.h) * 0.5 && xo > 0){ hit = i; break; }
@@ -740,21 +741,43 @@ function mergeLines(lines){
       var P = out[i];
       var ov = Math.min(P.bb.y1, L.bb.y1) - Math.max(P.bb.y0, L.bb.y0);
       var hmin = Math.min(P.h, L.h), hmax = Math.max(P.h, L.h);
-      if (!hmin || ov < hmin * 0.6) continue;
-      if (hmin < hmax * 0.55) continue;
+      /* 「株式会社」だけの行は字が小さいことが多いので、高さの差は問わない */
+      var bare = RE_COBARE.test(P.t) || RE_COBARE.test(L.t);
+      if (!hmin || ov < hmin * (bare ? 0.3 : 0.6)) continue;
+      if (!bare && hmin < hmax * 0.55) continue;
       var gap = Math.max(L.bb.x0 - P.bb.x1, P.bb.x0 - L.bb.x1);
       if (gap > hmax * 2.2) continue;
       m = P; break;
     }
     if (!m){ out.push(L); return; }
+    if (norm(m.t) === norm(L.t)){ if (L.c > m.c) m.c = L.c; return; }   /* 同じ文字の行はつながない */
     var left = m.bb.x0 <= L.bb.x0 ? m : L, right = left === m ? L : m;
     var n1 = m.t.length, n2 = L.t.length;
-    m.t = left.t + ' ' + right.t;
+    m.t = left.t + (RE_COBARE.test(left.t) || RE_COBARE.test(right.t) ? '' : ' ') + right.t;
     m.c = Math.round((m.c * n1 + L.c * n2) / Math.max(1, n1 + n2));
     m.bb = { x0:Math.min(m.bb.x0, L.bb.x0), x1:Math.max(m.bb.x1, L.bb.x1),
              y0:Math.min(m.bb.y0, L.bb.y0), y1:Math.max(m.bb.y1, L.bb.y1) };
     m.h = Math.round(m.bb.y1 - m.bb.y0); m.y = m.bb.y0;
   });
+  /* 「株式会社」だけの行が上に残っていたら、すぐ下の行につなぐ */
+  for (var i2 = 0; i2 < out.length; i2++){
+    var P2 = out[i2];
+    if (!RE_COBARE.test(P2.t)) continue;
+    var tgt = -1, bd = 1e18;
+    for (var j = 0; j < out.length; j++){
+      if (j === i2 || RE_COBARE.test(out[j].t)) continue;
+      var Q = out[j], gap2 = Q.bb.y0 - P2.bb.y1;
+      var xo = Math.min(P2.bb.x1, Q.bb.x1) - Math.max(P2.bb.x0, Q.bb.x0);
+      if (gap2 < -P2.h * 0.2 || gap2 > P2.h * 1.2 || xo <= 0) continue;
+      if (gap2 < bd){ bd = gap2; tgt = j; }
+    }
+    if (tgt < 0) continue;
+    var T = out[tgt];
+    T.t = P2.t + T.t;
+    T.bb = { x0:Math.min(T.bb.x0, P2.bb.x0), x1:Math.max(T.bb.x1, P2.bb.x1), y0:Math.min(T.bb.y0, P2.bb.y0), y1:Math.max(T.bb.y1, P2.bb.y1) };
+    T.h = Math.round(T.bb.y1 - T.bb.y0); T.y = T.bb.y0;
+    out.splice(i2, 1); i2--;
+  }
   return out;
 }
 /* 1行だけ切り出して、読みやすい大きさにして読み直す（名前と会社に使う） */
@@ -795,10 +818,52 @@ var RE_MAIL  = /[A-Za-z0-9][A-Za-z0-9._%+\-]*@[A-Za-z0-9][A-Za-z0-9\-]*(?:\.[A-Z
 var RE_LOCAL = /^[A-Za-z0-9][A-Za-z0-9._%+\-]*$/;
 var RE_TEL   = /0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4}/g;
 var RE_LOOSE = /\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}/g;
-var RE_CO    = /株式会社|有限会社|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
+var RE_CO    = /株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
 var RE_TITLE = /代表取締役|取締役|代表社員|代表者|代表|会長|社長|専務|常務|本部長|統括|部長|次長|課長|係長|主任|主査|主幹|店主|店長|所長|支店長|工場長|室長|局長|主宰|オーナー|女将|チーフ|マネージャ|リーダー|顧問|参与|参事|理事|監査役|技師|税理士|公認会計士|弁護士|社会保険労務士|司法書士|行政書士|建築士|ディレクター|プランナー|コンサルタント/;
 var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|部|課|室|係|局)$/;
+var RE_DEPT2 = /^(営業|総務|経理|人事|企画|開発|製造|技術|広報|管理|購買|品質保証|法務|財務|設計|施工|工事|販売|事務|生産|物流|営業企画|経営企画|本社|支社)$/;
 var RE_ADDR  = /[都道府県]|[市区町村郡]/;
+/* 免許・登録番号の行（「兵庫県知事（特-7）第110902号」など）。県が入るが住所ではない */
+var RE_LIC   = /第\s*[0-9A-Za-z０-９\-‐]+\s*号|知事|大臣|免許|登録番号|許可|建築士事務所|宅地建物取引|届出|認定番号/;
+/* 「株式会社」だけの行 */
+var RE_COBARE = /^(株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲|\(株\)|（株）|\(有\)|（有）)$/;
+/* 文のような行（「ママが喜ぶ家づくり」）。名前や会社ではない */
+function sentenceLike(t){
+  var n = String(t).replace(/[\s　]/g, '').length;
+  return n >= 6 && /[がをにでへともぶづ]/.test(t);
+}
+/* 本文の列：メール・URL・電話・住所が並ぶ横の範囲。ロゴや免許番号の列と分ける */
+function mainColumn(lines){
+  var bs = [];
+  lines.forEach(function(L){
+    if (!L.bb) return;
+    var t = han(L.t);
+    var hit = /@/.test(t) || /https?:|www\./i.test(t) || /TEL|FAX|電話|携帯|Mobile/i.test(t) || /〒/.test(L.t) || RE_TEL.test(t);
+    RE_TEL.lastIndex = 0;
+    if (hit && !RE_LIC.test(L.t)) bs.push(L.bb);
+  });
+  if (bs.length < 2) return null;
+  var x0s = bs.map(function(b){ return b.x0; }).sort(function(a, b){ return a - b; });
+  var x1s = bs.map(function(b){ return b.x1; }).sort(function(a, b){ return a - b; });
+  var x0 = x0s[Math.floor(x0s.length / 2)], x1 = x1s[Math.floor(x1s.length / 2)];
+  return (x1 - x0 < 50) ? null : { x0:x0, x1:x1 };
+}
+function inCol(L, col){
+  if (!col || !L.bb) return true;
+  var w = L.bb.x1 - L.bb.x0;
+  if (w <= 0) return true;
+  var ov = Math.min(L.bb.x1, col.x1) - Math.max(L.bb.x0, col.x0);
+  return ov >= w * 0.5;
+}
+/* 「浅 堀 楓 又」のように1字ずつ空いた名前を「浅堀 楓又」にする */
+function fixSpacing(t){
+  var p = String(t).split(' ').filter(Boolean);
+  var singles = p.length >= 3 && p.every(function(w){ return w.length === 1; });
+  if (!singles) return t;
+  if (p.length === 4) return p[0] + p[1] + ' ' + p[2] + p[3];
+  if (p.length === 6) return p[0] + p[1] + p[2] + ' ' + p[3] + p[4] + p[5];
+  return p.join('');
+}
 
 var RE_MLABEL = /(^|[\s　(（])(?:E[\s\-_]?mail|EMAIL|MAIL|Mail|mail|メール|Ｅメール|アドレス)[\s　\-]*[:：]?/gi;
 function cleanMail(a){
@@ -830,7 +895,7 @@ function pickUrl(line){
 function pickPhones(lines){
   var tel = '', mobile = '';
   lines.forEach(function(L){
-    var t = dashes(han(L.t));
+    var t = dashes(han(L.t)).replace(/\(\s*(\d{2,5})\s*\)\s*/g, '$1-');   /* （078）795-… → 078-795-… */
     t.split(/(?=FAX|Fax|fax|ファックス)/).forEach(function(seg){
       if (/^(FAX|Fax|fax|ファックス)/.test(seg)) return;
       var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM\./.test(seg);
@@ -852,29 +917,52 @@ function pickPhones(lines){
   });
   return { tel:tel, mobile:mobile };
 }
-function pickZipAddr(lines){
-  var zip = '', addr = '';
+function pickZipAddr(lines, col){
+  var zip = '', addr = '', bestS = -1;
   lines.forEach(function(L){
     if (/TEL|FAX|PHONE|MOBILE/i.test(L.t) || /電話|携帯|ファックス/.test(L.t) || /@/.test(L.t)) return;
-    var t = dashes(han(L.t));
-    if (!zip && (/〒/.test(t) || /^[T干][^ELel]/.test(t) || RE_ADDR.test(L.t))){
+    if (RE_LIC.test(L.t)) return;
+    var t = dashes(han(L.t)), lineZip = '';
+    if (/〒/.test(t) || /^[T干][^ELel]/.test(t) || RE_ADDR.test(L.t)){
       var m = t.match(/[〒T干]?\s*([0-9lI!Oo]{3})\s*-\s*([0-9lI!Oo]{4})/);
       if (m){
         var a = digitsFix(m[1]), b = digitsFix(m[2]);
-        if (/^\d{3}$/.test(a) && /^\d{4}$/.test(b)) zip = a + '-' + b;
+        if (/^\d{3}$/.test(a) && /^\d{4}$/.test(b)) lineZip = a + '-' + b;
       }
     }
+    if (lineZip && !zip) zip = lineZip;
     if (!RE_ADDR.test(L.t)) return;
     var body = L.t.replace(/[〒T干]?\s*[0-9lI!Oo]{3}\s*[-‐]\s*[0-9lI!Oo]{4}\s*/g, ' ')
                   .replace(/^[^ぁ-んァ-ヶ一-龥0-9]+/, '')
                   .replace(/[\s　]+/g, ' ').trim();
-    if (body.length > addr.length) addr = body;
+    if (!body) return;
+    /* 郵便番号つきの行を強く優先。本文の列にある行も少し優先 */
+    var sc = body.length + (lineZip ? 100 : 0) + (inCol(L, col) ? 20 : 0);
+    if (sc > bestS){ bestS = sc; addr = body; if (lineZip) zip = lineZip; }
   });
   return { zip:zip, addr:addr };
 }
-function parseCard(lines){
+function nameScore(L, t, col, heads){
+  var sc = L.h;
+  if (!inCol(L, col)) sc *= 0.25;                 /* 本文の列の外（ロゴ脇など）は弱く */
+  var n = t.replace(/[\s　]/g, '').length;
+  if (n >= 7) sc *= 0.45;                          /* 長すぎる（標語など） */
+  if (sentenceLike(t)) sc *= 0.4;
+  if (L.bb){
+    for (var k = 0; k < heads.length; k++){         /* 肩書き・部署のすぐ下なら強く */
+      var H = heads[k];
+      if (!H.bb || H === L) continue;
+      var gap = L.bb.y0 - H.bb.y1;
+      var xo = Math.min(L.bb.x1, H.bb.x1) - Math.max(L.bb.x0, H.bb.x0);
+      if (gap > -H.h * 0.3 && gap < H.h * 2.5 && xo > -H.h){ sc *= 1.7; break; }
+    }
+  }
+  return sc;
+}
+function parseCard(lines, W){
   var got = { name:'', kana:'', company:'', dept:'', title:'', tel:'', mobile:'', email:'', url:'', addr:'' };
   var used = {};
+  var col = mainColumn(lines);
   lines.forEach(function(L, i){
     if (!got.email){ var e = pickEmail(L.t); if (e){ got.email = e; used[i] = 1; } }
   });
@@ -886,59 +974,57 @@ function parseCard(lines){
   got.tel = ph.tel; got.mobile = ph.mobile;
   lines.forEach(function(L, i){ if (RE_TEL.test(han(L.t))) used[i] = 1; RE_TEL.lastIndex = 0; });
 
-  var za = pickZipAddr(lines);
+  var za = pickZipAddr(lines, col);
   got.addr = (za.zip ? '〒' + za.zip + ' ' : '') + za.addr;
   if (!za.addr && !za.zip) got.addr = '';
-  lines.forEach(function(L, i){ if (RE_ADDR.test(L.t) && !/@/.test(L.t)) used[i] = 1; });
+  lines.forEach(function(L, i){ if ((RE_ADDR.test(L.t) && !/@/.test(L.t)) || RE_LIC.test(L.t)) used[i] = 1; });
 
-  /* 会社：会社らしい語を含み、いちばん大きい行 */
+  /* 会社：会社らしい語を含む行。本文の列にあるものを優先し、いちばん大きいもの */
   var co = null;
   lines.forEach(function(L, i){
-    if (used[i]) return;
-    if (!RE_CO.test(L.t)) return;
-    if (L.c < 40) return;
-    if (!co || L.h > co.h) co = { L:L, i:i };
+    if (used[i] || L.c < 30) return;
+    if (!RE_CO.test(L.t) || sentenceLike(L.t)) return;
+    var sc = L.h * (inCol(L, col) ? 1 : 0.3);
+    if (!co || sc > co.sc) co = { L:L, i:i, sc:sc };
   });
-  if (co){ got.company = co.L.t; used[co.i] = 1; got._coIdx = co.i; }
+  if (co){ got.company = tidyCompany(co.L.t); used[co.i] = 1; got._coIdx = co.i; }
 
   /* 部署と役職：名前と同じ行に並んでいることも多いので、余った語は名前の候補に回す */
-  var residual = {};
+  var residual = {}, heads = [];
   lines.forEach(function(L, i){
-    if (used[i]) return;
-    if (L.c < 40) return;
+    if (used[i] || L.c < 40) return;
     var parts = L.t.split(/[\s　\/／・|]+/).filter(Boolean);
     var rest = [], hit = false;
     parts.forEach(function(w){
       if (!got.title && RE_TITLE.test(w)){ got.title = w; hit = true; }
-      else if (!got.dept && RE_DEPT.test(w) && w.length <= 12){ got.dept = w; hit = true; }
+      else if (!got.dept && (RE_DEPT.test(w) || RE_DEPT2.test(w)) && w.length <= 12){ got.dept = w; hit = true; }
       else rest.push(w);
     });
     if (!hit) return;
+    heads.push(L);
     if (rest.length) residual[i] = rest.join(' ');
     else used[i] = 1;
   });
 
-  /* 名前：残った行のうち、いちばん字が大きいもの。
-     信頼度は足切りにだけ使う。読みちがえた名前でも大きい行が本物で、あとで読み直す */
+  /* 名前：本文の列にある大きな行。肩書きのすぐ下なら強く、標語のような行は弱く。
+     信頼度は足切りにだけ使う（読みちがえた名前でも大きい行が本物で、あとで読み直す） */
   var best = null;
-  [15].forEach(function(floor){
-    lines.forEach(function(L, i){
-      if (used[i] || L.c < floor) return;
-      var t = tidyName(residual[i] != null ? residual[i] : L.t);
-      if (/@/.test(t)) return;
-      if (/[0-9]/.test(han(t))){
-        /* 数字の混じった語だけ落とす。「小野寺 に8」のように末尾が化けることがある */
-        t = t.split(' ').filter(function(wd){ return !/[0-9]/.test(han(wd)); }).join(' ').trim();
-        if (!t) return;
-      }
-      if (t.length < 2 || t.length > 14) return;
-      if (!/[一-龥ぁ-んァ-ヶ]/.test(t)) return;
-      if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t)) return;
-      if (!best || L.h > best.L.h || (L.h === best.L.h && L.c > best.L.c)) best = { L:L, i:i, t:t };
-    });
+  lines.forEach(function(L, i){
+    if (used[i] || L.c < 15) return;
+    var t = tidyName(residual[i] != null ? residual[i] : L.t);
+    if (/@/.test(t)) return;
+    if (/[0-9]/.test(han(t))){
+      t = t.split(' ').filter(function(wd){ return !/[0-9]/.test(han(wd)); }).join(' ').trim();
+      if (!t) return;
+    }
+    if (t.length < 2 || t.length > 14) return;
+    if (!/[一-龥ぁ-んァ-ヶ]/.test(t)) return;
+    if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t) || RE_DEPT2.test(t) || RE_LIC.test(t)) return;
+    var sc = nameScore(L, t, col, heads);
+    if (!best || sc > best.sc || (sc === best.sc && L.c > best.L.c)) best = { L:L, i:i, t:t, sc:sc };
   });
   if (best){
-    got.name = best.t; used[best.i] = 1; got._nameIdx = best.i;
+    got.name = fixSpacing(best.t); used[best.i] = 1; got._nameIdx = best.i;
     /* ふりがなが名前の行にくっついていたら分ける（読みは5文字以上のときだけ。ひらがなの下の名前と区別するため） */
     var fm = got.name.match(/^([ぁ-んー]{5,})\s*([一-龥][^ぁ-ん]*)$/) || got.name.match(/^([一-龥][^ぁ-ん]*?)\s*([ぁ-んー]{5,})$/);
     if (fm){
@@ -947,17 +1033,17 @@ function parseCard(lines){
     }
   }
 
-  /* 会社が見つからなかったら、名前の上にある少し小さい行を会社とみなす（名刺はたいていこの並び） */
+  /* 会社が見つからなかったら、本文の列にある名前に近い大きめの行（上でも下でもよい） */
   if (!got.company && best){
     var guess = null;
     lines.forEach(function(L, i){
       if (used[i] || L.c < 30 || !L.bb || !best.L.bb) return;
-      if (L.bb.y0 >= best.L.bb.y0) return;
-      if (L.h < best.L.h * 0.28 || L.h > best.L.h * 0.95) return;
+      if (!inCol(L, col)) return;
+      if (L.h < best.L.h * 0.28 || L.h > best.L.h * 1.6) return;
       var t = L.t;
       if (/[0-9@]/.test(han(t)) || t.length < 2 || t.length > 30) return;
-      if (RE_TITLE.test(t) || RE_DEPT.test(t)) return;
-      if (/^[ぁ-んー\s]+$/.test(t)) return;
+      if (RE_TITLE.test(t) || RE_DEPT.test(t) || RE_DEPT2.test(t) || RE_LIC.test(t)) return;
+      if (/^[ぁ-んー\s]+$/.test(t) || sentenceLike(t)) return;
       if (!guess || L.h > guess.L.h) guess = { L:L, i:i };
     });
     if (guess){ got.company = guess.L.t; used[guess.i] = 1; got._coIdx = guess.i; }
@@ -969,6 +1055,12 @@ function parseCard(lines){
     if (/^[ぁ-んー\s]{3,16}$/.test(L.t)){ got.kana = L.t; used[i] = 1; }
   });
   return got;
+}
+/* 「株式会社 マリンホーム」→「株式会社マリンホーム」 */
+function tidyCompany(t){
+  return String(t).replace(/株式会[杜視祉]/g, '株式会社').replace(/有限会[杜視祉]/g, '有限会社')
+                  .replace(/(株式会社|有限会社|合同会社|合資会社|㈱|㈲)[\s　]+/g, '$1')
+                  .replace(/[\s　]+(株式会社|有限会社|合同会社|合資会社|㈱|㈲)$/g, '$1').trim();
 }
 /* 名前の行にローマ字が混ざっていたら外す */
 function tidyName(t){
@@ -1173,20 +1265,20 @@ function ocrProgress(m){
 function runOcr(img){
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
   readCard(img, ocrProgress).then(function(res){
-    var lines = res.lines, got = parseCard(lines), extra = [];
+    var lines = res.lines, got = parseCard(lines, res.cv.width), extra = [];
     if ($('s-read')) $('s-read').textContent = '名前と会社を確かめています…';
     var chain = Promise.resolve();
     [['name', got._nameIdx], ['company', got._coIdx]].forEach(function(pair){
       var k = pair[0], idx = pair[1];
       if (idx == null || !lines[idx] || !lines[idx].bb) return;
-      var orig = k === 'name' ? tidyName(lines[idx].t) : lines[idx].t;
-      if (plausible(k, orig) && orig !== got[k]) extra.push(orig);
+      var orig = k === 'name' ? fixSpacing(tidyName(lines[idx].t)) : tidyCompany(lines[idx].t);
+      if (plausible(k, orig)) extra.push(orig);      /* 元の読みは必ず候補に残す */
       var bestAlt = null;
       [90, 130].forEach(function(sz){
         chain = chain.then(function(){ return rereadLine(res.w, res.cv, lines[idx].bb, '7', sz); })
           .then(function(alt){
             if (!alt || !alt.t) return;
-            var t = k === 'name' ? tidyName(alt.t) : alt.t;
+            var t = k === 'name' ? fixSpacing(tidyName(alt.t)) : tidyCompany(alt.t);
             if (!plausible(k, t)) return;
             if (k === 'name' && (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t))) return;
             if (t !== got[k]) extra.push(t);
@@ -1194,8 +1286,11 @@ function runOcr(img){
           });
       });
       chain = chain.then(function(){
-        /* 読み直したほうがはっきり確からしければ、そちらを使う */
-        if (bestAlt && bestAlt.c > lines[idx].c + 3) got[k] = bestAlt.t;
+        /* 元の読みが怪しいときだけ、読み直しで入れ替える。
+           元が十分確からしい（65以上）なら、読み直しは候補に出すだけにする */
+        if (!bestAlt || bestAlt.c <= lines[idx].c + 3) return;
+        var shaky = lines[idx].c < 65 || (k === 'company' && !RE_CO.test(orig));
+        if (shaky) got[k] = bestAlt.t;
       });
     });
     return chain.then(function(){
