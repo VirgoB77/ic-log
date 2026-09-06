@@ -1,0 +1,2290 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#4f7042">
+<meta name="apple-mobile-web-app-title" content="めいしばこ">
+<title>めいしばこ</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#f5f4ec; --card:#ffffff; --ink:#1b1d17; --sub:#6f7568; --rule:#e1e2d4; --field:#eef0e6;
+  --key:#4f7042; --key-deep:#33502b; --key-soft:#e7efe1; --on-key:#ffffff;
+  --ok:#3c7a4e; --mute:#868c7d;
+  --shadow:0 1px 2px rgba(30,36,22,.05), 0 10px 30px rgba(30,36,22,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --ground:#131510; --card:#1d201a; --ink:#e8ebdf; --sub:#98a08d; --rule:#2f332a; --field:#171a14;
+    --key:#8dba6f; --key-deep:#456b34; --key-soft:#1a2416; --on-key:#12200c;
+    --ok:#7cc48f; --mute:#848b78;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",Meiryo,sans-serif;
+  font-size:16px; line-height:1.7; -webkit-text-size-adjust:100%;
+}
+.mincho{font-family:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
+
+.wrap{max-width:620px;margin:0 auto;padding:0 16px calc(56px + env(safe-area-inset-bottom))}
+
+header{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 2px 4px}
+header h1{font-family:"Zen Old Mincho",serif;font-size:19px;font-weight:900;letter-spacing:.1em;margin:0}
+header .n{font-size:12px;color:var(--sub);letter-spacing:.04em}
+header .sp{flex:1}
+.gear{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);
+  width:38px;height:38px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:none;box-shadow:var(--shadow)}
+.gear:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+.shoot{display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);border-radius:18px;
+  padding:24px 18px;margin-top:12px;font:inherit;text-align:center;
+  background:linear-gradient(165deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
+  -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease}
+.shoot:active{transform:scale(.985);filter:brightness(.93)}
+.shoot:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.shoot b{display:block;font-size:23px;font-weight:900;letter-spacing:.16em;line-height:1.3}
+.shoot span{display:block;font-size:12.5px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:3px}
+.sub-act{display:block;width:100%;margin-top:8px;appearance:none;border:0;background:transparent;
+  color:var(--sub);font:inherit;font-size:13px;font-weight:700;padding:6px;cursor:pointer;text-decoration:underline}
+
+.find{position:relative;margin-top:18px}
+.find input[type=search]{width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--card);
+  border:1px solid var(--rule);border-radius:12px;padding:13px 14px 13px 42px;box-shadow:var(--shadow);-webkit-appearance:none}
+.find input[type=search]:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+.find .mag{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:15px;pointer-events:none}
+
+.listhead{display:flex;align-items:center;gap:10px;margin:18px 2px 0}
+.count{font-size:11.5px;color:var(--sub);letter-spacing:.08em;font-weight:700;flex:1}
+.viewsw{display:flex;gap:3px;background:var(--field);border:1px solid var(--rule);border-radius:9px;padding:3px;flex:none}
+.viewsw button{appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;
+  font-size:12px;font-weight:700;padding:5px 13px;border-radius:7px;cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,36,22,.12)}
+.viewsw button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+
+/* 文字で見る一覧。メモまで出るので、ぱっと見て思い出せる */
+.listwrap{background:var(--card);border:1px solid var(--rule);border-radius:13px;
+  box-shadow:var(--shadow);padding:0 13px;margin-top:9px}
+.lrow{display:flex;gap:11px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:transparent;border:0;border-top:1px solid var(--rule);padding:11px 0;cursor:pointer}
+.lrow:first-child{border-top:0}
+.lrow:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
+.lth{flex:none;width:54px;height:33px;border-radius:5px;object-fit:cover;display:block;
+  background:var(--field);border:1px solid var(--rule)}
+.lth.no{display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mute);
+  font-weight:700;letter-spacing:.02em}
+.lbody{flex:1;min-width:0}
+.lnm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.4;word-break:break-word}
+.lco{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11.5px;font-weight:700;color:var(--sub);margin-left:7px}
+.lmemo,.lmeta{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lmemo{font-size:12.5px;color:var(--ink);line-height:1.55;margin-top:1px}
+.lmeta{font-size:11px;color:var(--sub);line-height:1.5}
+.lrow .chev{flex:none;color:var(--sub);font-size:19px;line-height:1}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:9px}
+@media (min-width:520px){ .grid{grid-template-columns:1fr 1fr 1fr} }
+.tile{appearance:none;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
+.tile:focus-visible{outline:2px solid var(--key);outline-offset:3px;border-radius:12px}
+.tile .pic{aspect-ratio:91/55;border-radius:11px;overflow:hidden;background:var(--field);
+  border:1px solid var(--rule);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.tile .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.tile .pic .no{font-size:10.5px;color:var(--mute);font-weight:700;letter-spacing:.04em}
+.tile .nm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.45;margin-top:8px;word-break:break-word}
+.tile .co{font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:1px;word-break:break-word;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:34px 14px;line-height:2.1}
+.empty b{color:var(--ink)}
+
+/* ===== 下から出る画面 ===== */
+.sheet{position:fixed;inset:0;z-index:50;background:rgba(20,14,10,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--card);width:100%;max-width:620px;max-height:94vh;overflow:auto;
+  border-radius:20px 20px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
+.sheet h2{font-family:"Zen Old Mincho",serif;margin:2px 0 0;font-size:22px;font-weight:900;letter-spacing:.05em;word-break:break-word}
+.sheet .lead{font-size:13px;color:var(--sub);margin:5px 0 0;word-break:break-word}
+
+.pic-big{display:block;width:100%;padding:0;border:1px solid var(--rule);border-radius:13px;overflow:hidden;
+  background:#0c0b0a;margin-top:14px;cursor:zoom-in}
+.pic-big img{width:100%;display:block}
+.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.viewer img{max-width:100%;max-height:100%;object-fit:contain}
+
+label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:17px 0 6px}
+input[type=text],input[type=date],input[type=tel],input[type=email],input[type=search],textarea,select{
+  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
+  border:1px solid var(--rule);border-radius:10px;padding:12px 13px;-webkit-appearance:none}
+textarea{line-height:1.75;resize:vertical;min-height:70px}
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--key);outline-offset:1px}
+.name-in{font-family:"Zen Old Mincho",serif;font-size:21px !important;font-weight:700}
+.half{display:flex;gap:10px}
+.half>div{flex:1;min-width:0}
+
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 1px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
+  font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
+.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+.cap{font-size:10.5px;font-weight:700;color:var(--mute);letter-spacing:.08em;margin:11px 2px 0}
+
+details.more{margin-top:16px;border-top:1px solid var(--rule);padding-top:4px}
+details.more>summary{list-style:none;cursor:pointer;font-size:13px;font-weight:700;color:var(--key);
+  letter-spacing:.05em;padding:11px 2px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"＋ ";font-weight:900}
+details.more[open]>summary::before{content:"− "}
+details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
+
+.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14.5px;
+  font-weight:700;letter-spacing:.04em;border-radius:11px;padding:13px 14px;cursor:pointer;width:100%;margin-top:10px}
+.btn:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+.btn.primary{background:var(--key);border-color:var(--key);color:var(--on-key);font-size:16px;padding:15px}
+.btn.danger{color:var(--key);border-color:var(--key)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px}
+
+.facts{margin:16px 0 0;border-top:1px solid var(--rule)}
+.facts .f{display:flex;gap:12px;border-bottom:1px solid var(--rule);padding:11px 2px;align-items:baseline}
+.facts .k{flex:none;width:70px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.06em}
+.facts .v{flex:1;min-width:0;font-size:15px;word-break:break-word;white-space:pre-wrap}
+.facts .v a{color:var(--key);font-weight:700;text-decoration:none;border-bottom:1px solid var(--key)}
+
+.bar{height:7px;background:var(--field);border-radius:99px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;background:var(--key);border-radius:99px;transition:width .3s ease}
+.reading{font-size:13px;color:var(--sub);margin:9px 2px 0;font-weight:700}
+.warn{font-size:12.5px;color:var(--key);background:var(--key-soft);border:1px solid var(--key);
+  border-radius:11px;padding:11px 13px;margin-top:12px;line-height:1.75}
+
+.opt{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:0}
+.opt input{width:21px;height:21px;flex:none;accent-color:var(--key)}
+.hint{font-size:11.5px;color:var(--sub);line-height:1.85;margin:8px 2px 0}
+.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--ground);
+  font-size:14px;font-weight:700;padding:12px 20px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
+/* ===== その場のカメラ（枠に合わせて撮る。シャッター音は鳴らない） ===== */
+.cam{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column}
+.cam .top{display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 10px;background:#000}
+.cam .top button{appearance:none;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);
+  color:#fff;font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer}
+.cam .top .sp{flex:1}
+.cam .stage{position:relative;flex:1;overflow:hidden;background:#000}
+.cam video{width:100%;height:100%;object-fit:cover;display:block}
+.cam .box{position:absolute;left:6%;width:88%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
+  border:2px solid rgba(255,255,255,.92);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+.cam .tip{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-size:13px;
+  font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none}
+.cam .ctl{display:flex;align-items:center;gap:12px;padding:16px 18px calc(20px + env(safe-area-inset-bottom));background:#000}
+.cam .ctl .side{flex:1;color:#fff;font:inherit;font-size:12.5px;font-weight:700;background:transparent;
+  border:0;cursor:pointer;text-decoration:underline;opacity:.85}
+.shutter{flex:none;width:74px;height:74px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.3);
+  cursor:pointer;-webkit-tap-highlight-color:transparent}
+.shutter:active{transform:scale(.94)}
+.cam .err{color:#fff;font-size:13.5px;line-height:1.9;padding:26px 22px;text-align:center}
+
+/* ===== 切り直し（四隅を動かす） ===== */
+.cropbox{position:relative;margin-top:14px;border-radius:11px;overflow:hidden;background:#0c0b0a;touch-action:none}
+.cropbox img{width:100%;display:block}
+.cropbox svg{position:absolute;inset:0;width:100%;height:100%}
+
+.busy{position:fixed;inset:0;z-index:90;background:rgba(20,14,10,.45);display:flex;align-items:center;justify-content:center}
+.busy span{background:var(--card);color:var(--ink);font-size:14px;font-weight:700;padding:15px 24px;border-radius:13px;box-shadow:var(--shadow)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>めいしばこ</h1>
+    <span class="n" id="hdn"></span>
+    <span class="sp"></span>
+    <button class="gear" id="btn-gear" aria-label="設定">⚙</button>
+  </header>
+
+  <button class="shoot" id="btn-shoot">
+    <b>名刺を撮る</b>
+    <span>撮ると、名前や電話を自分で読みとります</span>
+  </button>
+  <button class="sub-act" id="btn-pick">写真から選ぶ</button>
+  <input type="file" id="file-cam" accept="image/*" capture="environment" hidden>
+  <input type="file" id="file-pick" accept="image/*" hidden>
+
+  <div class="find">
+    <span class="mag">🔍</span>
+    <input type="search" id="q" placeholder="名前・会社・場所・メモ　どれでも" autocomplete="off">
+  </div>
+
+  <div class="listhead" id="listhead" hidden>
+    <span class="count" id="count"></span>
+    <div class="viewsw" id="viewsw">
+      <button data-v="grid" aria-pressed="true">写真</button>
+      <button data-v="list" aria-pressed="false">一覧</button>
+    </div>
+  </div>
+  <div id="cards"></div>
+  <div id="none" hidden></div>
+
+  <p class="credit">写真も記録もこの端末の中だけ。文字を読むのも端末の中で行います。</p>
+</div>
+
+<div class="cam" id="cam" hidden>
+  <div class="top">
+    <button id="cam-close">閉じる</button>
+    <span class="sp"></span>
+    <button id="cam-torch" hidden>ライト</button>
+  </div>
+  <div class="stage" id="cam-stage">
+    <video id="cam-video" playsinline muted autoplay></video>
+    <div class="box" id="cam-box"></div>
+    <p class="tip">枠に名刺を合わせる。まわりの机が入っても切り取ります</p>
+  </div>
+  <div class="ctl">
+    <button class="side" id="cam-pick">写真から選ぶ</button>
+    <button class="shutter" id="cam-shot" aria-label="撮る"></button>
+    <span class="side"></span>
+  </div>
+</div>
+
+<div class="sheet" id="sheet" hidden><div class="panel" id="panel"></div></div>
+<div class="viewer" id="viewer" hidden><img id="viewer-img" alt="名刺"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ===================== 文字を読む部品の置き場所 =====================
+   ふだんは CDN から取ってくる。自分で置きたいときは ?ocr=（置いた場所）を付けて開く。
+   置き場所には tesseract.min.js / worker.min.js / core/ / lang/ を入れておく。      */
+var OCRBASE = (function(){
+  var m = location.search.match(/[?&]ocr=([^&]+)/);
+  return m ? decodeURIComponent(m[1]).replace(/\/$/, '') : '';
+})();
+var OCR = OCRBASE ? {
+  lib:    OCRBASE + '/tesseract.min.js',
+  worker: OCRBASE + '/worker.min.js',
+  core:   OCRBASE + '/core',
+  lang:   OCRBASE + '/lang'
+} : {
+  lib:    'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',
+  worker: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js',
+  core:   'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1',
+  lang:   'https://cdn.jsdelivr.net/npm/@tesseract.js-data/jpn@1.0.0/4.0.0_best_int'
+};
+
+/* ===================== 保存（端末内のみ） ===================== */
+var KEY = 'meishi.v1';
+var db = { cards:[], mail:'' };
+(function load(){
+  var raw = null;
+  try { raw = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
+  if (raw && typeof raw === 'object'){
+    db.cards = Array.isArray(raw.cards) ? raw.cards : [];
+    db.mail  = typeof raw.mail === 'string' ? raw.mail : '';
+  }
+  for (var i = 0; i < db.cards.length; i++){
+    var c = db.cards[i];
+    if (!c.id) c.id = uid();
+    if (!c.ts) c.ts = Date.now();
+  }
+})();
+function persist(){
+  try { localStorage.setItem(KEY, JSON.stringify(db)); }
+  catch(e){ toast('保存できませんでした。端末の空き容量を確認してください'); }
+}
+
+/* 名刺の写真は大きいので IndexedDB に置く */
+var IDB = (function(){
+  var dbp = null;
+  function open(){
+    if (dbp) return dbp;
+    dbp = new Promise(function(res, rej){
+      if (!window.indexedDB){ rej(new Error('indexedDB なし')); return; }
+      var rq = indexedDB.open('meishi', 1);
+      rq.onupgradeneeded = function(){
+        var d = rq.result;
+        if (!d.objectStoreNames.contains('shots')) d.createObjectStore('shots', { keyPath:'id' });
+      };
+      rq.onsuccess = function(){ res(rq.result); };
+      rq.onerror   = function(){ rej(rq.error); };
+    });
+    return dbp;
+  }
+  function work(mode, fn){
+    return open().then(function(d){
+      return new Promise(function(res, rej){
+        var t = d.transaction('shots', mode), rq = fn(t.objectStore('shots'));
+        t.oncomplete = function(){ res(rq ? rq.result : null); };
+        t.onerror = function(){ rej(t.error); };
+        t.onabort = function(){ rej(t.error); };
+      });
+    });
+  }
+  return {
+    get:   function(id){ return work('readonly',  function(s){ return s.get(id); }); },
+    put:   function(o){  return work('readwrite', function(s){ return s.put(o); }); },
+    del:   function(id){ return work('readwrite', function(s){ return s.delete(id); }); },
+    all:   function(){   return work('readonly',  function(s){ return s.getAll ? s.getAll() : null; }); },
+    clear: function(){   return work('readwrite', function(s){ return s.clear(); }); }
+  };
+})();
+if (navigator.storage && navigator.storage.persist) { try { navigator.storage.persist(); } catch(e){} }
+
+/* ===================== 小道具 ===================== */
+var $ = function(id){ return document.getElementById(id); };
+var WD = ['日','月','火','水','木','金','土'];
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function two(n){ return n < 10 ? '0' + n : '' + n; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function trim(s){ return String(s == null ? '' : s).trim(); }
+function ymd(d){ return d.getFullYear() + '-' + two(d.getMonth()+1) + '-' + two(d.getDate()); }
+function today(){ return ymd(new Date()); }
+function toDate(s){
+  if (!s) return null;
+  var p = String(s).split('-');
+  if (p.length !== 3) return null;
+  var d = new Date(+p[0], +p[1]-1, +p[2]);
+  return isNaN(d.getTime()) ? null : d;
+}
+function fmtDate(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() + '（' + WD[d.getDay()] + '）' : ''; }
+
+var toastTimer = null;
+function toast(msg){
+  var el = document.querySelector('.toast');
+  if (!el){ el = document.createElement('div'); el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 2800);
+}
+function busy(on, msg){
+  var el = document.querySelector('.busy');
+  if (on){
+    if (!el){ el = document.createElement('div'); el.className='busy'; el.innerHTML='<span></span>'; document.body.appendChild(el); }
+    el.firstChild.textContent = msg || 'しばらくお待ちください…';
+  } else if (el && el.parentNode) el.parentNode.removeChild(el);
+}
+
+/* 探すときは、大文字小文字・全角半角・カタカナひらがな・「株式会社」を区別しない */
+function norm(s){
+  s = String(s == null ? '' : s).toLowerCase();
+  s = s.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0xFEE0); });
+  s = s.replace(/[ァ-ヶ]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); });
+  s = s.replace(/株式会社|有限会社|合同会社|一般社団法人|\(株\)|（株）|\(有\)|（有）/g, '');
+  return s.replace(/[\s　・ー\-‐-―()（）.,、。]/g, '');
+}
+
+/* ===================== 名刺 ===================== */
+var F = ['name','kana','company','dept','title','tel','mobile','email','url','addr','met','where','memo'];
+function fullName(c){ return trim(c.name) || (trim(c.company) ? trim(c.company) : '名前がまだ'); }
+function orgLine(c){ return [trim(c.company), trim(c.dept), trim(c.title)].filter(Boolean).join(' '); }
+function matches(c, q){
+  if (!q) return true;
+  var hay = norm(F.map(function(k){ return c[k]; }).join(' '));
+  var t = q.split(/[\s　]+/).filter(Boolean);
+  for (var i = 0; i < t.length; i++) if (hay.indexOf(norm(t[i])) < 0) return false;
+  return true;
+}
+
+/* ===================== 写真 ===================== */
+var thumbCache = {};
+function readImage(file, cb){
+  var url = URL.createObjectURL(file);
+  var im = new Image();
+  im.onload  = function(){ cb(im); setTimeout(function(){ URL.revokeObjectURL(url); }, 3000); };
+  im.onerror = function(){ URL.revokeObjectURL(url); cb(null); };
+  im.src = url;
+}
+/* 文字を読ませるための下ごしらえ：長辺2000pxまで拡大し、白黒にして濃淡を強める */
+function forOcr(src, target){
+  var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
+  var s = Math.min(3, (target || 2000) / Math.max(w, h));
+  var cw = Math.max(1, Math.round(w*s)), ch = Math.max(1, Math.round(h*s));
+  var cv = document.createElement('canvas');
+  cv.width = cw; cv.height = ch;
+  var cx = cv.getContext('2d');
+  cx.imageSmoothingQuality = 'high';
+  cx.drawImage(src, 0, 0, cw, ch);
+  try {
+    var d = cx.getImageData(0, 0, cw, ch), p = d.data, hist = new Int32Array(256);
+    for (var i0 = 0; i0 < p.length; i0 += 4) hist[(0.299*p[i0] + 0.587*p[i0+1] + 0.114*p[i0+2])|0]++;
+    /* 地の色が暗い名刺（紺や緑に白文字）は、白黒を反転させてから読む */
+    var acc = 0, medg = 0, half = (p.length / 4) >> 1;
+    for (var t0 = 0; t0 < 256; t0++){ acc += hist[t0]; if (acc >= half){ medg = t0; break; } }
+    var inv = medg < 110;
+    for (var i = 0; i < p.length; i += 4){
+      var g = 0.299*p[i] + 0.587*p[i+1] + 0.114*p[i+2];
+      if (inv) g = 255 - g;
+      g = g < 128 ? Math.max(0, (g-40)*1.6) : Math.min(255, (g-128)*1.6 + 150);
+      p[i] = p[i+1] = p[i+2] = g;
+    }
+    cx.putImageData(d, 0, 0);
+  } catch(e){}
+  return cv;
+}
+function toCanvas(src, maxEdge){
+  var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
+  var sc = Math.min(1, maxEdge / Math.max(w, h));
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round(w * sc));
+  c.height = Math.max(1, Math.round(h * sc));
+  var x = c.getContext('2d');
+  x.imageSmoothingQuality = 'high';
+  x.drawImage(src, 0, 0, c.width, c.height);
+  return c;
+}
+function rotCanvas(src){ return rotCanvasK(src, 1); }
+/* k×90度、時計回りに回す */
+function rotCanvasK(src, k){
+  k = ((k % 4) + 4) % 4;
+  if (!k) return src;
+  var c = document.createElement('canvas');
+  if (k === 2){ c.width = src.width; c.height = src.height; }
+  else { c.width = src.height; c.height = src.width; }
+  var x = c.getContext('2d');
+  x.translate(c.width/2, c.height/2);
+  x.rotate(k * Math.PI/2);
+  x.drawImage(src, -src.width/2, -src.height/2);
+  return c;
+}
+
+/* ===== 名刺の四隅をさがす =====
+   写真ぜんぶを読ませると、机まで含めて文字が小さくなり読みちがえる。
+   明るい紙のかたまりを中心から塗り広げて見つけ、その四隅を返す。 */
+function findQuad(src){
+  var w = 360, h = Math.max(1, Math.round(src.height * w / src.width));
+  var c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  c.getContext('2d').drawImage(src, 0, 0, w, h);
+  var d;
+  try { d = c.getContext('2d').getImageData(0, 0, w, h).data; } catch(e){ return null; }
+  var N = w*h, L = new Float32Array(N), A = new Float32Array(N), B = new Float32Array(N);
+  var hist = [];
+  for (var i0 = 0; i0 < 256; i0++) hist[i0] = 0;
+  for (var i = 0, j = 0; i < d.length; i += 4, j++){
+    var r = d[i], g = d[i+1], b = d[i+2];
+    L[j] = 0.299*r + 0.587*g + 0.114*b; A[j] = r - g; B[j] = (r+g)/2 - b;
+    hist[L[j]|0]++;
+  }
+  /* 机の色：写真の縁の画素の中央値 */
+  var eL = [], eA = [], eB = [];
+  function edge(k){ eL.push(L[k]); eA.push(A[k]); eB.push(B[k]); }
+  for (var x = 0; x < w; x += 2){ for (var y = 0; y < 4; y++){ edge(y*w + x); edge((h-1-y)*w + x); } }
+  for (var y2 = 0; y2 < h; y2 += 2){ for (var x2 = 0; x2 < 4; x2++){ edge(y2*w + x2); edge(y2*w + (w-1-x2)); } }
+  function med(a){ a.sort(function(p, q){ return p - q; }); return a[a.length >> 1]; }
+  var mL = med(eL), mA = med(eA), mB = med(eB);
+  if (window.__fqLog) window.__fqLog.push({ mL:mL, mA:mA, mB:mB, w:w, h:h });
+  /* 明るさのしきい値（大津） */
+  var tot = N, sum = 0;
+  for (var t = 0; t < 256; t++) sum += t*hist[t];
+  var sB = 0, wB = 0, bestV = 0, thr = 128;
+  for (var t2 = 0; t2 < 256; t2++){
+    wB += hist[t2]; if (!wB) continue;
+    var wF = tot - wB; if (!wF) break;
+    sB += t2*hist[t2];
+    var mBk = sB/wB, mF = (sum-sB)/wF, val = wB*wF*(mBk-mF)*(mBk-mF);
+    if (val > bestV){ bestV = val; thr = t2; }
+  }
+  if (window.__fqLog) window.__fqLog.push({ thr:thr });
+  /* 机と名刺を分けるやり方をいくつか試す。木の机は照明で明るさがかなり変わるので、
+     色み（赤み・黄み）だけで分ける見方も入れる */
+  var masks = [
+    function(k){ return Math.abs(L[k]-mL) > 34 || Math.abs(A[k]-mA) > 30 || Math.abs(B[k]-mB) > 30; },
+    function(k){ return Math.abs(L[k]-mL) > 18 || Math.abs(A[k]-mA) > 16 || Math.abs(B[k]-mB) > 16; },
+    function(k){ return L[k] > thr; },
+    function(k){ return Math.abs(A[k]-mA) > 14 || Math.abs(B[k]-mB) > 14; },
+    function(k){ return Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22; },
+    function(k){ return L[k] > mL + 45; },
+    function(k){ return L[k] < mL - 45; },
+    function(k){ return (Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22) && L[k] > mL + 15; },
+    function(k){ return (Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22) && L[k] < mL - 15; }
+  ];
+  var best = null;
+  for (var mi = 0; mi < masks.length; mi++){
+    var cand = floodRect(masks[mi], w, h);
+    if (!cand) continue;
+    /* 写真の縁まで届いている長方形は、机ごと拾っている可能性が高い */
+    var touch = 0;
+    cand.rect.forEach(function(pp){
+      if (pp[0] < 2 || pp[1] < 2 || pp[0] > w-3 || pp[1] > h-3) touch++;
+    });
+    var ar = cand.ar || 1.65;
+    var sc = cand.fill - 0.08 * touch - (cand.frac > 0.9 ? 0.6 : 0) - 0.3 * Math.min(1, Math.abs(ar - 1.65) / 1.65);
+    if (window.__fqLog) window.__fqLog.push({ mask:mi, sc:sc, touch:touch });
+    if (!best || sc > best.sc){ cand.sc = sc; best = cand; }
+  }
+  if (!best) return null;
+  if (window.__fqLog) window.__fqLog.push({ best:best.sc, frac:best.frac });
+  var kk = src.width / w;
+  return orderQuad(best.rect.map(function(pp){ return [pp[0]*kk, pp[1]*kk]; }));
+}
+/* 中心から、条件に合う画素を塗り広げて、囲む長方形を返す */
+function floodRect(inMaskFn, w, h){
+  var N = w*h, start = (w>>1) + (h>>1)*w, R = 2;
+  /* 条件に合う画素を先に集めて、縁を R 画素けずる。
+     机の木目や影の細い橋づたいに、名刺の外へ塗りが漏れるのを防ぐ */
+  var M = new Uint8Array(N), E = new Uint8Array(N);
+  for (var k0 = 0; k0 < N; k0++) M[k0] = inMaskFn(k0) ? 1 : 0;
+  for (var yy0 = R; yy0 < h - R; yy0++){
+    for (var xx0 = R; xx0 < w - R; xx0++){
+      var ok = 1;
+      for (var dy = -R; dy <= R && ok; dy++)
+        for (var dx = -R; dx <= R; dx++) if (!M[(yy0+dy)*w + xx0+dx]){ ok = 0; break; }
+      E[yy0*w + xx0] = ok;
+    }
+  }
+  function inMask(k){ return E[k] === 1; }
+  if (!inMask(start)){
+    var bi = -1, bd = 1e18;
+    for (var yy = (h*0.3)|0; yy < h*0.7; yy += 2)
+      for (var xx = (w*0.3)|0; xx < w*0.7; xx += 2){
+        var k0 = yy*w + xx;
+        if (!inMask(k0)) continue;
+        var dd = (xx - (w>>1))*(xx - (w>>1)) + (yy - (h>>1))*(yy - (h>>1));
+        if (dd < bd){ bd = dd; bi = k0; }
+      }
+    if (bi < 0) return null;
+    start = bi;
+  }
+  var seen = new Uint8Array(N), q = [start], n = 0;
+  var minx = w, maxx = 0, miny = h, maxy = 0;
+  seen[start] = 1;
+  while (q.length){
+    var k = q.pop(), px = k % w, py = (k/w)|0;
+    n++;
+    if (px < minx) minx = px;
+    if (px > maxx) maxx = px;
+    if (py < miny) miny = py;
+    if (py > maxy) maxy = py;
+    var nb = [k-1, k+1, k-w, k+w];
+    for (var a = 0; a < 4; a++){
+      var m = nb[a];
+      if (m < 0 || m >= N || seen[m]) continue;
+      if (a === 0 && k % w === 0) continue;
+      if (a === 1 && k % w === w-1) continue;
+      if (inMask(m)){ seen[m] = 1; q.push(m); }
+    }
+  }
+  if (maxx <= minx || maxy <= miny) return null;
+  var bp = [];
+  for (var y3 = miny; y3 <= maxy; y3++){
+    for (var x3 = minx; x3 <= maxx; x3++){
+      var k2 = y3*w + x3;
+      if (!seen[k2]) continue;
+      if (x3 === 0 || y3 === 0 || x3 === w-1 || y3 === h-1){ bp.push(x3, y3); continue; }
+      if (!seen[k2-1] || !seen[k2+1] || !seen[k2-w] || !seen[k2+w]) bp.push(x3, y3);
+    }
+  }
+  if (bp.length < 24) return null;
+  var rect = minAreaRect(bp);
+  if (!rect) return null;
+  /* 長方形の向きにそって、塗れた画素の分布を見る。端のほうで画素がまばらな列・行は、
+     手や光の反射など名刺のとなりのものへ漏れた分なので切り落とす */
+  var ux = rect[1][0]-rect[0][0], uy = rect[1][1]-rect[0][1], lu0 = Math.hypot(ux, uy) || 1;
+  var cs = ux/lu0, sn = uy/lu0;
+  var U0 = 1e18, U1 = -1e18, V0 = 1e18, V1 = -1e18;
+  for (var i5 = 0; i5 < bp.length; i5 += 2){
+    var pu = bp[i5]*cs + bp[i5+1]*sn, pv = -bp[i5]*sn + bp[i5+1]*cs;
+    if (pu < U0) U0 = pu; if (pu > U1) U1 = pu; if (pv < V0) V0 = pv; if (pv > V1) V1 = pv;
+  }
+  var nu = Math.max(1, Math.ceil(U1 - U0) + 1), nv = Math.max(1, Math.ceil(V1 - V0) + 1);
+  var hu = new Int32Array(nu), hv = new Int32Array(nv);
+  for (var k5 = 0; k5 < N; k5++){
+    if (!seen[k5]) continue;
+    var x5 = k5 % w, y5 = (k5/w)|0;
+    var pu2 = x5*cs + y5*sn - U0, pv2 = -x5*sn + y5*cs - V0;
+    var bu = Math.min(nu-1, Math.max(0, pu2|0)), bv = Math.min(nv-1, Math.max(0, pv2|0));
+    hu[bu]++; hv[bv]++;
+  }
+  function trim(hist){
+    var arr = Array.prototype.slice.call(hist).filter(function(v){ return v > 0; }).sort(function(a, b){ return a - b; });
+    var medv = arr.length ? arr[arr.length >> 1] : 0, lo = 0, hi = hist.length - 1;
+    while (lo < hi && hist[lo] < medv * 0.55) lo++;
+    while (hi > lo && hist[hi] < medv * 0.55) hi--;
+    return [lo, hi];
+  }
+  var tu = trim(hu), tv = trim(hv);
+  if (tu[0] > 0 || tu[1] < nu-1 || tv[0] > 0 || tv[1] < nv-1){
+    var a0 = U0 + tu[0], a1 = U0 + tu[1] + 1, b0 = V0 + tv[0], b1 = V0 + tv[1] + 1;
+    function back(pu3, pv3){ return [pu3*cs - pv3*sn, pu3*sn + pv3*cs]; }
+    rect = [back(a0, b0), back(a1, b0), back(a1, b1), back(a0, b1)];
+    n = 0;
+    for (var k6 = 0; k6 < N; k6++){
+      if (!seen[k6]) continue;
+      var x6 = k6 % w, y6 = (k6/w)|0, pu4 = x6*cs + y6*sn, pv4 = -x6*sn + y6*cs;
+      if (pu4 >= a0 && pu4 <= a1 && pv4 >= b0 && pv4 <= b1) n++;
+    }
+  }
+  /* けずった分（R）だけ外へ広げてもどす */
+  var u = [rect[1][0]-rect[0][0], rect[1][1]-rect[0][1]], v = [rect[3][0]-rect[0][0], rect[3][1]-rect[0][1]];
+  var lu = Math.hypot(u[0], u[1]) || 1, lv = Math.hypot(v[0], v[1]) || 1;
+  u = [u[0]/lu*R, u[1]/lu*R]; v = [v[0]/lv*R, v[1]/lv*R];
+  rect = [[rect[0][0]-u[0]-v[0], rect[0][1]-u[1]-v[1]], [rect[1][0]+u[0]-v[0], rect[1][1]+u[1]-v[1]],
+          [rect[2][0]+u[0]+v[0], rect[2][1]+u[1]+v[1]], [rect[3][0]-u[0]+v[0], rect[3][1]-u[1]+v[1]]];
+  var sz = quadSize(rect), ra = sz.w * sz.h;
+  if (!ra) return null;
+  var ar = Math.max(sz.w, sz.h) / Math.max(1e-6, Math.min(sz.w, sz.h));
+  var frac = ra / N, fill = n / ra;
+  if (window.__fqLog) window.__fqLog.push({ ar:ar, frac:frac, fill:fill, n:n, rect:rect });
+  if (ar < 1.15 || ar > 2.7) return null;
+  if (frac < 0.06 || frac > 0.97) return null;
+  if (fill < 0.6) return null;
+  return { rect:rect, fill:fill, frac:frac, ar:ar };
+}
+
+/* 点をぜんぶ囲む、面積がいちばん小さい回転長方形をさがす。
+   角を1点ずつ拾う方式とちがい、かならず直角の長方形になるので、
+   角が丸い名刺や、角に影がかかった名刺でもゆがまない。 */
+function minAreaRect(pts){
+  function scan(a0, a1, st){
+    var best = null;
+    for (var deg = a0; deg < a1; deg += st){
+      var t = deg*Math.PI/180, c = Math.cos(t), sn = Math.sin(t);
+      var mnx = 1e18, mxx = -1e18, mny = 1e18, mxy = -1e18;
+      for (var i = 0; i < pts.length; i += 2){
+        var x = pts[i]*c + pts[i+1]*sn, y = -pts[i]*sn + pts[i+1]*c;
+        if (x < mnx) mnx = x;
+        if (x > mxx) mxx = x;
+        if (y < mny) mny = y;
+        if (y > mxy) mxy = y;
+      }
+      var a = (mxx-mnx) * (mxy-mny);
+      if (!best || a < best.a) best = { a:a, deg:deg, mnx:mnx, mxx:mxx, mny:mny, mxy:mxy };
+    }
+    return best;
+  }
+  var b = scan(0, 90, 1);
+  if (!b) return null;
+  b = scan(b.deg - 1, b.deg + 1.001, 0.2) || b;
+  var t = b.deg*Math.PI/180, c = Math.cos(t), sn = Math.sin(t);
+  function back(x, y){ return [x*c - y*sn, x*sn + y*c]; }
+  return [back(b.mnx,b.mny), back(b.mxx,b.mny), back(b.mxx,b.mxy), back(b.mnx,b.mxy)];
+}
+/* 画面の左上にいちばん近い角から、時計回りに並べ直す */
+function orderQuad(q){
+  var k = 0, bs = 1e18;
+  for (var i = 0; i < 4; i++){
+    var sm = q[i][0] + q[i][1];
+    if (sm < bs){ bs = sm; k = i; }
+  }
+  var o = [q[k], q[(k+1)%4], q[(k+2)%4], q[(k+3)%4]], a = 0;
+  for (var i2 = 0; i2 < 4; i2++){
+    var p1 = o[i2], p2 = o[(i2+1)%4];
+    a += p1[0]*p2[1] - p2[0]*p1[1];
+  }
+  return a < 0 ? [o[0], o[3], o[2], o[1]] : o;
+}
+function fullQuad(c){ return [[0,0], [c.width,0], [c.width,c.height], [0,c.height]]; }
+function quadSize(qd){
+  function dist(a, b){ return Math.sqrt((a[0]-b[0])*(a[0]-b[0]) + (a[1]-b[1])*(a[1]-b[1])); }
+  return { w: (dist(qd[0],qd[1]) + dist(qd[3],qd[2])) / 2,
+           h: (dist(qd[0],qd[3]) + dist(qd[1],qd[2])) / 2 };
+}
+/* ===== 四隅から、まっすぐな長方形に直す（斜めから撮っても正面になる） ===== */
+function solve8(A, b){
+  for (var i = 0; i < 8; i++){
+    var pv = i;
+    for (var r = i+1; r < 8; r++) if (Math.abs(A[r][i]) > Math.abs(A[pv][i])) pv = r;
+    var ta = A[i]; A[i] = A[pv]; A[pv] = ta;
+    var tb = b[i]; b[i] = b[pv]; b[pv] = tb;
+    if (Math.abs(A[i][i]) < 1e-12) return null;
+    for (var r2 = 0; r2 < 8; r2++){
+      if (r2 === i) continue;
+      var f = A[r2][i] / A[i][i];
+      for (var c2 = i; c2 < 8; c2++) A[r2][c2] -= f * A[i][c2];
+      b[r2] -= f * b[i];
+    }
+  }
+  var out = [];
+  for (var i4 = 0; i4 < 8; i4++) out.push(b[i4] / A[i4][i4]);
+  return out;
+}
+function warp(src, qd, outW, outH){
+  var dst = [[0,0], [outW,0], [outW,outH], [0,outH]], A = [], b = [];
+  for (var i = 0; i < 4; i++){
+    var X = dst[i][0], Y = dst[i][1], u = qd[i][0], v = qd[i][1];
+    A.push([X, Y, 1, 0, 0, 0, -X*u, -Y*u]); b.push(u);
+    A.push([0, 0, 0, X, Y, 1, -X*v, -Y*v]); b.push(v);
+  }
+  var hh = solve8(A, b);
+  if (!hh) return null;
+  var sc = toCanvas(src, Math.max(src.width, src.height));
+  var sd;
+  try { sd = sc.getContext('2d').getImageData(0, 0, sc.width, sc.height); } catch(e){ return null; }
+  var sp = sd.data, sw = sc.width, sh = sc.height;
+  var oc = document.createElement('canvas');
+  oc.width = outW; oc.height = outH;
+  var octx = oc.getContext('2d'), od = octx.createImageData(outW, outH), op = od.data;
+  for (var y = 0; y < outH; y++){
+    for (var x = 0; x < outW; x++){
+      var den = hh[6]*x + hh[7]*y + 1;
+      var u2 = (hh[0]*x + hh[1]*y + hh[2]) / den, v2 = (hh[3]*x + hh[4]*y + hh[5]) / den;
+      var o = (y*outW + x) * 4;
+      if (u2 < 0 || v2 < 0 || u2 >= sw-1 || v2 >= sh-1){
+        op[o] = op[o+1] = op[o+2] = 255; op[o+3] = 255; continue;
+      }
+      var x0 = u2|0, y0 = v2|0, fx = u2-x0, fy = v2-y0;
+      var i00 = (y0*sw + x0)*4, i10 = i00+4, i01 = i00 + sw*4, i11 = i01+4;
+      for (var ch = 0; ch < 3; ch++){
+        op[o+ch] = (sp[i00+ch]*(1-fx)*(1-fy) + sp[i10+ch]*fx*(1-fy) +
+                    sp[i01+ch]*(1-fx)*fy + sp[i11+ch]*fx*fy) | 0;
+      }
+      op[o+3] = 255;
+    }
+  }
+  octx.putImageData(od, 0, 0);
+  return oc;
+}
+function putShot(id, shot){
+  return IDB.put({ id:id, full:shot.full, thumb:shot.thumb }).then(function(){
+    thumbCache[id] = shot.thumb;
+  }, function(){ toast(idbOK ? '写真を保存できませんでした。空き容量を確認してください' : 'この開き方では写真を保存できません'); });
+}
+function getShot(id){ return IDB.get(id).catch(function(){ return null; }); }
+function delShot(id){ delete thumbCache[id]; return IDB.del(id).catch(function(){}); }
+var idbOK = true;
+IDB.get('__probe__').then(function(){}, function(){ idbOK = false; });
+
+/* ===================== 名刺の文字を読む =====================
+   Tesseract（オープンソースの文字読み取り）を端末の中で動かす。
+   写真はどこにも送らない。初回だけ部品の取り込みに数MBかかる。      */
+var tessScriptP = null, tessWorkerP = null, progressCb = null;
+
+function loadScript(src){
+  if (tessScriptP) return tessScriptP;
+  tessScriptP = new Promise(function(res, rej){
+    if (window.Tesseract) { res(); return; }
+    var s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload  = function(){ res(); };
+    s.onerror = function(){ tessScriptP = null; rej(new Error('部品を取り込めませんでした')); };
+    document.head.appendChild(s);
+  });
+  return tessScriptP;
+}
+function getWorker(){
+  if (tessWorkerP) return tessWorkerP;
+  tessWorkerP = loadScript(OCR.lib).then(function(){
+    if (!window.Tesseract) throw new Error('部品を取り込めませんでした');
+    return window.Tesseract.createWorker('jpn', 1, {
+      workerPath: OCR.worker, corePath: OCR.core, langPath: OCR.lang, gzip: true,
+      logger: function(m){ if (progressCb) progressCb(m); }
+    });
+  }).then(function(w){
+    return w.setParameters({ tessedit_pageseg_mode:'3', preserve_interword_spaces:'1' })
+            .then(function(){ return w; });
+  });
+  tessWorkerP['catch'](function(){ tessWorkerP = null; });
+  return tessWorkerP;
+}
+function readCard(img, onProg){
+  progressCb = onProg || null;
+  var cv = forOcr(img);
+  return getWorker().then(function(w){
+    /* 段組みの見立てがちがうと、拾える行がちがう。2通りで読んで足し合わせる */
+    var a = null, b = null;
+    return w.setParameters({ tessedit_pageseg_mode:'3', preserve_interword_spaces:'1' })
+      .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+      .then(function(r){ a = linesOf(r.data); return w.setParameters({ tessedit_pageseg_mode:'4' }); })
+      .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+      .then(function(r){ b = linesOf(r.data); return w.setParameters({ tessedit_pageseg_mode:'6' }); })
+      /* 3回目は「全体がひとかたまりの文章」と見なして読む。
+         前の2回が絵や帯と見まちがえて飛ばした行（社名など）を、すき間にだけ足す */
+      .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+      .then(function(r){
+        var c6 = linesOf(r.data);
+        if (OCRBASE) window.__meishiRaw = { a:JSON.parse(JSON.stringify(a)), b:JSON.parse(JSON.stringify(b)), c:JSON.parse(JSON.stringify(c6)), ml:mergeLines, ul:unionLines, H:cv.height, W:cv.width };
+        var un = unionLines(unionLines(a, b), c6, true); if (OCRBASE) window.__meishiRaw.un = JSON.parse(JSON.stringify(un));
+        var mg = mergeLines(un); if (OCRBASE) window.__meishiRaw.mg = JSON.parse(JSON.stringify(mg));
+        var ls = mg.filter(function(L){
+          /* 机の木目や写真を1行として拾ったもの（背が高すぎる・大きいのに信頼度が低い）は捨てる */
+          if (!L.bb) return true;
+          if (L.h > cv.height * 0.22) return false;
+          if (L.c < 35 && L.h > cv.height * 0.18) return false;
+          if (L.c < 20 && (L.bb.x1 - L.bb.x0) > cv.width * 0.85) return false;   /* 端から端までの帯や縁 */
+          return true;
+        });
+        return { lines: ls, cv: cv, w: w };
+      });
+  }).then(function(res){
+    progressCb = null;
+    return res;
+  }, function(err){
+    progressCb = null;
+    throw err;
+  });
+}
+/* 向きの自動判定：4方向を小さく読んで、いちばん文字らしく読めた向きを選ぶ */
+function orientScore(w, cv){
+  return w.setParameters({ tessedit_pageseg_mode:'6' })
+    .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+    .then(function(r){
+      var sc = 0;
+      linesOf(r.data).forEach(function(L){
+        if (L.c < 40) return;
+        var n = (L.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
+        sc += L.c * n;
+      });
+      return sc;
+    }, function(){ return 0; });
+}
+function autoOrient(w, card){
+  /* 横長に切れていても、縦書きレイアウトの名刺は文字が横倒しなので、3方向とも試す。
+     同点なら正位置（回さない）を優先する */
+  var small = forOcr(card, 1000), best = { k:0, s:-1 }, chain = Promise.resolve();
+  [0, 1, 3].forEach(function(k){
+    chain = chain.then(function(){ return orientScore(w, rotCanvasK(small, k)); })
+      .then(function(sc){ if (sc > best.s * 1.15) best = { k:k, s:sc }; });
+  });
+  return chain.then(function(){ return best.k; });
+}
+function linesOf(data){
+  var out = [];
+  (data.blocks || []).forEach(function(b){
+    (b.paragraphs || []).forEach(function(p){
+      (p.lines || []).forEach(function(l){
+        var t = String(l.text || '').replace(/[\s　]+/g, ' ').trim();
+        if (!t) return;
+        out.push({ t:t, h:Math.round(l.bbox.y1 - l.bbox.y0), c:Math.round(l.confidence), y:l.bbox.y0,
+                   bb:{ x0:l.bbox.x0, x1:l.bbox.x1, y0:l.bbox.y0, y1:l.bbox.y1 } });
+      });
+    });
+  });
+  if (!out.length && data.text){
+    String(data.text).split('\n').forEach(function(t){
+      t = t.replace(/[\s　]+/g,' ').trim();
+      if (t) out.push({ t:t, h:0, c:80, y:0, bb:null });
+    });
+  }
+  return out;
+}
+/* 2回の読みを足す。同じ場所の行は確からしいほうを残し、片方にしかない行は加える */
+/* fillOnly … b の行は、a にまだ無いところにだけ足す（a の行を置きかえない） */
+function unionLines(a, b, fillOnly){
+  var out = a.slice();
+  b.forEach(function(L){
+    if (!L.bb) return;
+    var hit = -1;
+    for (var i = 0; i < out.length; i++){
+      var P = out[i];
+      if (!P.bb) continue;
+      if (norm(P.t) === norm(L.t) && norm(L.t)){ hit = i; break; }   /* 同じ文字なら同じ行 */
+      var ov = Math.min(P.bb.y1, L.bb.y1) - Math.max(P.bb.y0, L.bb.y0);
+      var xo = Math.min(P.bb.x1, L.bb.x1) - Math.max(P.bb.x0, L.bb.x0);
+      if (ov > Math.min(P.h, L.h) * 0.5 && xo > 0){ hit = i; break; }
+    }
+    if (hit < 0) out.push(L);
+    else if (!fillOnly && L.c > out[hit].c + 8) out[hit] = L;
+  });
+  return out;
+}
+/* 同じ高さに横に並んでいる行をつなぐ。「小野寺」「誠」のように名前が割れることがある */
+function mergeLines(lines){
+  var ls = lines.filter(function(L){ return L.bb; });
+  if (ls.length !== lines.length) return lines;
+  ls.sort(function(a, b){ return (a.bb.y0 - b.bb.y0) || (a.bb.x0 - b.bb.x0); });
+  var out = [];
+  ls.forEach(function(L){
+    var m = null;
+    for (var i = out.length - 1; i >= 0 && i >= out.length - 4; i--){
+      var P = out[i];
+      var ov = Math.min(P.bb.y1, L.bb.y1) - Math.max(P.bb.y0, L.bb.y0);
+      var hmin = Math.min(P.h, L.h), hmax = Math.max(P.h, L.h);
+      /* 「株式会社」だけの行は字が小さいことが多いので、高さの差は問わない */
+      var bare = RE_COBARE.test(P.t) || RE_COBARE.test(L.t);
+      if (!hmin || ov < hmin * (bare ? 0.3 : 0.6)) continue;
+      if (!bare && hmin < hmax * 0.55) continue;
+      var gap = Math.max(L.bb.x0 - P.bb.x1, P.bb.x0 - L.bb.x1);
+      if (gap > hmax * 2.2) continue;
+      m = P; break;
+    }
+    if (!m){ out.push(L); return; }
+    if (norm(m.t) === norm(L.t)){ if (L.c > m.c) m.c = L.c; return; }   /* 同じ文字の行はつながない */
+    /* 横に大きく重なっていれば同じ行の別の読み。確からしいほうだけ残す */
+    var xo = Math.min(m.bb.x1, L.bb.x1) - Math.max(m.bb.x0, L.bb.x0);
+    var wmin = Math.min(m.bb.x1 - m.bb.x0, L.bb.x1 - L.bb.x0);
+    if (wmin > 0 && xo > wmin * 0.6){           /* 狭いほうの大半が重なる＝同じ行の別の読み */
+      var nm = norm(m.t), nl = norm(L.t), longer = null;
+      /* 片方がもう片方を含む（「小野寺」と「小野寺 誠」）なら、長いほうを採る */
+      if (nl.length > nm.length && nl.indexOf(nm) >= 0) longer = L;
+      else if (nm.length > nl.length && nm.indexOf(nl) >= 0) longer = m;
+      if (longer){
+        var cc = Math.round((m.c + L.c) / 2);
+        if (longer === L){ m.t = L.t; m.bb = L.bb; m.h = L.h; m.y = L.y; }
+        m.c = Math.max(longer.c, cc);
+      } else if (L.c > m.c){ m.t = L.t; m.c = L.c; m.bb = L.bb; m.h = L.h; m.y = L.y; }
+      return;
+    }
+    var left = m.bb.x0 <= L.bb.x0 ? m : L, right = left === m ? L : m;
+    var n1 = m.t.length, n2 = L.t.length;
+    m.t = left.t + (RE_COBARE.test(left.t) || RE_COBARE.test(right.t) ? '' : ' ') + right.t;
+    /* つないだ行の確からしさは、弱いほうに引きずられる（断片が化けていたら読み直したい） */
+    var avg = (m.c * n1 + L.c * n2) / Math.max(1, n1 + n2);
+    m.c = Math.round(Math.min(m.c, L.c) * 0.5 + avg * 0.5);
+    m.bb = { x0:Math.min(m.bb.x0, L.bb.x0), x1:Math.max(m.bb.x1, L.bb.x1),
+             y0:Math.min(m.bb.y0, L.bb.y0), y1:Math.max(m.bb.y1, L.bb.y1) };
+    m.h = Math.round(m.bb.y1 - m.bb.y0); m.y = m.bb.y0;
+  });
+  /* 「株式会社」だけの行が上に残っていたら、すぐ下の行につなぐ */
+  for (var i2 = 0; i2 < out.length; i2++){
+    var P2 = out[i2];
+    if (!RE_COBARE.test(P2.t)) continue;
+    var tgt = -1, bd = 1e18;
+    for (var j = 0; j < out.length; j++){
+      if (j === i2 || RE_COBARE.test(out[j].t)) continue;
+      var Q = out[j], gap2 = Q.bb.y0 - P2.bb.y1;
+      var xo = Math.min(P2.bb.x1, Q.bb.x1) - Math.max(P2.bb.x0, Q.bb.x0);
+      if (gap2 < -P2.h * 0.2 || gap2 > P2.h * 1.2 || xo <= 0) continue;
+      if (gap2 < bd){ bd = gap2; tgt = j; }
+    }
+    if (tgt < 0) continue;
+    var T = out[tgt];
+    T.t = P2.t + T.t;
+    T.bb = { x0:Math.min(T.bb.x0, P2.bb.x0), x1:Math.max(T.bb.x1, P2.bb.x1), y0:Math.min(T.bb.y0, P2.bb.y0), y1:Math.max(T.bb.y1, P2.bb.y1) };
+    T.h = Math.round(T.bb.y1 - T.bb.y0); T.y = T.bb.y0;
+    out.splice(i2, 1); i2--;
+  }
+  return out;
+}
+/* 1行だけ切り出して、読みやすい大きさにして読み直す（名前と会社に使う） */
+function rereadLine(w, cv, bb, psm, size){
+  var h = bb.y1 - bb.y0, pad = Math.round(h * 0.2), padx = Math.round(h * 0.5);
+  var x0 = Math.max(0, bb.x0 - padx), y0 = Math.max(0, bb.y0 - pad);
+  var x1 = Math.min(cv.width, bb.x1 + padx), y1 = Math.min(cv.height, bb.y1 + pad);
+  if (x1 - x0 < 10 || y1 - y0 < 10) return Promise.resolve(null);
+  var sc = (size || 90) / (y1 - y0);
+  var c = document.createElement('canvas');
+  c.width = Math.max(1, Math.round((x1-x0) * sc)); c.height = Math.max(1, Math.round((y1-y0) * sc));
+  var x = c.getContext('2d');
+  x.imageSmoothingQuality = 'high';
+  x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.drawImage(cv, x0, y0, x1-x0, y1-y0, 0, 0, c.width, c.height);
+  return w.setParameters({ tessedit_pageseg_mode: psm || '7' })
+    .then(function(){ return w.recognize(c, {}, { text:true }); })
+    .then(function(r){
+      return { t: String(r.data.text || '').replace(/[\s　]+/g, ' ').trim(), c: Math.round(r.data.confidence || 0) };
+    }, function(){ return null; });
+}
+
+/* ===================== 読んだ文字を項目に割りふる ===================== */
+var CIRC = '①②③④⑤⑥⑦⑧⑨';
+function han(s){
+  var t = String(s == null ? '' : s).replace(/[！-～]/g, function(c){
+    return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/　/g, ' ');
+  /* 丸数字で返ってくることがあるので、ふつうの数字に直す */
+  return t.replace(/[①②③④⑤⑥⑦⑧⑨]/g, function(c){ return String(CIRC.indexOf(c) + 1); })
+          .replace(/⓪/g, '0');
+}
+function dashes(s){ return String(s).replace(/[‐‑‒–—―ー−ｰ]/g, '-'); }
+function digitsFix(s){
+  return String(s).replace(/[Ｏｏ○〇oO]/g, '0').replace(/[lI!|]/g, '1')
+                  .replace(/[Ss]/g, '5').replace(/[Bb]/g, '8');
+}
+var RE_MAIL  = /[A-Za-z0-9][A-Za-z0-9._%+\-]*@[A-Za-z0-9][A-Za-z0-9\-]*(?:\.[A-Za-z0-9][A-Za-z0-9\-]*)+/;
+var RE_LOCAL = /^[A-Za-z0-9][A-Za-z0-9._%+\-]*$/;
+var RE_TEL   = /0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4}/g;
+var RE_LOOSE = /\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}/g;
+var RE_CO    = /株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
+var RE_TITLE = /代表取締役|取締役|代表社員|代表者|代表|会長|社長|専務|常務|本部長|統括|部長|次長|課長|係長|主任|主査|主幹|店主|店長|所長|支店長|工場長|室長|局長|主宰|オーナー|女将|チーフ|マネージャ|リーダー|顧問|参与|参事|理事|監査役|技師|税理士|公認会計士|弁護士|社会保険労務士|司法書士|行政書士|建築士|ディレクター|プランナー|コンサルタント/;
+var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|部|課|室|係|局)$/;
+var RE_DEPT2 = /^(営業|総務|経理|人事|企画|開発|製造|技術|広報|管理|購買|品質保証|法務|財務|設計|施工|工事|販売|事務|生産|物流|営業企画|経営企画|本社|支社)$/;
+var RE_ADDR  = /[都道府県]|[市区町村郡]/;
+/* 免許・登録番号の行（「兵庫県知事（特-7）第110902号」など）。県が入るが住所ではない */
+var RE_LIC   = /第\s*[0-9A-Za-z０-９\-‐]+\s*号|知事|大臣|免許|登録番号|許可|建築士事務所|宅地建物取引|届出|認定番号/;
+/* 「株式会社」だけの行 */
+var RE_COBARE = /^(株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲|\(株\)|（株）|\(有\)|（有）)$/;
+/* 文のような行（「ママが喜ぶ家づくり」）。名前や会社ではない */
+function sentenceLike(t){
+  var n = String(t).replace(/[\s　]/g, '').length;
+  return n >= 6 && /[がをにでへともぶづ]/.test(t);
+}
+/* 本文の列：メール・URL・電話・住所が並ぶ横の範囲。ロゴや免許番号の列と分ける */
+function mainColumn(lines){
+  var bs = [];
+  lines.forEach(function(L){
+    if (!L.bb) return;
+    var t = han(L.t);
+    var hit = /@/.test(t) || /https?:|www\./i.test(t) || /TEL|FAX|電話|携帯|Mobile/i.test(t) || /〒/.test(L.t) || RE_TEL.test(t);
+    RE_TEL.lastIndex = 0;
+    if (hit && !RE_LIC.test(L.t)) bs.push(L.bb);
+  });
+  if (bs.length < 2) return null;
+  var x0s = bs.map(function(b){ return b.x0; }).sort(function(a, b){ return a - b; });
+  var x1s = bs.map(function(b){ return b.x1; }).sort(function(a, b){ return a - b; });
+  var x0 = x0s[Math.floor(x0s.length / 2)], x1 = x1s[Math.floor(x1s.length / 2)];
+  return (x1 - x0 < 50) ? null : { x0:x0, x1:x1 };
+}
+function inCol(L, col){
+  if (!col || !L.bb) return true;
+  var w = L.bb.x1 - L.bb.x0;
+  if (w <= 0) return true;
+  var ov = Math.min(L.bb.x1, col.x1) - Math.max(L.bb.x0, col.x0);
+  return ov >= w * 0.5;
+}
+/* 「浅 堀 楓 又」のように1字ずつ空いた名前を「浅堀 楓又」にする */
+function fixSpacing(t){
+  var p = String(t).split(' ').filter(Boolean);
+  var singles = p.length >= 3 && p.every(function(w){ return w.length === 1; });
+  if (!singles) return t;
+  if (p.length === 4) return p[0] + p[1] + ' ' + p[2] + p[3];
+  if (p.length === 6) return p[0] + p[1] + p[2] + ' ' + p[3] + p[4] + p[5];
+  return p.join('');
+}
+
+var RE_MLABEL = /(^|[\s　(（])(?:e[\s\-_.]?ma[il1|!]{1,2}|EMAIL|MAIL|Mail|mail|メール|Ｅメール|アドレス|E[.:：](?=\s))[\s　\-]*[:：]?/gi;
+function cleanMail(a){
+  var at = a.indexOf('@');
+  if (at < 0) return a;
+  var loc = a.slice(0, at), dom = a.slice(at + 1);
+  loc = loc.replace(/^e[\-_]?mai?l?l?(?=[A-Za-z0-9._%+\-])/i, '')     /* 見出しの残り */
+           .replace(/^m?mobile[.:]?/i, '')
+           .replace(/^[\d.\-]{9,}/, '')                                 /* くっついた電話番号 */
+           .replace(/^\d{1,3}(?=[A-Za-z])/, '')                          /* 記号の読み違え */
+           .replace(/^[.\-_]+/, '');
+  var m = dom.match(/^(.+?\.(?:co\.jp|ne\.jp|or\.jp|ac\.jp|lg\.jp|go\.jp|gr\.jp|ed\.jp|jp|com|net|org|info|biz))(.{0,2})$/i);
+  if (m) dom = m[1];                                                    /* 末尾のゴミ */
+  return loc + '@' + dom;
+}
+function pickEmail(line){
+  var t = han(line).replace(RE_MLABEL, ' ').replace(/[\s　]/g, '');
+  var m = t.match(RE_MAIL);
+  if (m) return cleanMail(m[0]).toLowerCase().replace(/[.,;:]+$/, '');
+  /* @ が Q・G・© に化けることが多い。e や o は本物の字のことが多いので触らない */
+  var pos = [];
+  for (var i = 1; i < t.length - 3; i++) if ('QGＱ©®'.indexOf(t.charAt(i)) >= 0) pos.push(i);
+  for (var j = pos.length - 1; j >= 0; j--){
+    var a = t.slice(0, pos[j]), b = t.slice(pos[j] + 1);
+    var mb = b.match(/^[A-Za-z0-9][A-Za-z0-9.\-]*\.[A-Za-z]{2,}/);
+    if (mb && a.length >= 2 && RE_LOCAL.test(a)) return cleanMail(a + '@' + mb[0]).toLowerCase();
+  }
+  return '';
+}
+function pickUrl(line){
+  var t = han(line).replace(/[\s　]/g, '');
+  if (t.indexOf('@') >= 0) return '';
+  var m = t.match(/https?:\/\/[A-Za-z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]+/i);
+  if (m) return m[0].replace(/[.,;:]+$/, '').toLowerCase();
+  m = t.match(/(?:www\.)[A-Za-z0-9\-]+(?:\.[A-Za-z0-9\-]+)*\.[A-Za-z]{2,}/i);
+  if (m) return m[0].replace(/[.,;:]+$/, '').toLowerCase();
+  return '';
+}
+function pickPhones(lines){
+  var tel = '', mobile = '';
+  lines.forEach(function(L){
+    var t = dashes(han(L.t)).replace(/\(\s*(\d{2,5})\s*\)\s*/g, '$1-');   /* （078）795-… → 078-795-… */
+    t.split(/(?=FAX|Fax|fax|ファックス|\bF[.:：]\s*\d)/).forEach(function(seg){
+      if (/^(FAX|Fax|fax|ファックス|F[.:：])/.test(seg)) return;
+      var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM[.:：]|\bHP[.:：]?\s*(?=\d)/.test(seg);
+      var labelled = isMob || /TEL|Tel|tel|電話|PHONE|Phone|\bT[.:：]/.test(seg);
+      var ms = seg.match(RE_TEL);
+      /* 「TEL」「携帯」と書いてある行は少し緩く拾う。数字を1つ多く・少なく読むことが
+         あるので、空欄で出すより、1文字直してもらうほうが早い */
+      if (!ms && labelled) ms = seg.match(RE_LOOSE);
+      if (!ms) return;
+      var lo = labelled ? 9 : 10, hi = labelled ? 12 : 11;
+      ms.forEach(function(n){
+        var num = n.replace(/\s/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        var d = num.replace(/\D/g, '');
+        if (d.length < lo || d.length > hi) return;
+        if (isMob || /^0[789]0/.test(d)){ if (!mobile) mobile = num; }
+        else if (!tel) tel = num;
+      });
+    });
+  });
+  return { tel:tel, mobile:mobile };
+}
+function pickZipAddr(lines, col){
+  var zip = '', addr = '', bestS = -1;
+  lines.forEach(function(L){
+    if (/TEL|FAX|PHONE|MOBILE/i.test(L.t) || /電話|携帯|ファックス/.test(L.t) || /@/.test(L.t)) return;
+    if (RE_LIC.test(L.t)) return;
+    var t = dashes(han(L.t)), lineZip = '';
+    if (/〒/.test(t) || /^[T干][^ELel]/.test(t) || RE_ADDR.test(L.t)){
+      var m = t.match(/[〒T干]?\s*([0-9lI!Oo]{3})\s*-\s*([0-9lI!Oo]{4})/);
+      if (m){
+        var a = digitsFix(m[1]), b = digitsFix(m[2]);
+        if (/^\d{3}$/.test(a) && /^\d{4}$/.test(b)) lineZip = a + '-' + b;
+      }
+    }
+    if (lineZip && !zip) zip = lineZip;
+    if (!RE_ADDR.test(L.t)) return;
+    var body = L.t.replace(/[〒T干]?\s*[0-9lI!Oo]{3}\s*[-‐]\s*[0-9lI!Oo]{4}\s*/g, ' ')
+                  .replace(/^[^ぁ-んァ-ヶ一-龥0-9]+/, '')
+                  .replace(/[\s　]+/g, ' ').trim();
+    if (!body) return;
+    /* 郵便番号つきの行を強く優先。本文の列にある行も少し優先 */
+    var sc = body.length + (lineZip ? 100 : 0) + (inCol(L, col) ? 20 : 0);
+    if (sc > bestS){ bestS = sc; addr = body; if (lineZip) zip = lineZip; }
+  });
+  return { zip:zip, addr:addr };
+}
+function nameScore(L, t, col, heads){
+  var sc = L.h;
+  if (!inCol(L, col)) sc *= 0.25;                 /* 本文の列の外（ロゴ脇など）は弱く */
+  var n = t.replace(/[\s　]/g, '').length;
+  if (n >= 7) sc *= 0.45;                          /* 長すぎる（標語など） */
+  if (sentenceLike(t)) sc *= 0.4;
+  if (L.bb){
+    for (var k = 0; k < heads.length; k++){         /* 肩書き・部署のすぐ下なら強く */
+      var H = heads[k];
+      if (!H.bb || H === L) continue;
+      var gap = L.bb.y0 - H.bb.y1;
+      var xo = Math.min(L.bb.x1, H.bb.x1) - Math.max(L.bb.x0, H.bb.x0);
+      if (gap > -H.h * 0.3 && gap < H.h * 2.5 && xo > -H.h){ sc *= 1.7; break; }
+    }
+  }
+  return sc;
+}
+function parseCard(lines, W){
+  var got = { name:'', kana:'', company:'', dept:'', title:'', tel:'', mobile:'', email:'', url:'', addr:'' };
+  var used = {};
+  var col = mainColumn(lines);
+  lines.forEach(function(L, i){
+    if (!got.email){ var e = pickEmail(L.t); if (e){ got.email = e; used[i] = 1; } }
+  });
+  lines.forEach(function(L, i){
+    if (used[i] || got.url) return;
+    var u = pickUrl(L.t); if (u){ got.url = u; used[i] = 1; }
+  });
+  var ph = pickPhones(lines);
+  got.tel = ph.tel; got.mobile = ph.mobile;
+  lines.forEach(function(L, i){ if (RE_TEL.test(han(L.t))) used[i] = 1; RE_TEL.lastIndex = 0; });
+
+  var za = pickZipAddr(lines, col);
+  got.addr = (za.zip ? '〒' + za.zip + ' ' : '') + za.addr;
+  if (!za.addr && !za.zip) got.addr = '';
+  lines.forEach(function(L, i){ if ((RE_ADDR.test(L.t) && !/@/.test(L.t)) || RE_LIC.test(L.t)) used[i] = 1; });
+
+  /* 会社：会社らしい語を含む行。本文の列にあるものを優先し、いちばん大きいもの */
+  var co = null;
+  lines.forEach(function(L, i){
+    if (used[i] || L.c < 30) return;
+    if (!RE_CO.test(L.t) || sentenceLike(L.t)) return;
+    var sc = L.h * (inCol(L, col) ? 1 : 0.3);
+    if (!co || sc > co.sc) co = { L:L, i:i, sc:sc };
+  });
+  if (co){ got.company = tidyCompany(co.L.t); used[co.i] = 1; got._coIdx = co.i; }
+
+  /* 部署と役職：名前と同じ行に並んでいることも多いので、余った語は名前の候補に回す */
+  var residual = {}, heads = [];
+  lines.forEach(function(L, i){
+    if (used[i] || L.c < 40) return;
+    var parts = L.t.split(/[\s　\/／・|]+/).filter(Boolean);
+    var rest = [], hit = false;
+    parts.forEach(function(w){
+      if (!got.title && RE_TITLE.test(w)){ got.title = w; hit = true; }
+      else if (!got.dept && (RE_DEPT.test(w) || RE_DEPT2.test(w)) && w.length <= 12){ got.dept = w; hit = true; }
+      else rest.push(w);
+    });
+    if (!hit) return;
+    heads.push(L);
+    if (rest.length) residual[i] = rest.join(' ');
+    else used[i] = 1;
+  });
+
+  /* 名前：本文の列にある大きな行。肩書きのすぐ下なら強く、標語のような行は弱く。
+     信頼度は足切りにだけ使う（読みちがえた名前でも大きい行が本物で、あとで読み直す） */
+  var best = null;
+  /* 大きく書かれた名前ほど読みちがえて信頼度が0近くになることがある。
+     ふつうの行よりずっと背が高い行は、信頼度が低くても候補に残し、あとで読み直しにかける */
+  var hs = lines.filter(function(L){ return L.c >= 40 && L.h > 0; }).map(function(L){ return L.h; }).sort(function(a, b){ return a - b; });
+  var medH = hs.length ? hs[hs.length >> 1] : 0, tallH = medH ? medH * 1.5 : 1e9;
+  lines.forEach(function(L, i){
+    if (used[i]) return;
+    var lowc = L.c < 15;
+    if (lowc && !(L.bb && L.h >= tallH && inCol(L, col))) return;
+    var t = cleanName(residual[i] != null ? residual[i] : L.t);
+    if (lowc){                                                /* 化けた記号を落として、字だけを残す */
+      var kj = L.t.replace(/[^一-龥ぁ-んァ-ヶ]/g, '');
+      var nk = (kj.match(/[一-龥]/g) || []).length;
+      if (!nk) return;
+      if (nk < 2 && (L.bb.x1 - L.bb.x0) < L.h * 2.5) return;    /* 細い縦長のしみ・模様 */
+      t = kj.slice(0, 10);
+    }
+    if (!t || /@/.test(t)) return;
+    if (t.length < (lowc ? 1 : 2) || t.length > 10) return;
+    if (!/[一-龥]/.test(t)) return;                          /* 漢字を含まない行は名前にしない（ふりがな・ロゴ） */
+    var tns = t.replace(/[\s　]/g, '');
+    if (RE_CO.test(tns) || RE_TITLE.test(tns) || RE_DEPT.test(tns) || RE_DEPT2.test(tns) || RE_LIC.test(tns)) return;
+    if (t.split(' ').some(function(wd){ return wd.length >= 3 && RE_DEPT.test(wd); })) return;   /* 「文化財課 公式」のように部署の語を含む */
+    if (/公式|SNS|受付|窓口|エリア|地区|担当|ブロック|リージョン|カンパニー|企業|法人|リーダ|サービス|センター/.test(tns)) return;
+    if (tns.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。]/g, '').length < 2) return;   /* 横棒や丸ばかりの化け */
+    var sc = nameScore(L, t, col, heads);
+    if (lowc) sc *= 0.7;                                     /* ほぼ読めていない行は、読めている行より弱く */
+    if (!best || sc > best.sc || (sc === best.sc && L.c > best.L.c)) best = { L:L, i:i, t:t, sc:sc };
+  });
+  if (best){
+    got.name = best.t; used[best.i] = 1; got._nameIdx = best.i; got._nameLow = best.L.c < 15;
+    /* ふりがなが名前の行にくっついていたら分ける（読みは5文字以上のときだけ。ひらがなの下の名前と区別するため） */
+    var fm = got.name.match(/^([ぁ-んー]{5,})\s*([一-龥][^ぁ-ん]*)$/) || got.name.match(/^([一-龥][^ぁ-ん]*?)\s*([ぁ-んー]{5,})$/);
+    if (fm){
+      var kanaPart = /^[ぁ-ん]/.test(fm[1]) ? fm[1] : fm[2], namePart = kanaPart === fm[1] ? fm[2] : fm[1];
+      if (/[一-龥]{2,}/.test(namePart)){ got.name = namePart.trim(); if (!got.kana) got.kana = kanaPart.trim(); }
+    }
+  }
+
+  /* 会社が見つからなかったら、本文の列にある名前に近い大きめの行（上でも下でもよい） */
+  if (!got.company && best){
+    var guess = null;
+    lines.forEach(function(L, i){
+      if (used[i] || L.c < 30 || !L.bb || !best.L.bb) return;
+      if (!inCol(L, col)) return;
+      if (L.h < best.L.h * 0.28 || L.h > best.L.h * 1.6) return;
+      var t = L.t;
+      if (/[0-9@]/.test(han(t)) || t.length < 2 || t.length > 30) return;
+      var t2 = t.replace(/[\s　]/g, '');
+      if (RE_TITLE.test(t2) || RE_DEPT.test(t2) || RE_DEPT2.test(t2) || RE_LIC.test(t2)) return;
+      if (/担当|マネージ|スタッフ|アドバイザー|プロデューサー/.test(t2)) return;
+      if (/^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(t) || /^[A-Z][A-Z]+\s+[A-Z][A-Z]+$/.test(t)) return;   /* ローマ字の名前 */
+      if (/^[ぁ-んー\s]+$/.test(t) || sentenceLike(t)) return;
+      if (!guess || L.h > guess.L.h) guess = { L:L, i:i };
+    });
+    if (guess){ got.company = guess.L.t; used[guess.i] = 1; got._coIdx = guess.i; }
+  }
+
+  /* よみ：ひらがなだけの短い行 */
+  lines.forEach(function(L, i){
+    if (used[i] || got.kana) return;
+    if (/^[ぁ-んー\s]{3,16}$/.test(L.t)){ got.kana = L.t; used[i] = 1; }
+  });
+  return got;
+}
+/* 「株式会社 マリンホーム」→「株式会社マリンホーム」 */
+function tidyCompany(t){
+  t = String(t).replace(/[、。,.]+$/, '');
+  if (RE_CO.test(t)) t = t.replace(/[\s　]+[^\s　]{1,2}$/, '');   /* 会社名のあとの短いゴミ */
+  /* 「株式会社〇〇 大阪支店」「〇〇株式会社明石店」のように、社名のうしろに付いた支店・部署は外す */
+  var KW = '株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲', BR = '支社|支店|営業所|事業部|本店|本社|本部|店';
+  var mA = t.match(new RegExp('^((?:' + KW + ')[\\s　]*[^\\s　]+)[\\s　]+[^\\s　]{1,12}(?:' + BR + ')$'));
+  if (mA) t = mA[1];
+  var mB = t.match(new RegExp('^([^\\s　].*?(?:' + KW + '|協同組合|協会))[\\s　]*[^\\s　]{1,12}(?:' + BR + ')$'));
+  if (mB && mB[1].replace(new RegExp('(' + KW + '|協同組合|協会|[\\s　])', 'g'), '').length >= 2) t = mB[1];
+  return String(t).replace(/^[^一-龥ぁ-んァ-ヶA-Za-z0-9]+/, '')
+                  .replace(/株式会[杜視祉]/g, '株式会社').replace(/有限会[杜視祉]/g, '有限会社')
+                  .replace(/(株式会社|有限会社|合同会社|合資会社|㈱|㈲)[\s　]+/g, '$1')
+                  .replace(/[\s　]+(株式会社|有限会社|合同会社|合資会社|㈱|㈲)$/g, '$1').trim();
+}
+/* 名前の行にローマ字が混ざっていたら外す */
+/* 名前の行の掃除：数字・記号・住所っぽい語から先を落とし、末尾の1文字かなを落とし、割れた名前を「姓 名」に */
+function cleanName(t){
+  t = tidyName(t);
+  var toks = t.split(' ').map(function(wd){ return wd.replace(/[。、，．,.]/g, ''); }).filter(Boolean), out = [];
+  for (var i = 0; i < toks.length; i++){
+    var wd = toks[i];
+    if (/[0-9]/.test(han(wd))) break;
+    if (/[|｜\[\]【】{}()（）=+*#@:;\/\\<>"'`~^『』「」・、。,.]/.test(wd)) break;
+    if (wd.length >= 3 && /(都|道|府|県|市|区|町|村|丁目|番地|ビル|階|号)$/.test(wd)) break;
+    if (/[ぁ-ん]/.test(wd) && /[ァ-ヶ]/.test(wd)) break;          /* ひらがなとカタカナが混じった語は名前ではない（ロゴの化け） */
+    out.push(wd);
+  }
+  while (out.length >= 2 && /^[ぁ-んァ-ヶー]$/.test(out[out.length-1])) out.pop();
+  /* 漢字だけで姓名がそろっている（漢字3字以上）のに、うしろにかなの語が付いていたらゴミ */
+  function kanjiCount(a){ return (a.join('').match(/[一-龥]/g) || []).length; }
+  while (out.length >= 2 && /^[ぁ-んァ-ヶー]+$/.test(out[out.length-1]) && kanjiCount(out.slice(0, -1)) >= 3) out.pop();
+  var flat = out.join('');
+  if (out.length >= 3 && flat.length <= 6 && out.every(function(wd){ return wd.length <= 2; })) return flat.slice(0, 2) + ' ' + flat.slice(2);
+  if (out.length >= 3 && flat.length <= 7 && /^[一-龥]+$/.test(flat)) return flat.slice(0, 2) + ' ' + flat.slice(2);
+  return out.join(' ').trim();
+}
+function tidyName(t){
+  t = String(t).replace(/[\s　]+/g, ' ').trim();
+  var jp = t.replace(/[A-Za-z][A-Za-z.\-']*/g, ' ').replace(/\s+/g, ' ').trim();
+  if (jp && /[一-龥ぁ-んァ-ヶ]/.test(jp)) t = jp;
+  return t;
+}
+function plausible(k, t){
+  if (!t) return false;
+  if (k === 'name'){
+    if (t.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。\s　]/g, '').length < 2) return false;   /* 横棒や丸ばかりの化け */
+    return t.length >= 2 && t.length <= 14 && /[一-龥ぁ-んァ-ヶ]/.test(t) && !/[0-9@]/.test(han(t));
+  }
+  return t.length >= 2 && t.length <= 30 && !/@/.test(t);
+}
+function candidates(lines){
+  var seen = {}, out = [];
+  lines.slice().sort(function(a, b){ return b.h - a.h; }).forEach(function(L){
+    var t = L.t.trim();
+    if (!t || t.length > 30 || L.c < 40) return;
+    if (seen[t]) return;
+    seen[t] = 1; out.push(t);
+  });
+  return out.slice(0, 10);
+}
+
+/* ===================== 下から出る画面 ===================== */
+function openSheet(html, wire){
+  $('panel').innerHTML = html;
+  $('sheet').hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('panel').scrollTop = 0;
+  if (wire) wire();
+}
+function closeSheet(){
+  $('sheet').hidden = true;
+  $('panel').innerHTML = '';
+  document.body.style.overflow = '';
+}
+$('sheet').addEventListener('click', function(ev){ if (ev.target === $('sheet')) closeSheet(); });
+$('viewer').addEventListener('click', function(){ $('viewer').hidden = true; $('viewer-img').src = ''; });
+function showBig(src){ if (!src) return; $('viewer-img').src = src; $('viewer').hidden = false; }
+
+/* ===================== 一覧 ===================== */
+var BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+function tileHtml(c){
+  var pic = c.shot
+    ? '<img src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
+    : '<span class="no">写真なし</span>';
+  return '<button class="tile" data-id="' + esc(c.id) + '">' +
+    '<span class="pic">' + pic + '</span>' +
+    '<span class="nm">' + esc(fullName(c)) + '</span>' +
+    (orgLine(c) ? '<span class="co">' + esc(orgLine(c)) + '</span>' : '') +
+    '</button>';
+}
+function fillThumbs(root){
+  var imgs = (root || document).querySelectorAll('img[data-th]');
+  for (var i = 0; i < imgs.length; i++){
+    (function(el){
+      var id = el.getAttribute('data-th');
+      if (thumbCache[id]){ el.src = thumbCache[id]; return; }
+      getShot(id).then(function(s){ if (s && s.thumb){ thumbCache[id] = s.thumb; el.src = s.thumb; } });
+    })(imgs[i]);
+  }
+}
+function rowHtml(c){
+  var pic = c.shot
+    ? '<img class="lth" src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
+    : '<span class="lth no">写真<br>なし</span>';
+  var meta = [c.met ? fmtDate(c.met) : '', trim(c.where)].filter(Boolean).join('　');
+  return '<button class="lrow" data-id="' + esc(c.id) + '">' + pic +
+    '<span class="lbody">' +
+      '<span class="lnm">' + esc(fullName(c)) +
+        (orgLine(c) ? '<span class="lco">' + esc(orgLine(c)) + '</span>' : '') + '</span>' +
+      (trim(c.memo) ? '<span class="lmemo">' + esc(c.memo.replace(/\n/g, ' ')) + '</span>' : '') +
+      (meta ? '<span class="lmeta">' + esc(meta) + '</span>' : '') +
+    '</span><span class="chev">›</span></button>';
+}
+var CKEY = 'meishi.checkcrop', checkCrop = false;
+try { checkCrop = localStorage.getItem(CKEY) === '1'; } catch(e){}
+var VKEY = 'meishi.view', view = 'grid';
+try { if (localStorage.getItem(VKEY) === 'list') view = 'list'; } catch(e){}
+function applyView(){
+  var all = $('viewsw').querySelectorAll('button');
+  for (var i = 0; i < all.length; i++)
+    all[i].setAttribute('aria-pressed', all[i].getAttribute('data-v') === view ? 'true' : 'false');
+}
+function renderCards(){
+  var q = trim($('q').value);
+  var list = db.cards.filter(function(c){ return matches(c, q); }).sort(function(a, b){ return b.ts - a.ts; });
+  $('hdn').textContent = db.cards.length ? db.cards.length + '枚' : '';
+  var box = $('cards');
+  box.className = view === 'list' ? 'listwrap' : 'grid';
+  box.innerHTML = list.map(view === 'list' ? rowHtml : tileHtml).join('');
+  if (!list.length) box.className = '';
+  fillThumbs(box);
+  var none = $('none');
+  $('listhead').hidden = !list.length;
+  applyView();
+  if (!db.cards.length){
+    none.hidden = false;
+    none.innerHTML = '<p class="empty">まだ1枚も入っていない。<br>' +
+      '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみる。<br>' +
+      '名前も会社も電話も、写真から自分で読みとる。</p>';
+  } else if (!list.length){
+    none.hidden = false;
+    none.innerHTML = '<p class="empty">見つからなかった。<br>ことばを減らすか、ひらがなだけで探してみる。</p>';
+  } else {
+    $('count').textContent = (q ? list.length + '枚 見つかった' : '新しい順') +
+      (view === 'list' ? '（メモまで出る）' : '');
+    none.hidden = true;
+  }
+}
+
+/* ===================== 撮ってからしまうまで ===================== */
+var pend = null;        /* まだしまっていない写真 { full, thumb } */
+var pendRaw = null;     /* 撮ったままの写真（切り直しに使う） */
+var pendQuad = null;    /* 名刺の四隅 */
+var pendCard = null;    /* 切り出してまっすぐにした名刺 */
+var pendCropped = false;
+var pendOrient = 0;      /* 時計回りに何度まわせば正位置か（0/90/180/270） */
+var pendOriented = false;
+var pendCand = [];      /* 読み取った文字の候補 */
+var touched = {};       /* 人が手で直した欄は、読み直しても上書きしない */
+var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','memo'];
+
+function recentWheres(n){
+  var seen = {}, out = [];
+  var sorted = db.cards.slice().sort(function(a, b){ return b.ts - a.ts; });
+  for (var i = 0; i < sorted.length && out.length < n; i++){
+    var w = trim(sorted[i].where);
+    if (w && !seen[w]){ seen[w] = 1; out.push(w); }
+  }
+  return out;
+}
+function saveSheetHtml(){
+  var wh = recentWheres(5).map(function(w){
+    return '<button class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+  return '<h2>新しい名刺</h2>' +
+    '<p class="lead" id="s-lead">写真から文字を読んでいます。ちがうところは直せます。</p>' +
+    '<button class="pic-big" id="s-pic"><img id="s-img" alt="いま撮った名刺"></button>' +
+    '<div class="row" style="margin-top:8px">' +
+      '<button class="btn" id="s-crop">切り直す</button>' +
+      '<button class="btn" id="s-rot">回す</button></div>' +
+    '<div class="bar" id="s-bar"><i style="width:6%"></i></div>' +
+    '<p class="reading" id="s-read">準備しています…</p>' +
+    '<div id="s-err"></div>' +
+    '<label for="s-name">名前</label>' +
+    '<input type="text" class="name-in" id="s-name" placeholder="読めなければ手で入れる" autocomplete="off">' +
+    '<div class="chips" id="s-cand-name"></div>' +
+    '<label for="s-company">会社</label>' +
+    '<input type="text" id="s-company" autocomplete="off">' +
+    '<div class="chips" id="s-cand-co"></div>' +
+    '<details class="more" id="s-more"><summary>電話・メール・住所など<span class="got" id="s-got"></span></summary>' +
+      '<div class="half"><div><label for="s-tel">電話</label><input type="tel" id="s-tel" autocomplete="off"></div>' +
+      '<div><label for="s-mobile">携帯</label><input type="tel" id="s-mobile" autocomplete="off"></div></div>' +
+      '<label for="s-email">メール</label><input type="email" id="s-email" autocomplete="off" inputmode="email">' +
+      '<div class="half"><div><label for="s-dept">部署</label><input type="text" id="s-dept" autocomplete="off"></div>' +
+      '<div><label for="s-title">役職</label><input type="text" id="s-title" autocomplete="off"></div></div>' +
+      '<label for="s-addr">住所</label><input type="text" id="s-addr" autocomplete="off">' +
+      '<label for="s-url">サイト</label><input type="text" id="s-url" autocomplete="off">' +
+      '<label for="s-kana">よみ</label><input type="text" id="s-kana" autocomplete="off">' +
+    '</details>' +
+    '<label for="s-where">どこで会った</label>' +
+    (wh ? '<div class="chips" id="s-where-chips">' + wh + '</div>' : '') +
+    '<input type="text" id="s-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">' +
+    '<label for="s-memo">ひとことメモ</label>' +
+    '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのこと。"></textarea>' +
+    '<button class="btn primary" id="s-save">名刺箱にしまう</button>' +
+    '<button class="btn danger" id="s-cancel">やめる</button>';
+}
+function setCands(){
+  var h = pendCand.map(function(t){
+    return '<button class="chip" data-v="' + esc(t) + '">' + esc(t) + '</button>'; }).join('');
+  if (!$('s-cand-name')) return;
+  $('s-cand-name').innerHTML = h;
+  $('s-cand-co').innerHTML = h;
+}
+function fillFrom(got){
+  var n = 0;
+  SF.forEach(function(k){
+    var el = $('s-' + k);
+    if (!el || touched[k] || !got[k]) return;
+    el.value = got[k];
+  });
+  ['tel','mobile','email','dept','title','addr','url','kana'].forEach(function(k){
+    if ($('s-' + k) && trim($('s-' + k).value)) n++;
+  });
+  $('s-got').textContent = n ? '（' + n + '件 入りました）' : '';
+  if (n && !$('s-more').open) $('s-more').open = false;
+}
+function ocrProgress(m){
+  var bar = $('s-bar'), rd = $('s-read');
+  if (!bar || !rd) return;
+  var names = {
+    'loading tesseract core':'文字を読む部品を用意しています',
+    'loading language traineddata':'日本語の辞書を取り込んでいます（初回だけ）',
+    'initializing tesseract':'準備しています',
+    'initializing api':'準備しています',
+    'recognizing text':'文字を読んでいます'
+  };
+  var pct = Math.max(4, Math.round((m.progress || 0) * 100));
+  bar.firstChild.style.width = (m.status === 'recognizing text' ? pct : Math.min(40, pct)) + '%';
+  rd.textContent = (names[m.status] || '準備しています') + '　' + pct + '%';
+}
+function runOcr(img){
+  if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
+  var pre = Promise.resolve();
+  if (!pendOriented && img === pendCard){
+    pre = getWorker().then(function(w){
+      if ($('s-read')) $('s-read').textContent = '向きを確かめています…';
+      return autoOrient(w, pendCard);
+    }).then(function(k){
+      pendOriented = true;
+      if (OCRBASE) window.__meishiOrient = k;
+      if (k){ pendOrient = (pendOrient + k*90) % 360; buildPend(); if ($('s-img')) $('s-img').src = pend.full; }
+    }, function(){});
+  }
+  pre.then(function(){ return readCard(pendCard || img, ocrProgress); }).then(function(res){
+    var lines = res.lines, got = parseCard(lines, res.cv.width), extra = [];
+    if ($('s-read')) $('s-read').textContent = '名前と会社を確かめています…';
+    var chain = Promise.resolve();
+    [['name', got._nameIdx], ['company', got._coIdx]].forEach(function(pair){
+      var k = pair[0], idx = pair[1];
+      if (idx == null || !lines[idx] || !lines[idx].bb) return;
+      var orig = k === 'name' ? cleanName(lines[idx].t) : tidyCompany(lines[idx].t);
+      if (plausible(k, orig)) extra.push(orig);      /* 元の読みは必ず候補に残す */
+      var bestAlt = null;
+      [90, 130].forEach(function(sz){
+        chain = chain.then(function(){ return rereadLine(res.w, res.cv, lines[idx].bb, '7', sz); })
+          .then(function(alt){
+            if (!alt || !alt.t) return;
+            var t = k === 'name' ? cleanName(alt.t) : tidyCompany(alt.t);
+            if (!plausible(k, t)) return;
+            if (k === 'name' && (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t))) return;
+            if (k === 'name'){
+              if (!/[一-龥]/.test(t)) return;                    /* かなだけに化けたものは使わない */
+              var ok = orig.match(/[一-龥]/g) || [], share = false;
+              for (var ci = 0; ci < ok.length; ci++) if (t.indexOf(ok[ci]) >= 0){ share = true; break; }
+              /* 元と1字も重ならないなら別の行を読んだ（元がほぼ読めていない行なら、重なりは問わない） */
+              if (ok.length && !share && !got._nameLow) return;
+              if (got._nameLow && (alt.c < 35 || (t.match(/[一-龥]/g) || []).length < 2)) return;
+            }
+            if (t !== got[k]) extra.push(t);
+            if (!bestAlt || alt.c > bestAlt.c) bestAlt = { t:t, c:alt.c };
+          });
+      });
+      chain = chain.then(function(){
+        /* 元の読みが怪しいときだけ、読み直しで入れ替える。
+           元が十分確からしい（65以上）なら、読み直しは候補に出すだけにする */
+        if (!bestAlt || bestAlt.c <= lines[idx].c + 3){
+          if (k === 'name' && got._nameLow) got.name = '';        /* 読み直しても確かめられなかった大きな行は空にする */
+          return;
+        }
+        var shaky = lines[idx].c < 65 || (k === 'company' && !RE_CO.test(orig));
+        if (shaky) got[k] = bestAlt.t;
+      });
+    });
+    /* 名前が見つからないとき、ふりがなの行（ひらがなだけ）があれば、そのすぐ下（または上）を読み直す */
+    if (got._nameIdx == null && !got.name){
+      var kanaL = null;
+      lines.forEach(function(L){
+        if (!L.bb || L.c < 50) return;
+        var k2 = L.t.replace(/[\s　]/g, '');
+        if (k2.length >= 4 && k2.length <= 14 && /^[ぁ-んー]+$/.test(k2) && (!kanaL || L.c > kanaL.c)) kanaL = L;
+      });
+      if (kanaL){
+        var kh = kanaL.h, kx0 = kanaL.bb.x0, kx1 = kanaL.bb.x1, wide = Math.max(kx1 - kx0, kh * 6);
+        [[kanaL.bb.y1 + kh * 0.1, kanaL.bb.y1 + kh * 3.2], [kanaL.bb.y0 - kh * 3.2, kanaL.bb.y0 - kh * 0.1]].forEach(function(yr){
+          chain = chain.then(function(){
+            if (got.name) return;
+            var bb = { x0:kx0 - kh, x1:kx0 - kh + wide + kh, y0:Math.max(0, yr[0]), y1:Math.min(res.cv.height, yr[1]) };
+            if (bb.y1 - bb.y0 < kh) return;
+            return rereadLine(res.w, res.cv, bb, '7', 130).then(function(alt){
+              if (!alt || !alt.t || alt.c < 50) return;
+              var t = cleanName(alt.t);
+              if (!plausible('name', t) || (t.match(/[一-龥]/g) || []).length < 2 || t.length > 8) return;
+              if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t)) return;
+              got.name = t; if (!got.kana) got.kana = kanaL.t.replace(/[\s　]+/g, ' ').trim(); extra.push(t);
+            });
+          });
+        });
+      }
+    }
+    /* 名前が見つからないとき、ローマ字の名前（ASAI Takuya のような行）があればそれを使う */
+    chain = chain.then(function(){
+      if (got.name) return;
+      var rom = null;
+      lines.forEach(function(L){
+        if (L.c < 50) return;
+        var t = L.t.trim();
+        /* ASAI Takuya / Deguchi Koko のような形。HYOGO ROKKO のように両方大文字だけなら社名やロゴ */
+        if (!/^[A-Z][A-Za-z]+[\s　]+[A-Z][A-Za-z]+$/.test(t) || t.length > 24) return;
+        if (/^[A-Z]+[\s　]+[A-Z]+$/.test(t)) return;
+        if (/Co|Inc|Ltd|Corp|Group|Office|Company|City|Tokyo|Osaka|Kobe|Japan|Home|House/i.test(t)) return;
+        if (!rom || L.h > rom.h) rom = L;
+      });
+      if (rom){ got.name = rom.t.replace(/[\s　]+/g, ' ').trim(); extra.push(got.name); }
+    });
+    return chain.then(function(){
+      if (OCRBASE) window.__meishiDebug = { lines:lines, got:got, extra:extra };
+      return { lines:lines, got:got, extra:extra };
+    });
+  }).then(function(o){
+    if (!o || !$('s-name')) return;
+    var lines = o.lines, got = o.got;
+    $('s-bar').hidden = true;
+    var seen = {}, cand = [];
+    [got.name, got.company].concat(o.extra, candidates(lines)).forEach(function(t){
+      t = trim(t); if (!t || seen[t]) return; seen[t] = 1; cand.push(t);
+    });
+    pendCand = cand.slice(0, 12);
+    setCands();
+    fillFrom(got);
+    var any = got.name || got.company || got.tel || got.email;
+    $('s-read').textContent = any ? '読めた。ちがうところは直す。' : '文字をうまく読めなかった。手で入れる。';
+    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
+                                   : '写真は残るので、名前だけ入れておけばよい。') +
+      (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
+  }, function(err){
+    if (!$('s-read')) return;
+    $('s-bar').hidden = true;
+    $('s-read').hidden = true;
+    $('s-err').innerHTML = '<div class="warn">文字を読む部品を取り込めなかった。' +
+      '初めて使うときは電波のあるところで開く必要がある。<br>' +
+      '写真は残るので、名前だけ手で入れてしまってよい。</div>';
+  });
+}
+function grabForm(){
+  var o = {};
+  SF.forEach(function(k){ if ($('s-' + k)) o[k] = $('s-' + k).value; });
+  return o;
+}
+function clearPend(){ pend = null; pendRaw = null; pendQuad = null; pendCard = null; }
+function openSave(restore){
+  if (!restore){ touched = {}; pendCand = []; }
+  openSheet(saveSheetHtml(), function(){
+    $('s-img').src = pend.full;
+    $('s-pic').addEventListener('click', function(){ showBig(pend.full); });
+    SF.forEach(function(k){
+      var el = $('s-' + k);
+      if (!el) return;
+      el.addEventListener('input', function(){ touched[k] = 1; });
+      if (restore && restore[k] != null) el.value = restore[k];
+    });
+    if (restore) setCands();
+    $('s-cand-name').addEventListener('click', function(ev){ pickCand(ev, 's-name', 'name'); });
+    $('s-cand-co').addEventListener('click', function(ev){ pickCand(ev, 's-company', 'company'); });
+    if ($('s-where-chips')) $('s-where-chips').addEventListener('click', function(ev){
+      var b = ev.target.closest ? ev.target.closest('.chip') : null;
+      if (!b) return;
+      $('s-where').value = b.getAttribute('data-w');
+      touched.where = 1;
+    });
+    $('s-crop').addEventListener('click', openRecrop);
+    $('s-rot').addEventListener('click', rotateAndRead);
+    $('s-save').addEventListener('click', doSave);
+    $('s-cancel').addEventListener('click', function(){
+      if (!confirm('この名刺をやめますか？　写真も残りません。')) return;
+      clearPend(); closeSheet();
+    });
+  });
+}
+function pickCand(ev, inputId, key){
+  var b = ev.target.closest ? ev.target.closest('.chip') : null;
+  if (!b) return;
+  $(inputId).value = b.getAttribute('data-v');
+  touched[key] = 1;
+}
+/* 四隅から切り出して、しまう用の写真を作る */
+function buildPend(){
+  var a = quadSize(pendQuad);
+  var outW = 2100, outH = Math.round(outW * a.h / Math.max(1, a.w));
+  if (outH < 200) outH = 200;
+  if (outH > 2400){ outH = 2400; outW = Math.max(200, Math.round(outH * a.w / Math.max(1, a.h))); }
+  pendCard = warp(pendRaw, pendQuad, outW, outH) || pendRaw;
+  if (pendOrient) pendCard = rotCanvasK(pendCard, pendOrient / 90);
+  pend = { full: toCanvas(pendCard, 1400).toDataURL('image/jpeg', 0.72),
+           thumb: toCanvas(pendCard, 320).toDataURL('image/jpeg', 0.62) };
+}
+function fracQuad(c, f){
+  var x = f.x*c.width, y = f.y*c.height, w = f.w*c.width, h = f.h*c.height;
+  return [[x,y], [x+w,y], [x+w,y+h], [x,y+h]];
+}
+/* hint … カメラの枠（画面に対する割合）。名刺を見つけられなかったときはここで切る */
+function processRaw(raw, hint){
+  busy(true, '名刺を切り出しています…');
+  setTimeout(function(){
+    try {
+      pendRaw = raw; pendOrient = 0; pendOriented = false;
+      var qd = findQuad(raw);
+      pendCropped = !!qd;
+      if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
+      pendQuad = qd || fullQuad(raw);
+      buildPend();
+    } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
+    busy(false);
+    if (checkCrop){ openRecrop(); return; }
+    openSave();
+    runOcr(pendCard);
+  }, 30);
+}
+function rotateAndRead(){
+  if (!pendRaw) return;
+  var keep = grabForm();
+  busy(true, '回しています…');
+  setTimeout(function(){
+    pendOrient = (pendOrient + 90) % 360; pendOriented = true;
+    buildPend();
+    busy(false);
+    openSave(keep);
+    runOcr(pendCard);
+  }, 30);
+}
+function startCapture(file){
+  if (!file) return;
+  busy(true, '写真を取り込んでいます…');
+  readImage(file, function(im){
+    busy(false);
+    if (!im){ toast('写真を読み込めませんでした'); return; }
+    processRaw(toCanvas(im, 2400));
+  });
+}
+
+/* ===== 切り直し：四隅を手で合わせる ===== */
+function openRecrop(){
+  if (!pendRaw) return;
+  var keep = $('s-name') ? grabForm() : null;
+  var W = pendRaw.width, H = pendRaw.height;
+  var url = toCanvas(pendRaw, 1100).toDataURL('image/jpeg', 0.82);
+  var q = pendQuad.map(function(pp){ return [pp[0], pp[1]]; });
+  var rr = Math.max(9, W/55), sw = Math.max(2, W/280);
+  var h = '<h2>四隅を合わせる</h2>' +
+    '<p class="lead">白い丸をつまんで、名刺の角に置く。合わせたら読み直す。</p>' +
+    '<div class="cropbox" id="cb"><img src="' + url + '" alt="撮った写真">' +
+    '<svg id="cb-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
+    '<polygon id="cb-poly" fill="rgba(120,200,120,.16)" stroke="#fff" stroke-width="' + sw + '"></polygon>' +
+    '<g id="cb-dots"></g></svg></div>' +
+    '<button class="btn primary" id="cb-ok">これで読み直す</button>' +
+    '<div class="row"><button class="btn" id="cb-all">写真ぜんぶを使う</button>' +
+    '<button class="btn" id="cb-cancel">やめる</button></div>';
+  openSheet(h, function(){
+    var svg = $('cb-svg'), poly = $('cb-poly'), dots = $('cb-dots'), active = -1;
+    function draw(){
+      poly.setAttribute('points', q.map(function(pp){ return pp[0] + ',' + pp[1]; }).join(' '));
+      var g = '';
+      for (var i = 0; i < 4; i++)
+        g += '<circle cx="' + q[i][0] + '" cy="' + q[i][1] + '" r="' + rr +
+             '" fill="#fff" stroke="#3a6b34" stroke-width="' + sw + '"></circle>';
+      dots.innerHTML = g;
+    }
+    function at(ev){
+      var r = svg.getBoundingClientRect();
+      return [(ev.clientX - r.left) / r.width * W, (ev.clientY - r.top) / r.height * H];
+    }
+    function put(pnt){
+      q[active] = [Math.max(0, Math.min(W, pnt[0])), Math.max(0, Math.min(H, pnt[1]))];
+      draw();
+    }
+    svg.addEventListener('pointerdown', function(ev){
+      var pnt = at(ev), bi = 0, bd = 1e18;
+      for (var i = 0; i < 4; i++){
+        var d = (q[i][0]-pnt[0])*(q[i][0]-pnt[0]) + (q[i][1]-pnt[1])*(q[i][1]-pnt[1]);
+        if (d < bd){ bd = d; bi = i; }
+      }
+      active = bi; put(pnt); ev.preventDefault();
+    });
+    svg.addEventListener('pointermove', function(ev){
+      if (active < 0) return;
+      put(at(ev)); ev.preventDefault();
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(function(t){
+      svg.addEventListener(t, function(){ active = -1; });
+    });
+    draw();
+    function apply(qd){
+      pendQuad = qd; pendCropped = true;
+      busy(true, '切り出しています…');
+      setTimeout(function(){
+        buildPend(); busy(false); openSave(keep); runOcr(pendCard);
+      }, 30);
+    }
+    $('cb-ok').addEventListener('click', function(){ apply(q); });
+    $('cb-all').addEventListener('click', function(){ apply(fullQuad(pendRaw)); });
+    $('cb-cancel').addEventListener('click', function(){
+      if (keep){ openSave(keep); return; }
+      apply(pendQuad);   /* 撮った直後なら、このまま読みに進む */
+    });
+  });
+}
+
+/* ===== アプリの中のカメラ（シャッター音は鳴らない） ===== */
+var camStream = null, camTrack = null, torchOn = false;
+function openCamera(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
+  $('cam').hidden = false;
+  document.body.style.overflow = 'hidden';
+  navigator.mediaDevices.getUserMedia({
+    video: { facingMode: { ideal: 'environment' }, width: { ideal: 3840 }, height: { ideal: 2160 } },
+    audio: false
+  }).then(function(st){
+    camStream = st;
+    camTrack = st.getVideoTracks()[0];
+    var v = $('cam-video');
+    v.srcObject = st;
+    var pl = v.play();
+    if (pl && pl['catch']) pl['catch'](function(){});
+    try {
+      if (camTrack.applyConstraints)
+        camTrack.applyConstraints({ advanced: [{ focusMode: 'continuous' }] })['catch'](function(){});
+      var cap = camTrack.getCapabilities ? camTrack.getCapabilities() : null;
+      $('cam-torch').hidden = !(cap && cap.torch);
+    } catch(e){}
+  }, function(){
+    closeCamera();
+    toast('カメラを使えませんでした。写真から選んでください');
+    $('file-pick').click();
+  });
+}
+function closeCamera(){
+  $('cam').hidden = true;
+  document.body.style.overflow = '';
+  if (camStream){
+    camStream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} });
+    camStream = null; camTrack = null;
+  }
+  try { $('cam-video').srcObject = null; } catch(e){}
+  torchOn = false;
+}
+/* 画面に出している枠が、写真のどこにあたるかを割合で返す（object-fit:cover の分を戻す） */
+function guideFrac(){
+  var v = $('cam-video'), bx = $('cam-box');
+  if (!v || !bx || !v.videoWidth) return null;
+  var vr = v.getBoundingClientRect(), br = bx.getBoundingClientRect();
+  if (!vr.width || !vr.height || !br.width) return null;
+  var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
+  var ox = vr.left + (vr.width - v.videoWidth*sc) / 2;
+  var oy = vr.top + (vr.height - v.videoHeight*sc) / 2;
+  var x = (br.left - ox)/sc, y = (br.top - oy)/sc, w = br.width/sc, h = br.height/sc;
+  x -= w*0.04; y -= h*0.06; w *= 1.08; h *= 1.12;      /* 少し広めに取る */
+  x = Math.max(0, x); y = Math.max(0, y);
+  w = Math.min(v.videoWidth - x, w); h = Math.min(v.videoHeight - y, h);
+  if (w < 40 || h < 40) return null;
+  return { x:x/v.videoWidth, y:y/v.videoHeight, w:w/v.videoWidth, h:h/v.videoHeight };
+}
+function camCapture(){
+  var v = $('cam-video');
+  if (!v.videoWidth){ toast('もう少し待ってから押す'); return; }
+  var hint = guideFrac();
+  var c = document.createElement('canvas');
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  closeCamera();
+  processRaw(toCanvas(c, 2400), hint);
+}
+function doSave(){
+  var c = { id:uid(), ts:Date.now(), shot: pend ? 1 : 0, met:today() };
+  SF.forEach(function(k){ c[k] = $('s-' + k) ? trim($('s-' + k).value) : ''; });
+  if (!pend && !c.name && !c.company){ toast('名前か会社を入れてください'); return; }
+  db.cards.unshift(c);
+  persist();
+  if (pend) putShot(c.id, pend);
+  clearPend();
+  closeSheet();
+  renderCards();
+  toast('しまった');
+  window.scrollTo(0, 0);
+}
+
+/* ===================== 名刺1枚の画面 ===================== */
+function cardById(id){
+  for (var i = 0; i < db.cards.length; i++) if (db.cards[i].id === id) return db.cards[i];
+  return null;
+}
+function siteUrl(u){ u = trim(u); return u ? (/^https?:\/\//i.test(u) ? u : 'https://' + u) : ''; }
+function telLink(v){ return '<a href="tel:' + esc(String(v).replace(/[^0-9+]/g, '')) + '">' + esc(v) + '</a>'; }
+function fact(k, v, html){
+  if (!trim(v)) return '';
+  return '<div class="f"><div class="k">' + esc(k) + '</div><div class="v">' + (html || esc(v)) + '</div></div>';
+}
+function openCard(id){
+  var c = cardById(id);
+  if (!c) return;
+  var h = '<h2>' + esc(fullName(c)) + '</h2>';
+  if (orgLine(c)) h += '<p class="lead">' + esc(orgLine(c)) + '</p>';
+  if (c.shot) h += '<button class="pic-big" id="d-pic"><img id="d-img" alt="名刺"></button>';
+  h += '<div class="facts">';
+  h += fact('よみ', c.kana);
+  h += fact('電話', c.tel, c.tel ? telLink(c.tel) : '');
+  h += fact('携帯', c.mobile, c.mobile ? telLink(c.mobile) : '');
+  h += fact('メール', c.email, c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
+  h += fact('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '');
+  h += fact('住所', c.addr, c.addr ? esc(c.addr) + '　<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.addr) + '" target="_blank" rel="noopener">地図</a>' : '');
+  h += fact('会った日', c.met ? fmtDate(c.met) : '');
+  h += fact('どこで', c.where);
+  h += fact('メモ', c.memo);
+  h += '</div>';
+  h += '<div class="row"><button class="btn" id="d-edit">直す</button>' +
+       '<button class="btn" id="d-vcf">連絡先に入れる</button></div>';
+  h += '<div class="row"><button class="btn" id="d-share">この人を送る</button>' +
+       '<button class="btn danger" id="d-del">捨てる</button></div>';
+  h += '<button class="btn" id="d-close">閉じる</button>';
+  openSheet(h, function(){
+    if (c.shot){
+      getShot(c.id).then(function(s){ if (s && s.full && $('d-img')) $('d-img').src = s.full; });
+      $('d-pic').addEventListener('click', function(){ showBig($('d-img').src); });
+    }
+    $('d-edit').addEventListener('click',  function(){ openEdit(id); });
+    $('d-vcf').addEventListener('click',   function(){ saveVcf(c); });
+    $('d-share').addEventListener('click', function(){ shareCard(c); });
+    $('d-del').addEventListener('click',   function(){
+      if (!confirm(fullName(c) + ' の名刺を捨てます。よろしいですか？')) return;
+      db.cards = db.cards.filter(function(o){ return o.id !== c.id; });
+      persist(); delShot(c.id); renderCards(); closeSheet(); toast('捨てた');
+    });
+    $('d-close').addEventListener('click', closeSheet);
+  });
+}
+function openEdit(id){
+  var c = cardById(id);
+  if (!c) return;
+  function row(k, lab, type){
+    return '<label for="e-' + k + '">' + lab + '</label><input type="' + (type || 'text') +
+      '" id="e-' + k + '" value="' + esc(c[k] || '') + '" autocomplete="off">';
+  }
+  var h = '<h2>名刺を直す</h2>' +
+    '<label for="e-name">名前</label><input type="text" class="name-in" id="e-name" value="' + esc(c.name || '') + '" autocomplete="off">' +
+    row('kana', 'よみ') + row('company', '会社') +
+    '<div class="half"><div>' + row('dept', '部署') + '</div><div>' + row('title', '役職') + '</div></div>' +
+    '<div class="half"><div>' + row('tel', '電話', 'tel') + '</div><div>' + row('mobile', '携帯', 'tel') + '</div></div>' +
+    row('email', 'メール', 'email') + row('url', 'サイト') + row('addr', '住所') +
+    row('met', '会った日', 'date') + row('where', 'どこで') +
+    '<label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea>' +
+    '<button class="btn primary" id="e-ok">直した</button><button class="btn" id="e-cancel">やめる</button>';
+  openSheet(h, function(){
+    $('e-ok').addEventListener('click', function(){
+      F.forEach(function(k){ if ($('e-' + k)) c[k] = trim($('e-' + k).value); });
+      c.memo = trim($('e-memo').value);
+      persist(); renderCards(); openCard(id); toast('直した');
+    });
+    $('e-cancel').addEventListener('click', function(){ openCard(id); });
+  });
+}
+
+/* ===================== 連絡先ファイル（vCard） ===================== */
+function ve(s){
+  return String(s == null ? '' : s).replace(/\\/g, '\\\\').replace(/;/g, '\\;')
+    .replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+}
+function foldB64(prefix, b64){
+  var out = prefix + b64.slice(0, Math.max(0, 72 - prefix.length));
+  var rest = b64.slice(Math.max(0, 72 - prefix.length));
+  while (rest.length){ out += '\r\n ' + rest.slice(0, 71); rest = rest.slice(71); }
+  return out;
+}
+function vcard(c, photo){
+  var L = ['BEGIN:VCARD', 'VERSION:3.0'];
+  var nm = trim(c.name) || trim(c.company) || '名刺';
+  var p = nm.split(/[\s　]+/);
+  L.push('N:' + ve(p[0] || nm) + ';' + ve(p.slice(1).join(' ')) + ';;;');
+  L.push('FN:' + ve(nm));
+  if (trim(c.kana)){
+    var k = trim(c.kana).split(/[\s　]+/);
+    L.push('X-PHONETIC-LAST-NAME:' + ve(k[0] || ''));
+    if (k.length > 1) L.push('X-PHONETIC-FIRST-NAME:' + ve(k.slice(1).join(' ')));
+  }
+  if (trim(c.company) || trim(c.dept)) L.push('ORG:' + ve(c.company) + ';' + ve(c.dept));
+  if (trim(c.title))  L.push('TITLE:' + ve(c.title));
+  if (trim(c.tel))    L.push('TEL;TYPE=WORK,VOICE:' + ve(c.tel));
+  if (trim(c.mobile)) L.push('TEL;TYPE=CELL,VOICE:' + ve(c.mobile));
+  if (trim(c.email))  L.push('EMAIL;TYPE=INTERNET,WORK:' + ve(c.email));
+  if (trim(c.url))    L.push('URL:' + ve(siteUrl(c.url)));
+  if (trim(c.addr))   L.push('ADR;TYPE=WORK:;;' + ve(c.addr) + ';;;;');
+  var note = [];
+  if (c.met) note.push('会った日 ' + c.met + (trim(c.where) ? '（' + trim(c.where) + '）' : ''));
+  else if (trim(c.where)) note.push('どこで ' + trim(c.where));
+  if (trim(c.memo)) note.push(trim(c.memo));
+  if (note.length) L.push('NOTE:' + ve(note.join('\n')));
+  var body = L.join('\r\n');
+  if (photo){
+    var i = photo.indexOf(',');
+    if (i > 0) body += '\r\n' + foldB64('PHOTO;ENCODING=b;TYPE=JPEG:', photo.slice(i + 1));
+  }
+  return body + '\r\nEND:VCARD\r\n';
+}
+function safeName(s){ return String(s || '名刺').replace(/[\\\/:*?"<>|]/g, '_').slice(0, 40); }
+function saveVcf(c){
+  if (!c.shot){ saveFile(safeName(fullName(c)) + '.vcf', vcard(c, null), 'text/vcard;charset=utf-8'); return; }
+  busy(true, '書き出しています…');
+  getShot(c.id).then(function(s){
+    busy(false);
+    saveFile(safeName(fullName(c)) + '.vcf', vcard(c, s && s.full), 'text/vcard;charset=utf-8');
+  });
+}
+function saveVcfAll(){
+  var list = db.cards.filter(function(c){ return trim(c.name) || trim(c.company); });
+  if (!list.length){ toast('書き出せる名刺がありません'); return; }
+  saveFile('めいしばこ_連絡先_' + today() + '.vcf',
+    list.map(function(c){ return vcard(c, null); }).join(''), 'text/vcard;charset=utf-8');
+}
+function shareCard(c){
+  var t = [fullName(c)];
+  if (orgLine(c)) t.push(orgLine(c));
+  if (trim(c.tel))    t.push('TEL ' + trim(c.tel));
+  if (trim(c.mobile)) t.push('携帯 ' + trim(c.mobile));
+  if (trim(c.email))  t.push(trim(c.email));
+  if (trim(c.addr))   t.push(trim(c.addr));
+  if (c.met) t.push(fmtDate(c.met) + (trim(c.where) ? '　' + trim(c.where) : '') + ' に会った');
+  var text = t.join('\n');
+  if (navigator.share) navigator.share({ text:text })['catch'](function(){ copyText(text, 'コピーしました'); });
+  else copyText(text, 'コピーしました。メールやLINEに貼り付けられる');
+}
+
+/* ===================== CSV ===================== */
+function buildCSV(){
+  var rows = [['名前','よみ','会社','部署','役職','電話','携帯','メール','サイト','住所','会った日','どこで','メモ','しまった日']];
+  db.cards.forEach(function(c){
+    rows.push([trim(c.name), trim(c.kana), trim(c.company), trim(c.dept), trim(c.title),
+      trim(c.tel), trim(c.mobile), trim(c.email), trim(c.url), trim(c.addr),
+      c.met || '', trim(c.where), trim(c.memo), ymd(new Date(c.ts))]);
+  });
+  return rows.map(function(r){
+    return r.map(function(v){
+      v = String(v == null ? '' : v);
+      return /[",\n\r]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+    }).join(',');
+  }).join('\r\n');
+}
+
+/* ===================== 書き出し・コピー ===================== */
+var savePromise = (window.claude && typeof window.claude.use === 'function')
+  ? window.claude.use('downloads')['catch'](function(){ return null; }) : null;
+function copyText(text, okMsg){
+  var fallback = function(){
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+    toast(ok ? okMsg : 'コピーできませんでした');
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(text).then(function(){ toast(okMsg); }, fallback);
+  else fallback();
+}
+function saveFile(name, data, mime){
+  if (savePromise){
+    toast('保存を準備しています…');
+    savePromise.then(function(dl){
+      if (!dl || !dl.save){ toast('この画面ではファイル保存を使えません'); return; }
+      dl.save({ filename:name, data:data }).then(function(){ toast('保存しました'); }, function(err){
+        if (err && err.code === 'declined') return;
+        toast('保存できませんでした');
+      });
+    });
+    return;
+  }
+  try {
+    var url = URL.createObjectURL(new Blob([data], { type:mime }));
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
+    toast('保存しました');
+  } catch(e){ toast('保存できませんでした'); }
+}
+
+/* ===================== 設定 ===================== */
+function openSettings(){
+  var h = '<h2>設定</h2>' +
+    '<p class="lead" id="g-usage"></p>' +
+    '<label>スマホの連絡先に入れる</label>' +
+    '<p class="hint" style="margin-top:0">書き出したファイルを開くと、連絡先アプリに登録できる。' +
+    '1人だけなら、その名刺を開いて「連絡先に入れる」。</p>' +
+    '<button class="btn" id="g-vcf">全員分を書き出す（.vcf）</button>' +
+    '<label>エクセルに出す</label>' +
+    '<div class="row"><button class="btn" id="g-csv-copy">コピー</button>' +
+    '<button class="btn" id="g-csv-save">CSVで保存</button></div>' +
+    '<label>バックアップ（機種変更・端末の乗り換え用）</label>' +
+    '<p class="hint" style="margin-top:0">名刺はこの端末の中にしかない。<b>月に一度</b>ここから書き出しておくこと。</p>' +
+    '<button class="btn" id="g-bk-full">写真つきで保存（.json）</button>' +
+    '<button class="btn" id="g-bk-lite">文字だけ保存（軽い）</button>' +
+    '<label for="g-restore">バックアップから復元</label>' +
+    '<input type="file" id="g-restore" accept=".json,application/json">' +
+    '<label>文字を読む準備</label>' +
+    '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込む。' +
+    'ここで先にすませておくと、外で撮るときに待たない。一度すめば次からは要らない。</p>' +
+    '<button class="btn" id="g-warm">いま準備しておく</button>' +
+    '<p class="hint" id="g-warm-state"></p>' +
+    '<label>撮ったあと</label>' +
+    '<label class="opt"><input type="checkbox" id="g-check"> 切り取りを毎回たしかめる</label>' +
+    '<p class="hint">名刺の枠を自分で合わせてから読ませたいときに。ふだんは切っておいてよい。</p>' +
+    '<label>お試し</label>' +
+    '<button class="btn" id="g-sample">お試し用のサンプルを入れる</button>' +
+    '<button class="btn danger" id="g-wipe">記録をすべて削除</button>' +
+    '<button class="btn" id="g-close">閉じる</button>';
+  openSheet(h, function(){
+    if (navigator.storage && navigator.storage.estimate){
+      navigator.storage.estimate().then(function(e){
+        if (e && e.usage && $('g-usage'))
+          $('g-usage').textContent = '名刺 ' + db.cards.length + '枚、写真をふくめて ' +
+            (e.usage / 1048576).toFixed(1) + ' MB 使っている。';
+      }, function(){});
+    } else $('g-usage').textContent = '名刺 ' + db.cards.length + '枚。';
+    $('g-vcf').addEventListener('click', saveVcfAll);
+    $('g-csv-copy').addEventListener('click', function(){ copyText(buildCSV(), 'CSVをコピーしました'); });
+    $('g-csv-save').addEventListener('click', function(){
+      saveFile('めいしばこ_名簿_' + today() + '.csv', '﻿' + buildCSV(), 'text/csv;charset=utf-8;'); });
+    $('g-bk-full').addEventListener('click', function(){ doBackup(true); });
+    $('g-bk-lite').addEventListener('click', function(){ doBackup(false); });
+    $('g-restore').addEventListener('change', function(){
+      if (this.files && this.files[0]) doRestore(this.files[0]);
+      this.value = '';
+    });
+    $('g-warm').addEventListener('click', function(){
+      var st = $('g-warm-state');
+      st.textContent = '取り込んでいます…';
+      progressCb = function(m){
+        if (!$('g-warm-state')) return;
+        $('g-warm-state').textContent = m.status + '　' + Math.round((m.progress || 0) * 100) + '%';
+      };
+      getWorker().then(function(){
+        progressCb = null;
+        if ($('g-warm-state')) $('g-warm-state').textContent = '準備できた。次からは待たずに読める。';
+      }, function(){
+        progressCb = null;
+        if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めなかった。電波のあるところでもう一度。';
+      });
+    });
+    $('g-check').checked = checkCrop;
+    $('g-check').addEventListener('change', function(){
+      checkCrop = this.checked;
+      try { localStorage.setItem(CKEY, checkCrop ? '1' : '0'); } catch(e){}
+    });
+    $('g-sample').addEventListener('click', function(){
+      if (db.cards.length){ toast('名刺があるときは入れられません'); return; }
+      if (!confirm('動きを試すための架空の名刺を5枚入れます。よろしいですか？')) return;
+      loadSample();
+    });
+    $('g-wipe').addEventListener('click', function(){
+      if (!confirm('名刺も写真もすべて消えます。取り消せません。よろしいですか？')) return;
+      if (!confirm('本当に削除しますか？')) return;
+      db.cards = []; db.mail = '';
+      persist(); thumbCache = {};
+      IDB.clear()['catch'](function(){});
+      renderCards(); closeSheet(); toast('すべて削除しました');
+    });
+    $('g-close').addEventListener('click', closeSheet);
+  });
+}
+
+/* ===================== バックアップ ===================== */
+function doBackup(withPhotos){
+  var base = { app:'meishibako', v:2, at:new Date().toISOString(), cards:db.cards };
+  if (!withPhotos){
+    saveFile('めいしばこ_バックアップ_文字だけ_' + today() + '.json', JSON.stringify(base), 'application/json');
+    return;
+  }
+  busy(true, '写真をまとめています…');
+  IDB.all().then(function(rows){
+    busy(false);
+    base.shots = (rows || []).filter(function(r){ return r && r.id && r.id.indexOf('__') !== 0; });
+    saveFile('めいしばこ_バックアップ_' + today() + '.json', JSON.stringify(base), 'application/json');
+  }, function(){ busy(false); toast('写真を読み出せませんでした'); });
+}
+function doRestore(file){
+  var r = new FileReader();
+  r.onload = function(){
+    var raw = null;
+    try { raw = JSON.parse(String(r.result)); } catch(e){}
+    if (!raw || !Array.isArray(raw.cards)){ toast('このファイルは読めませんでした'); return; }
+    var ns = (raw.shots || []).length;
+    if (!confirm('名刺 ' + raw.cards.length + '枚' + (ns ? '（写真 ' + ns + '枚）' : '（写真なし）') +
+      ' を読み込みます。いまの記録は置きかわります。よろしいですか？')) return;
+    db.cards = raw.cards;
+    db.cards.forEach(function(c){ if (!c.id) c.id = uid(); if (!c.ts) c.ts = Date.now(); });
+    persist();
+    thumbCache = {};
+    busy(true, '写真をもどしています…');
+    IDB.clear().then(function(){
+      var chain = Promise.resolve();
+      (raw.shots || []).forEach(function(s){
+        if (!s || !s.id) return;
+        chain = chain.then(function(){ return IDB.put({ id:s.id, full:s.full, thumb:s.thumb }); });
+      });
+      return chain;
+    }).then(function(){
+      busy(false); renderCards(); closeSheet(); toast('もどしました');
+    }, function(){
+      busy(false); renderCards(); closeSheet(); toast('文字はもどったが、写真はもどせなかった');
+    });
+  };
+  r.onerror = function(){ toast('ファイルを読めませんでした'); };
+  r.readAsText(file);
+}
+
+/* ===================== お試し用のサンプル ===================== */
+function fakeShot(name, company, sub){
+  var cv = document.createElement('canvas');
+  cv.width = 728; cv.height = 440;
+  var cx = cv.getContext('2d');
+  var FF = '"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",IPAGothic,sans-serif';
+  cx.fillStyle = '#fdfcf9'; cx.fillRect(0, 0, 728, 440);
+  cx.fillStyle = '#4f7042'; cx.fillRect(0, 0, 728, 12);
+  cx.fillStyle = '#e6e0d6'; cx.fillRect(48, 268, 300, 2);
+  cx.fillStyle = '#3f4750'; cx.font = '600 27px ' + FF; cx.fillText(company, 48, 92);
+  cx.fillStyle = '#9aa3ad'; cx.font = '500 19px ' + FF; cx.fillText(sub, 48, 128);
+  cx.fillStyle = '#16191d'; cx.font = '700 52px ' + FF; cx.fillText(name, 48, 232);
+  cx.fillStyle = '#6b7280'; cx.font = '500 18px ' + FF;
+  cx.fillText('TEL 03-5555-0000 / FAX 03-5555-0001', 48, 320);
+  cx.fillText('東京都千代田区丸の内1-1-1', 48, 352);
+  cx.fillText('www.example.co.jp', 48, 384);
+  var t = document.createElement('canvas');
+  t.width = 320; t.height = 194;
+  t.getContext('2d').drawImage(cv, 0, 0, 320, 194);
+  return { full: cv.toDataURL('image/jpeg', 0.8), thumb: t.toDataURL('image/jpeg', 0.62) };
+}
+function loadSample(){
+  function back(n){ var d = new Date(); d.setDate(d.getDate() - n); return d; }
+  var S = [
+    { name:'山田 太郎', kana:'やまだ たろう', company:'株式会社ヤマダ商事', dept:'営業部', title:'課長',
+      tel:'03-5555-0000', mobile:'090-1111-2222', email:'yamada@example.co.jp', url:'www.example.co.jp',
+      addr:'〒100-0005 東京都千代田区丸の内1-1-1', where:'東京ビッグサイトの展示会', d:3,
+      memo:'白髪でめがね。息子さんが野球をしている。うちの倉庫の件で見積がほしいとのこと。' },
+    { name:'鈴木 花子', kana:'すずき はなこ', company:'鈴木不動産株式会社', dept:'仲介部', title:'主任',
+      tel:'03-5555-1000', mobile:'090-3333-4444', email:'suzuki@example.com',
+      addr:'東京都港区新橋2-2-2', where:'東京ビッグサイトの展示会', d:3,
+      memo:'名刺の裏に地図。テナントの話ならこの人。' },
+    { name:'佐藤 健一', kana:'さとう けんいち', company:'株式会社ヤマダ商事', dept:'総務部',
+      tel:'03-5555-0002', email:'sato@example.co.jp', where:'東京ビッグサイトの展示会', d:3,
+      memo:'山田さんの部下。請求の窓口はこちら。' },
+    { name:'田中 みどり', kana:'たなか みどり', company:'みどり印刷有限会社', title:'代表取締役',
+      mobile:'080-5555-6666', email:'midori@midori-print.jp',
+      addr:'〒460-0008 愛知県名古屋市中区栄3-2-1', where:'商工会の新年会', d:40,
+      memo:'チラシと封筒はここに頼んでいる。小ロットも受けてくれる。' },
+    { name:'高橋 学', kana:'たかはし まなぶ', company:'高橋建設株式会社', dept:'工務部', title:'部長',
+      tel:'042-555-7777', where:'現場で紹介された', d:210,
+      memo:'倉庫の改修の見積をもらったことがある。話が早い。' }
+  ];
+  var chain = Promise.resolve();
+  S.forEach(function(s, i){
+    var d = back(s.d); d.setHours(14, 20, 0, 0);
+    var c = { id:uid() + i, ts:d.getTime(), shot:1, met:ymd(d) };
+    F.forEach(function(k){ if (k !== 'met') c[k] = s[k] || ''; });
+    db.cards.push(c);
+    var sh = fakeShot(c.name, c.company, [c.dept, c.title].filter(Boolean).join(' '));
+    chain = chain.then(function(){ return putShot(c.id, sh); });
+  });
+  db.cards.sort(function(a, b){ return b.ts - a.ts; });
+  persist();
+  chain.then(function(){ renderCards(); closeSheet(); toast('サンプルを入れました'); });
+}
+
+/* ===================== 配線 ===================== */
+$('btn-shoot').addEventListener('click', openCamera);
+$('cam-close').addEventListener('click', closeCamera);
+$('cam-shot').addEventListener('click', camCapture);
+$('cam-pick').addEventListener('click', function(){ closeCamera(); $('file-pick').click(); });
+$('cam-torch').addEventListener('click', function(){
+  if (!camTrack || !camTrack.applyConstraints) return;
+  torchOn = !torchOn;
+  camTrack.applyConstraints({ advanced: [{ torch: torchOn }] })['catch'](function(){ torchOn = false; });
+  $('cam-torch').textContent = torchOn ? 'ライト 切' : 'ライト';
+});
+$('btn-pick').addEventListener('click',  function(){ $('file-pick').click(); });
+$('file-cam').addEventListener('change',  function(){ startCapture(this.files[0]); this.value = ''; });
+$('file-pick').addEventListener('change', function(){ startCapture(this.files[0]); this.value = ''; });
+$('btn-gear').addEventListener('click', openSettings);
+var qT = null;
+$('q').addEventListener('input', function(){ clearTimeout(qT); qT = setTimeout(renderCards, 120); });
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.tile[data-id],.lrow[data-id]') : null;
+  if (b) openCard(b.getAttribute('data-id'));
+});
+$('viewsw').addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('button[data-v]') : null;
+  if (!b) return;
+  view = b.getAttribute('data-v');
+  try { localStorage.setItem(VKEY, view); } catch(e){}
+  renderCards();
+});
+document.addEventListener('keydown', function(ev){
+  if (ev.key !== 'Escape') return;
+  if (!$('viewer').hidden){ $('viewer').hidden = true; $('viewer-img').src = ''; }
+  else if (!$('sheet').hidden && !pend) closeSheet();
+});
+renderCards();
+})();
+</script>
+</body>
+</html>
