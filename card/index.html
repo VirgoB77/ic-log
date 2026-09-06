@@ -187,7 +187,9 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
 .cam .stage{position:relative;flex:1;overflow:hidden;background:#000}
 .cam video{width:100%;height:100%;object-fit:cover;display:block}
 .cam .box{position:absolute;left:6%;width:88%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
-  border:2px solid rgba(255,255,255,.92);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+  border:2px dashed rgba(255,255,255,.55);border-radius:12px;pointer-events:none}
+.cam .ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.cam .box.found{border-color:transparent}
 .cam .tip{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-size:13px;
   font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none}
 .cam .ctl{display:flex;align-items:center;gap:12px;padding:16px 18px calc(20px + env(safe-area-inset-bottom));background:#000}
@@ -251,8 +253,9 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
   </div>
   <div class="stage" id="cam-stage">
     <video id="cam-video" playsinline muted autoplay></video>
+    <canvas class="ov" id="cam-ov"></canvas>
     <div class="box" id="cam-box"></div>
-    <p class="tip">枠に名刺を合わせる。まわりの机が入っても切り取ります</p>
+    <p class="tip" id="cam-tip">名刺を枠のあたりに。四隅を見つけて止まったら、自動で撮ります</p>
   </div>
   <div class="ctl">
     <button class="side" id="cam-pick">写真から選ぶ</button>
@@ -466,8 +469,9 @@ function rotCanvasK(src, k){
 /* ===== 名刺の四隅をさがす =====
    写真ぜんぶを読ませると、机まで含めて文字が小さくなり読みちがえる。
    明るい紙のかたまりを中心から塗り広げて見つけ、その四隅を返す。 */
-function findQuad(src){
-  var w = 360, h = Math.max(1, Math.round(src.height * w / src.width));
+function findQuad(src, w){
+  w = w || 360;
+  var h = Math.max(1, Math.round(src.height * w / src.width));
   var c = document.createElement('canvas');
   c.width = w; c.height = h;
   c.getContext('2d').drawImage(src, 0, 0, w, h);
@@ -1018,10 +1022,17 @@ function mainColumn(lines){
   var bs = [];
   lines.forEach(function(L){
     if (!L.bb) return;
-    var t = han(L.t);
-    var hit = /@/.test(t) || /https?:|www\./i.test(t) || /TEL|FAX|電話|携帯|Mobile/i.test(t) || /〒/.test(L.t) || RE_TEL.test(t);
-    RE_TEL.lastIndex = 0;
-    if (hit && !RE_LIC.test(L.t)) bs.push(L.bb);
+    var t = han(L.t), cands = [];
+    [/TEL|FAX|電話|携帯|Mobile|https?:|www\./i, /〒/].forEach(function(re){ var mm = t.match(re); if (mm) cands.push(mm.index); });
+    var at = t.indexOf('@'); if (at >= 0) cands.push(t.lastIndexOf(' ', at) + 1);
+    RE_TEL.lastIndex = 0; var mt = t.search(RE_TEL); RE_TEL.lastIndex = 0; if (mt >= 0) cands.push(mt);
+    if (!cands.length || RE_LIC.test(L.t)) return;
+    /* 左の列の文字とくっついて1行になっていることがある（「DESIGN Mobile 070-…」「〜のスポンサーです TEL…」）。
+       手がかりの前に別の列らしい文字があるときだけ、そこから列の左端を見積もる */
+    var idx = Math.min.apply(null, cands), pre = t.slice(0, idx).trim();
+    var shift = idx > 0 && pre.length >= 3 && (RE_LIC.test(pre) || /[A-Z]{3,}/.test(pre) || /[。のです、]$/.test(pre) || sentenceLike(pre));
+    var ex0 = shift ? L.bb.x0 + (L.bb.x1 - L.bb.x0) * idx / t.length : L.bb.x0;
+    bs.push({ x0:ex0, x1:L.bb.x1 });
   });
   if (bs.length < 2) return null;
   var x0s = bs.map(function(b){ return b.x0; }).sort(function(a, b){ return a - b; });
@@ -1175,7 +1186,11 @@ function parseCard(lines, W){
   lines.forEach(function(L, i){
     if (used[i] || L.c < 30) return;
     if (!RE_CO.test(L.t) || sentenceLike(L.t)) return;
+    if (/優良法人|認定|受賞|登録|加盟|会員|表彰|認証|指定/.test(L.t)) return;   /* 「健康経営優良法人」などの認定表示 */
     var sc = L.h * (inCol(L, col) ? 1 : 0.3);
+    /* 「株式会社」「協同組合」などがはっきり付く行を、「グループ」「工業」だけの行より優先 */
+    if (/株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲|\(株\)|（株）|協同組合|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC/i.test(L.t)) sc *= 1.6;
+    else if (/グループ|ホールディングス|カンパニー/.test(L.t) && !/会社/.test(L.t)) sc *= 0.7;
     if (!co || sc > co.sc) co = { L:L, i:i, sc:sc };
   });
   if (co){ got.company = tidyCompany(co.L.t); used[co.i] = 1; got._coIdx = co.i; }
@@ -1247,6 +1262,7 @@ function parseCard(lines, W){
       if (L.h < best.L.h * 0.28 || L.h > best.L.h * 1.6) return;
       var t = L.t;
       if (/[0-9@]/.test(han(t)) || t.length < 2 || t.length > 30) return;
+      if ((t.match(/[一-龥ぁ-んァ-ヶA-Za-z]/g) || []).length < 2) return;   /* 「N /」のような読み */
       var t2 = t.replace(/[\s　]/g, '');
       if (RE_TITLE.test(t2) || RE_DEPT.test(t2) || RE_DEPT2.test(t2) || RE_LIC.test(t2)) return;
       if (/担当|マネージ|スタッフ|アドバイザー|プロデューサー/.test(t2)) return;
@@ -1267,7 +1283,8 @@ function parseCard(lines, W){
 /* 「株式会社 マリンホーム」→「株式会社マリンホーム」 */
 function tidyCompany(t){
   t = String(t).replace(/[、。,.]+$/, '');
-  if (RE_CO.test(t)) t = t.replace(/[\s　]+[^\s　]{1,2}$/, '');   /* 会社名のあとの短いゴミ */
+  if (RE_CO.test(t)) t = t.replace(/^[0-9A-Za-z|｜!:;・.,、。]{1,2}[\s　]+/, '');   /* 社名の前の短いゴミ（「7 株式会社…」） */
+  if (RE_CO.test(t)) t = t.replace(/[\s　]+([^\s　]{1,2})$/, function(m0, tk){ return RE_CO.test(tk) ? m0 : ''; });   /* 会社名のあとの短いゴミ */
   /* 「株式会社〇〇 大阪支店」「〇〇株式会社明石店」のように、社名のうしろに付いた支店・部署は外す */
   var KW = '株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲', BR = '支社|支店|営業所|事業部|本店|本社|本部|店';
   var mA = t.match(new RegExp('^((?:' + KW + ')[\\s　]*[^\\s　]+)[\\s　]+[^\\s　]{1,12}(?:' + BR + ')$'));
@@ -1526,7 +1543,8 @@ function bandReread(res){
     chain = chain.then(function(){
       var h = L.h;
       var beyond = col && (L.bb.x0 < col.x0 - h || L.bb.x1 > col.x1 + h);
-      if (L.c >= 45 && !beyond) return;                     /* よく読めていて列にも収まっている行はそのまま */
+      var jp0 = (L.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
+      if (L.c >= 45 && !beyond && jp0 >= 2) return;         /* よく読めていて列にも収まっている行はそのまま */
       var bx0 = col ? Math.max(L.bb.x0, col.x0 - h * 0.4) : L.bb.x0;
       var bx1 = col ? Math.min(L.bb.x1, col.x1 + h * 0.4) : L.bb.x1;
       if (bx1 - bx0 < h) return;
@@ -1539,7 +1557,80 @@ function bandReread(res){
       });
     });
   });
+  /* 文字の並びを絵から直接さがす。全体読みが行ごと飛ばしたところ（大きな社名など）を拾う */
+  chain = chain.then(function(){
+    var bands = inkBands(cv, col);
+    if (OCRBASE) window.__meishiBands = { col:col, bands:bands.map(function(b){ return { x0:b.x0, x1:b.x1, y0:b.y0, y1:b.y1 }; }) };
+    var todo = bands.filter(function(b){
+      var covered = lines.some(function(L){
+        if (!L.bb || L.c < 45) return false;
+        if ((L.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length < 2) return false;   /* 「N /」のような読みは読めたうちに入れない */
+        var ov = Math.min(L.bb.y1, b.y1) - Math.max(L.bb.y0, b.y0);
+        return ov > (b.y1 - b.y0) * 0.5;
+      });
+      return !covered;
+    }).sort(function(a, b){ return (b.y1 - b.y0) - (a.y1 - a.y0); }).slice(0, 5);
+    var ch2 = Promise.resolve();
+    todo.forEach(function(b){
+      ch2 = ch2.then(function(){
+        return rereadLine(res.w, cv, b, '7', 130).then(function(alt){
+          if (!alt || !alt.t || alt.c < 40) return;
+          var jp = (alt.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
+          if (jp < 2) return;
+          lines.push({ t:alt.t, c:alt.c, h:Math.round(b.y1 - b.y0), y:b.y0, bb:{ x0:b.x0, x1:b.x1, y0:b.y0, y1:b.y1 }, band:true });
+        });
+      });
+    });
+    return ch2.then(function(){
+      if (lines.every(function(L){ return L.bb; })) lines.sort(function(a, b){ return a.bb.y0 - b.bb.y0; });
+    });
+  });
   return chain;
+}
+/* 本文の列の中で、インクのある行の帯をさがす（読みとった絵は白黒で濃淡が強めてある） */
+function inkBands(cv, col){
+  var W = cv.width, H = cv.height, x0 = col ? Math.max(0, Math.round(col.x0)) : Math.round(W * 0.2);
+  var x1 = col ? Math.min(W, Math.round(col.x1)) : Math.round(W * 0.8);
+  if (x1 - x0 < 40) return [];
+  var d;
+  try { d = cv.getContext('2d').getImageData(x0, 0, x1 - x0, H).data; } catch(e){ return []; }
+  var cw = x1 - x0, rows = new Int32Array(H);
+  for (var y = 0; y < H; y++){
+    var n = 0, base = y * cw * 4;
+    for (var x = 0; x < cw; x++) if (d[base + x*4] < 110) n++;
+    rows[y] = n;
+  }
+  if (OCRBASE) window.__meishiRows = Array.prototype.slice.call(rows);
+  /* しきい値：ぼけた写真では文字のない行にも薄い点が散るので、行ごとの量の上位1割を目安にする */
+  var nz = Array.prototype.filter.call(rows, function(v){ return v > 0; }).sort(function(a, b){ return a - b; });
+  var p90 = nz.length ? nz[Math.floor(nz.length * 0.9)] : 0;
+  var thr = Math.max(cw * 0.008, p90 * 0.06), bands = [], y2 = 0;
+  while (y2 < H){
+    if (rows[y2] <= thr){ y2++; continue; }
+    var s0 = y2; while (y2 < H && rows[y2] > thr) y2++;
+    bands.push({ y0:s0, y1:y2 });
+  }
+  /* 近い帯はつなぐ（「ー」や濁点で切れる） */
+  var out = [];
+  bands.forEach(function(b){
+    var p = out[out.length - 1];
+    var hmin = p ? Math.min(p.y1 - p.y0, b.y1 - b.y0) : 0;
+    if (p && b.y0 - p.y1 < Math.max(3, hmin * 0.12)) p.y1 = b.y1; else out.push({ y0:b.y0, y1:b.y1 });
+  });
+  out = out.filter(function(b){ var h = b.y1 - b.y0; return h >= H * 0.025 && h <= H * 0.2; });
+  /* 帯ごとに、インクのある横の範囲 */
+  out.forEach(function(b){
+    var bx0 = cw, bx1 = 0;
+    for (var yy = b.y0; yy < b.y1; yy += 2){
+      var base2 = yy * cw * 4;
+      for (var xx = 0; xx < cw; xx++){
+        if (d[base2 + xx*4] < 110){ if (xx < bx0) bx0 = xx; if (xx > bx1) bx1 = xx; }
+      }
+    }
+    var m = Math.round((b.y1 - b.y0) * 0.3);
+    b.x0 = Math.max(0, x0 + bx0 - m); b.x1 = Math.min(W, x0 + bx1 + m);
+  });
+  return out.filter(function(b){ return b.x1 - b.x0 >= (b.y1 - b.y0) * 1.2; });
 }
 /* 写真の文字を押したら、そこだけ読み直して、どの欄に入れるか選んでもらう */
 var lastOcr = null;
@@ -1802,7 +1893,8 @@ function processRaw(raw, hint){
       pendRaw = raw; pendOrient = 0; pendOriented = false;
       var qd = findQuad(raw);
       pendCropped = !!qd;
-      if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
+      if (!qd && hint && hint.quad){ qd = hint.quad.map(function(q){ return [q[0]*raw.width, q[1]*raw.height]; }); pendCropped = true; }
+      else if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
       pendQuad = qd || fullQuad(raw);
       buildPend();
     } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
@@ -1903,12 +1995,82 @@ function openRecrop(){
 
 /* ===== アプリの中のカメラ（シャッター音は鳴らない） ===== */
 var camStream = null, camTrack = null, torchOn = false;
+/* ===== 生きた映像から四隅をさがす（メモアプリの書類スキャンのように） =====
+   200msごとに小さな絵で名刺の四隅をさがし、見つかったら緑の枠で映像に重ねる。
+   枠が1秒ほど動かなければ自動で撮る。撮る前に枠が見えるので、外れていればその場で直せる */
+var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0;
+function camFrameRect(){
+  var v = $('cam-video'), vr = v.getBoundingClientRect(), st = $('cam-stage').getBoundingClientRect();
+  var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
+  return { sc:sc, ox:vr.left - st.left + (vr.width - v.videoWidth*sc) / 2, oy:vr.top - st.top + (vr.height - v.videoHeight*sc) / 2, w:st.width, h:st.height };
+}
+function drawLive(q, stable){
+  var ov = $('cam-ov'), v = $('cam-video');
+  if (!ov || !v.videoWidth) return;
+  var fr = camFrameRect();
+  if (ov.width !== Math.round(fr.w) || ov.height !== Math.round(fr.h)){ ov.width = Math.round(fr.w); ov.height = Math.round(fr.h); }
+  var x = ov.getContext('2d');
+  x.clearRect(0, 0, ov.width, ov.height);
+  if (!q) return;
+  x.beginPath();
+  q.forEach(function(p, i){
+    var px = fr.ox + p[0]*v.videoWidth*fr.sc, py = fr.oy + p[1]*v.videoHeight*fr.sc;
+    if (i) x.lineTo(px, py); else x.moveTo(px, py);
+  });
+  x.closePath();
+  x.fillStyle = stable ? 'rgba(120,200,110,.28)' : 'rgba(120,200,110,.14)';
+  x.strokeStyle = stable ? '#8fe08a' : '#cfeacb';
+  x.lineWidth = stable ? 4 : 3;
+  x.fill(); x.stroke();
+}
+function liveStep(){
+  liveTimer = null;
+  var v = $('cam-video');
+  if (!camStream || $('cam').hidden) return;
+  if (v.videoWidth && v.readyState >= 2){
+    var W = 240, H = Math.max(1, Math.round(v.videoHeight * W / v.videoWidth));
+    var c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    var qd = null;
+    try { c.getContext('2d').drawImage(v, 0, 0, W, H); qd = findQuad(c, W); } catch(e){ qd = null; }
+    var q = qd ? qd.map(function(p){ return [Math.min(1, Math.max(0, p[0]/W)), Math.min(1, Math.max(0, p[1]/H))]; }) : null;
+    var edge = false;
+    if (q) q.forEach(function(p){ if (p[0] < 0.01 || p[0] > 0.99 || p[1] < 0.01 || p[1] > 0.99) edge = true; });
+    /* 枠がしばらく動いていないか */
+    liveHist.push(q); if (liveHist.length > 5) liveHist.shift();
+    var stable = false;
+    if (q && liveHist.length >= 5 && liveHist.every(function(o){ return !!o; })){
+      stable = true;
+      for (var i = 0; i < liveHist.length - 1 && stable; i++){
+        for (var k = 0; k < 4; k++){
+          var a = liveHist[i][k], b = q[k];
+          if (Math.abs(a[0]-b[0]) > 0.02 || Math.abs(a[1]-b[1]) > 0.02){ stable = false; break; }
+        }
+      }
+    }
+    liveQuad = q;
+    drawLive(q, stable && !edge);
+    var tip = $('cam-tip'), bx = $('cam-box');
+    if (bx) bx.className = 'box' + (q ? ' found' : '');
+    if (tip){
+      tip.textContent = !q ? '名刺を枠のあたりに。机との境がはっきり写るように'
+                      : edge ? '名刺がぜんぶ入るように、少し離す'
+                      : stable ? 'そのまま…' : '四隅を見つけた。止めると自動で撮ります';
+    }
+    if (stable && !edge && liveArmed && Date.now() - liveShotAt > 2500){ liveShotAt = Date.now(); camCapture(); return; }
+  }
+  liveTimer = setTimeout(liveStep, 200);
+}
 function openCamera(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
   $('cam').hidden = false;
   document.body.style.overflow = 'hidden';
+  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now();
+  drawLive(null);
+  if (liveTimer) clearTimeout(liveTimer);
+  liveTimer = setTimeout(liveStep, 400);
   navigator.mediaDevices.getUserMedia({
-    video: { facingMode: { ideal: 'environment' }, width: { ideal: 3840 }, height: { ideal: 2160 } },
+    video: { facingMode: { ideal: 'environment' }, width: { ideal: 4032 }, height: { ideal: 3024 } },
     audio: false
   }).then(function(st){
     camStream = st;
@@ -1932,6 +2094,8 @@ function openCamera(){
 function closeCamera(){
   $('cam').hidden = true;
   document.body.style.overflow = '';
+  if (liveTimer){ clearTimeout(liveTimer); liveTimer = null; }
+  liveArmed = false;
   if (camStream){
     camStream.getTracks().forEach(function(t){ try { t.stop(); } catch(e){} });
     camStream = null; camTrack = null;
@@ -1959,11 +2123,13 @@ function camCapture(){
   var v = $('cam-video');
   if (!v.videoWidth){ toast('もう少し待ってから押す'); return; }
   var hint = guideFrac();
+  if (liveQuad) hint = { quad: liveQuad };       /* 映像で見つけていた四隅を、見つけ直せなかったときの控えにする */
   var c = document.createElement('canvas');
   c.width = v.videoWidth; c.height = v.videoHeight;
   c.getContext('2d').drawImage(v, 0, 0);
+  if (OCRBASE) window.__camSize = [v.videoWidth, v.videoHeight];
   closeCamera();
-  processRaw(toCanvas(c, 2400), hint);
+  processRaw(toCanvas(c, 3000), hint);
 }
 function doSave(){
   var c = { id:uid(), ts:Date.now(), shot: pend ? 1 : 0, met:today() };
