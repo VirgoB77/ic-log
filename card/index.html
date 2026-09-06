@@ -168,6 +168,8 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
 .warn{font-size:12.5px;color:var(--key);background:var(--key-soft);border:1px solid var(--key);
   border-radius:11px;padding:11px 13px;margin-top:12px;line-height:1.75}
 
+.opt{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:0}
+.opt input{width:21px;height:21px;flex:none;accent-color:var(--key)}
 .hint{font-size:11.5px;color:var(--sub);line-height:1.85;margin:8px 2px 0}
 .credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--ground);
@@ -245,7 +247,7 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
   </div>
   <div class="stage" id="cam-stage">
     <video id="cam-video" playsinline muted autoplay></video>
-    <div class="box"></div>
+    <div class="box" id="cam-box"></div>
     <p class="tip">枠に名刺を合わせる。まわりの机が入っても切り取ります</p>
   </div>
   <div class="ctl">
@@ -500,20 +502,71 @@ function findQuad(src){
       if (g[m] > thr){ seen[m] = 1; q.push(m); }
     }
   }
-  var area = n/(w*h), bw = maxx-minx, bh = maxy-miny;
-  if (!bw || !bh) return null;
-  var ar = Math.max(bw, bh) / Math.min(bw, bh);
-  if (area < 0.06 || area > 0.96 || ar < 1.15 || ar > 2.7) return null;
-  var tl = [1e9,0,0], br = [-1e9,0,0], tr = [-1e9,0,0], bl = [1e9,0,0];
-  for (var i3 = 0; i3 < pts.length; i3 += 2){
-    var X = pts[i3], Y = pts[i3+1], sm = X+Y, df = X-Y;
-    if (sm < tl[0]) tl = [sm, X, Y];
-    if (sm > br[0]) br = [sm, X, Y];
-    if (df > tr[0]) tr = [df, X, Y];
-    if (df < bl[0]) bl = [df, X, Y];
+  if (maxx <= minx || maxy <= miny) return null;
+  /* 輪郭の点だけを取り出す */
+  var bp = [];
+  for (var y2 = miny; y2 <= maxy; y2++){
+    for (var x2 = minx; x2 <= maxx; x2++){
+      var k2 = y2*w + x2;
+      if (!seen[k2]) continue;
+      if (x2 === 0 || y2 === 0 || x2 === w-1 || y2 === h-1){ bp.push(x2, y2); continue; }
+      if (!seen[k2-1] || !seen[k2+1] || !seen[k2-w] || !seen[k2+w]) bp.push(x2, y2);
+    }
   }
+  if (bp.length < 24) return null;
+  var rect = minAreaRect(bp);
+  if (!rect) return null;
+  var sz = quadSize(rect), ra = sz.w * sz.h;
+  if (!ra) return null;
+  var ar = Math.max(sz.w, sz.h) / Math.max(1e-6, Math.min(sz.w, sz.h));
+  if (ar < 1.15 || ar > 2.7) return null;              /* 名刺らしい縦横比か */
+  if (ra/(w*h) < 0.06 || ra/(w*h) > 0.99) return null; /* 小さすぎ・大きすぎ */
+  if (n / ra < 0.72) return null;                      /* 長方形からはみ出しすぎ */
   var kk = src.width / w;
-  return [[tl[1]*kk, tl[2]*kk], [tr[1]*kk, tr[2]*kk], [br[1]*kk, br[2]*kk], [bl[1]*kk, bl[2]*kk]];
+  return orderQuad(rect.map(function(pp){ return [pp[0]*kk, pp[1]*kk]; }));
+}
+
+/* 点をぜんぶ囲む、面積がいちばん小さい回転長方形をさがす。
+   角を1点ずつ拾う方式とちがい、かならず直角の長方形になるので、
+   角が丸い名刺や、角に影がかかった名刺でもゆがまない。 */
+function minAreaRect(pts){
+  function scan(a0, a1, st){
+    var best = null;
+    for (var deg = a0; deg < a1; deg += st){
+      var t = deg*Math.PI/180, c = Math.cos(t), sn = Math.sin(t);
+      var mnx = 1e18, mxx = -1e18, mny = 1e18, mxy = -1e18;
+      for (var i = 0; i < pts.length; i += 2){
+        var x = pts[i]*c + pts[i+1]*sn, y = -pts[i]*sn + pts[i+1]*c;
+        if (x < mnx) mnx = x;
+        if (x > mxx) mxx = x;
+        if (y < mny) mny = y;
+        if (y > mxy) mxy = y;
+      }
+      var a = (mxx-mnx) * (mxy-mny);
+      if (!best || a < best.a) best = { a:a, deg:deg, mnx:mnx, mxx:mxx, mny:mny, mxy:mxy };
+    }
+    return best;
+  }
+  var b = scan(0, 90, 1);
+  if (!b) return null;
+  b = scan(b.deg - 1, b.deg + 1.001, 0.2) || b;
+  var t = b.deg*Math.PI/180, c = Math.cos(t), sn = Math.sin(t);
+  function back(x, y){ return [x*c - y*sn, x*sn + y*c]; }
+  return [back(b.mnx,b.mny), back(b.mxx,b.mny), back(b.mxx,b.mxy), back(b.mnx,b.mxy)];
+}
+/* 画面の左上にいちばん近い角から、時計回りに並べ直す */
+function orderQuad(q){
+  var k = 0, bs = 1e18;
+  for (var i = 0; i < 4; i++){
+    var sm = q[i][0] + q[i][1];
+    if (sm < bs){ bs = sm; k = i; }
+  }
+  var o = [q[k], q[(k+1)%4], q[(k+2)%4], q[(k+3)%4]], a = 0;
+  for (var i2 = 0; i2 < 4; i2++){
+    var p1 = o[i2], p2 = o[(i2+1)%4];
+    a += p1[0]*p2[1] - p2[0]*p1[1];
+  }
+  return a < 0 ? [o[0], o[3], o[2], o[1]] : o;
 }
 function fullQuad(c){ return [[0,0], [c.width,0], [c.width,c.height], [0,c.height]]; }
 function quadSize(qd){
@@ -651,9 +704,13 @@ function linesOf(data){
 }
 
 /* ===================== 読んだ文字を項目に割りふる ===================== */
+var CIRC = '①②③④⑤⑥⑦⑧⑨';
 function han(s){
-  return String(s == null ? '' : s).replace(/[！-～]/g, function(c){
+  var t = String(s == null ? '' : s).replace(/[！-～]/g, function(c){
     return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); }).replace(/　/g, ' ');
+  /* 丸数字で返ってくることがあるので、ふつうの数字に直す */
+  return t.replace(/[①②③④⑤⑥⑦⑧⑨]/g, function(c){ return String(CIRC.indexOf(c) + 1); })
+          .replace(/⓪/g, '0');
 }
 function dashes(s){ return String(s).replace(/[‐‑‒–—―ー−ｰ]/g, '-'); }
 function digitsFix(s){
@@ -663,6 +720,7 @@ function digitsFix(s){
 var RE_MAIL  = /[A-Za-z0-9][A-Za-z0-9._%+\-]*@[A-Za-z0-9][A-Za-z0-9\-]*(?:\.[A-Za-z0-9][A-Za-z0-9\-]*)+/;
 var RE_LOCAL = /^[A-Za-z0-9][A-Za-z0-9._%+\-]*$/;
 var RE_TEL   = /0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4}/g;
+var RE_LOOSE = /\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}/g;
 var RE_CO    = /株式会社|有限会社|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
 var RE_TITLE = /代表取締役|取締役|代表社員|代表者|代表|会長|社長|専務|常務|本部長|統括|部長|次長|課長|係長|主任|主査|主幹|店主|店長|所長|支店長|工場長|室長|局長|主宰|オーナー|女将|チーフ|マネージャ|リーダー|顧問|参与|参事|理事|監査役|技師|税理士|公認会計士|弁護士|社会保険労務士|司法書士|行政書士|建築士|ディレクター|プランナー|コンサルタント/;
 var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|部|課|室|係|局)$/;
@@ -702,12 +760,17 @@ function pickPhones(lines){
     t.split(/(?=FAX|Fax|fax|ファックス)/).forEach(function(seg){
       if (/^(FAX|Fax|fax|ファックス)/.test(seg)) return;
       var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM\./.test(seg);
+      var labelled = isMob || /TEL|Tel|tel|電話|PHONE|Phone/.test(seg);
       var ms = seg.match(RE_TEL);
+      /* 「TEL」「携帯」と書いてある行は少し緩く拾う。数字を1つ多く・少なく読むことが
+         あるので、空欄で出すより、1文字直してもらうほうが早い */
+      if (!ms && labelled) ms = seg.match(RE_LOOSE);
       if (!ms) return;
+      var lo = labelled ? 9 : 10, hi = labelled ? 12 : 11;
       ms.forEach(function(n){
         var num = n.replace(/\s/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         var d = num.replace(/\D/g, '');
-        if (d.length < 10 || d.length > 11) return;
+        if (d.length < lo || d.length > hi) return;
         if (isMob || /^0[789]0/.test(d)){ if (!mobile) mobile = num; }
         else if (!tel) tel = num;
       });
@@ -864,6 +927,8 @@ function rowHtml(c){
       (meta ? '<span class="lmeta">' + esc(meta) + '</span>' : '') +
     '</span><span class="chev">›</span></button>';
 }
+var CKEY = 'meishi.checkcrop', checkCrop = false;
+try { checkCrop = localStorage.getItem(CKEY) === '1'; } catch(e){}
 var VKEY = 'meishi.view', view = 'grid';
 try { if (localStorage.getItem(VKEY) === 'list') view = 'list'; } catch(e){}
 function applyView(){
@@ -923,6 +988,9 @@ function saveSheetHtml(){
   return '<h2>新しい名刺</h2>' +
     '<p class="lead" id="s-lead">写真から文字を読んでいます。ちがうところは直せます。</p>' +
     '<button class="pic-big" id="s-pic"><img id="s-img" alt="いま撮った名刺"></button>' +
+    '<div class="row" style="margin-top:8px">' +
+      '<button class="btn" id="s-crop">切り直す</button>' +
+      '<button class="btn" id="s-rot">回す</button></div>' +
     '<div class="bar" id="s-bar"><i style="width:6%"></i></div>' +
     '<p class="reading" id="s-read">準備しています…</p>' +
     '<div id="s-err"></div>' +
@@ -948,8 +1016,6 @@ function saveSheetHtml(){
     '<label for="s-memo">ひとことメモ</label>' +
     '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのこと。"></textarea>' +
     '<button class="btn primary" id="s-save">名刺箱にしまう</button>' +
-    '<div class="row"><button class="btn" id="s-crop">切り直す</button>' +
-    '<button class="btn" id="s-rot">回す</button></div>' +
     '<button class="btn danger" id="s-cancel">やめる</button>';
 }
 function setCands(){
@@ -1060,17 +1126,24 @@ function buildPend(){
   pend = { full: toCanvas(pendCard, 1400).toDataURL('image/jpeg', 0.72),
            thumb: toCanvas(pendCard, 320).toDataURL('image/jpeg', 0.62) };
 }
-function processRaw(raw){
+function fracQuad(c, f){
+  var x = f.x*c.width, y = f.y*c.height, w = f.w*c.width, h = f.h*c.height;
+  return [[x,y], [x+w,y], [x+w,y+h], [x,y+h]];
+}
+/* hint … カメラの枠（画面に対する割合）。名刺を見つけられなかったときはここで切る */
+function processRaw(raw, hint){
   busy(true, '名刺を切り出しています…');
   setTimeout(function(){
     try {
       pendRaw = raw;
       var qd = findQuad(raw);
       pendCropped = !!qd;
+      if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
       pendQuad = qd || fullQuad(raw);
       buildPend();
     } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
     busy(false);
+    if (checkCrop){ openRecrop(); return; }
     openSave();
     runOcr(pendCard);
   }, 30);
@@ -1103,7 +1176,7 @@ function startCapture(file){
 /* ===== 切り直し：四隅を手で合わせる ===== */
 function openRecrop(){
   if (!pendRaw) return;
-  var keep = grabForm();
+  var keep = $('s-name') ? grabForm() : null;
   var W = pendRaw.width, H = pendRaw.height;
   var url = toCanvas(pendRaw, 1100).toDataURL('image/jpeg', 0.82);
   var q = pendQuad.map(function(pp){ return [pp[0], pp[1]]; });
@@ -1160,7 +1233,10 @@ function openRecrop(){
     }
     $('cb-ok').addEventListener('click', function(){ apply(q); });
     $('cb-all').addEventListener('click', function(){ apply(fullQuad(pendRaw)); });
-    $('cb-cancel').addEventListener('click', function(){ openSave(keep); });
+    $('cb-cancel').addEventListener('click', function(){
+      if (keep){ openSave(keep); return; }
+      apply(pendQuad);   /* 撮った直後なら、このまま読みに進む */
+    });
   });
 }
 
@@ -1202,14 +1278,31 @@ function closeCamera(){
   try { $('cam-video').srcObject = null; } catch(e){}
   torchOn = false;
 }
+/* 画面に出している枠が、写真のどこにあたるかを割合で返す（object-fit:cover の分を戻す） */
+function guideFrac(){
+  var v = $('cam-video'), bx = $('cam-box');
+  if (!v || !bx || !v.videoWidth) return null;
+  var vr = v.getBoundingClientRect(), br = bx.getBoundingClientRect();
+  if (!vr.width || !vr.height || !br.width) return null;
+  var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
+  var ox = vr.left + (vr.width - v.videoWidth*sc) / 2;
+  var oy = vr.top + (vr.height - v.videoHeight*sc) / 2;
+  var x = (br.left - ox)/sc, y = (br.top - oy)/sc, w = br.width/sc, h = br.height/sc;
+  x -= w*0.04; y -= h*0.06; w *= 1.08; h *= 1.12;      /* 少し広めに取る */
+  x = Math.max(0, x); y = Math.max(0, y);
+  w = Math.min(v.videoWidth - x, w); h = Math.min(v.videoHeight - y, h);
+  if (w < 40 || h < 40) return null;
+  return { x:x/v.videoWidth, y:y/v.videoHeight, w:w/v.videoWidth, h:h/v.videoHeight };
+}
 function camCapture(){
   var v = $('cam-video');
   if (!v.videoWidth){ toast('もう少し待ってから押す'); return; }
+  var hint = guideFrac();
   var c = document.createElement('canvas');
   c.width = v.videoWidth; c.height = v.videoHeight;
   c.getContext('2d').drawImage(v, 0, 0);
   closeCamera();
-  processRaw(toCanvas(c, 2400));
+  processRaw(toCanvas(c, 2400), hint);
 }
 function doSave(){
   var c = { id:uid(), ts:Date.now(), shot: pend ? 1 : 0, met:today() };
@@ -1446,6 +1539,9 @@ function openSettings(){
     'ここで先にすませておくと、外で撮るときに待たない。一度すめば次からは要らない。</p>' +
     '<button class="btn" id="g-warm">いま準備しておく</button>' +
     '<p class="hint" id="g-warm-state"></p>' +
+    '<label>撮ったあと</label>' +
+    '<label class="opt"><input type="checkbox" id="g-check"> 切り取りを毎回たしかめる</label>' +
+    '<p class="hint">名刺の枠を自分で合わせてから読ませたいときに。ふだんは切っておいてよい。</p>' +
     '<label>お試し</label>' +
     '<button class="btn" id="g-sample">お試し用のサンプルを入れる</button>' +
     '<button class="btn danger" id="g-wipe">記録をすべて削除</button>' +
@@ -1482,6 +1578,11 @@ function openSettings(){
         progressCb = null;
         if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めなかった。電波のあるところでもう一度。';
       });
+    });
+    $('g-check').checked = checkCrop;
+    $('g-check').addEventListener('change', function(){
+      checkCrop = this.checked;
+      try { localStorage.setItem(CKEY, checkCrop ? '1' : '0'); } catch(e){}
     });
     $('g-sample').addEventListener('click', function(){
       if (db.cards.length){ toast('名刺があるときは入れられません'); return; }
