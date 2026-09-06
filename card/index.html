@@ -407,9 +407,9 @@ function readImage(file, cb){
   im.src = url;
 }
 /* 文字を読ませるための下ごしらえ：長辺2000pxまで拡大し、白黒にして濃淡を強める */
-function forOcr(src){
+function forOcr(src, target){
   var w = src.naturalWidth || src.width, h = src.naturalHeight || src.height;
-  var s = Math.min(3, 2000 / Math.max(w, h));
+  var s = Math.min(3, (target || 2000) / Math.max(w, h));
   var cw = Math.max(1, Math.round(w*s)), ch = Math.max(1, Math.round(h*s));
   var cv = document.createElement('canvas');
   cv.width = cw; cv.height = ch;
@@ -417,9 +417,15 @@ function forOcr(src){
   cx.imageSmoothingQuality = 'high';
   cx.drawImage(src, 0, 0, cw, ch);
   try {
-    var d = cx.getImageData(0, 0, cw, ch), p = d.data;
+    var d = cx.getImageData(0, 0, cw, ch), p = d.data, hist = new Int32Array(256);
+    for (var i0 = 0; i0 < p.length; i0 += 4) hist[(0.299*p[i0] + 0.587*p[i0+1] + 0.114*p[i0+2])|0]++;
+    /* 地の色が暗い名刺（紺や緑に白文字）は、白黒を反転させてから読む */
+    var acc = 0, medg = 0, half = (p.length / 4) >> 1;
+    for (var t0 = 0; t0 < 256; t0++){ acc += hist[t0]; if (acc >= half){ medg = t0; break; } }
+    var inv = medg < 110;
     for (var i = 0; i < p.length; i += 4){
       var g = 0.299*p[i] + 0.587*p[i+1] + 0.114*p[i+2];
+      if (inv) g = 255 - g;
       g = g < 128 ? Math.max(0, (g-40)*1.6) : Math.min(255, (g-128)*1.6 + 150);
       p[i] = p[i+1] = p[i+2] = g;
     }
@@ -438,12 +444,17 @@ function toCanvas(src, maxEdge){
   x.drawImage(src, 0, 0, c.width, c.height);
   return c;
 }
-function rotCanvas(src){
+function rotCanvas(src){ return rotCanvasK(src, 1); }
+/* k×90度、時計回りに回す */
+function rotCanvasK(src, k){
+  k = ((k % 4) + 4) % 4;
+  if (!k) return src;
   var c = document.createElement('canvas');
-  c.width = src.height; c.height = src.width;
+  if (k === 2){ c.width = src.width; c.height = src.height; }
+  else { c.width = src.height; c.height = src.width; }
   var x = c.getContext('2d');
   x.translate(c.width/2, c.height/2);
-  x.rotate(Math.PI/2);
+  x.rotate(k * Math.PI/2);
   x.drawImage(src, -src.width/2, -src.height/2);
   return c;
 }
@@ -458,37 +469,100 @@ function findQuad(src){
   c.getContext('2d').drawImage(src, 0, 0, w, h);
   var d;
   try { d = c.getContext('2d').getImageData(0, 0, w, h).data; } catch(e){ return null; }
-  var g = new Uint8Array(w*h), hist = [];
-  for (var i = 0; i < 256; i++) hist[i] = 0;
-  for (var i2 = 0, j = 0; i2 < d.length; i2 += 4, j++){
-    var v = (0.299*d[i2] + 0.587*d[i2+1] + 0.114*d[i2+2]) | 0;
-    g[j] = v; hist[v]++;
+  var N = w*h, L = new Float32Array(N), A = new Float32Array(N), B = new Float32Array(N);
+  var hist = [];
+  for (var i0 = 0; i0 < 256; i0++) hist[i0] = 0;
+  for (var i = 0, j = 0; i < d.length; i += 4, j++){
+    var r = d[i], g = d[i+1], b = d[i+2];
+    L[j] = 0.299*r + 0.587*g + 0.114*b; A[j] = r - g; B[j] = (r+g)/2 - b;
+    hist[L[j]|0]++;
   }
-  var tot = w*h, sum = 0;
+  /* 机の色：写真の縁の画素の中央値 */
+  var eL = [], eA = [], eB = [];
+  function edge(k){ eL.push(L[k]); eA.push(A[k]); eB.push(B[k]); }
+  for (var x = 0; x < w; x += 2){ for (var y = 0; y < 4; y++){ edge(y*w + x); edge((h-1-y)*w + x); } }
+  for (var y2 = 0; y2 < h; y2 += 2){ for (var x2 = 0; x2 < 4; x2++){ edge(y2*w + x2); edge(y2*w + (w-1-x2)); } }
+  function med(a){ a.sort(function(p, q){ return p - q; }); return a[a.length >> 1]; }
+  var mL = med(eL), mA = med(eA), mB = med(eB);
+  if (window.__fqLog) window.__fqLog.push({ mL:mL, mA:mA, mB:mB, w:w, h:h });
+  /* 明るさのしきい値（大津） */
+  var tot = N, sum = 0;
   for (var t = 0; t < 256; t++) sum += t*hist[t];
-  var sB = 0, wB = 0, best = 0, thr = 128;
+  var sB = 0, wB = 0, bestV = 0, thr = 128;
   for (var t2 = 0; t2 < 256; t2++){
     wB += hist[t2]; if (!wB) continue;
     var wF = tot - wB; if (!wF) break;
     sB += t2*hist[t2];
-    var mB = sB/wB, mF = (sum-sB)/wF, val = wB*wF*(mB-mF)*(mB-mF);
-    if (val > best){ best = val; thr = t2; }
+    var mBk = sB/wB, mF = (sum-sB)/wF, val = wB*wF*(mBk-mF)*(mBk-mF);
+    if (val > bestV){ bestV = val; thr = t2; }
   }
-  var start = (w>>1) + (h>>1)*w;
-  if (g[start] <= thr){
-    var bi = start, bv = -1;
-    for (var yy = (h*0.35)|0; yy < h*0.65; yy++)
-      for (var xx = (w*0.35)|0; xx < w*0.65; xx++){
-        var k0 = yy*w + xx; if (g[k0] > bv){ bv = g[k0]; bi = k0; }
+  if (window.__fqLog) window.__fqLog.push({ thr:thr });
+  /* 机と名刺を分けるやり方をいくつか試す。木の机は照明で明るさがかなり変わるので、
+     色み（赤み・黄み）だけで分ける見方も入れる */
+  var masks = [
+    function(k){ return Math.abs(L[k]-mL) > 34 || Math.abs(A[k]-mA) > 30 || Math.abs(B[k]-mB) > 30; },
+    function(k){ return Math.abs(L[k]-mL) > 18 || Math.abs(A[k]-mA) > 16 || Math.abs(B[k]-mB) > 16; },
+    function(k){ return L[k] > thr; },
+    function(k){ return Math.abs(A[k]-mA) > 14 || Math.abs(B[k]-mB) > 14; },
+    function(k){ return Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22; },
+    function(k){ return L[k] > mL + 45; },
+    function(k){ return L[k] < mL - 45; },
+    function(k){ return (Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22) && L[k] > mL + 15; },
+    function(k){ return (Math.abs(A[k]-mA) > 22 || Math.abs(B[k]-mB) > 22) && L[k] < mL - 15; }
+  ];
+  var best = null;
+  for (var mi = 0; mi < masks.length; mi++){
+    var cand = floodRect(masks[mi], w, h);
+    if (!cand) continue;
+    /* 写真の縁まで届いている長方形は、机ごと拾っている可能性が高い */
+    var touch = 0;
+    cand.rect.forEach(function(pp){
+      if (pp[0] < 2 || pp[1] < 2 || pp[0] > w-3 || pp[1] > h-3) touch++;
+    });
+    var ar = cand.ar || 1.65;
+    var sc = cand.fill - 0.08 * touch - (cand.frac > 0.9 ? 0.6 : 0) - 0.3 * Math.min(1, Math.abs(ar - 1.65) / 1.65);
+    if (window.__fqLog) window.__fqLog.push({ mask:mi, sc:sc, touch:touch });
+    if (!best || sc > best.sc){ cand.sc = sc; best = cand; }
+  }
+  if (!best) return null;
+  if (window.__fqLog) window.__fqLog.push({ best:best.sc, frac:best.frac });
+  var kk = src.width / w;
+  return orderQuad(best.rect.map(function(pp){ return [pp[0]*kk, pp[1]*kk]; }));
+}
+/* 中心から、条件に合う画素を塗り広げて、囲む長方形を返す */
+function floodRect(inMaskFn, w, h){
+  var N = w*h, start = (w>>1) + (h>>1)*w, R = 2;
+  /* 条件に合う画素を先に集めて、縁を R 画素けずる。
+     机の木目や影の細い橋づたいに、名刺の外へ塗りが漏れるのを防ぐ */
+  var M = new Uint8Array(N), E = new Uint8Array(N);
+  for (var k0 = 0; k0 < N; k0++) M[k0] = inMaskFn(k0) ? 1 : 0;
+  for (var yy0 = R; yy0 < h - R; yy0++){
+    for (var xx0 = R; xx0 < w - R; xx0++){
+      var ok = 1;
+      for (var dy = -R; dy <= R && ok; dy++)
+        for (var dx = -R; dx <= R; dx++) if (!M[(yy0+dy)*w + xx0+dx]){ ok = 0; break; }
+      E[yy0*w + xx0] = ok;
+    }
+  }
+  function inMask(k){ return E[k] === 1; }
+  if (!inMask(start)){
+    var bi = -1, bd = 1e18;
+    for (var yy = (h*0.3)|0; yy < h*0.7; yy += 2)
+      for (var xx = (w*0.3)|0; xx < w*0.7; xx += 2){
+        var k0 = yy*w + xx;
+        if (!inMask(k0)) continue;
+        var dd = (xx - (w>>1))*(xx - (w>>1)) + (yy - (h>>1))*(yy - (h>>1));
+        if (dd < bd){ bd = dd; bi = k0; }
       }
+    if (bi < 0) return null;
     start = bi;
   }
-  var seen = new Uint8Array(w*h), q = [start], n = 0, pts = [];
-  seen[start] = 1;
+  var seen = new Uint8Array(N), q = [start], n = 0;
   var minx = w, maxx = 0, miny = h, maxy = 0;
+  seen[start] = 1;
   while (q.length){
     var k = q.pop(), px = k % w, py = (k/w)|0;
-    n++; pts.push(px, py);
+    n++;
     if (px < minx) minx = px;
     if (px > maxx) maxx = px;
     if (py < miny) miny = py;
@@ -496,34 +570,77 @@ function findQuad(src){
     var nb = [k-1, k+1, k-w, k+w];
     for (var a = 0; a < 4; a++){
       var m = nb[a];
-      if (m < 0 || m >= w*h || seen[m]) continue;
+      if (m < 0 || m >= N || seen[m]) continue;
       if (a === 0 && k % w === 0) continue;
       if (a === 1 && k % w === w-1) continue;
-      if (g[m] > thr){ seen[m] = 1; q.push(m); }
+      if (inMask(m)){ seen[m] = 1; q.push(m); }
     }
   }
   if (maxx <= minx || maxy <= miny) return null;
-  /* 輪郭の点だけを取り出す */
   var bp = [];
-  for (var y2 = miny; y2 <= maxy; y2++){
-    for (var x2 = minx; x2 <= maxx; x2++){
-      var k2 = y2*w + x2;
+  for (var y3 = miny; y3 <= maxy; y3++){
+    for (var x3 = minx; x3 <= maxx; x3++){
+      var k2 = y3*w + x3;
       if (!seen[k2]) continue;
-      if (x2 === 0 || y2 === 0 || x2 === w-1 || y2 === h-1){ bp.push(x2, y2); continue; }
-      if (!seen[k2-1] || !seen[k2+1] || !seen[k2-w] || !seen[k2+w]) bp.push(x2, y2);
+      if (x3 === 0 || y3 === 0 || x3 === w-1 || y3 === h-1){ bp.push(x3, y3); continue; }
+      if (!seen[k2-1] || !seen[k2+1] || !seen[k2-w] || !seen[k2+w]) bp.push(x3, y3);
     }
   }
   if (bp.length < 24) return null;
   var rect = minAreaRect(bp);
   if (!rect) return null;
+  /* 長方形の向きにそって、塗れた画素の分布を見る。端のほうで画素がまばらな列・行は、
+     手や光の反射など名刺のとなりのものへ漏れた分なので切り落とす */
+  var ux = rect[1][0]-rect[0][0], uy = rect[1][1]-rect[0][1], lu0 = Math.hypot(ux, uy) || 1;
+  var cs = ux/lu0, sn = uy/lu0;
+  var U0 = 1e18, U1 = -1e18, V0 = 1e18, V1 = -1e18;
+  for (var i5 = 0; i5 < bp.length; i5 += 2){
+    var pu = bp[i5]*cs + bp[i5+1]*sn, pv = -bp[i5]*sn + bp[i5+1]*cs;
+    if (pu < U0) U0 = pu; if (pu > U1) U1 = pu; if (pv < V0) V0 = pv; if (pv > V1) V1 = pv;
+  }
+  var nu = Math.max(1, Math.ceil(U1 - U0) + 1), nv = Math.max(1, Math.ceil(V1 - V0) + 1);
+  var hu = new Int32Array(nu), hv = new Int32Array(nv);
+  for (var k5 = 0; k5 < N; k5++){
+    if (!seen[k5]) continue;
+    var x5 = k5 % w, y5 = (k5/w)|0;
+    var pu2 = x5*cs + y5*sn - U0, pv2 = -x5*sn + y5*cs - V0;
+    var bu = Math.min(nu-1, Math.max(0, pu2|0)), bv = Math.min(nv-1, Math.max(0, pv2|0));
+    hu[bu]++; hv[bv]++;
+  }
+  function trim(hist){
+    var arr = Array.prototype.slice.call(hist).filter(function(v){ return v > 0; }).sort(function(a, b){ return a - b; });
+    var medv = arr.length ? arr[arr.length >> 1] : 0, lo = 0, hi = hist.length - 1;
+    while (lo < hi && hist[lo] < medv * 0.55) lo++;
+    while (hi > lo && hist[hi] < medv * 0.55) hi--;
+    return [lo, hi];
+  }
+  var tu = trim(hu), tv = trim(hv);
+  if (tu[0] > 0 || tu[1] < nu-1 || tv[0] > 0 || tv[1] < nv-1){
+    var a0 = U0 + tu[0], a1 = U0 + tu[1] + 1, b0 = V0 + tv[0], b1 = V0 + tv[1] + 1;
+    function back(pu3, pv3){ return [pu3*cs - pv3*sn, pu3*sn + pv3*cs]; }
+    rect = [back(a0, b0), back(a1, b0), back(a1, b1), back(a0, b1)];
+    n = 0;
+    for (var k6 = 0; k6 < N; k6++){
+      if (!seen[k6]) continue;
+      var x6 = k6 % w, y6 = (k6/w)|0, pu4 = x6*cs + y6*sn, pv4 = -x6*sn + y6*cs;
+      if (pu4 >= a0 && pu4 <= a1 && pv4 >= b0 && pv4 <= b1) n++;
+    }
+  }
+  /* けずった分（R）だけ外へ広げてもどす */
+  var u = [rect[1][0]-rect[0][0], rect[1][1]-rect[0][1]], v = [rect[3][0]-rect[0][0], rect[3][1]-rect[0][1]];
+  var lu = Math.hypot(u[0], u[1]) || 1, lv = Math.hypot(v[0], v[1]) || 1;
+  u = [u[0]/lu*R, u[1]/lu*R]; v = [v[0]/lv*R, v[1]/lv*R];
+  rect = [[rect[0][0]-u[0]-v[0], rect[0][1]-u[1]-v[1]], [rect[1][0]+u[0]-v[0], rect[1][1]+u[1]-v[1]],
+          [rect[2][0]+u[0]+v[0], rect[2][1]+u[1]+v[1]], [rect[3][0]-u[0]+v[0], rect[3][1]-u[1]+v[1]]];
   var sz = quadSize(rect), ra = sz.w * sz.h;
   if (!ra) return null;
   var ar = Math.max(sz.w, sz.h) / Math.max(1e-6, Math.min(sz.w, sz.h));
-  if (ar < 1.15 || ar > 2.7) return null;              /* 名刺らしい縦横比か */
-  if (ra/(w*h) < 0.06 || ra/(w*h) > 0.99) return null; /* 小さすぎ・大きすぎ */
-  if (n / ra < 0.72) return null;                      /* 長方形からはみ出しすぎ */
-  var kk = src.width / w;
-  return orderQuad(rect.map(function(pp){ return [pp[0]*kk, pp[1]*kk]; }));
+  var frac = ra / N, fill = n / ra;
+  if (window.__fqLog) window.__fqLog.push({ ar:ar, frac:frac, fill:fill, n:n, rect:rect });
+  if (ar < 1.15 || ar > 2.7) return null;
+  if (frac < 0.06 || frac > 0.97) return null;
+  if (fill < 0.6) return null;
+  return { rect:rect, fill:fill, frac:frac, ar:ar };
 }
 
 /* 点をぜんぶ囲む、面積がいちばん小さい回転長方形をさがす。
@@ -676,12 +793,30 @@ function readCard(img, onProg){
   var cv = forOcr(img);
   return getWorker().then(function(w){
     /* 段組みの見立てがちがうと、拾える行がちがう。2通りで読んで足し合わせる */
-    var a = null;
+    var a = null, b = null;
     return w.setParameters({ tessedit_pageseg_mode:'3', preserve_interword_spaces:'1' })
       .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
       .then(function(r){ a = linesOf(r.data); return w.setParameters({ tessedit_pageseg_mode:'4' }); })
       .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
-      .then(function(r){ return { lines: mergeLines(unionLines(a, linesOf(r.data))), cv: cv, w: w }; });
+      .then(function(r){ b = linesOf(r.data); return w.setParameters({ tessedit_pageseg_mode:'6' }); })
+      /* 3回目は「全体がひとかたまりの文章」と見なして読む。
+         前の2回が絵や帯と見まちがえて飛ばした行（社名など）を、すき間にだけ足す */
+      .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+      .then(function(r){
+        var c6 = linesOf(r.data);
+        if (OCRBASE) window.__meishiRaw = { a:JSON.parse(JSON.stringify(a)), b:JSON.parse(JSON.stringify(b)), c:JSON.parse(JSON.stringify(c6)), ml:mergeLines, ul:unionLines, H:cv.height, W:cv.width };
+        var un = unionLines(unionLines(a, b), c6, true); if (OCRBASE) window.__meishiRaw.un = JSON.parse(JSON.stringify(un));
+        var mg = mergeLines(un); if (OCRBASE) window.__meishiRaw.mg = JSON.parse(JSON.stringify(mg));
+        var ls = mg.filter(function(L){
+          /* 机の木目や写真を1行として拾ったもの（背が高すぎる・大きいのに信頼度が低い）は捨てる */
+          if (!L.bb) return true;
+          if (L.h > cv.height * 0.22) return false;
+          if (L.c < 35 && L.h > cv.height * 0.18) return false;
+          if (L.c < 20 && (L.bb.x1 - L.bb.x0) > cv.width * 0.85) return false;   /* 端から端までの帯や縁 */
+          return true;
+        });
+        return { lines: ls, cv: cv, w: w };
+      });
   }).then(function(res){
     progressCb = null;
     return res;
@@ -689,6 +824,30 @@ function readCard(img, onProg){
     progressCb = null;
     throw err;
   });
+}
+/* 向きの自動判定：4方向を小さく読んで、いちばん文字らしく読めた向きを選ぶ */
+function orientScore(w, cv){
+  return w.setParameters({ tessedit_pageseg_mode:'6' })
+    .then(function(){ return w.recognize(cv, {}, { blocks:true, text:true }); })
+    .then(function(r){
+      var sc = 0;
+      linesOf(r.data).forEach(function(L){
+        if (L.c < 40) return;
+        var n = (L.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
+        sc += L.c * n;
+      });
+      return sc;
+    }, function(){ return 0; });
+}
+function autoOrient(w, card){
+  /* 横長に切れていても、縦書きレイアウトの名刺は文字が横倒しなので、3方向とも試す。
+     同点なら正位置（回さない）を優先する */
+  var small = forOcr(card, 1000), best = { k:0, s:-1 }, chain = Promise.resolve();
+  [0, 1, 3].forEach(function(k){
+    chain = chain.then(function(){ return orientScore(w, rotCanvasK(small, k)); })
+      .then(function(sc){ if (sc > best.s * 1.15) best = { k:k, s:sc }; });
+  });
+  return chain.then(function(){ return best.k; });
 }
 function linesOf(data){
   var out = [];
@@ -711,7 +870,8 @@ function linesOf(data){
   return out;
 }
 /* 2回の読みを足す。同じ場所の行は確からしいほうを残し、片方にしかない行は加える */
-function unionLines(a, b){
+/* fillOnly … b の行は、a にまだ無いところにだけ足す（a の行を置きかえない） */
+function unionLines(a, b, fillOnly){
   var out = a.slice();
   b.forEach(function(L){
     if (!L.bb) return;
@@ -725,7 +885,7 @@ function unionLines(a, b){
       if (ov > Math.min(P.h, L.h) * 0.5 && xo > 0){ hit = i; break; }
     }
     if (hit < 0) out.push(L);
-    else if (L.c > out[hit].c + 8) out[hit] = L;
+    else if (!fillOnly && L.c > out[hit].c + 8) out[hit] = L;
   });
   return out;
 }
@@ -751,10 +911,27 @@ function mergeLines(lines){
     }
     if (!m){ out.push(L); return; }
     if (norm(m.t) === norm(L.t)){ if (L.c > m.c) m.c = L.c; return; }   /* 同じ文字の行はつながない */
+    /* 横に大きく重なっていれば同じ行の別の読み。確からしいほうだけ残す */
+    var xo = Math.min(m.bb.x1, L.bb.x1) - Math.max(m.bb.x0, L.bb.x0);
+    var wmin = Math.min(m.bb.x1 - m.bb.x0, L.bb.x1 - L.bb.x0);
+    if (wmin > 0 && xo > wmin * 0.6){           /* 狭いほうの大半が重なる＝同じ行の別の読み */
+      var nm = norm(m.t), nl = norm(L.t), longer = null;
+      /* 片方がもう片方を含む（「小野寺」と「小野寺 誠」）なら、長いほうを採る */
+      if (nl.length > nm.length && nl.indexOf(nm) >= 0) longer = L;
+      else if (nm.length > nl.length && nm.indexOf(nl) >= 0) longer = m;
+      if (longer){
+        var cc = Math.round((m.c + L.c) / 2);
+        if (longer === L){ m.t = L.t; m.bb = L.bb; m.h = L.h; m.y = L.y; }
+        m.c = Math.max(longer.c, cc);
+      } else if (L.c > m.c){ m.t = L.t; m.c = L.c; m.bb = L.bb; m.h = L.h; m.y = L.y; }
+      return;
+    }
     var left = m.bb.x0 <= L.bb.x0 ? m : L, right = left === m ? L : m;
     var n1 = m.t.length, n2 = L.t.length;
     m.t = left.t + (RE_COBARE.test(left.t) || RE_COBARE.test(right.t) ? '' : ' ') + right.t;
-    m.c = Math.round((m.c * n1 + L.c * n2) / Math.max(1, n1 + n2));
+    /* つないだ行の確からしさは、弱いほうに引きずられる（断片が化けていたら読み直したい） */
+    var avg = (m.c * n1 + L.c * n2) / Math.max(1, n1 + n2);
+    m.c = Math.round(Math.min(m.c, L.c) * 0.5 + avg * 0.5);
     m.bb = { x0:Math.min(m.bb.x0, L.bb.x0), x1:Math.max(m.bb.x1, L.bb.x1),
              y0:Math.min(m.bb.y0, L.bb.y0), y1:Math.max(m.bb.y1, L.bb.y1) };
     m.h = Math.round(m.bb.y1 - m.bb.y0); m.y = m.bb.y0;
@@ -782,9 +959,9 @@ function mergeLines(lines){
 }
 /* 1行だけ切り出して、読みやすい大きさにして読み直す（名前と会社に使う） */
 function rereadLine(w, cv, bb, psm, size){
-  var h = bb.y1 - bb.y0, pad = Math.round(h * 0.45);
-  var x0 = Math.max(0, bb.x0 - pad*1.5), y0 = Math.max(0, bb.y0 - pad);
-  var x1 = Math.min(cv.width, bb.x1 + pad*1.5), y1 = Math.min(cv.height, bb.y1 + pad);
+  var h = bb.y1 - bb.y0, pad = Math.round(h * 0.2), padx = Math.round(h * 0.5);
+  var x0 = Math.max(0, bb.x0 - padx), y0 = Math.max(0, bb.y0 - pad);
+  var x1 = Math.min(cv.width, bb.x1 + padx), y1 = Math.min(cv.height, bb.y1 + pad);
   if (x1 - x0 < 10 || y1 - y0 < 10) return Promise.resolve(null);
   var sc = (size || 90) / (y1 - y0);
   var c = document.createElement('canvas');
@@ -865,9 +1042,19 @@ function fixSpacing(t){
   return p.join('');
 }
 
-var RE_MLABEL = /(^|[\s　(（])(?:E[\s\-_]?mail|EMAIL|MAIL|Mail|mail|メール|Ｅメール|アドレス)[\s　\-]*[:：]?/gi;
+var RE_MLABEL = /(^|[\s　(（])(?:e[\s\-_.]?ma[il1|!]{1,2}|EMAIL|MAIL|Mail|mail|メール|Ｅメール|アドレス|E[.:：](?=\s))[\s　\-]*[:：]?/gi;
 function cleanMail(a){
-  return a.replace(/^e[\-_]?mail(?=[A-Za-z0-9._%+\-])/i, '').replace(/^[.\-_]+/, '');
+  var at = a.indexOf('@');
+  if (at < 0) return a;
+  var loc = a.slice(0, at), dom = a.slice(at + 1);
+  loc = loc.replace(/^e[\-_]?mai?l?l?(?=[A-Za-z0-9._%+\-])/i, '')     /* 見出しの残り */
+           .replace(/^m?mobile[.:]?/i, '')
+           .replace(/^[\d.\-]{9,}/, '')                                 /* くっついた電話番号 */
+           .replace(/^\d{1,3}(?=[A-Za-z])/, '')                          /* 記号の読み違え */
+           .replace(/^[.\-_]+/, '');
+  var m = dom.match(/^(.+?\.(?:co\.jp|ne\.jp|or\.jp|ac\.jp|lg\.jp|go\.jp|gr\.jp|ed\.jp|jp|com|net|org|info|biz))(.{0,2})$/i);
+  if (m) dom = m[1];                                                    /* 末尾のゴミ */
+  return loc + '@' + dom;
 }
 function pickEmail(line){
   var t = han(line).replace(RE_MLABEL, ' ').replace(/[\s　]/g, '');
@@ -896,10 +1083,10 @@ function pickPhones(lines){
   var tel = '', mobile = '';
   lines.forEach(function(L){
     var t = dashes(han(L.t)).replace(/\(\s*(\d{2,5})\s*\)\s*/g, '$1-');   /* （078）795-… → 078-795-… */
-    t.split(/(?=FAX|Fax|fax|ファックス)/).forEach(function(seg){
-      if (/^(FAX|Fax|fax|ファックス)/.test(seg)) return;
-      var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM\./.test(seg);
-      var labelled = isMob || /TEL|Tel|tel|電話|PHONE|Phone/.test(seg);
+    t.split(/(?=FAX|Fax|fax|ファックス|\bF[.:：]\s*\d)/).forEach(function(seg){
+      if (/^(FAX|Fax|fax|ファックス|F[.:：])/.test(seg)) return;
+      var isMob = /携帯|ケータイ|Mobile|MOBILE|mobile|Cell|CELL|\bM[.:：]|\bHP[.:：]?\s*(?=\d)/.test(seg);
+      var labelled = isMob || /TEL|Tel|tel|電話|PHONE|Phone|\bT[.:：]/.test(seg);
       var ms = seg.match(RE_TEL);
       /* 「TEL」「携帯」と書いてある行は少し緩く拾う。数字を1つ多く・少なく読むことが
          あるので、空欄で出すより、1文字直してもらうほうが早い */
@@ -1009,22 +1196,36 @@ function parseCard(lines, W){
   /* 名前：本文の列にある大きな行。肩書きのすぐ下なら強く、標語のような行は弱く。
      信頼度は足切りにだけ使う（読みちがえた名前でも大きい行が本物で、あとで読み直す） */
   var best = null;
+  /* 大きく書かれた名前ほど読みちがえて信頼度が0近くになることがある。
+     ふつうの行よりずっと背が高い行は、信頼度が低くても候補に残し、あとで読み直しにかける */
+  var hs = lines.filter(function(L){ return L.c >= 40 && L.h > 0; }).map(function(L){ return L.h; }).sort(function(a, b){ return a - b; });
+  var medH = hs.length ? hs[hs.length >> 1] : 0, tallH = medH ? medH * 1.5 : 1e9;
   lines.forEach(function(L, i){
-    if (used[i] || L.c < 15) return;
-    var t = tidyName(residual[i] != null ? residual[i] : L.t);
-    if (/@/.test(t)) return;
-    if (/[0-9]/.test(han(t))){
-      t = t.split(' ').filter(function(wd){ return !/[0-9]/.test(han(wd)); }).join(' ').trim();
-      if (!t) return;
+    if (used[i]) return;
+    var lowc = L.c < 15;
+    if (lowc && !(L.bb && L.h >= tallH && inCol(L, col))) return;
+    var t = cleanName(residual[i] != null ? residual[i] : L.t);
+    if (lowc){                                                /* 化けた記号を落として、字だけを残す */
+      var kj = L.t.replace(/[^一-龥ぁ-んァ-ヶ]/g, '');
+      var nk = (kj.match(/[一-龥]/g) || []).length;
+      if (!nk) return;
+      if (nk < 2 && (L.bb.x1 - L.bb.x0) < L.h * 2.5) return;    /* 細い縦長のしみ・模様 */
+      t = kj.slice(0, 10);
     }
-    if (t.length < 2 || t.length > 14) return;
-    if (!/[一-龥ぁ-んァ-ヶ]/.test(t)) return;
-    if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t) || RE_DEPT2.test(t) || RE_LIC.test(t)) return;
+    if (!t || /@/.test(t)) return;
+    if (t.length < (lowc ? 1 : 2) || t.length > 10) return;
+    if (!/[一-龥]/.test(t)) return;                          /* 漢字を含まない行は名前にしない（ふりがな・ロゴ） */
+    var tns = t.replace(/[\s　]/g, '');
+    if (RE_CO.test(tns) || RE_TITLE.test(tns) || RE_DEPT.test(tns) || RE_DEPT2.test(tns) || RE_LIC.test(tns)) return;
+    if (t.split(' ').some(function(wd){ return wd.length >= 3 && RE_DEPT.test(wd); })) return;   /* 「文化財課 公式」のように部署の語を含む */
+    if (/公式|SNS|受付|窓口|エリア|地区|担当|ブロック|リージョン|カンパニー|企業|法人|リーダ|サービス|センター/.test(tns)) return;
+    if (tns.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。]/g, '').length < 2) return;   /* 横棒や丸ばかりの化け */
     var sc = nameScore(L, t, col, heads);
+    if (lowc) sc *= 0.7;                                     /* ほぼ読めていない行は、読めている行より弱く */
     if (!best || sc > best.sc || (sc === best.sc && L.c > best.L.c)) best = { L:L, i:i, t:t, sc:sc };
   });
   if (best){
-    got.name = fixSpacing(best.t); used[best.i] = 1; got._nameIdx = best.i;
+    got.name = best.t; used[best.i] = 1; got._nameIdx = best.i; got._nameLow = best.L.c < 15;
     /* ふりがなが名前の行にくっついていたら分ける（読みは5文字以上のときだけ。ひらがなの下の名前と区別するため） */
     var fm = got.name.match(/^([ぁ-んー]{5,})\s*([一-龥][^ぁ-ん]*)$/) || got.name.match(/^([一-龥][^ぁ-ん]*?)\s*([ぁ-んー]{5,})$/);
     if (fm){
@@ -1042,7 +1243,10 @@ function parseCard(lines, W){
       if (L.h < best.L.h * 0.28 || L.h > best.L.h * 1.6) return;
       var t = L.t;
       if (/[0-9@]/.test(han(t)) || t.length < 2 || t.length > 30) return;
-      if (RE_TITLE.test(t) || RE_DEPT.test(t) || RE_DEPT2.test(t) || RE_LIC.test(t)) return;
+      var t2 = t.replace(/[\s　]/g, '');
+      if (RE_TITLE.test(t2) || RE_DEPT.test(t2) || RE_DEPT2.test(t2) || RE_LIC.test(t2)) return;
+      if (/担当|マネージ|スタッフ|アドバイザー|プロデューサー/.test(t2)) return;
+      if (/^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(t) || /^[A-Z][A-Z]+\s+[A-Z][A-Z]+$/.test(t)) return;   /* ローマ字の名前 */
       if (/^[ぁ-んー\s]+$/.test(t) || sentenceLike(t)) return;
       if (!guess || L.h > guess.L.h) guess = { L:L, i:i };
     });
@@ -1058,11 +1262,41 @@ function parseCard(lines, W){
 }
 /* 「株式会社 マリンホーム」→「株式会社マリンホーム」 */
 function tidyCompany(t){
-  return String(t).replace(/株式会[杜視祉]/g, '株式会社').replace(/有限会[杜視祉]/g, '有限会社')
+  t = String(t).replace(/[、。,.]+$/, '');
+  if (RE_CO.test(t)) t = t.replace(/[\s　]+[^\s　]{1,2}$/, '');   /* 会社名のあとの短いゴミ */
+  /* 「株式会社〇〇 大阪支店」「〇〇株式会社明石店」のように、社名のうしろに付いた支店・部署は外す */
+  var KW = '株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|㈱|㈲', BR = '支社|支店|営業所|事業部|本店|本社|本部|店';
+  var mA = t.match(new RegExp('^((?:' + KW + ')[\\s　]*[^\\s　]+)[\\s　]+[^\\s　]{1,12}(?:' + BR + ')$'));
+  if (mA) t = mA[1];
+  var mB = t.match(new RegExp('^([^\\s　].*?(?:' + KW + '|協同組合|協会))[\\s　]*[^\\s　]{1,12}(?:' + BR + ')$'));
+  if (mB && mB[1].replace(new RegExp('(' + KW + '|協同組合|協会|[\\s　])', 'g'), '').length >= 2) t = mB[1];
+  return String(t).replace(/^[^一-龥ぁ-んァ-ヶA-Za-z0-9]+/, '')
+                  .replace(/株式会[杜視祉]/g, '株式会社').replace(/有限会[杜視祉]/g, '有限会社')
                   .replace(/(株式会社|有限会社|合同会社|合資会社|㈱|㈲)[\s　]+/g, '$1')
                   .replace(/[\s　]+(株式会社|有限会社|合同会社|合資会社|㈱|㈲)$/g, '$1').trim();
 }
 /* 名前の行にローマ字が混ざっていたら外す */
+/* 名前の行の掃除：数字・記号・住所っぽい語から先を落とし、末尾の1文字かなを落とし、割れた名前を「姓 名」に */
+function cleanName(t){
+  t = tidyName(t);
+  var toks = t.split(' ').map(function(wd){ return wd.replace(/[。、，．,.]/g, ''); }).filter(Boolean), out = [];
+  for (var i = 0; i < toks.length; i++){
+    var wd = toks[i];
+    if (/[0-9]/.test(han(wd))) break;
+    if (/[|｜\[\]【】{}()（）=+*#@:;\/\\<>"'`~^『』「」・、。,.]/.test(wd)) break;
+    if (wd.length >= 3 && /(都|道|府|県|市|区|町|村|丁目|番地|ビル|階|号)$/.test(wd)) break;
+    if (/[ぁ-ん]/.test(wd) && /[ァ-ヶ]/.test(wd)) break;          /* ひらがなとカタカナが混じった語は名前ではない（ロゴの化け） */
+    out.push(wd);
+  }
+  while (out.length >= 2 && /^[ぁ-んァ-ヶー]$/.test(out[out.length-1])) out.pop();
+  /* 漢字だけで姓名がそろっている（漢字3字以上）のに、うしろにかなの語が付いていたらゴミ */
+  function kanjiCount(a){ return (a.join('').match(/[一-龥]/g) || []).length; }
+  while (out.length >= 2 && /^[ぁ-んァ-ヶー]+$/.test(out[out.length-1]) && kanjiCount(out.slice(0, -1)) >= 3) out.pop();
+  var flat = out.join('');
+  if (out.length >= 3 && flat.length <= 6 && out.every(function(wd){ return wd.length <= 2; })) return flat.slice(0, 2) + ' ' + flat.slice(2);
+  if (out.length >= 3 && flat.length <= 7 && /^[一-龥]+$/.test(flat)) return flat.slice(0, 2) + ' ' + flat.slice(2);
+  return out.join(' ').trim();
+}
 function tidyName(t){
   t = String(t).replace(/[\s　]+/g, ' ').trim();
   var jp = t.replace(/[A-Za-z][A-Za-z.\-']*/g, ' ').replace(/\s+/g, ' ').trim();
@@ -1071,7 +1305,10 @@ function tidyName(t){
 }
 function plausible(k, t){
   if (!t) return false;
-  if (k === 'name') return t.length >= 2 && t.length <= 14 && /[一-龥ぁ-んァ-ヶ]/.test(t) && !/[0-9@]/.test(han(t));
+  if (k === 'name'){
+    if (t.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。\s　]/g, '').length < 2) return false;   /* 横棒や丸ばかりの化け */
+    return t.length >= 2 && t.length <= 14 && /[一-龥ぁ-んァ-ヶ]/.test(t) && !/[0-9@]/.test(han(t));
+  }
   return t.length >= 2 && t.length <= 30 && !/@/.test(t);
 }
 function candidates(lines){
@@ -1179,6 +1416,8 @@ var pendRaw = null;     /* 撮ったままの写真（切り直しに使う） *
 var pendQuad = null;    /* 名刺の四隅 */
 var pendCard = null;    /* 切り出してまっすぐにした名刺 */
 var pendCropped = false;
+var pendOrient = 0;      /* 時計回りに何度まわせば正位置か（0/90/180/270） */
+var pendOriented = false;
 var pendCand = [];      /* 読み取った文字の候補 */
 var touched = {};       /* 人が手で直した欄は、読み直しても上書きしない */
 var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','memo'];
@@ -1264,23 +1503,42 @@ function ocrProgress(m){
 }
 function runOcr(img){
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
-  readCard(img, ocrProgress).then(function(res){
+  var pre = Promise.resolve();
+  if (!pendOriented && img === pendCard){
+    pre = getWorker().then(function(w){
+      if ($('s-read')) $('s-read').textContent = '向きを確かめています…';
+      return autoOrient(w, pendCard);
+    }).then(function(k){
+      pendOriented = true;
+      if (OCRBASE) window.__meishiOrient = k;
+      if (k){ pendOrient = (pendOrient + k*90) % 360; buildPend(); if ($('s-img')) $('s-img').src = pend.full; }
+    }, function(){});
+  }
+  pre.then(function(){ return readCard(pendCard || img, ocrProgress); }).then(function(res){
     var lines = res.lines, got = parseCard(lines, res.cv.width), extra = [];
     if ($('s-read')) $('s-read').textContent = '名前と会社を確かめています…';
     var chain = Promise.resolve();
     [['name', got._nameIdx], ['company', got._coIdx]].forEach(function(pair){
       var k = pair[0], idx = pair[1];
       if (idx == null || !lines[idx] || !lines[idx].bb) return;
-      var orig = k === 'name' ? fixSpacing(tidyName(lines[idx].t)) : tidyCompany(lines[idx].t);
+      var orig = k === 'name' ? cleanName(lines[idx].t) : tidyCompany(lines[idx].t);
       if (plausible(k, orig)) extra.push(orig);      /* 元の読みは必ず候補に残す */
       var bestAlt = null;
       [90, 130].forEach(function(sz){
         chain = chain.then(function(){ return rereadLine(res.w, res.cv, lines[idx].bb, '7', sz); })
           .then(function(alt){
             if (!alt || !alt.t) return;
-            var t = k === 'name' ? fixSpacing(tidyName(alt.t)) : tidyCompany(alt.t);
+            var t = k === 'name' ? cleanName(alt.t) : tidyCompany(alt.t);
             if (!plausible(k, t)) return;
             if (k === 'name' && (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t))) return;
+            if (k === 'name'){
+              if (!/[一-龥]/.test(t)) return;                    /* かなだけに化けたものは使わない */
+              var ok = orig.match(/[一-龥]/g) || [], share = false;
+              for (var ci = 0; ci < ok.length; ci++) if (t.indexOf(ok[ci]) >= 0){ share = true; break; }
+              /* 元と1字も重ならないなら別の行を読んだ（元がほぼ読めていない行なら、重なりは問わない） */
+              if (ok.length && !share && !got._nameLow) return;
+              if (got._nameLow && (alt.c < 35 || (t.match(/[一-龥]/g) || []).length < 2)) return;
+            }
             if (t !== got[k]) extra.push(t);
             if (!bestAlt || alt.c > bestAlt.c) bestAlt = { t:t, c:alt.c };
           });
@@ -1288,10 +1546,54 @@ function runOcr(img){
       chain = chain.then(function(){
         /* 元の読みが怪しいときだけ、読み直しで入れ替える。
            元が十分確からしい（65以上）なら、読み直しは候補に出すだけにする */
-        if (!bestAlt || bestAlt.c <= lines[idx].c + 3) return;
+        if (!bestAlt || bestAlt.c <= lines[idx].c + 3){
+          if (k === 'name' && got._nameLow) got.name = '';        /* 読み直しても確かめられなかった大きな行は空にする */
+          return;
+        }
         var shaky = lines[idx].c < 65 || (k === 'company' && !RE_CO.test(orig));
         if (shaky) got[k] = bestAlt.t;
       });
+    });
+    /* 名前が見つからないとき、ふりがなの行（ひらがなだけ）があれば、そのすぐ下（または上）を読み直す */
+    if (got._nameIdx == null && !got.name){
+      var kanaL = null;
+      lines.forEach(function(L){
+        if (!L.bb || L.c < 50) return;
+        var k2 = L.t.replace(/[\s　]/g, '');
+        if (k2.length >= 4 && k2.length <= 14 && /^[ぁ-んー]+$/.test(k2) && (!kanaL || L.c > kanaL.c)) kanaL = L;
+      });
+      if (kanaL){
+        var kh = kanaL.h, kx0 = kanaL.bb.x0, kx1 = kanaL.bb.x1, wide = Math.max(kx1 - kx0, kh * 6);
+        [[kanaL.bb.y1 + kh * 0.1, kanaL.bb.y1 + kh * 3.2], [kanaL.bb.y0 - kh * 3.2, kanaL.bb.y0 - kh * 0.1]].forEach(function(yr){
+          chain = chain.then(function(){
+            if (got.name) return;
+            var bb = { x0:kx0 - kh, x1:kx0 - kh + wide + kh, y0:Math.max(0, yr[0]), y1:Math.min(res.cv.height, yr[1]) };
+            if (bb.y1 - bb.y0 < kh) return;
+            return rereadLine(res.w, res.cv, bb, '7', 130).then(function(alt){
+              if (!alt || !alt.t || alt.c < 50) return;
+              var t = cleanName(alt.t);
+              if (!plausible('name', t) || (t.match(/[一-龥]/g) || []).length < 2 || t.length > 8) return;
+              if (RE_CO.test(t) || RE_TITLE.test(t) || RE_DEPT.test(t)) return;
+              got.name = t; if (!got.kana) got.kana = kanaL.t.replace(/[\s　]+/g, ' ').trim(); extra.push(t);
+            });
+          });
+        });
+      }
+    }
+    /* 名前が見つからないとき、ローマ字の名前（ASAI Takuya のような行）があればそれを使う */
+    chain = chain.then(function(){
+      if (got.name) return;
+      var rom = null;
+      lines.forEach(function(L){
+        if (L.c < 50) return;
+        var t = L.t.trim();
+        /* ASAI Takuya / Deguchi Koko のような形。HYOGO ROKKO のように両方大文字だけなら社名やロゴ */
+        if (!/^[A-Z][A-Za-z]+[\s　]+[A-Z][A-Za-z]+$/.test(t) || t.length > 24) return;
+        if (/^[A-Z]+[\s　]+[A-Z]+$/.test(t)) return;
+        if (/Co|Inc|Ltd|Corp|Group|Office|Company|City|Tokyo|Osaka|Kobe|Japan|Home|House/i.test(t)) return;
+        if (!rom || L.h > rom.h) rom = L;
+      });
+      if (rom){ got.name = rom.t.replace(/[\s　]+/g, ' ').trim(); extra.push(got.name); }
     });
     return chain.then(function(){
       if (OCRBASE) window.__meishiDebug = { lines:lines, got:got, extra:extra };
@@ -1370,6 +1672,7 @@ function buildPend(){
   if (outH < 200) outH = 200;
   if (outH > 2400){ outH = 2400; outW = Math.max(200, Math.round(outH * a.w / Math.max(1, a.h))); }
   pendCard = warp(pendRaw, pendQuad, outW, outH) || pendRaw;
+  if (pendOrient) pendCard = rotCanvasK(pendCard, pendOrient / 90);
   pend = { full: toCanvas(pendCard, 1400).toDataURL('image/jpeg', 0.72),
            thumb: toCanvas(pendCard, 320).toDataURL('image/jpeg', 0.62) };
 }
@@ -1382,7 +1685,7 @@ function processRaw(raw, hint){
   busy(true, '名刺を切り出しています…');
   setTimeout(function(){
     try {
-      pendRaw = raw;
+      pendRaw = raw; pendOrient = 0; pendOriented = false;
       var qd = findQuad(raw);
       pendCropped = !!qd;
       if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
@@ -1400,10 +1703,7 @@ function rotateAndRead(){
   var keep = grabForm();
   busy(true, '回しています…');
   setTimeout(function(){
-    pendRaw = rotCanvas(pendRaw);
-    var qd = findQuad(pendRaw);
-    pendCropped = !!qd;
-    pendQuad = qd || fullQuad(pendRaw);
+    pendOrient = (pendOrient + 90) % 360; pendOriented = true;
     buildPend();
     busy(false);
     openSave(keep);
