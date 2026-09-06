@@ -119,6 +119,10 @@ header .sp{flex:1}
 .pic-big{display:block;width:100%;padding:0;border:1px solid var(--rule);border-radius:13px;overflow:hidden;
   background:#0c0b0a;margin-top:14px;cursor:zoom-in}
 .pic-big img{width:100%;display:block}
+.spot{margin:8px 0 4px;padding:9px 11px;border:1px solid var(--rule);border-radius:11px;background:var(--card)}
+.spot .spot-t{font-size:19px;font-weight:700;line-height:1.35;margin-bottom:6px;word-break:break-all}
+.spot .chips{margin-top:0}
+.hint{font-size:12.5px;color:var(--sub);margin:6px 0 0;line-height:1.5}
 .viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
 .viewer img{max-width:100%;max-height:100%;object-fit:contain}
 
@@ -1219,7 +1223,7 @@ function parseCard(lines, W){
     if (RE_CO.test(tns) || RE_TITLE.test(tns) || RE_DEPT.test(tns) || RE_DEPT2.test(tns) || RE_LIC.test(tns)) return;
     if (t.split(' ').some(function(wd){ return wd.length >= 3 && RE_DEPT.test(wd); })) return;   /* 「文化財課 公式」のように部署の語を含む */
     if (/公式|SNS|受付|窓口|エリア|地区|担当|ブロック|リージョン|カンパニー|企業|法人|リーダ|サービス|センター/.test(tns)) return;
-    if (tns.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。]/g, '').length < 2) return;   /* 横棒や丸ばかりの化け */
+    if (!plausible('name', t)) return;                        /* 横棒や丸ばかりの化け、漢字1字＋かな1字、店名 */
     var sc = nameScore(L, t, col, heads);
     if (lowc) sc *= 0.7;                                     /* ほぼ読めていない行は、読めている行より弱く */
     if (!best || sc > best.sc || (sc === best.sc && L.c > best.L.c)) best = { L:L, i:i, t:t, sc:sc };
@@ -1246,7 +1250,7 @@ function parseCard(lines, W){
       var t2 = t.replace(/[\s　]/g, '');
       if (RE_TITLE.test(t2) || RE_DEPT.test(t2) || RE_DEPT2.test(t2) || RE_LIC.test(t2)) return;
       if (/担当|マネージ|スタッフ|アドバイザー|プロデューサー/.test(t2)) return;
-      if (/^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(t) || /^[A-Z][A-Z]+\s+[A-Z][A-Z]+$/.test(t)) return;   /* ローマ字の名前 */
+      if (/^[A-Z][a-z]+\s+[A-Z][a-z]+$/.test(t)) return;   /* ローマ字の名前（Taniguchi Soichi）。大文字だけなら社名のことが多い */
       if (/^[ぁ-んー\s]+$/.test(t) || sentenceLike(t)) return;
       if (!guess || L.h > guess.L.h) guess = { L:L, i:i };
     });
@@ -1271,7 +1275,7 @@ function tidyCompany(t){
   var mB = t.match(new RegExp('^([^\\s　].*?(?:' + KW + '|協同組合|協会))[\\s　]*[^\\s　]{1,12}(?:' + BR + ')$'));
   if (mB && mB[1].replace(new RegExp('(' + KW + '|協同組合|協会|[\\s　])', 'g'), '').length >= 2) t = mB[1];
   return String(t).replace(/^[^一-龥ぁ-んァ-ヶA-Za-z0-9]+/, '')
-                  .replace(/株式会[杜視祉]/g, '株式会社').replace(/有限会[杜視祉]/g, '有限会社')
+                  .replace(/株式[会合全][杜視祉社]/g, '株式会社').replace(/有限[会合全][杜視祉社]/g, '有限会社')
                   .replace(/(株式会社|有限会社|合同会社|合資会社|㈱|㈲)[\s　]+/g, '$1')
                   .replace(/[\s　]+(株式会社|有限会社|合同会社|合資会社|㈱|㈲)$/g, '$1').trim();
 }
@@ -1306,7 +1310,10 @@ function tidyName(t){
 function plausible(k, t){
   if (!t) return false;
   if (k === 'name'){
-    if (t.replace(/[一ー―‐‑–—二三十口っ〇○・.,、。\s　]/g, '').length < 2) return false;   /* 横棒や丸ばかりの化け */
+    var tn0 = t.replace(/[\s　]/g, '').replace(/[一ー―‐‑–—二三十口っ〇○・.,、。]/g, '');
+    if (tn0.length < 2) return false;                                              /* 横棒や丸ばかりの化け */
+    if ((tn0.match(/[一-龥]/g) || []).length === 1 && tn0.length <= 2) return false;   /* 漢字1字＋かな1字 */
+    if (tn0.length >= 3 && /店$/.test(tn0)) return false;                           /* 店名 */
     return t.length >= 2 && t.length <= 14 && /[一-龥ぁ-んァ-ヶ]/.test(t) && !/[0-9@]/.test(han(t));
   }
   return t.length >= 2 && t.length <= 30 && !/@/.test(t);
@@ -1442,6 +1449,7 @@ function saveSheetHtml(){
       '<button class="btn" id="s-rot">回す</button></div>' +
     '<div class="bar" id="s-bar"><i style="width:6%"></i></div>' +
     '<p class="reading" id="s-read">準備しています…</p>' +
+    '<div class="spot" id="s-spot" hidden></div>' +
     '<div id="s-err"></div>' +
     '<label for="s-name">名前</label>' +
     '<input type="text" class="name-in" id="s-name" placeholder="読めなければ手で入れる" autocomplete="off">' +
@@ -1501,6 +1509,102 @@ function ocrProgress(m){
   bar.firstChild.style.width = (m.status === 'recognizing text' ? pct : Math.min(40, pct)) + '%';
   rd.textContent = (names[m.status] || '準備しています') + '　' + pct + '%';
 }
+function medianH(lines){
+  var hs = lines.filter(function(L){ return L.c >= 40 && L.h > 0; }).map(function(L){ return L.h; }).sort(function(a, b){ return a - b; });
+  return hs.length ? hs[hs.length >> 1] : 0;
+}
+/* 名刺の大事なところ（本文の列にある大きな字）に絞って読み直す。
+   全体を読むときは、名前の横のロゴや飾りが同じ行に混ざって化けやすい。
+   本文の列の幅で切り、1行として大きく読み直すと、名前や社名だけがきれいに読める */
+function bandReread(res){
+  var lines = res.lines, cv = res.cv, col = mainColumn(lines), medH = medianH(lines);
+  if (!medH) return Promise.resolve();
+  var cands = lines.filter(function(L){ return L.bb && L.h >= medH * 1.3; })
+                   .sort(function(a, b){ return b.h - a.h; }).slice(0, 4);
+  var chain = Promise.resolve();
+  cands.forEach(function(L){
+    chain = chain.then(function(){
+      var h = L.h;
+      var beyond = col && (L.bb.x0 < col.x0 - h || L.bb.x1 > col.x1 + h);
+      if (L.c >= 45 && !beyond) return;                     /* よく読めていて列にも収まっている行はそのまま */
+      var bx0 = col ? Math.max(L.bb.x0, col.x0 - h * 0.4) : L.bb.x0;
+      var bx1 = col ? Math.min(L.bb.x1, col.x1 + h * 0.4) : L.bb.x1;
+      if (bx1 - bx0 < h) return;
+      var bb = { x0:bx0, x1:bx1, y0:L.bb.y0, y1:L.bb.y1 };
+      return rereadLine(res.w, cv, bb, '7', 130).then(function(alt){
+        if (!alt || !alt.t) return;
+        var jp = (alt.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
+        if (jp < 2 || alt.c <= L.c + 5) return;
+        L.t = alt.t; L.c = alt.c; L.bb = bb; L.band = true;
+      });
+    });
+  });
+  return chain;
+}
+/* 写真の文字を押したら、そこだけ読み直して、どの欄に入れるか選んでもらう */
+var lastOcr = null;
+function readSpot(ev){
+  if (!lastOcr || !pend){ if (pend) showBig(pend.full); return; }
+  var img = $('s-img'), r = img.getBoundingClientRect();
+  if (!r.width || !r.height) return;
+  var fx = (ev.clientX - r.left) / r.width, fy = (ev.clientY - r.top) / r.height;
+  if (fx < 0 || fx > 1 || fy < 0 || fy > 1) return;
+  var cv = lastOcr.cv, x = fx * cv.width, y = fy * cv.height, hit = null;
+  lastOcr.lines.forEach(function(L){
+    if (!L.bb) return;
+    var pad = L.h * 0.3;
+    if (x >= L.bb.x0 - pad && x <= L.bb.x1 + pad && y >= L.bb.y0 - pad && y <= L.bb.y1 + pad){
+      if (!hit || L.h < hit.h) hit = L;
+    }
+  });
+  var bb;
+  if (hit){
+    bb = { x0:hit.bb.x0, x1:hit.bb.x1, y0:hit.bb.y0, y1:hit.bb.y1 };
+    /* 行がやたら横に長いときは、押したところを中心に、本文の列の幅で切る */
+    if (lastOcr.col && (bb.x1 - bb.x0) > (lastOcr.col.x1 - lastOcr.col.x0) * 1.3){
+      bb.x0 = Math.max(bb.x0, lastOcr.col.x0 - hit.h * 0.4); bb.x1 = Math.min(bb.x1, lastOcr.col.x1 + hit.h * 0.4);
+    }
+  } else {
+    var hh = (lastOcr.medH || cv.height * 0.05) * 0.9;
+    bb = { x0: lastOcr.col ? lastOcr.col.x0 : 0, x1: lastOcr.col ? lastOcr.col.x1 : cv.width,
+           y0: Math.max(0, y - hh), y1: Math.min(cv.height, y + hh) };
+  }
+  if (bb.x1 - bb.x0 < 8 || bb.y1 - bb.y0 < 8) return;
+  busy(true, 'そこを読んでいます…');
+  /* 大きさを2通りで読んで、確からしいほうを採る（社名の「株式会社」だけ小さい、などに備える） */
+  var best = hit && hit.c >= 60 ? { t:hit.t, c:hit.c } : null;   /* 最初に読めていた文字も候補に */
+  rereadLine(lastOcr.w, cv, bb, '7', 130).then(function(alt){
+    if (alt && alt.t && (!best || alt.c > best.c)) best = alt;
+    return rereadLine(lastOcr.w, cv, bb, '7', 200);
+  }).then(function(alt){
+    if (alt && alt.t && (!best || alt.c > best.c)) best = alt;
+    busy(false);
+    var t = best && best.t ? best.t.replace(/^[\s　|｜\[\]!:;・.,、。]+/, '').trim() : '';
+    if (!t){ toast('読めなかった'); return; }
+    showSpot(t);
+  }, function(){ busy(false); toast('読めなかった'); });
+}
+function showSpot(t){
+  var box = $('s-spot');
+  if (!box) return;
+  var fields = [['name','名前'], ['company','会社'], ['dept','部署'], ['title','役職']];
+  box.hidden = false;
+  box.innerHTML = '<div class="spot-t" id="s-spot-t"></div><div class="chips">' +
+    fields.map(function(f){ return '<button class="chip" data-k="' + f[0] + '">' + f[1] + 'に入れる</button>'; }).join('') +
+    '<button class="chip" data-k="">やめる</button></div>';
+  $('s-spot-t').textContent = t;
+  box.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k = b.getAttribute('data-k');
+      if (k){
+        var v = k === 'name' ? (cleanName(t) || t) : k === 'company' ? tidyCompany(t) : t;
+        $('s-' + k).value = v; touched[k] = true;
+        if ((k === 'dept' || k === 'title') && $('s-more')) $('s-more').open = true;
+      }
+      box.hidden = true;
+    });
+  });
+}
 function runOcr(img){
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
   var pre = Promise.resolve();
@@ -1514,7 +1618,12 @@ function runOcr(img){
       if (k){ pendOrient = (pendOrient + k*90) % 360; buildPend(); if ($('s-img')) $('s-img').src = pend.full; }
     }, function(){});
   }
+  lastOcr = null;
   pre.then(function(){ return readCard(pendCard || img, ocrProgress); }).then(function(res){
+    var lines = res.lines;
+    if ($('s-read')) $('s-read').textContent = '大きな文字を確かめています…';
+    return bandReread(res).then(function(){ return res; });
+  }).then(function(res){
     var lines = res.lines, got = parseCard(lines, res.cv.width), extra = [];
     if ($('s-read')) $('s-read').textContent = '名前と会社を確かめています…';
     var chain = Promise.resolve();
@@ -1537,7 +1646,10 @@ function runOcr(img){
               for (var ci = 0; ci < ok.length; ci++) if (t.indexOf(ok[ci]) >= 0){ share = true; break; }
               /* 元と1字も重ならないなら別の行を読んだ（元がほぼ読めていない行なら、重なりは問わない） */
               if (ok.length && !share && !got._nameLow) return;
-              if (got._nameLow && (alt.c < 35 || (t.match(/[一-龥]/g) || []).length < 2)) return;
+              if (got._nameLow){                                  /* 元がほぼ読めていない行の読み直しは、名前らしい形のときだけ使う */
+                var tn = t.replace(/[\s　]/g, '');
+                if (alt.c < 35 || (t.match(/[一-龥]/g) || []).length < 2 || tn.length > 6 || RE_CO.test(tn)) return;
+              }
             }
             if (t !== got[k]) extra.push(t);
             if (!bestAlt || alt.c > bestAlt.c) bestAlt = { t:t, c:alt.c };
@@ -1596,6 +1708,7 @@ function runOcr(img){
       if (rom){ got.name = rom.t.replace(/[\s　]+/g, ' ').trim(); extra.push(got.name); }
     });
     return chain.then(function(){
+      lastOcr = { lines:lines, cv:res.cv, w:res.w, col:mainColumn(lines), medH:medianH(lines) };
       if (OCRBASE) window.__meishiDebug = { lines:lines, got:got, extra:extra };
       return { lines:lines, got:got, extra:extra };
     });
@@ -1611,7 +1724,8 @@ function runOcr(img){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? '読めた。ちがうところは直す。' : '文字をうまく読めなかった。手で入れる。';
+    $('s-read').textContent = any ? '読めた。ちがうところは直す。写真の文字を押すと、そこだけ読み直せる。'
+                                  : '文字をうまく読めなかった。写真の名前を押すと、そこだけ読み直す。';
     $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
                                    : '写真は残るので、名前だけ入れておけばよい。') +
       (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
@@ -1634,7 +1748,7 @@ function openSave(restore){
   if (!restore){ touched = {}; pendCand = []; }
   openSheet(saveSheetHtml(), function(){
     $('s-img').src = pend.full;
-    $('s-pic').addEventListener('click', function(){ showBig(pend.full); });
+    $('s-pic').addEventListener('click', readSpot);
     SF.forEach(function(k){
       var el = $('s-' + k);
       if (!el) return;
