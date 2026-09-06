@@ -1,21 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#5b3a92"/>
-      <stop offset="1" stop-color="#1c1130"/>
-    </linearGradient>
-    <linearGradient id="bubble" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffa5cf"/>
-      <stop offset="1" stop-color="#ff5f9e"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" fill="url(#bg)"/>
-  <circle cx="140" cy="110" r="190" fill="#ff5f9e" opacity="0.12"/>
-  <path d="M110 118 H382 A44 44 0 0 1 426 162 V314 A44 44 0 0 1 382 358 H236 L164 420 L178 358 H110 A44 44 0 0 1 66 314 V162 A44 44 0 0 1 110 118 Z" fill="url(#bubble)"/>
-  <g fill="#3a1f55" opacity="0.88">
-    <rect x="118" y="176" width="256" height="24" rx="12"/>
-    <rect x="118" y="228" width="200" height="24" rx="12"/>
-    <rect x="118" y="280" width="144" height="24" rx="12"/>
-  </g>
-  <path d="M410 82 L422 118 L458 130 L422 142 L410 178 L398 142 L362 130 L398 118 Z" fill="#ffd9ec"/>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b1a1f"/><stop offset="1" stop-color="#09080b"/></linearGradient>
+  <linearGradient id="bb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ece4"/><stop offset="1" stop-color="#e2d6cb"/></linearGradient>
+</defs>
+<rect width="512" height="512" fill="url(#bg)"/>
+<g fill="url(#bb)">
+  <path d="M116 132 L150 66 L204 136 Z"/>
+  <path d="M396 132 L362 66 L308 136 Z"/>
+  <path d="M110 130 H402 A44 44 0 0 1 446 174 V326 A44 44 0 0 1 402 370 H236 L164 432 L178 370 H110 A44 44 0 0 1 66 326 V174 A44 44 0 0 1 110 130 Z"/>
+</g>
+<g fill="#2a2430">
+  <rect x="118" y="188" width="256" height="22" rx="11"/>
+  <rect x="118" y="240" width="200" height="22" rx="11"/>
+  <rect x="118" y="292" width="144" height="22" rx="11"/>
+</g>
 </svg>
