@@ -1536,9 +1536,35 @@ function medianH(lines){
 function bandReread(res){
   var lines = res.lines, cv = res.cv, col = mainColumn(lines), medH = medianH(lines);
   if (!medH) return Promise.resolve();
+  var chain = Promise.resolve();
+  /* 「営業担当部長 古川 一樹」のように、肩書き・部署と名前が同じ高さに並んで1行になることがある。
+     先頭の肩書き・部署の語を切り離し、残りの名前のところだけを大きく読み直して、2行に分ける */
+  lines.filter(function(L){ return L.bb && L.h >= medH * 1.2; }).forEach(function(L){
+    chain = chain.then(function(){
+      var toks = L.t.split(/[\s　]+/).filter(Boolean), np = 0;
+      while (np < toks.length && (RE_TITLE.test(toks[np]) || RE_DEPT.test(toks[np]) || RE_DEPT2.test(toks[np]))) np++;
+      if (!np || np >= toks.length) return;
+      var pre = toks.slice(0, np).join(' '), rest = toks.slice(np).join(' ');
+      if (rest.replace(/[^一-龥ぁ-んァ-ヶA-Za-z]/g, '').length < 1) return;
+      var total = L.t.replace(/[\s　]+/g, ' ').trim().length, cut = pre.length + 1;
+      var xs = L.bb.x0 + (L.bb.x1 - L.bb.x0) * cut / Math.max(1, total);
+      var bb = { x0:Math.max(L.bb.x0, xs - L.h * 0.15), x1:L.bb.x1, y0:L.bb.y0, y1:L.bb.y1 };
+      if (bb.x1 - bb.x0 < L.h) return;
+      var best = null;
+      return rereadLine(res.w, cv, bb, '7', 130).then(function(a1){
+        if (a1 && a1.t) best = a1;
+        return rereadLine(res.w, cv, bb, '7', 200);
+      }).then(function(a2){
+        if (a2 && a2.t && (!best || a2.c > best.c)) best = a2;
+        var nt = best && best.c >= 35 && /[一-龥ぁ-んァ-ヶ]/.test(best.t) ? best.t : rest;
+        var nc = best && best.c >= 35 ? Math.max(best.c, L.c) : L.c;
+        lines.push({ t:nt, c:nc, h:L.h, y:L.y, bb:bb, band:true });
+        L.t = pre; L.bb = { x0:L.bb.x0, x1:xs, y0:L.bb.y0, y1:L.bb.y1 };
+      });
+    });
+  });
   var cands = lines.filter(function(L){ return L.bb && L.h >= medH * 1.3; })
                    .sort(function(a, b){ return b.h - a.h; }).slice(0, 4);
-  var chain = Promise.resolve();
   cands.forEach(function(L){
     chain = chain.then(function(){
       var h = L.h;
