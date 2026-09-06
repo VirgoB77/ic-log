@@ -56,6 +56,7 @@ https://virgob77.github.io/ic-log/
 | `dist/artifact.html` | 公開用（`build.sh` が生成） |
 | `tenant/` | 2つ目のアプリ「ゆうちメモ」（テナント誘致の連絡メモ）。単体で動く |
 | `card/` | 3つ目のアプリ「めいしばこ」（名刺管理）。単体で動く |
+| `stoploss/` | 「損切りの山の逆張り」を過去データで検証した報告書とプログラム。単体で読める |
 
 ### 作り直すとき
 
@@ -107,3 +108,13 @@ localStorage ではなく IndexedDB に入れている。
 
 IC位置データは OpenStreetMap から取得している。
 © OpenStreetMap contributors / [ODbL](https://opendatacommons.org/licenses/odbl/)
+
+## 4つ目：損切りの山の逆張りを検証（相場）
+
+「含み損を抱えた人が損切りをしたら、相場は逆に行く」を逆手にとって勝てるのか。
+ビットコイン・ドル円・ポンド円・ユーロドルの過去データに当てはめて数えた。
+結論は「短い時間では儲からない。ビットコインの日足で投げ売りの翌日に買うのだけプラスだが、
+上げ相場に偏っていて聖杯ではない。損切りの山の安値は7〜8割の確率でまた割られる」。
+
+- 報告書: [stoploss/index.html](stoploss/index.html)（公開版: https://virgob77.github.io/ic-log/stoploss/ ）
+- 作り方・データの出どころ: [stoploss/README.md](stoploss/README.md)
