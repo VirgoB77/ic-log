@@ -1,0 +1,66 @@
+# 清算データを取りに行く係。
+# GitHub の画面 → Actions → 「清算データを取りに行く」 → Run workflow で動く。
+# 毎日 朝10時（日本時間）にも自動で動いて、直近の清算と建玉を積み上げる。
+name: 清算データを取りに行く
+
+on:
+  # このファイルか取りに行くプログラムが変わって送られたときにも1回動く（初回はこれで動く）
+  push:
+    paths:
+      - ".github/workflows/fetch-liquidations.yml"
+      - "stoploss/fetch_liquidations.py"
+  workflow_dispatch:
+    inputs:
+      start:
+        description: "いつから取るか (YYYY-MM-DD)"
+        default: "2023-01-01"
+        required: false
+      end:
+        description: "いつまで取るか (YYYY-MM-DD)。空なら昨日まで"
+        default: ""
+        required: false
+  schedule:
+    - cron: "0 1 * * *"   # 毎日 01:00 UTC = 日本時間 10:00（main に入ってから動き始める）
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-liquidations
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: リポジトリを持ってくる
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Python を用意する
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 部品を入れる
+        run: pip install --quiet pandas requests
+
+      - name: 取りに行く
+        run: |
+          ARGS="--start ${{ github.event.inputs.start || '2023-01-01' }}"
+          if [ -n "${{ github.event.inputs.end }}" ]; then ARGS="$ARGS --end ${{ github.event.inputs.end }}"; fi
+          python3 stoploss/fetch_liquidations.py $ARGS
+
+      - name: 取れたものを保存する（コミットして送る）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stoploss/data/liq
+          if git diff --cached --quiet; then
+            echo "新しいデータはなかった"
+          else
+            git commit -m "清算データを取ってきた ($(date -u +%Y-%m-%d))"
+            git push
+          fi

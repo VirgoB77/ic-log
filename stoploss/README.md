@@ -65,6 +65,30 @@ python3 make_report.py
 
 元の1分足（約340MB）はこのリポジトリに入れていない。`prepare_data.py` に元ファイルを置いたフォルダを渡すと作り直せる。
 
+## 本物の清算データを取りに行く（GitHub Actions）
+
+Coinglass のような清算の画面は、Claude の作業場所からは読めない。代わりに GitHub のコンピュータに
+取りに行かせて、このリポジトリに CSV として置く仕組みにした。
+
+- 手順ファイル: [.github/workflows/fetch-liquidations.yml](../.github/workflows/fetch-liquidations.yml)
+- 取りに行くプログラム: `fetch_liquidations.py`
+- 置き場所: `data/liq/`
+
+取るもの（すべて無料・鍵なし）:
+
+| ファイル | 中身 | 期間 |
+| --- | --- | --- |
+| `binance_liq_BTCUSDT_1h.csv` / `_1d.csv` | Binance 先物の強制清算をロング・ショート別に金額と件数でまとめたもの | 2023年〜2024年3月末（Binance の公開が止まっている） |
+| `binance_metrics_BTCUSDT_1h.csv` | 建玉（ポジションの総量）とロングショート比率。建玉が急に減った所が清算の目印 | 2023年〜今日 |
+| `recent_liq_okx.csv` / `recent_liq_bybit.csv` | OKX・Bybit の直近の清算。毎日取りに行って積み上げる | 動かし始めてから |
+
+動かし方:
+
+1. 手順ファイルか取りに行くプログラムが変わって送られると、自動で1回動く。
+2. 手で動かすときは GitHub の画面 → **Actions** → 左の「清算データを取りに行く」 → 右の **Run workflow** →
+   ブランチを選んで **Run workflow**。10〜30分で終わり、`data/liq/` にコミットが増える。
+3. `main` に入れると、毎日 日本時間の朝10時にも自動で動いて積み上がる。
+
 ## 検証の限界
 
 - 本物の損切り（強制清算）データは使っていない。値動きと出来高からの推定。
