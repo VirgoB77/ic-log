@@ -445,6 +445,15 @@ var db = { props:[], tenants:[], rows:[], logs:[], mail:'' };
     db.rows    = Array.isArray(raw.rows)    ? raw.rows    : [];
     db.logs    = Array.isArray(raw.logs)    ? raw.logs    : [];
     db.mail    = typeof raw.mail === 'string' ? raw.mail : '';
+    /* 面積が文字で入っている案件は、読めるものだけ ㎡ の数値に直す */
+    for (var k = 0; k < db.props.length; k++){
+      var pa = db.props[k].area;
+      if (pa != null && pa !== '' && !/^[\d.]+$/.test(String(pa))){
+        var n = parseArea(pa);
+        if (n != null && !isNaN(n)) db.props[k].area = String(Math.round(n * 100) / 100);
+      }
+      if (db.props[k].staff == null) db.props[k].staff = '';
+    }
     /* 前の版のメモ（rowId でつないでいた）を、テナント＋案件のつなぎに直す */
     for (var i = 0; i < db.logs.length; i++){
       var g = db.logs[i];
@@ -552,6 +561,30 @@ function memoBlock(tenantId, propId){
 }
 function rowsOfProp(id){ return db.rows.filter(function(r){ return r.propId === id; }); }
 function rowsOfTen(id){ return db.rows.filter(function(r){ return r.tenantId === id; }); }
+
+/* 面積：㎡の数値で持つ。文字（「150坪」「1445.49㎡（437坪）」など）も読める */
+var TSUBO = 3.305785;
+function parseArea(v){
+  var t = String(v == null ? '' : v).replace(/[,，\s　]/g, '');
+  if (!t) return null;
+  var m = t.match(/([\d.]+)㎡/) || t.match(/([\d.]+)m2/i);
+  if (m) return parseFloat(m[1]);
+  m = t.match(/([\d.]+)坪/);
+  if (m) return Math.round(parseFloat(m[1]) * TSUBO * 100) / 100;
+  if (/^[\d.]+$/.test(t)) return parseFloat(t);
+  return null;
+}
+function fmtNum(n){ return (Math.round(n * 100) / 100).toLocaleString('ja-JP', { maximumFractionDigits:2 }); }
+function areaLabel(v){
+  var n = parseArea(v);
+  if (n == null || isNaN(n)) return String(v == null ? '' : v);
+  return fmtNum(n) + '㎡（' + fmtNum(n / TSUBO) + '坪）';
+}
+/* 備考の先頭の「◯◯さん」は社内の担当として分ける（エクセルの書き方に合わせる） */
+function splitStaff(memo){
+  var m = String(memo || '').trim().match(/^([^\s　]{1,12}さん)[\s　]*([\s\S]*)$/);
+  return m ? { staff:m[1], memo:m[2].trim() } : { staff:'', memo:String(memo || '').trim() };
+}
 
 /* エクセルの「状態」列と同じ判定 */
 function stateOf(r){
@@ -830,7 +863,7 @@ function openPicker(kind){
         '<span class="ds">案件なし</span></button>';
       list.forEach(function(p){
         h += '<button class="pick" data-pick="' + esc(p.id) + '"><span class="nm">' + esc(p.name) + '</span>' +
-          '<span class="ds">' + esc([p.area, p.rent].filter(function(x){ return !!x; }).join(' ')) + '</span></button>';
+          '<span class="ds">' + esc([areaLabel(p.area), p.rent].filter(function(x){ return !!x; }).join(' ')) + '</span></button>';
       });
     }
     $('pk-list').innerHTML = h || '<div class="empty">見つかりませんでした。</div>';
@@ -937,7 +970,7 @@ function propRow(p){
     else if (k === 'yet') n.yet++;
     else if (k === 'deal') n.deal++;
   });
-  var spec = [p.addr, p.area, p.rent, p.zoning, p.staff ? '担当 ' + p.staff : ''].filter(function(x){ return !!x; });
+  var spec = [p.addr, areaLabel(p.area), p.rent, p.zoning, p.staff ? '担当 ' + p.staff : ''].filter(function(x){ return !!x; });
   var parts = [];
   if (n.good) parts.push('前向き' + n.good);
   if (n.talk) parts.push('条件協議' + n.talk);
@@ -1195,8 +1228,9 @@ function openPropSheet(id){
     '<label for="p-addr">所在地</label>' +
     '<input type="text" id="p-addr" value="' + esc(p ? p.addr : '') + '">' +
     '<div class="half">' +
-      '<div><label for="p-area">面積</label>' +
-        '<input type="text" id="p-area" value="' + esc(p ? p.area : '') + '" placeholder="例：150坪"></div>' +
+      '<div><label for="p-area">合計面積（㎡）</label>' +
+        '<input type="text" id="p-area" value="' + esc(p ? p.area : '') + '" inputmode="decimal" placeholder="例：1445.49">' +
+        '<p class="hint" id="p-tsubo" style="margin-top:4px"></p></div>' +
       '<div><label for="p-zoning">用途地域</label>' +
         '<input type="text" id="p-zoning" value="' + esc(p ? p.zoning : '') + '" placeholder="例：準工業"></div>' +
     '</div>' +
@@ -1234,13 +1268,21 @@ function openPropSheet(id){
 
   if (p) $('p-addrow').addEventListener('click', function(){ openRowSheet(null, { propId:p.id }); });
 
+  function showTsubo(){
+    var n = parseArea($('p-area').value);
+    $('p-tsubo').textContent = (n == null || isNaN(n)) ? '坪は自動で出ます' : '≒ ' + fmtNum(n / TSUBO) + '坪';
+  }
+  $('p-area').addEventListener('input', showTsubo);
+  showTsubo();
+
   $('p-save').addEventListener('click', function(){
     var name = $('p-name').value.trim();
     if (!name){ toast('案件名を入れてください'); $('p-name').focus(); return; }
     var rec = p || { id:uid(), ts:Date.now() };
     rec.name = name;
     rec.addr = $('p-addr').value.trim();
-    rec.area = $('p-area').value.trim();
+    var av = $('p-area').value.trim(), an = parseArea(av);
+    rec.area = (an != null && !isNaN(an)) ? String(Math.round(an * 100) / 100) : av;
     rec.zoning = $('p-zoning').value.trim();
     rec.rent = $('p-rent').value.trim();
     rec.startDate = $('p-start').value;
@@ -1362,14 +1404,28 @@ function normDate(s){
   var m = s.match(/^(\d{4})[-\/年.](\d{1,2})[-\/月.](\d{1,2})/);
   return m ? m[1] + '-' + two(+m[2]) + '-' + two(+m[3]) : '';
 }
+function propFromCells(f, name, i){
+  var m2 = parseArea((f[2] || '').trim());
+  if (m2 == null || isNaN(m2)){
+    var tb = parseFloat(String(f[3] || '').replace(/[,，\s　]/g, ''));
+    m2 = isNaN(tb) ? null : Math.round(tb * TSUBO * 100) / 100;
+  }
+  var sm = splitStaff(f[11] || '');
+  return { id:uid(), ts:Date.now() + i, name:name,
+    addr:(f[1] || '').trim(), area:m2 == null ? '' : String(Math.round(m2 * 100) / 100),
+    zoning:(f[4] || '').trim(), rent:(f[5] || '').trim(), startDate:normDate(f[6]),
+    owner:(f[7] || '').trim(), ownerTel:(f[8] || '').trim(),
+    lessor:(f[9] || '').trim(), lessorTel:(f[10] || '').trim(),
+    staff:sm.staff, memo:sm.memo };
+}
 function openBulkSheet(kind){
   var isTen = kind === 'ten';
   var cols = isTen
     ? 'テナント名 → 業種 → 窓口会社 → 代表担当者 → 連絡先 → 希望面積 → 備考'
-    : '案件名 → 所在地 → 面積 → 用途地域 → 賃料想定 → 募集開始日 → 地主 → 地主連絡先 → 貸主 → 貸主連絡先 → 社内の担当 → 備考';
+    : '案件名 → 所在地 → 合計面積(㎡) → 坪数 → 用途地域 → 賃料想定 → 募集開始日 → 地主 → 地主連絡先 → 貸主 → 貸主連絡先 → 備考';
   var ph = isTen
     ? '㈱吉野家HD\t飲食（牛丼）\t〇〇不動産\t田中\t06-0000-0000\t40〜60坪\t駅前立地を優先\n松屋フーズ\t飲食（牛丼）\n㈱ゼンショー\t飲食（すき家ほか）'
-    : '伊丹寺本\t寺本6丁目1番・2番\t1272.15㎡（384.83坪）\t準工業地域\t\t2026-08-01\t村上恭子・喜久治\t\t村上恭子・喜久治\t\t藤川さん\n川西市\t\t\t\t\t2026-08-01\t\t\t\t\t中村さん';
+    : '伊丹寺本\t寺本6丁目1番、2番\t1272.15\t384.83\t準工業地域\t\t2026-08-01\t村上恭子・喜久治\t\t村上恭子・喜久治\t\t藤川さん\n川西市\t\t\t\t\t\t2026-08-01\t\t\t\t\t中村さん';
 
   openSheet(
     '<h2>' + (isTen ? 'テナントをまとめて追加' : '案件をまとめて追加') + '</h2>' +
@@ -1378,7 +1434,8 @@ function openBulkSheet(kind){
     '<label for="b-text">1行に1件　' + esc(cols) + '</label>' +
     '<textarea id="b-text" style="min-height:200px" placeholder="' + esc(ph) + '"></textarea>' +
     '<p class="hint">タブ区切り（エクセルからのコピー）でも、カンマ区切りでも読めます。<br>' +
-      '同じ名前がすでにあるものは飛ばします。</p>' +
+      '同じ名前がすでにあるものは飛ばします。' +
+      (isTen ? '' : '<br>備考の先頭が「◯◯さん」なら、社内の担当として分けて入れます。坪数は㎡から自動で出すので空でも大丈夫です。') + '</p>' +
     '<label class="opt"><input type="checkbox" id="b-clear">' +
       '<span>先にいまの' + (isTen ? 'テナント名簿' : '案件一覧') + 'を消してから入れる</span></label>' +
     '<button class="btn primary" id="b-save">この内容で追加する</button>' +
@@ -1400,11 +1457,7 @@ function openBulkSheet(kind){
         ? { id:uid(), ts:Date.now() + i, name:name,
             cat:(f[1] || '').trim(), agency:(f[2] || '').trim(), person:(f[3] || '').trim(),
             tel:(f[4] || '').trim(), wantArea:(f[5] || '').trim(), memo:(f[6] || '').trim() }
-        : { id:uid(), ts:Date.now() + i, name:name,
-            addr:(f[1] || '').trim(), area:(f[2] || '').trim(), zoning:(f[3] || '').trim(),
-            rent:(f[4] || '').trim(), startDate:normDate(f[5]), owner:(f[6] || '').trim(),
-            ownerTel:(f[7] || '').trim(), lessor:(f[8] || '').trim(), lessorTel:(f[9] || '').trim(),
-            staff:(f[10] || '').trim(), memo:(f[11] || '').trim() });
+        : propFromCells(f, name, i));
     }
     if (!add.length){ toast('追加できる行がありませんでした'); return; }
 
@@ -1515,7 +1568,7 @@ function buildText(){
     out.push('■ 案件ごとの推進');
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
       var rs = rowsOfProp(p.id);
-      var spec = [p.addr, p.area, p.rent].filter(function(x){ return !!x; }).join('／');
+      var spec = [p.addr, areaLabel(p.area), p.rent].filter(function(x){ return !!x; }).join('／');
       out.push('　・' + p.name + (spec ? '（' + spec + '）' : '') + '　打診 ' + rs.length + '社');
       rs.slice().sort(function(a, b){ return stateOf(a).sort - stateOf(b).sort; }).forEach(function(x){
         out.push('　　' + tenName(x.tenantId) + '　' + stateOf(x).label + (x.person ? '　担当 ' + x.person : ''));
@@ -1543,10 +1596,13 @@ function buildCSV(kind){
         propName(g.propId), g.kind, g.text]);
     });
   } else if (kind === 'prop'){
-    rows = [['案件名','所在地','面積','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','社内の担当','備考']];
+    rows = [['案件名','所在地','合計面積(㎡)','坪数','用途地域','賃料想定','募集開始日','地主（所有者）','地主連絡先','貸主','貸主連絡先','備考']];
     db.props.slice().sort(function(a, b){ return (a.ts || 0) - (b.ts || 0); }).forEach(function(p){
-      rows.push([p.name, p.addr, p.area, p.zoning, p.rent, p.startDate, p.owner, p.ownerTel,
-        p.lessor, p.lessorTel, p.staff, p.memo]);
+      var n = parseArea(p.area);
+      var ok = n != null && !isNaN(n);
+      rows.push([p.name, p.addr, ok ? n : (p.area || ''), ok ? Math.round(n / TSUBO * 100) / 100 : '',
+        p.zoning, p.rent, p.startDate, p.owner, p.ownerTel, p.lessor, p.lessorTel,
+        [p.staff, p.memo].filter(function(x){ return !!x; }).join('　')]);
     });
   } else if (kind === 'ten'){
     rows = [['テナント名','業種','窓口会社','代表担当者','連絡先','希望面積','備考']];
@@ -1647,12 +1703,12 @@ function loadSample(){
   function dateBack(n){ var x = new Date(); x.setDate(x.getDate() - n); return ymd(x); }
   var now = Date.now();
 
-  var p1 = { id:uid(), ts:now+1, name:'伊丹寺本', addr:'伊丹市寺本', area:'150坪', zoning:'準工業',
+  var p1 = { id:uid(), ts:now+1, name:'伊丹寺本', addr:'伊丹市寺本', area:'1272.15', zoning:'準工業',
     rent:'坪1.2万', startDate:dateBack(60), owner:'寺本地主', ownerTel:'', lessor:'', lessorTel:'',
     memo:'幹線道路沿い。間口12m。' };
-  var p2 = { id:uid(), ts:now+2, name:'川西市', addr:'川西市栄町', area:'80坪', zoning:'商業',
+  var p2 = { id:uid(), ts:now+2, name:'川西市', addr:'川西市栄町', area:'264.46', zoning:'商業',
     rent:'坪1.5万', startDate:dateBack(40), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'' };
-  var p3 = { id:uid(), ts:now+3, name:'小中島', addr:'尼崎市小中島', area:'340坪', zoning:'工業',
+  var p3 = { id:uid(), ts:now+3, name:'小中島', addr:'尼崎市小中島', area:'1124', zoning:'工業',
     rent:'相談', startDate:dateBack(20), owner:'', ownerTel:'', lessor:'', lessorTel:'', memo:'造成が要る。' };
   db.props = [p1, p2, p3];
 
