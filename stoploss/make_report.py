@@ -8,6 +8,9 @@ OUT = bt.OUT
 HERE = bt.HERE
 res = json.load(open(os.path.join(OUT, "results.json")))
 sweep = pd.read_csv(os.path.join(OUT, "sweep.csv"))
+LIQ = None
+if os.path.exists(os.path.join(OUT, "liq_compare.json")):
+    LIQ = json.load(open(os.path.join(OUT, "liq_compare.json"))).get("建玉の急減(Binance)")
 
 
 def img(name):
@@ -72,6 +75,60 @@ def market_list():
         rows.append(f"<tr><td>{m['label']}</td><td>{m['start'][:10]} 〜 {m['end'][:10]}</td><td>{m['bars_1h']:,}本</td>"
                     f"<td>{'0.10%（往復）' if sym == 'BTCUSD' else str(bt.MARKETS[sym]['cost']) + ' pips（往復）'}</td></tr>")
     return "<table><thead><tr><th>相場</th><th>期間</th><th>1時間足の本数</th><th>見込んだコスト</th></tr></thead><tbody>" + "".join(rows) + "</tbody></table>"
+
+
+def liq_section():
+    if not LIQ:
+        return ""
+    ev = LIQ["events"]
+    def row(label, key, hs):
+        e = ev[key]
+        cells = "".join(f"<td class='{cls(e[f'H{H}']['mean_net_pct'])}'>{pct(e[f'H{H}']['mean_net_pct'], 2)}<br><small>{e[f'H{H}']['win_rate']*100:.0f}% / {pct(e[f'H{H}']['baseline_pct'], 2)} / t{e[f'H{H}']['t_stat']:+.1f}</small></td>" for H in hs)
+        return f"<tr><td>{label}</td><td>{e['threshold_oi_change_pct']:.1f}%</td><td>{e['n_events']}</td><td>{e['caught_by_my_signal']*100:.0f}%</td>{cells}</tr>"
+    hs = [1, 4, 12, 24, 48]
+    t1 = ("<div class='scroll'><table><thead><tr><th>本物の清算の山</th><th>建玉の減り</th><th>回数</th><th>私の合図が<br>拾えた割合</th>"
+          + "".join(f"<th>{H}時間後<br><small>勝率 / 合図なし / t</small></th>" for H in hs) + "</tr></thead><tbody>"
+          + row("上位5%の急減＋下落 → 買い", "top5pct_long_cascade_then_buy", hs)
+          + row("上位1%の急減＋下落 → 買い", "top1pct_long_cascade_then_buy", hs)
+          + row("上位0.1%の急減＋下落 → 買い", "top0.1pct_long_cascade_then_buy", hs)
+          + row("上位1%の急減＋上昇 → 売り", "top1pct_short_cascade_then_sell", hs)
+          + row("上位0.1%の急減＋上昇 → 売り", "top0.1pct_short_cascade_then_sell", hs)
+          + "</tbody></table></div>")
+    d = LIQ["daily"]
+    def drow(label, key):
+        e = d[key]
+        cells = "".join(f"<td class='{cls(e[f'H{H}']['mean_net_pct'])}'>{pct(e[f'H{H}']['mean_net_pct'], 2)}<br><small>{e[f'H{H}']['win_rate']*100:.0f}% / {pct(e[f'H{H}']['baseline_pct'], 2)} / t{e[f'H{H}']['t_stat']:+.1f}</small></td>" for H in [1, 2, 3, 5, 10])
+        return f"<tr><td>{label}</td><td>{e['threshold_oi_change_pct']:.1f}%</td><td>{e['n_events']}</td>{cells}</tr>"
+    t2 = ("<div class='scroll'><table><thead><tr><th>日足</th><th>建玉の減り(1日)</th><th>回数</th>"
+          + "".join(f"<th>{H}日後<br><small>勝率 / 合図なし / t</small></th>" for H in [1, 2, 3, 5, 10]) + "</tr></thead><tbody>"
+          + drow("上位5%の急減＋下落の翌日に買う", "top5pct_long_cascade_then_buy")
+          + drow("上位2%の急減＋下落の翌日に買う", "top2pct_long_cascade_then_buy") + "</tbody></table></div>")
+    e1 = ev["top1pct_long_cascade_then_buy"]; e0 = ev["top0.1pct_long_cascade_then_buy"]
+    return f"""
+<h2>9. 本物の清算の目印（建玉の急減）で確かめ直す</h2>
+<p>ここまでは「値動きから推定した損切りの山」だった。Binance が無料で公開している<b>建玉（たてぎょく）</b>＝先物のポジションの総量を使うと、
+本物の清算に近い目印が作れる。清算が一斉に出ると、建玉は1時間で一気に減るからだ。データは {LIQ['period'][0][:10]} 〜 {LIQ['period'][1][:10]} の
+{LIQ['hours']:,} 時間。建玉の減り方と値動きの大きさの相関は {LIQ['corr_abs_oi_change_vs_abs_return']:.2f} で、目印として使える強さ。</p>
+{img('liq_oi.png')}
+<div class="box">
+<p><b>読み方</b></p>
+<ul>
+<li>本物の清算の山（建玉が上位1%の減り方＋値下がり、{e1['n_events']}回）のあとに買うと、48時間後の平均は{pct(e1['H48']['mean_net_pct'],2)}（コスト後）。合図なし（{pct(e1['H48']['baseline_pct'],2)}）より上で、勝率{e1['H48']['win_rate']*100:.0f}%。<b>値動きだけの合図より、はっきり良い。</b></li>
+<li>山が大きいほど戻りも大きい。上位0.1%（{e0['n_events']}回）だと48時間後に{pct(e0['H48']['mean_net_pct'],2)}。ただし回数が少ない。</li>
+<li>最初の数時間はほぼ動かず、戻りは12〜48時間かけて出る。「損切りの山の直後に飛び乗る」のではなく、「山を確認してから半日〜2日持つ」形。</li>
+<li>上に跳ねてショートが清算された山のあとに売るのは、やはり負ける（上昇が続く）。</li>
+<li>私の値動きだけの合図は、本物の山の{e1['caught_by_my_signal']*100:.0f}%しか拾えておらず、山でない所でも鳴っていた。それが前回の成績を薄めていた。</li>
+</ul>
+</div>
+{t1}
+<p><small>各マスは「1回あたりの利益（コスト0.10%を引いたあと）」。下の小さい字は「勝率 / 合図なしで同じ長さ持った平均 / t値（2以上なら偶然と言いにくい）」。</small></p>
+<p>日足でも同じことを見た。1日で建玉が大きく減って値下がりした翌日に買う。</p>
+{t2}
+<div class="box warn">
+<p><b>気をつけること。</b> この期間（2023〜2026年）はビットコインが大きく上がった期間で、下げ相場が短い。「清算の山のあと買う」が下げ相場でも効くかは、この期間だけでは言えない。
+1回あたりの利益は0.3〜0.5%で、日本の取引所のスプレッド（0.3〜1%）だと消える大きさ。やるなら手数料の安い所で、48時間持つ前提になる。</p>
+</div>
+"""
 
 
 B = res["markets"]["BTCUSD"]["timeframes"]
@@ -185,7 +242,7 @@ html = f"""<!DOCTYPE html>
 <li>同時に持つのは1つだけ、資金の大きさは無視、金利・スワップも無視。</li>
 </ul>
 
-<h2>7. ここから何をするか</h2>
+<h2>7. ここから何をするか（値動きだけの検証を見て）</h2>
 <ol>
 <li><b>短い時間の逆張りはやめる。</b> データがはっきり「ダメ」と言っている。</li>
 <li>ビットコインの日足の「投げ売り翌日に買う」を追いかけるなら、まず<b>本物のお金を使わずに、これから出る合図を記録して当たるか見る</b>（フォワードテスト）。半年〜1年分たまってから判断する。</li>
@@ -193,11 +250,13 @@ html = f"""<!DOCTYPE html>
 <li>本物の損切り（強制清算）データで確かめたいなら、持っている取引所の名前を教えてもらえれば、そのAPIで取れるかを調べる。</li>
 </ol>
 
-<h2>8. 自分で動かすとき</h2>
+{liq_section()}
+<h2>10. 自分で動かすとき</h2>
 <p>このフォルダに全部入っている。パソコンに Python が入っていれば、次の順に実行するだけで同じ結果が出る。</p>
 <pre><code>pip install pandas numpy matplotlib
 python3 backtest.py      # 計算（20秒くらい）→ out/results.json, out/sweep.csv
 python3 charts.py        # グラフ → out/*.png
+python3 compare_liquidations.py   # 建玉の急減との突き合わせ（data/liq/ が要る）
 python3 make_report.py   # この報告書 → index.html</code></pre>
 <p>元データは <code>data/</code> に1時間足で入れてある（作り直すときは <code>prepare_data.py</code>）。出どころは README に書いた。</p>
 </main></body></html>
