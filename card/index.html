@@ -470,6 +470,7 @@ function rotCanvasK(src, k){
    写真ぜんぶを読ませると、机まで含めて文字が小さくなり読みちがえる。
    明るい紙のかたまりを中心から塗り広げて見つけ、その四隅を返す。 */
 function findQuad(src, w){
+  if (OCRBASE) window.__findQuad = findQuad;
   w = w || 360;
   var h = Math.max(1, Math.round(src.height * w / src.width));
   var c = document.createElement('canvas');
@@ -1005,7 +1006,7 @@ var RE_TEL   = /0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4}/g;
 var RE_LOOSE = /\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}/g;
 var RE_CO    = /株式会[社杜視祉]|有限会[社杜視祉]|合同会社|合資会社|\(株\)|（株）|\(有\)|（有）|会社|事務所|法人|組合|協会|財団|社団|工業|産業|商事|物産|製作所|印刷|出版|銀行|信用金庫|建設|工務店|不動産|商店|運輸|電機|電気|設計|企画|システム|グループ|ホールディングス|カフェ|工房|商会|舎|亭|農園|クリニック|診療所|薬局|美容室|サロン|スタジオ|教室|Inc\.?|Corp|Co\.,?\s?Ltd|Ltd\.?|LLC|K\.K\./i;
 var RE_TITLE = /代表取締役|取締役|代表社員|代表者|代表|会長|社長|専務|常務|本部長|統括|部長|次長|課長|係長|主任|主査|主幹|店主|店長|所長|支店長|工場長|室長|局長|主宰|オーナー|女将|チーフ|マネージャ|リーダー|顧問|参与|参事|理事|監査役|技師|税理士|公認会計士|弁護士|社会保険労務士|司法書士|行政書士|建築士|ディレクター|プランナー|コンサルタント/;
-var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|部|課|室|係|局)$/;
+var RE_DEPT  = /(事業部|営業所|支店|支社|センター|本部|研究所|工場|グループ|チーム|開発|営業|企画|管理|販売|総務|人事|経理|広報|製造|技術|部|課|室|係|局)$/;
 var RE_DEPT2 = /^(営業|総務|経理|人事|企画|開発|製造|技術|広報|管理|購買|品質保証|法務|財務|設計|施工|工事|販売|事務|生産|物流|営業企画|経営企画|本社|支社)$/;
 var RE_ADDR  = /[都道府県]|[市区町村郡]/;
 /* 免許・登録番号の行（「兵庫県知事（特-7）第110902号」など）。県が入るが住所ではない */
@@ -1237,7 +1238,9 @@ function parseCard(lines, W){
     var tns = t.replace(/[\s　]/g, '');
     if (RE_CO.test(tns) || RE_TITLE.test(tns) || RE_DEPT.test(tns) || RE_DEPT2.test(tns) || RE_LIC.test(tns)) return;
     if (t.split(' ').some(function(wd){ return wd.length >= 3 && RE_DEPT.test(wd); })) return;   /* 「文化財課 公式」のように部署の語を含む */
-    if (/公式|SNS|受付|窓口|エリア|地区|担当|ブロック|リージョン|カンパニー|企業|法人|リーダ|サービス|センター/.test(tns)) return;
+    if (/公式|SNS|受付|窓口|エリア|地区|担当|ブロック|リージョン|カンパニー|企業|法人|リーダ|サービス|センター|営業時間|定休日|営業日/.test(tns)) return;
+    /* 漢字のあとにカタカナが長く続く行は、社名やロゴの一部（「纏リアライズー」） */
+    if (/[一-龥]/.test(tns) && /[ァ-ヶー]{5,}/.test(tns)) return;
     if (!plausible('name', t)) return;                        /* 横棒や丸ばかりの化け、漢字1字＋かな1字、店名 */
     var sc = nameScore(L, t, col, heads);
     if (lowc) sc *= 0.7;                                     /* ほぼ読めていない行は、読めている行より弱く */
@@ -1262,7 +1265,9 @@ function parseCard(lines, W){
       if (L.h < best.L.h * 0.28 || L.h > best.L.h * 1.6) return;
       var t = L.t;
       if (/[0-9@]/.test(han(t)) || t.length < 2 || t.length > 30) return;
-      if ((t.match(/[一-龥ぁ-んァ-ヶA-Za-z]/g) || []).length < 2) return;   /* 「N /」のような読み */
+      /* 文字らしい部分が短い行（「<へ、 に」のような化け）は会社にしない */
+      var core = t.replace(/[^一-龥ぁ-んァ-ヶA-Za-z0-9]/g, '');
+      if (core.length < 3 || !/[一-龥ァ-ヶA-Za-z]/.test(core)) return;
       var t2 = t.replace(/[\s　]/g, '');
       if (RE_TITLE.test(t2) || RE_DEPT.test(t2) || RE_DEPT2.test(t2) || RE_LIC.test(t2)) return;
       if (/担当|マネージ|スタッフ|アドバイザー|プロデューサー/.test(t2)) return;
@@ -1303,8 +1308,16 @@ function cleanName(t){
   var toks = t.split(' ').map(function(wd){ return wd.replace(/[。、，．,.]/g, ''); }).filter(Boolean), out = [];
   for (var i = 0; i < toks.length; i++){
     var wd = toks[i];
+    /* 語の前後に付いた記号（「|松下幸司」の「|」など）は落とす。中に混ざっていたらそこで打ち切る */
+    wd = wd.replace(/^[^一-龥ぁ-んァ-ヶA-Za-z0-9]+/, '').replace(/[^一-龥ぁ-んァ-ヶA-Za-z0-9]+$/, '');
+    if (!wd) continue;
+    /* 漢字のあいだに入った下線や棒（「巳_恵」）は消す */
+    if (/[一-龥]/.test(wd)) wd = wd.replace(/[_＿‐‑–—―]+/g, '');
+    if (!wd) continue;
     if (/[0-9]/.test(han(wd))) break;
     if (/[|｜\[\]【】{}()（）=+*#@:;\/\\<>"'`~^『』「」・、。,.]/.test(wd)) break;
+    /* 漢字の名前のうしろに付いたローマ字読み（takenori kanamoto）はここまで */
+    if (/^[A-Za-z][A-Za-z.'-]*$/.test(wd) && out.some(function(o){ return /[一-龥ぁ-んァ-ヶ]/.test(o); })) break;
     if (wd.length >= 3 && /(都|道|府|県|市|区|町|村|丁目|番地|ビル|階|号)$/.test(wd)) break;
     if (/[ぁ-ん]/.test(wd) && /[ァ-ヶ]/.test(wd)) break;          /* ひらがなとカタカナが混じった語は名前ではない（ロゴの化け） */
     out.push(wd);
@@ -1571,8 +1584,11 @@ function bandReread(res){
       var beyond = col && (L.bb.x0 < col.x0 - h || L.bb.x1 > col.x1 + h);
       var jp0 = (L.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
       if (L.c >= 45 && !beyond && jp0 >= 2) return;         /* よく読めていて列にも収まっている行はそのまま */
+      var sp = inkSpanX(cv, L.bb.y0, L.bb.y1, h, col);
       var bx0 = col ? Math.max(L.bb.x0, col.x0 - h * 0.4) : L.bb.x0;
       var bx1 = col ? Math.min(L.bb.x1, col.x1 + h * 0.4) : L.bb.x1;
+      /* インクの切れ目で決めた範囲があれば、そちらを使う（列からはみ出す社名を切らない） */
+      if (sp && sp.x1 - sp.x0 >= h){ bx0 = Math.max(0, Math.min(bx0, sp.x0)); bx1 = Math.min(cv.width, Math.max(bx1, sp.x1)); }
       if (bx1 - bx0 < h) return;
       var bb = { x0:bx0, x1:bx1, y0:L.bb.y0, y1:L.bb.y1 };
       return rereadLine(res.w, cv, bb, '7', 130).then(function(alt){
@@ -1602,7 +1618,7 @@ function bandReread(res){
         return rereadLine(res.w, cv, b, '7', 130).then(function(alt){
           if (!alt || !alt.t || alt.c < 40) return;
           var jp = (alt.t.match(/[一-龥ぁ-んァ-ヶA-Za-z0-9]/g) || []).length;
-          if (jp < 2) return;
+          if (jp < 3 && !(jp >= 2 && alt.c >= 60)) return;   /* 短い化けは足さない */
           lines.push({ t:alt.t, c:alt.c, h:Math.round(b.y1 - b.y0), y:b.y0, bb:{ x0:b.x0, x1:b.x1, y0:b.y0, y1:b.y1 }, band:true });
         });
       });
@@ -1612,6 +1628,48 @@ function bandReread(res){
     });
   });
   return chain;
+}
+/* ある高さの帯について、インクのある横の範囲をさがす。
+   文字のあいだの狭いすき間はつなぎ、大きく離れたかたまり（左右のロゴ）は捨てる。
+   本文の列から少しはみ出す社名も、切らずに最後まで取れる */
+function inkSpanX(cv, y0, y1, h, col){
+  var W = cv.width;
+  y0 = Math.max(0, Math.floor(y0)); y1 = Math.min(cv.height, Math.ceil(y1));
+  if (y1 - y0 < 2) return null;
+  var d;
+  try { d = cv.getContext('2d').getImageData(0, y0, W, y1 - y0).data; } catch(e){ return null; }
+  var rows = y1 - y0, ink = new Uint8Array(W);
+  for (var y = 0; y < rows; y += 2){
+    var base = y * W * 4;
+    for (var x = 0; x < W; x++) if (d[base + x*4] < 110) ink[x] = 1;
+  }
+  var gs = [], x2 = 0;
+  while (x2 < W){
+    if (!ink[x2]){ x2++; continue; }
+    var s0 = x2; while (x2 < W && ink[x2]) x2++;
+    gs.push({ x0:s0, x1:x2 });
+  }
+  if (!gs.length) return null;
+  var gap = Math.max(6, (h || 20) * 0.9), mg = [];
+  gs.forEach(function(g){
+    var p = mg[mg.length - 1];
+    if (p && g.x0 - p.x1 < gap) p.x1 = g.x1; else mg.push({ x0:g.x0, x1:g.x1 });
+  });
+  if (!col) return { x0:mg[0].x0, x1:mg[mg.length - 1].x1 };
+  var m = (h || 20) * 0.5, lo = col.x0 - m, hi = col.x1 + m, keep = null;
+  mg.forEach(function(g){
+    if (g.x1 < lo || g.x0 > hi) return;                 /* 列から離れたかたまり（ロゴ）は捨てる */
+    if (!keep) keep = { x0:g.x0, x1:g.x1 };
+    else { keep.x0 = Math.min(keep.x0, g.x0); keep.x1 = Math.max(keep.x1, g.x1); }
+  });
+  /* 列からはみ出してよいのは1文字ぶんくらいまで（切れた「ム」は拾い、となりのローマ字までは入れない） */
+  if (keep){
+    var e = (h || 20) * 1.5;
+    keep.x0 = Math.max(keep.x0, col.x0 - e);
+    keep.x1 = Math.min(keep.x1, col.x1 + e);
+    if (keep.x1 - keep.x0 < (h || 20)) return null;
+  }
+  return keep;
 }
 /* 本文の列の中で、インクのある行の帯をさがす（読みとった絵は白黒で濃淡が強めてある） */
 function inkBands(cv, col){
@@ -1644,8 +1702,11 @@ function inkBands(cv, col){
     if (p && b.y0 - p.y1 < Math.max(3, hmin * 0.12)) p.y1 = b.y1; else out.push({ y0:b.y0, y1:b.y1 });
   });
   out = out.filter(function(b){ var h = b.y1 - b.y0; return h >= H * 0.025 && h <= H * 0.2; });
-  /* 帯ごとに、インクのある横の範囲 */
+  /* 帯ごとに、インクのある横の範囲（列から少しはみ出す分も入れる） */
   out.forEach(function(b){
+    var bh = b.y1 - b.y0, m = Math.round(bh * 0.3);
+    var sp = inkSpanX(cv, b.y0, b.y1, bh, col || { x0:x0, x1:x1 });
+    if (sp){ b.x0 = Math.max(0, sp.x0 - m); b.x1 = Math.min(W, sp.x1 + m); return; }
     var bx0 = cw, bx1 = 0;
     for (var yy = b.y0; yy < b.y1; yy += 2){
       var base2 = yy * cw * 4;
@@ -1653,7 +1714,6 @@ function inkBands(cv, col){
         if (d[base2 + xx*4] < 110){ if (xx < bx0) bx0 = xx; if (xx > bx1) bx1 = xx; }
       }
     }
-    var m = Math.round((b.y1 - b.y0) * 0.3);
     b.x0 = Math.max(0, x0 + bx0 - m); b.x1 = Math.min(W, x0 + bx1 + m);
   });
   return out.filter(function(b){ return b.x1 - b.x0 >= (b.y1 - b.y0) * 1.2; });
@@ -1893,7 +1953,11 @@ function openSave(restore){
 function pickCand(ev, inputId, key){
   var b = ev.target.closest ? ev.target.closest('.chip') : null;
   if (!b) return;
-  $(inputId).value = b.getAttribute('data-v');
+  var t = b.getAttribute('data-v');
+  /* 候補は読んだままの文字なので、欄に入れるときに名前・会社として整える */
+  if (key === 'name') t = cleanName(t) || t;
+  else if (key === 'company') t = tidyCompany(t) || t;
+  $(inputId).value = t;
   touched[key] = 1;
 }
 /* 四隅から切り出して、しまう用の写真を作る */
@@ -2024,7 +2088,19 @@ var camStream = null, camTrack = null, torchOn = false;
 /* ===== 生きた映像から四隅をさがす（メモアプリの書類スキャンのように） =====
    200msごとに小さな絵で名刺の四隅をさがし、見つかったら緑の枠で映像に重ねる。
    枠が1秒ほど動かなければ自動で撮る。撮る前に枠が見えるので、外れていればその場で直せる */
-var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0;
+var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0, liveMiss = 0;
+/* 映像は画面いっぱいに切って出している（object-fit:cover）ので、
+   映像の全部ではなく、いま画面に見えているところだけをさがす。
+   見えていない外側の机や、となりの物にまどわされない */
+function camVisibleSrc(){
+  var v = $('cam-video');
+  if (!v || !v.videoWidth) return null;
+  var vr = v.getBoundingClientRect();
+  if (!vr.width || !vr.height) return null;
+  var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
+  var w = Math.min(v.videoWidth, vr.width / sc), h = Math.min(v.videoHeight, vr.height / sc);
+  return { x:(v.videoWidth - w) / 2, y:(v.videoHeight - h) / 2, w:w, h:h };
+}
 function camFrameRect(){
   var v = $('cam-video'), vr = v.getBoundingClientRect(), st = $('cam-stage').getBoundingClientRect();
   var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
@@ -2054,36 +2130,57 @@ function liveStep(){
   var v = $('cam-video');
   if (!camStream || $('cam').hidden) return;
   if (v.videoWidth && v.readyState >= 2){
-    var W = 240, H = Math.max(1, Math.round(v.videoHeight * W / v.videoWidth));
+    var src = camVisibleSrc();
+    if (!src){ liveTimer = setTimeout(liveStep, 200); return; }
+    var W = 260, H = Math.max(1, Math.round(src.h * W / src.w));
     var c = document.createElement('canvas');
     c.width = W; c.height = H;
     var qd = null;
-    try { c.getContext('2d').drawImage(v, 0, 0, W, H); qd = findQuad(c, W); } catch(e){ qd = null; }
-    var q = qd ? qd.map(function(p){ return [Math.min(1, Math.max(0, p[0]/W)), Math.min(1, Math.max(0, p[1]/H))]; }) : null;
-    var edge = false;
-    if (q) q.forEach(function(p){ if (p[0] < 0.01 || p[0] > 0.99 || p[1] < 0.01 || p[1] > 0.99) edge = true; });
-    /* 枠がしばらく動いていないか */
-    liveHist.push(q); if (liveHist.length > 5) liveHist.shift();
+    try {
+      c.getContext('2d').drawImage(v, src.x, src.y, src.w, src.h, 0, 0, W, H);
+      qd = findQuad(c, W);
+    } catch(e){ qd = null; }
+    /* 見えている範囲の割合を、映像ぜんぶに対する割合に直す */
+    var q = qd ? qd.map(function(p){
+      var fx = Math.min(1, Math.max(0, p[0] / W)), fy = Math.min(1, Math.max(0, p[1] / H));
+      return [(src.x + fx * src.w) / v.videoWidth, (src.y + fy * src.h) / v.videoHeight];
+    }) : null;
+    /* 見えている範囲の縁にかかっていないか（かかっていたら名刺が画面からはみ出している） */
+    var edge = false, area = 0;
+    if (qd){
+      qd.forEach(function(p){ if (p[0] < W*0.012 || p[0] > W*0.988 || p[1] < H*0.012 || p[1] > H*0.988) edge = true; });
+      for (var ai = 0; ai < 4; ai++){
+        var p1 = qd[ai], p2 = qd[(ai+1) % 4];
+        area += p1[0]*p2[1] - p2[0]*p1[1];
+      }
+      area = Math.abs(area) / 2 / (W * H);
+    }
+    /* 枠がしばらく動いていないか（3コマつづけて、コマごとのずれが小さい） */
+    liveHist.push(q); if (liveHist.length > 3) liveHist.shift();
     var stable = false;
-    if (q && liveHist.length >= 5 && liveHist.every(function(o){ return !!o; })){
+    if (q && liveHist.length >= 3 && liveHist.every(function(o){ return !!o; })){
       stable = true;
-      for (var i = 0; i < liveHist.length - 1 && stable; i++){
+      for (var i = 1; i < liveHist.length && stable; i++){
         for (var k = 0; k < 4; k++){
-          var a = liveHist[i][k], b = q[k];
-          if (Math.abs(a[0]-b[0]) > 0.02 || Math.abs(a[1]-b[1]) > 0.02){ stable = false; break; }
+          var a = liveHist[i-1][k], b = liveHist[i][k];
+          if (Math.abs(a[0]-b[0]) > 0.03 || Math.abs(a[1]-b[1]) > 0.03){ stable = false; break; }
         }
       }
     }
+    var big = area >= 0.12;                       /* 小さすぎる（遠すぎる）ものでは撮らない */
     liveQuad = q;
-    drawLive(q, stable && !edge);
+    liveMiss = q ? 0 : liveMiss + 1;
+    drawLive(q, stable && !edge && big);
     var tip = $('cam-tip'), bx = $('cam-box');
     if (bx) bx.className = 'box' + (q ? ' found' : '');
     if (tip){
-      tip.textContent = !q ? '名刺を枠のあたりに。机との境がはっきり写るように'
+      tip.textContent = !q ? (liveMiss > 12 ? '見つからないときは、丸ボタンで撮ってもいいにゃ'
+                                            : '名刺を枠のあたりに。机との境がはっきり写るように')
                       : edge ? '名刺がぜんぶ入るように、少し離す'
+                      : !big ? '名刺が小さい。もう少し近づける'
                       : stable ? 'そのまま…' : '四隅を見つけた。止めると自動で撮ります';
     }
-    if (stable && !edge && liveArmed && Date.now() - liveShotAt > 2500){ liveShotAt = Date.now(); camCapture(); return; }
+    if (stable && !edge && big && liveArmed && Date.now() - liveShotAt > 2500){ liveShotAt = Date.now(); camCapture(); return; }
   }
   liveTimer = setTimeout(liveStep, 200);
 }
@@ -2091,7 +2188,7 @@ function openCamera(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
   $('cam').hidden = false;
   document.body.style.overflow = 'hidden';
-  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now();
+  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0;
   drawLive(null);
   if (liveTimer) clearTimeout(liveTimer);
   liveTimer = setTimeout(liveStep, 400);
