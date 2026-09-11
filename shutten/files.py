@@ -45,6 +45,12 @@ PDF_MAX_BYTES = 2 * 1024 * 1024   # PDFはこれより大きければ見送る�
 WANT = re.compile(r"\.(xlsx|xls|csv)(\?|$)", re.I)
 WANT_PDF = re.compile(r"\.pdf(\?|$)", re.I)
 
+# PDFは数が多いので、リンクの文字で中身かどうかを見分ける。
+# 大阪狭山市と泉佐野市は「手引き」「要綱」「しおり」「フロー図」しか無く、
+# 一覧だと思って落とすと手続きの説明書が溜まるだけだった。
+PDF_IS_DATA = re.compile(r"概要|一覧|リスト|届出状況|縦覧|告示")
+PDF_NOT_DATA = re.compile(r"手引|要綱|しおり|フロー|意見書|様式|記入例|チェックリスト|指針")
+
 # PDFそのものが一覧になっている収集先だけ、PDFも落とす。
 # 兵庫県のように「届出1件ごとの資料8MB」を並べているところは対象外。
 # （sources.json の "pdf": true で指定する）
@@ -63,7 +69,10 @@ def newest_raw(source):
 
 
 def excel_links(path, base_url, want=WANT):
-    """保存ページから Excel/CSV（や PDF）のリンクを拾う（重複は除く）。"""
+    """保存ページから Excel/CSV（や PDF）のリンクを拾う（重複は除く）。
+
+    PDFのときは、リンクの文字から中身かどうかも見る。
+    """
     with open(path, encoding="utf-8", errors="replace") as f:
         page = f.read()
     out, seen = [], set()
@@ -74,8 +83,11 @@ def excel_links(path, base_url, want=WANT):
         url = urllib.parse.urljoin(base_url, href)
         if url in seen:
             continue
-        seen.add(url)
         label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(2))).strip()
+        if want is WANT_PDF:
+            if PDF_NOT_DATA.search(label) or not PDF_IS_DATA.search(label):
+                continue
+        seen.add(url)
         out.append((url, label[:60]))
     return out
 
@@ -87,8 +99,17 @@ def safe_name(url):
     return name[:100]
 
 
-def download(url, dest, limit=MAX_BYTES):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Language": "ja"})
+def download(url, dest, limit=MAX_BYTES, referer=None):
+    """ファイルを落とす。
+
+    大阪市はURLの組み立てが正しいのに404を返した（大阪府は同じやり方で17本
+    取れている）。ファイルを配るときに参照元を見るサーバーがあるので、
+    どのページから来たのかを添える。素性は User-Agent に書いてあるとおり。
+    """
+    headers = {"User-Agent": UA, "Accept-Language": "ja", "Accept": "*/*"}
+    if referer:
+        headers["Referer"] = referer
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         size = int(r.headers.get("Content-Length") or 0)
         if size > limit:
@@ -167,7 +188,8 @@ def main():
                 continue
             try:
                 n = download(url, dest,
-                             PDF_MAX_BYTES if url.lower().endswith(".pdf") else MAX_BYTES)
+                             PDF_MAX_BYTES if url.lower().endswith(".pdf") else MAX_BYTES,
+                             referer=src["url"])
             except (urllib.error.HTTPError, urllib.error.URLError, ValueError, OSError) as e:
                 lines.append(f"  - 取れなかった {safe_name(url)} — {e}")
                 failed += 1

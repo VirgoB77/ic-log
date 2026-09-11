@@ -62,7 +62,7 @@
       "name": "大阪市 大規模小売店舗立地法 手続き・届出",
       "area": "osaka",
       "url": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
-      "note": "大阪市は政令市なので府とは別に受理する",
+      "note": "Excel 3本（縦覧一覧・届出一覧1.51MB・市内店舗一覧）。URLの組み立ては正しいのに404を返す。大阪府は同じやり方で17本取れているので大阪市固有。Referer を付けて再挑戦中",
       "enabled": true
     },
     {
@@ -143,7 +143,7 @@
       "area": "osaka",
       "url": "https://www.city.osaka-izumi.lg.jp/bizisan/shoukou/rixcchihou/todokedejoukyou/index.html",
       "enabled": true,
-      "note": "12年分すべてPDF。PDFが一覧そのもの",
+      "note": "12年分すべてPDF。「届出の概要・縦覧期間等」が58本ある。大阪でいちばん本数が多い",
       "pdf": true
     },
     {
@@ -208,8 +208,8 @@
       "area": "osaka",
       "url": "https://www.city.osakasayama.osaka.jp/sosiki/siminseikatsubu/sangyounigiwaizukuri/4/1/1410228705740.html",
       "enabled": true,
-      "note": "PDFが4本。一覧の可能性が高い",
-      "pdf": true
+      "note": "PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体",
+      "pdf": false
     },
     {
       "id": "kumatori-town",
@@ -225,8 +225,8 @@
       "area": "osaka",
       "url": "https://www.city.izumisano.lg.jp/kakuka/seikatsu/shoko/menu/jigyosyo/todokede/1613433836928.html",
       "enabled": true,
-      "note": "PDFが4本。一覧の可能性が高い",
-      "pdf": true
+      "note": "PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体",
+      "pdf": false
     },
     {
       "id": "kawachinagano-city",
