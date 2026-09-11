@@ -4,7 +4,8 @@
     "届出先": "大店立地法の届出先は都道府県と政令指定都市。さらに大阪府は20市町村に事務を移譲しているため、府のページだけでは大阪の大半が抜ける。移譲先は府のページの「地域名｜移譲市町村」の表から読み取った",
     "enabled": "false にすると取りに行かない。URLが未確認のものはここを false にしてある",
     "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ",
-    "整理のしかた": "調べて一覧が無いと分かったものは、消さずに enabled:false にして note に理由と確認日を残す。同じところを何度も調べ直さないため"
+    "整理のしかた": "調べて一覧が無いと分かったものは、消さずに enabled:false にして note に理由と確認日を残す。同じところを何度も調べ直さないため",
+    "目次ページ": "入口が目次だけで、実物が1階層下にあることが多い（堺市・和泉市・阪南市・八尾市など）。表が無いと判定されたページは、その先の年度別ページを辿るようにしてある"
   },
   "sources": [
     {
@@ -148,8 +149,8 @@
       "name": "岸和田市 大店届出",
       "area": "osaka",
       "url": "https://www.city.kishiwada.osaka.jp/soshiki/43/daitentodokede.html",
-      "enabled": true,
-      "note": "移譲市町村。届出状況の一覧ページと判定"
+      "enabled": false,
+      "note": "実地で叩いたらホスト名が引けなかった（Name or service not known、2026-09-11）。検索結果から採ったURLだがドメインが違うらしい。正しいURLが分かったら enabled を true に戻す"
     },
     {
       "id": "kaizuka-city",
@@ -157,7 +158,7 @@
       "area": "osaka",
       "url": "https://www.city.kaizuka.lg.jp/kakuka/sogoseisaku/sangyo/menu/daitenrittihounituite/daitenrittihoutodokedejoukyou.html",
       "enabled": true,
-      "note": "移譲市町村。届出状況の一覧ページと判定"
+      "note": "表もPDFも0だが、箇条書きが62個ある。リストの形で出している可能性。辿る先も0本なので、別の読み方が要る"
     },
     {
       "id": "matsubara-city",
@@ -229,7 +230,7 @@
       "area": "osaka",
       "url": "https://www.city.kawachinagano.lg.jp/soshiki/16/100545.html",
       "enabled": true,
-      "note": "縦覧の枠はあるが現在掲載ゼロと見られる。届出が出れば載る想定なので取り続ける"
+      "note": "「縦覧リスト」のPDFが1本だけある。辿る先は0本。PDFを読まないと中身が分からない"
     },
     {
       "id": "sakai-chukibo",

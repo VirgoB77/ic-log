@@ -19,6 +19,7 @@
 Python 3 の標準ライブラリだけで動く。GitHub Actions でそのまま動く。
 """
 
+import html
 import json
 import os
 import re
@@ -126,6 +127,39 @@ class Scanner(HTMLParser):
 
 # ---------------------------------------------------------------- 取りに行く
 
+def follow_links(page, base_url):
+    """目次ページから、年度別ページなど「その先」のリンクを選ぶ。
+
+    堺市や和泉市のように、入口は目次だけで、実物は1階層下にあることが多い。
+    ここで拾わないと「表が無いページ」に見えてしまう。
+    """
+    out, seen = [], set()
+    for m in re.finditer(r'<a\b[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>', page, re.S | re.I):
+        label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(2))).strip()
+        if not label or len(label) > 60:
+            continue
+        if FOLLOW_SKIP.search(label):
+            continue
+        if not (FOLLOW_TEXT.search(label) and FOLLOW_TOPIC.search(label)):
+            continue
+        url = urllib.parse.urljoin(base_url, html.unescape(m.group(1)))
+        if not url.startswith("http") or url in seen or url == base_url:
+            continue
+        # 同じサイトの中だけ辿る。よそへ出ていかない
+        if urllib.parse.urlparse(url).netloc != urllib.parse.urlparse(base_url).netloc:
+            continue
+        seen.add(url)
+        out.append((url, label))
+    return out
+
+
+def slug_of(url):
+    """辿った先を保存するときのファイル名の一部。"""
+    path = urllib.parse.urlparse(url).path
+    name = re.sub(r"[^A-Za-z0-9._-]", "_", path.strip("/").replace("/", "-"))
+    return (name or "page")[-60:]
+
+
 def check_robots(url):
     """robots.txt で禁じられていないか確かめる。分からないときは True。"""
     p = urllib.parse.urlparse(url)
@@ -153,6 +187,19 @@ def fetch(url):
 # ---------------------------------------------------------------- 判定する
 
 KEYWORDS = ["新設", "変更", "廃止", "縦覧", "届出", "店舗面積", "開店"]
+
+# 目次ページのリンク文字から、その先に一覧がありそうなものを選ぶ。
+# 「令和N年度」だけを手がかりにすると、人権セミナーや中小企業支援の
+# ページまで拾ってしまったので、届出か縦覧の語が入っていることを必須にする。
+# 「届出」だけだと、アスベスト・騒音・水道・駐車場など市のあらゆる届出を
+# 拾ってしまう（箕面市の窓口ページで実際に起きた）。
+# 「届出か縦覧」であることに加えて、大規模小売店舗まわりの語が要る。
+FOLLOW_TEXT = re.compile(r"届出|縦覧")
+FOLLOW_TOPIC = re.compile(r"大規模|中規模|小売|大店|届出状況|縦覧状況|状況|第\s*\d+\s*条|年度")
+# 様式のダウンロードや申請の入口に逃げないよう、明らかに違うものは弾く
+FOLLOW_SKIP = re.compile(r"手引|様式|ワード|エクセル|\.doc|\.xls|要綱|申請書|"
+                         r"お問い合わせ|電子申請|検索|一覧表示|ダウンロード")
+FOLLOW_MAX = 12          # 1つの目次から辿る数の上限。相手に迷惑をかけないため
 
 
 def analyze(text, base_url):
@@ -246,6 +293,17 @@ def report_one(src, res):
         out.append(f"- 出てきた言葉: {' / '.join(a['keywords'])}")
     if a["years"]:
         out.append(f"- 年度らしき表記: {' / '.join(a['years'])}")
+
+    if res.get("followed"):
+        cap = res.get("follow_capped")
+        note = f"（{cap[0]}本見つかったが上限{cap[1]}本まで）" if cap else ""
+        out.append(f"- **この先を辿った: {len(res['followed'])}本** {note}")
+        for label, a2, err in res["followed"]:
+            if err:
+                out.append(f"  - {label[:34]} … 取れなかった（{err}）")
+            else:
+                extra = f" {a2['biggest']['rows']}行×{a2['biggest']['cols']}列" if a2.get("biggest") else ""
+                out.append(f"  - {label[:34]} … **{a2['verdict']}**{extra}")
     out.append("")
     return "\n".join(out)
 
@@ -311,6 +369,28 @@ def main():
         os.makedirs(d, exist_ok=True)
         with open(os.path.join(d, f"{today}.html"), "wb") as f:
             f.write(raw)
+
+        # 入口が目次だけのことが多い（堺市・和泉市・阪南市など）。
+        # 表が無いページはその先を見に行く。
+        if res["analysis"]["verdict"] == "わからない":
+            cand = follow_links(text, src["url"])
+            res["followed"] = []
+            if len(cand) > FOLLOW_MAX:
+                res["follow_capped"] = (len(cand), FOLLOW_MAX)
+                cand = cand[:FOLLOW_MAX]
+            for url2, label in cand:
+                time.sleep(WAIT)
+                try:
+                    st2, ct2, raw2 = fetch(url2)
+                except Exception as e:
+                    res["followed"].append((label, None, f"{type(e).__name__}"))
+                    continue
+                t2, _ = to_text(raw2, ct2)
+                a2 = analyze(t2, url2)
+                with open(os.path.join(d, f"{today}--{slug_of(url2)}.html"), "wb") as f:
+                    f.write(raw2)
+                res["followed"].append((label, a2, None))
+                counts[a2["verdict"]] = counts.get(a2["verdict"], 0) + 1
 
         lines.append(report_one(src, res))
         time.sleep(WAIT)
