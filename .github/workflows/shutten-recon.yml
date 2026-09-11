@@ -14,6 +14,11 @@ on:
     # 毎日とっておくと「いつ消えたか」が git の履歴に残る。
     - cron: "0 22 * * *"
 
+# 二重に走ると、お互いの結果を押し合うことになるので1本ずつ走らせる
+concurrency:
+  group: shutten
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -41,7 +46,24 @@ jobs:
           git add shutten/data
           if git diff --cached --quiet; then
             echo "変わりなし。今日は何も起きていない"
-          else
-            git commit -m "大店立地法の届出を $(date -u +%Y-%m-%d) の時点でためた"
-            git push
+            exit 0
           fi
+          git commit -m "大店立地法の届出を $(date -u +%Y-%m-%d) の時点でためた"
+
+          # 走っている間に、誰かが別の作業を main に入れていることがある。
+          # そのまま送ると押し戻されて、集めたデータが消えてしまう。
+          # 取り込み直してから送る。何度か試す。
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "送れた"
+              exit 0
+            fi
+            echo "押し戻されたので取り込み直す（${i}回目）"
+            git pull --rebase origin main || {
+              echo "取り込みに失敗した。手で見る必要がある"
+              exit 1
+            }
+            sleep $((i * 3))
+          done
+          echo "5回試したが送れなかった"
+          exit 1
