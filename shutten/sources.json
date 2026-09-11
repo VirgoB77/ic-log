@@ -3,7 +3,8 @@
     "何これ": "大店立地法の届出が出るページの一覧。recon.py がここを順に見に行く",
     "届出先": "大店立地法の届出先は都道府県と政令指定都市。だから兵庫・大阪でも府県だけでは足りず、神戸市・大阪市・堺市が別に要る",
     "enabled": "false にすると取りに行かない。URLが未確認のものはここを false にしてある",
-    "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ"
+    "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ",
+    "整理のしかた": "調べて一覧が無いと分かったものは、消さずに enabled:false にして note に理由と確認日を残す。同じところを何度も調べ直さないため"
   },
   "sources": [
     {
@@ -35,16 +36,16 @@
       "name": "尼崎市 大規模小売店舗立地法",
       "area": "hyogo",
       "url": "https://www.city.amagasaki.hyogo.jp/sangyo/kigyou/kouri/069rittihou.html",
-      "note": "受理は県のはずだが、市が独自に一覧を載せていることがある。確認用",
-      "enabled": true
+      "note": "一覧を持っていなかった。兵庫県のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にあるので、そちらは別途調べる",
+      "enabled": false
     },
     {
       "id": "himeji-city",
       "name": "姫路市 中規模小売店舗の設置",
       "area": "hyogo",
       "url": "https://www.city.himeji.lg.jp/sangyo/0000005793.html",
-      "note": "姫路は1000平米以下の中規模店にも独自条例がある。大店立地法が拾えない層を拾える可能性あり",
-      "enabled": true
+      "note": "中規模小売店舗の要綱と様式はあるが、届出された店の一覧は公開していなかった（2026-09-11の保存ページで確認）",
+      "enabled": false
     },
     {
       "id": "osaka-pref",
@@ -75,8 +76,8 @@
       "name": "高槻市 大規模小売店舗立地法に基づく大阪府への届出一覧",
       "area": "osaka",
       "url": "https://www.city.takatsuki.osaka.jp/soshiki/58/102618.html",
-      "note": "市が府への届出を転載している型。府のページより読みやすい形で出していることがある",
-      "enabled": true
+      "note": "一覧を持っていなかった。関係するリンクが実質ゼロ（2026-09-11の保存ページで確認）。ページが作り変わった可能性がある",
+      "enabled": false
     },
     {
       "id": "yao-city",
@@ -91,15 +92,15 @@
       "name": "吹田市 大規模小売店舗の出店に関する届出",
       "area": "osaka",
       "url": "https://www.city.suita.osaka.jp/sangyo/1018028/1018041/1011521.html",
-      "note": "同上",
-      "enabled": true
+      "note": "一覧を持っていなかった。大阪府のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にある",
+      "enabled": false
     },
     {
       "id": "tokyo-ref",
       "name": "（参考）東京都 届出状況一覧 平成12年度〜",
       "area": "ref",
-      "url": "https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo/8itiran",
-      "note": "対象外だが、20年分を公開している唯一級の例。年間何件出るかの相場を知る用と、一覧ページのお手本として見る",
+      "url": "https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo",
+      "note": "前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている",
       "enabled": true
     }
   ]

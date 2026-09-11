@@ -27,6 +27,9 @@ import re
 import sys
 import urllib.parse
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from xlsx import _serial_to_date as serial_to_date  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, "data", "raw")
 OUT = os.path.join(HERE, "data", "parsed")
@@ -103,6 +106,42 @@ def span_of(s):
     a = to_iso(parts[0])
     b = to_iso(parts[1]) if len(parts) > 1 else None
     return a, b
+
+
+def coerce_date_column(rows, threshold=0.6):
+    """列ごとに「ここは日付の列」と判断して、はみ出したセルを揃える。
+
+    役所のExcelは同じ列でも手打ちのブレがあり、日付書式のセルと、
+    ただの数字（Excelの連番）と、「令和元年６月30日」という文字列が混ざる。
+
+      グルメシティ瓢箪山店 | … | 43901      | 43916
+      ブリスモール瓢箪山店 | … | 44251      | 令和元年６月30日
+      イオン東大阪店      | … | 2021-04-27 | 2021-03-31
+
+    その列の中身の多くが日付なら、残りも日付として読み直す。
+    多くが日付でない列（店舗面積など）は数字のまま触らない。
+    """
+    if not rows:
+        return rows
+    width = max(len(r) for r in rows)
+    out = [list(r) + [""] * (width - len(r)) for r in rows]
+
+    for col in range(width):
+        vals = [(i, out[i][col]) for i in range(len(out)) if out[i][col]]
+        if len(vals) < 3:
+            continue
+        already = sum(1 for _, v in vals if re.fullmatch(r"\d{4}-\d{2}-\d{2}", v))
+        if already / len(vals) < threshold:
+            continue                      # 日付の列ではない
+        for i, v in vals:
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", v):
+                continue
+            fixed = to_iso(v)             # 「令和元年６月30日」など
+            if not fixed and re.fullmatch(r"\d{5}(\.\d+)?", v):
+                fixed = serial_to_date(v)  # Excelの連番のまま残ったもの
+            if fixed:
+                out[i][col] = fixed
+    return out
 
 
 # ---------------------------------------------------------------- 見分ける
