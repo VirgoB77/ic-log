@@ -77,7 +77,7 @@
       "name": "高槻市 大規模小売店舗立地法に基づく大阪府への届出一覧",
       "area": "osaka",
       "url": "https://www.city.takatsuki.osaka.jp/soshiki/58/102618.html",
-      "note": "一覧を持っていなかった。関係するリンクが実質ゼロ（2026-09-11の保存ページで確認）。ページが作り変わった可能性がある",
+      "note": "題が「大規模小売店舗立地法に基づく大阪府への届出一覧」なので一覧に見えるが、中身は『大阪府へ届出がされた後、高槻市で縦覧されます』『大阪府ホームページをご確認ください』の2文だけ。店舗名も公告も意見書も0回（2026-09-11の保存ページで確認）。高槻市は移譲先ではなく大阪府が受理するので、高槻市分は大阪府のデータに入っている。取りに行かなくてよい",
       "enabled": false
     },
     {
@@ -148,9 +148,9 @@
       "id": "kishiwada-city",
       "name": "岸和田市 大店届出",
       "area": "osaka",
-      "url": "https://www.city.kishiwada.osaka.jp/soshiki/43/daitentodokede.html",
-      "enabled": false,
-      "note": "実地で叩いたらホスト名が引けなかった（Name or service not known、2026-09-11）。検索結果から採ったURLだがドメインが違うらしい。正しいURLが分かったら enabled を true に戻す"
+      "url": "https://www.city.kishiwada.lg.jp/page/43-daitentodokede.html",
+      "enabled": true,
+      "note": "利用者が実際に開いて確認したURL。前は検索から拾った www.city.kishiwada.osaka.jp/soshiki/43/... を入れていたが、ドメインもパスも違ってDNSが引けなかった。43 と daitentodokede の部分だけ合っていた"
     },
     {
       "id": "kaizuka-city",
