@@ -5,7 +5,8 @@
     "enabled": "false にすると取りに行かない。URLが未確認のものはここを false にしてある",
     "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ",
     "整理のしかた": "調べて一覧が無いと分かったものは、消さずに enabled:false にして note に理由と確認日を残す。同じところを何度も調べ直さないため",
-    "目次ページ": "入口が目次だけで、実物が1階層下にあることが多い（堺市・和泉市・阪南市・八尾市など）。表が無いと判定されたページは、その先の年度別ページを辿るようにしてある"
+    "目次ページ": "入口が目次だけで、実物が1階層下にあることが多い（堺市・和泉市・阪南市・八尾市など）。表が無いと判定されたページは、その先の年度別ページを辿るようにしてある",
+    "PDF": "PDFそのものが一覧になっている収集先だけ pdf:true にして落とす。兵庫県のように届出1件ごとの資料（1本8MB×44本）を並べているところは落とさない。PDFは2MBまで"
   },
   "sources": [
     {
@@ -61,7 +62,7 @@
       "name": "大阪市 大規模小売店舗立地法 手続き・届出",
       "area": "osaka",
       "url": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
-      "note": "大阪市は政令市なので府とは別に受理する",
+      "note": "Excel 3本（縦覧一覧・届出一覧1.51MB・市内店舗一覧）。URLの組み立ては正しいのに404を返す。大阪府は同じやり方で17本取れているので大阪市固有。Referer を付けて再挑戦中",
       "enabled": true
     },
     {
@@ -142,7 +143,8 @@
       "area": "osaka",
       "url": "https://www.city.osaka-izumi.lg.jp/bizisan/shoukou/rixcchihou/todokedejoukyou/index.html",
       "enabled": true,
-      "note": "移譲市町村。届出状況の一覧ページと判定"
+      "note": "12年分すべてPDF。「届出の概要・縦覧期間等」が58本ある。大阪でいちばん本数が多い",
+      "pdf": true
     },
     {
       "id": "kishiwada-city",
@@ -206,7 +208,8 @@
       "area": "osaka",
       "url": "https://www.city.osakasayama.osaka.jp/sosiki/siminseikatsubu/sangyounigiwaizukuri/4/1/1410228705740.html",
       "enabled": true,
-      "note": "案内ページと見られる。実地で確かめる"
+      "note": "PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体",
+      "pdf": false
     },
     {
       "id": "kumatori-town",
@@ -222,7 +225,8 @@
       "area": "osaka",
       "url": "https://www.city.izumisano.lg.jp/kakuka/seikatsu/shoko/menu/jigyosyo/todokede/1613433836928.html",
       "enabled": true,
-      "note": "案内ページと見られる。実地で確かめる"
+      "note": "PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体",
+      "pdf": false
     },
     {
       "id": "kawachinagano-city",
@@ -230,7 +234,8 @@
       "area": "osaka",
       "url": "https://www.city.kawachinagano.lg.jp/soshiki/16/100545.html",
       "enabled": true,
-      "note": "「縦覧リスト」のPDFが1本だけある。辿る先は0本。PDFを読まないと中身が分からない"
+      "note": "「縦覧リスト」PDFが一覧そのもの。設置者と店舗面積まで入っている",
+      "pdf": true
     },
     {
       "id": "sakai-chukibo",
