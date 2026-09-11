@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-11）
 
-**まとめ: Excel 2件 / PDF 1件 / わからない 5件 / 表 3件**
+**まとめ: Excel 2件 / PDF 2件 / わからない 9件 / 失敗 1件 / 表 12件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 33,897 バイト
+- HTTP 200 / utf-8 / 35,293 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,276 バイト
+- HTTP 200 / utf-8 / 23,277 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -61,23 +61,14 @@
 ### 尼崎市 大規模小売店舗立地法
 
 - URL: https://www.city.amagasaki.hyogo.jp/sangyo/kigyou/kouri/069rittihou.html
-- メモ: 受理は県のはずだが、市が独自に一覧を載せていることがある。確認用
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 36,160 バイト
-- **判定: わからない**
-- 表 0 個 / PDFリンク 0 本 / Excel 0 本
-- 出てきた言葉: 新設 / 変更 / 廃止 / 届出 / 店舗面積
+- メモ: 一覧を持っていなかった。兵庫県のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にあるので、そちらは別途調べる
+- **結果: 取りに行かなかった（一覧を持っていなかった。兵庫県のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にあるので、そちらは別途調べる）**
 
 ### 姫路市 中規模小売店舗の設置
 
 - URL: https://www.city.himeji.lg.jp/sangyo/0000005793.html
-- メモ: 姫路は1000平米以下の中規模店にも独自条例がある。大店立地法が拾えない層を拾える可能性あり
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 73,656 バイト
-- **判定: わからない**
-- 表 0 個 / PDFリンク 1 本 / Excel 0 本
-  - PDF: 姫路市中規模小売店舗出店届出要綱 (pdf、124.63KB) → https://www.city.himeji.lg.jp/sangyo/cmsfiles/contents/0000005/5793/201262610301.pdf
-- 出てきた言葉: 新設 / 変更 / 廃止 / 届出 / 店舗面積 / 開店
+- メモ: 中規模小売店舗の要綱と様式はあるが、届出された店の一覧は公開していなかった（2026-09-11の保存ページで確認）
+- **結果: 取りに行かなかった（中規模小売店舗の要綱と様式はあるが、届出された店の一覧は公開していなかった（2026-09-11の保存ページで確認））**
 
 ### 大阪府 大規模小売店舗立地法
 
@@ -121,56 +112,297 @@
 - 出てきた言葉: 変更 / 縦覧 / 届出 / 店舗面積
 - 年度らしき表記: 平成12年 / 平成19年
 
-### 堺市 大規模小売店舗立地法
+### 堺市 大規模小売店舗の届出状況
 
-- URL: 
-- メモ: 堺市も政令市なので独自に受理するはず。URLが未確認なので止めてある。見つけたらURLを入れて enabled を true に
-- **結果: 取りに行かなかった（堺市も政令市なので独自に受理するはず。URLが未確認なので止めてある。見つけたらURLを入れて enabled を true に）**
+- URL: https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html
+- メモ: 政令市。新設・名称変更・配置変更が届出種別×年度で整理された階層インデックス。長らく空けていた穴
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 13,844 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 新設 / 変更 / 廃止 / 届出
+- 年度らしき表記: 令和8年
 
 ### 高槻市 大規模小売店舗立地法に基づく大阪府への届出一覧
 
 - URL: https://www.city.takatsuki.osaka.jp/soshiki/58/102618.html
-- メモ: 市が府への届出を転載している型。府のページより読みやすい形で出していることがある
+- メモ: 一覧を持っていなかった。関係するリンクが実質ゼロ（2026-09-11の保存ページで確認）。ページが作り変わった可能性がある
+- **結果: 取りに行かなかった（一覧を持っていなかった。関係するリンクが実質ゼロ（2026-09-11の保存ページで確認）。ページが作り変わった可能性がある）**
+
+### 八尾市 大規模小売店舗の届出状況（全年度の入口）
+
+- URL: https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/index.html
+- メモ: 年度別ページを束ねるインデックス。単年度ページは年度が変わると古くなるのでこちらを見る
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,758 バイト
+- HTTP 200 / UTF-8 / 35,236 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
-- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出
-
-### 八尾市 大規模小売店舗の届出状況
-
-- URL: https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/1021603.html
-- メモ: 年度ごとに届出状況を出している。年度別ページの作りを見る参考
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 36,802 バイト
-- **判定: PDF**
-- 表 0 個 / PDFリンク 4 本 / Excel 0 本
-  - PDF: 令和7年度 （PDF 62.7KB） → https://www.city.yao.osaka.jp/_res/projects/default_project/_page_/001/021/603/20251222.pdf
-  - PDF: 竜華スポーツコンプレックス （PDF 108.4KB） → https://www.city.yao.osaka.jp/_res/projects/default_project/_page_/001/021/603/r7-540.pdf
-  - PDF: アクロスプラザ八尾 （PDF 109.0KB） → https://www.city.yao.osaka.jp/_res/projects/default_project/_page_/001/021/603/r7-557.pdf
-  - PDF: フォレストモール八尾 （PDF 106.1KB） → https://www.city.yao.osaka.jp/_res/projects/default_project/_page_/001/021/603/r7-558.pdf
-- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出
+- 出てきた言葉: 変更 / 届出
 - 年度らしき表記: 令和5年 / 令和6年 / 令和7年 / 令和8年
 
 ### 吹田市 大規模小売店舗の出店に関する届出
 
 - URL: https://www.city.suita.osaka.jp/sangyo/1018028/1018041/1011521.html
-- メモ: 同上
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 42,837 バイト
-- **判定: わからない**
-- 表 0 個 / PDFリンク 2 本 / Excel 0 本
-  - PDF: 大規模小売店舗設置に関する協議について（要領概要） （PDF 81.0 KB） → https://www.city.suita.osaka.jp/_res/projects/default_project/_page_/001/011/521/12233103222.pdf
-  - PDF: 吹田市大規模小売店舗設置に関する協議要領 （PDF 120.4 KB） → https://www.city.suita.osaka.jp/_res/projects/default_project/_page_/001/011/521/12233103250.pdf
-- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出 / 店舗面積
+- メモ: 一覧を持っていなかった。大阪府のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にある
+- **結果: 取りに行かなかった（一覧を持っていなかった。大阪府のページへ外部リンクしているだけ（2026-09-11の保存ページで確認）。中規模小売店舗の届出は別にある）**
 
 ### （参考）東京都 届出状況一覧 平成12年度〜
 
-- URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo/8itiran
-- メモ: 対象外だが、20年分を公開している唯一級の例。年間何件出るかの相場を知る用と、一覧ページのお手本として見る
+- URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
+- メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 562,267 バイト
+- HTTP 200 / UTF-8 / 553,224 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 縦覧 / 届出
+- 年度らしき表記: 令和５年 / 令和８年 / 平成12年
+
+### 豊中市 届出状況
+
+- URL: https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.html
+- メモ: 制度解説のindexとは別の「届出状況」専用ページ
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 86,034 バイト
+- **判定: 表**
+- 表 5 個 / PDFリンク 24 本 / Excel 0 本
+- いちばん大きい表: 66 行 × 7 列
+  - 見出しらしき行: 店舗の名称 | 店舗の所在地 | 届出日 | 縦覧期間 | 変更理由 | 変更事項 | 住民等の意見の概要
+  - PDF: 届出概要(PDF:100KB) → https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.files/0612okhozumi.pdf
+  - PDF: 届出概要(PDF:110KB) → https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.files/20240606yunikuro.pdf
+  - PDF: 届出概要(PDF:121KB) → https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.files/0415iontown.pdf
+  - PDF: 届出概要(PDF:119KB) → https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.files/1016sennri.pdf
+  - PDF: 届出概要(PDF:121KB) → https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.files/s15jyoushin0319.pdf
 - 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出
-- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和５年 / 令和８年
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 令和9年
+
+### 箕面市 箕面市の届出状況
+
+- URL: https://www.city.minoh.lg.jp/syoukou/daikibominoh.html
+- メモ: 2市2町（箕面・池田・豊能・能勢）の共同処理で箕面市が幹事。これは箕面市分の届出状況
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 30,612 バイト
+- **判定: 表**
+- 表 6 個 / PDFリンク 1 本 / Excel 0 本
+- いちばん大きい表: 6 行 × 6 列
+  - 見出しらしき行: 店舗の名称 | 店舗の所在地 | 届出日 | 縦覧期限 | 変更事項 | 住民等の意見の概要
+  - PDF: 届出概要（PDF：45KB） → https://www.city.minoh.lg.jp/syoukou/documents/suvland_5-1.pdf
+- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出 / 店舗面積
+- 年度らしき表記: 令和5年 / 令和6年 / 令和7年 / 令和8年
+
+### 枚方市 届出状況
+
+- URL: https://www.city.hirakata.osaka.jp/0000003373.html
+- メモ: アルプラザ枚方・枚方T-SITE・フォレオひらかた等の個別届出が並ぶ。告示PDFも同じ配下
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 88,940 バイト
+- **判定: 表**
+- 表 6 個 / PDFリンク 45 本 / Excel 0 本
+- いちばん大きい表: 65 行 × 6 列
+  - 見出しらしき行: 店舗名称 | 所在地 | 設置者 | 届出日 | 変更事項 | 住民等の意見の概要
+  - PDF: 意見概要 （仮称）KUZUHA MALL 南館 (PDF形式、106.78KB) → https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000003/3373/36543.pdf
+  - PDF: 届出概要 （仮称）枚方市大峰南町物販店舗 (PDF形式、106.76KB) → https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000003/3373/34151.pdf
+  - PDF: 届出概要 （仮称）ドラッグユタカ枚方西招提店 (PDF形式、112.28KB) → https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000003/3373/45787.pdf
+  - PDF: 届出概要 （仮称）ニトリモール枚方 (PDF形式、127.17KB) → https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000003/3373/65207.pdf
+  - PDF: 意見概要 （仮称）ニトリモール枚方 (PDF形式、109.90KB) → https://www.city.hirakata.osaka.jp/cmsfiles/contents/0000003/3373/72084.pdf
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成24年
+
+### 茨木市 届出状況
+
+- URL: https://www.city.ibaraki.osaka.jp/kikou/sangyo/shoukou/menu/daikibotyukibokouritenpo/tensyutsu/48906.html
+- メモ: 届出年月日と縦覧期間つきで案件が載る。サイト改編でパスが移行中の可能性ありとの指摘あり
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 70,044 バイト
+- **判定: 表**
+- 表 6 個 / PDFリンク 0 本 / Excel 0 本
+- いちばん大きい表: 58 行 × 3 列
+  - 見出しらしき行: 名称 | 所在地 | 届出日
+- 出てきた言葉: 新設 / 変更 / 廃止 / 届出 / 店舗面積
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成12年
+
+### 和泉市 届出状況
+
+- URL: https://www.city.osaka-izumi.lg.jp/bizisan/shoukou/rixcchihou/todokedejoukyou/index.html
+- メモ: 移譲市町村。届出状況の一覧ページと判定
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 39,218 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 変更 / 届出
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成25年
+
+### 岸和田市 大店届出
+
+- URL: https://www.city.kishiwada.osaka.jp/soshiki/43/daitentodokede.html
+- メモ: 移譲市町村。届出状況の一覧ページと判定
+- **結果: 取得できなかった — URLError: <urlopen error [Errno -2] Name or service not known>**
+
+### 貝塚市 大店立地法届出状況
+
+- URL: https://www.city.kaizuka.lg.jp/kakuka/sogoseisaku/sangyo/menu/daitenrittihounituite/daitenrittihoutodokedejoukyou.html
+- メモ: 移譲市町村。届出状況の一覧ページと判定
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 51,305 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出 / 店舗面積
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 平成25年 / 平成26年
+
+### 松原市 届出受理等について
+
+- URL: https://www.city.matsubara.lg.jp/docs/page3041.html
+- メモ: コーナン松原市役所前店・イオンタウン松原などの「届出の概要」PDFが配下にある
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 72,751 バイト
+- **判定: 表**
+- 表 1 個 / PDFリンク 37 本 / Excel 0 本
+- いちばん大きい表: 31 行 × 5 列
+  - 見出しらしき行: 区分 | 店舗名称・住所 | 届出日 | 届出書の概要 | 縦覧期間
+			（意見提出期間）
+  - PDF: 意見書様式 (PDFファイル: 41.0KB) → https://www.city.matsubara.lg.jp/fs/1/9/3/0/3/6/_/20130108-120738.pdf
+  - PDF: 届出書概要[50KB pdfファイル] → https://www.city.matsubara.lg.jp/fs/1/9/3/0/3/7/_/20130108-121756.pdf
+  - PDF: 届出書概要[42KB pdfファイル] → https://www.city.matsubara.lg.jp/fs/1/9/3/0/3/8/_/20140225-180711.pdf
+  - PDF: 別表[74KB pdfファイル] → https://www.city.matsubara.lg.jp/fs/1/9/3/0/3/9/_/20140225-180759.pdf
+  - PDF: 届出書概要[83KB pdfファイル] → https://www.city.matsubara.lg.jp/fs/1/9/3/0/4/0/_/20150203-085657.pdf
+- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出 / 店舗面積
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成23年
+
+### 泉南市 届出
+
+- URL: https://www.city.sennan.lg.jp/kakuka/shiminseikatu/sangyoushinkou/shokorodokakari/town/daikibo/todokede/12417.html
+- メモ: 移譲市町村。届出状況の一覧ページと判定
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 44,378 バイト
+- **判定: 表**
+- 表 2 個 / PDFリンク 0 本 / Excel 0 本
+- いちばん大きい表: 3 行 × 8 列
+  - 見出しらしき行: 店舗名称 | 店舗所在地 | 届出日 | 届出の縦覧期間 | 説明会開催日時・場所 | 市民等の意見提出期限 | 市の意見 | 意見の縦覧期間
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出 / 店舗面積
+- 年度らしき表記: 令和8年 / 平成12年
+
+### 阪南市 大規模小売店舗立地法の届出
+
+- URL: https://www.city.hannan.lg.jp/kakuka/mirai/kikaku/daikibokouritennporittihou/index.html
+- メモ: 移譲市町村。届出状況の一覧ページと判定
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 41,290 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 新設 / 変更 / 届出 / 店舗面積 / 開店
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 平成23年 / 平成24年
+
+### 箕面市 2市2町の窓口（池田市・豊能町・能勢町ぶん）
+
+- URL: https://www.city.minoh.lg.jp/syoukou/daikibo.html
+- メモ: 池田市・豊能町・能勢町はここが窓口。案内ページだが届出件数の記載がある。3自治体で同じURLなので1本にまとめた
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 30,294 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 1 本 / Excel 0 本
+  - PDF: 大規模小売店舗の出店等に関する手続き・届出書類等の手引き（PDF：172KB） → https://www.city.minoh.lg.jp/syoukou/documents/r8_minoh_daitentebiki.pdf
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出 / 店舗面積
+
+### 門真市 大規模小売店舗立地法
+
+- URL: https://www.city.kadoma.osaka.jp/soshiki/shiminbunkabu/6/3/4/2484.html
+- メモ: 案内ページと見られる。平成28年度以前は大阪府側にあるとの案内あり。実地で確かめる
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 75,431 バイト
+- **判定: 表**
+- 表 7 個 / PDFリンク 30 本 / Excel 0 本
+- いちばん大きい表: 18 行 × 5 列
+  - 見出しらしき行: 店舗の名称 | 店舗の所在地 | 届出日 | 届出概要、縦覧期間など | 市町村、住民等の意見の概要
+  - PDF: 大規模小売店舗立地法解説リーフレット (PDFファイル: 121.1KB) → https://www.city.kadoma.osaka.jp/material/files/group/14/daiten_01.pdf
+  - PDF: 大規模小売店舗立地法の基本的な手続きの流れ (PDFファイル: 35.6KB) → https://www.city.kadoma.osaka.jp/material/files/group/14/daiten_02.pdf
+  - PDF: 大規模小売店舗立地法の手続きが必要な場合 (PDFファイル: 76.5KB) → https://www.city.kadoma.osaka.jp/material/files/group/14/daikibo_03.pdf
+  - PDF: 大規模小売店舗の出店等に関する手続き・届出書類等の手引き (PDFファイル: 152.0KB) → https://www.city.kadoma.osaka.jp/material/files/group/14/daiten_03.pdf
+  - PDF: 門真市大規模小売店舗立地法運用事務手続要綱 (PDFファイル: 259.5KB) → https://www.city.kadoma.osaka.jp/material/files/group/14/daikibo_05.pdf
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出 / 店舗面積 / 開店
+- 年度らしき表記: 平成19年
+
+### 大阪狭山市 大規模小売店舗立地法
+
+- URL: https://www.city.osakasayama.osaka.jp/sosiki/siminseikatsubu/sangyounigiwaizukuri/4/1/1410228705740.html
+- メモ: 案内ページと見られる。実地で確かめる
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 168,967 バイト
+- **判定: PDF**
+- 表 0 個 / PDFリンク 4 本 / Excel 0 本
+  - PDF: 大規模小売店舗立地法「しおり」 (PDFファイル: 177.4KB) → https://www.city.osakasayama.osaka.jp/material/files/group/31/daitenshiori.pdf
+  - PDF: 出店の手引き (PDFファイル: 300.6KB) → https://www.city.osakasayama.osaka.jp/material/files/group/31/daitentebiki.pdf
+  - PDF: 大阪狭山市大規模小売店舗運用事務手続要綱 (PDFファイル: 142.6KB) → https://www.city.osakasayama.osaka.jp/material/files/group/31/daitenyoukou.pdf
+  - PDF: 大規模小売店舗の出店（変更）に関する様式集 (PDFファイル: 636.7KB) → https://www.city.osakasayama.osaka.jp/material/files/group/31/daitenyoushiki.pdf
+- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出 / 店舗面積 / 開店
+- 年度らしき表記: 平成24年
+
+### 熊取町 大規模小売店舗立地法
+
+- URL: https://www.town.kumatori.lg.jp/soshiki/sangyo_shinko/gyomu/sangyo_shinko/shokogyo/2357.html
+- メモ: 案内ページと見られる。実地で確かめる
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 69,185 バイト
+- **判定: 表**
+- 表 1 個 / PDFリンク 2 本 / Excel 0 本
+- いちばん大きい表: 3 行 × 6 列
+  - 見出しらしき行: 届出書類名 | 店舗の名称及び所在地 | 届出日 | 届出書の提出理由 | 縦覧期間 | 提出期限
+  - PDF: 大規模小売店舗立地法の出店等に関する手続き (PDFファイル: 319.0KB) → https://www.town.kumatori.lg.jp/material/files/group/14/tebikinew.pdf
+  - PDF: 大規模小売店舗立地法手続要綱 (PDFファイル: 83.9KB) → https://www.town.kumatori.lg.jp/material/files/group/14/tetudukiyoukou.pdf
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出 / 店舗面積 / 開店
+- 年度らしき表記: 令和4年 / 平成19年 / 平成25年 / 平成27年
+
+### 泉佐野市 届出
+
+- URL: https://www.city.izumisano.lg.jp/kakuka/seikatsu/shoko/menu/jigyosyo/todokede/1613433836928.html
+- メモ: 案内ページと見られる。実地で確かめる
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 61,437 バイト
+- **判定: PDF**
+- 表 0 個 / PDFリンク 4 本 / Excel 0 本
+  - PDF: 事務の流れ（フロー図） (PDFファイル: 81.9KB) → https://www.city.izumisano.lg.jp/material/files/group/23/furo20180401.pdf
+  - PDF: 泉佐野市大規模小売店舗立地法手続要綱 (PDFファイル: 163.0KB) → https://www.city.izumisano.lg.jp/material/files/group/23/daitenyoukou.pdf
+  - PDF: 大規模小売店舗の出店等に関する手続き・届出書類等の手引き (PDFファイル: 337.6KB) → https://www.city.izumisano.lg.jp/material/files/group/23/daitentebiki.pdf
+  - PDF: 手引き（別表） (PDFファイル: 78.8KB) → https://www.city.izumisano.lg.jp/material/files/group/23/daitentebikibeppyou.pdf
+- 出てきた言葉: 新設 / 変更 / 廃止 / 縦覧 / 届出 / 店舗面積 / 開店
+- 年度らしき表記: 平成30年
+
+### 河内長野市 大規模小売店舗立地法のお知らせ
+
+- URL: https://www.city.kawachinagano.lg.jp/soshiki/16/100545.html
+- メモ: 縦覧の枠はあるが現在掲載ゼロと見られる。届出が出れば載る想定なので取り続ける
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 17,313 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 2 本 / Excel 0 本
+  - PDF: 縦覧リスト [PDFファイル／62KB] → https://www.city.kawachinagano.lg.jp/uploaded/attachment/48096.pdf
+  - PDF: 意見書（PDF） [PDFファイル／88KB] → https://www.city.kawachinagano.lg.jp/uploaded/attachment/39098.pdf
+- 出てきた言葉: 新設 / 変更 / 縦覧 / 届出
+
+### 堺市 中規模小売店舗の届出状況
+
+- URL: https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/chukouritenpo/chukiboichiran.html
+- メモ: 中規模で一覧を公開している数少ない例。大店立地法が拾えない1000平米以下を拾える
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 13,858 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 届出
+- 年度らしき表記: 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年
+
+### 八尾市 中規模小売店舗
+
+- URL: https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012003.html
+- メモ: 同上。一覧の可能性ありとの判定。実地で確かめる
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 52,137 バイト
+- **判定: 表**
+- 表 1 個 / PDFリンク 0 本 / Excel 0 本
+- いちばん大きい表: 98 行 × 5 列
+  - 見出しらしき行: 年度 | 届出日 | 店舗名称 | 所在地（地番） | 店舗面積
+- 出てきた言葉: 変更 / 届出 / 店舗面積
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和8年 / 平成12年 / 平成13年
+
+### 岬町 大規模小売店舗立地法
+
+- URL: 
+- メモ: 移譲先だが、大店立地法の届出ページが検索で見つからなかった（2026-09-11調査）。届出実績が無い可能性
+- **結果: 取りに行かなかった（移譲先だが、大店立地法の届出ページが検索で見つからなかった（2026-09-11調査）。届出実績が無い可能性）**
