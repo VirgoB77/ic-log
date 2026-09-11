@@ -1,7 +1,7 @@
 {
   "_meta": {
     "何これ": "大店立地法の届出が出るページの一覧。recon.py がここを順に見に行く",
-    "届出先": "大店立地法の届出先は都道府県と政令指定都市。だから兵庫・大阪でも府県だけでは足りず、神戸市・大阪市・堺市が別に要る",
+    "届出先": "大店立地法の届出先は都道府県と政令指定都市。さらに大阪府は20市町村に事務を移譲しているため、府のページだけでは大阪の大半が抜ける。移譲先は府のページの「地域名｜移譲市町村」の表から読み取った",
     "enabled": "false にすると取りに行かない。URLが未確認のものはここを false にしてある",
     "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ",
     "整理のしかた": "調べて一覧が無いと分かったものは、消さずに enabled:false にして note に理由と確認日を残す。同じところを何度も調べ直さないため"
@@ -65,11 +65,11 @@
     },
     {
       "id": "sakai-city",
-      "name": "堺市 大規模小売店舗立地法",
+      "name": "堺市 大規模小売店舗の届出状況",
       "area": "osaka",
-      "url": "",
-      "note": "堺市も政令市なので独自に受理するはず。URLが未確認なので止めてある。見つけたらURLを入れて enabled を true に",
-      "enabled": false
+      "url": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html",
+      "note": "政令市。新設・名称変更・配置変更が届出種別×年度で整理された階層インデックス。長らく空けていた穴",
+      "enabled": true
     },
     {
       "id": "takatsuki-city",
@@ -81,10 +81,10 @@
     },
     {
       "id": "yao-city",
-      "name": "八尾市 大規模小売店舗の届出状況",
+      "name": "八尾市 大規模小売店舗の届出状況（全年度の入口）",
       "area": "osaka",
-      "url": "https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/1021603.html",
-      "note": "年度ごとに届出状況を出している。年度別ページの作りを見る参考",
+      "url": "https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/index.html",
+      "note": "年度別ページを束ねるインデックス。単年度ページは年度が変わると古くなるのでこちらを見る",
       "enabled": true
     },
     {
@@ -102,6 +102,158 @@
       "url": "https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo",
       "note": "前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている",
       "enabled": true
+    },
+    {
+      "id": "toyonaka-city",
+      "name": "豊中市 届出状況",
+      "area": "osaka",
+      "url": "https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.html",
+      "enabled": true,
+      "note": "制度解説のindexとは別の「届出状況」専用ページ"
+    },
+    {
+      "id": "minoh-city",
+      "name": "箕面市 箕面市の届出状況",
+      "area": "osaka",
+      "url": "https://www.city.minoh.lg.jp/syoukou/daikibominoh.html",
+      "enabled": true,
+      "note": "2市2町（箕面・池田・豊能・能勢）の共同処理で箕面市が幹事。これは箕面市分の届出状況"
+    },
+    {
+      "id": "hirakata-city",
+      "name": "枚方市 届出状況",
+      "area": "osaka",
+      "url": "https://www.city.hirakata.osaka.jp/0000003373.html",
+      "enabled": true,
+      "note": "アルプラザ枚方・枚方T-SITE・フォレオひらかた等の個別届出が並ぶ。告示PDFも同じ配下"
+    },
+    {
+      "id": "ibaraki-city",
+      "name": "茨木市 届出状況",
+      "area": "osaka",
+      "url": "https://www.city.ibaraki.osaka.jp/kikou/sangyo/shoukou/menu/daikibotyukibokouritenpo/tensyutsu/48906.html",
+      "enabled": true,
+      "note": "届出年月日と縦覧期間つきで案件が載る。サイト改編でパスが移行中の可能性ありとの指摘あり"
+    },
+    {
+      "id": "izumi-city",
+      "name": "和泉市 届出状況",
+      "area": "osaka",
+      "url": "https://www.city.osaka-izumi.lg.jp/bizisan/shoukou/rixcchihou/todokedejoukyou/index.html",
+      "enabled": true,
+      "note": "移譲市町村。届出状況の一覧ページと判定"
+    },
+    {
+      "id": "kishiwada-city",
+      "name": "岸和田市 大店届出",
+      "area": "osaka",
+      "url": "https://www.city.kishiwada.osaka.jp/soshiki/43/daitentodokede.html",
+      "enabled": true,
+      "note": "移譲市町村。届出状況の一覧ページと判定"
+    },
+    {
+      "id": "kaizuka-city",
+      "name": "貝塚市 大店立地法届出状況",
+      "area": "osaka",
+      "url": "https://www.city.kaizuka.lg.jp/kakuka/sogoseisaku/sangyo/menu/daitenrittihounituite/daitenrittihoutodokedejoukyou.html",
+      "enabled": true,
+      "note": "移譲市町村。届出状況の一覧ページと判定"
+    },
+    {
+      "id": "matsubara-city",
+      "name": "松原市 届出受理等について",
+      "area": "osaka",
+      "url": "https://www.city.matsubara.lg.jp/docs/page3041.html",
+      "enabled": true,
+      "note": "コーナン松原市役所前店・イオンタウン松原などの「届出の概要」PDFが配下にある"
+    },
+    {
+      "id": "sennan-city",
+      "name": "泉南市 届出",
+      "area": "osaka",
+      "url": "https://www.city.sennan.lg.jp/kakuka/shiminseikatu/sangyoushinkou/shokorodokakari/town/daikibo/todokede/12417.html",
+      "enabled": true,
+      "note": "移譲市町村。届出状況の一覧ページと判定"
+    },
+    {
+      "id": "hannan-city",
+      "name": "阪南市 大規模小売店舗立地法の届出",
+      "area": "osaka",
+      "url": "https://www.city.hannan.lg.jp/kakuka/mirai/kikaku/daikibokouritennporittihou/index.html",
+      "enabled": true,
+      "note": "移譲市町村。届出状況の一覧ページと判定"
+    },
+    {
+      "id": "minoh-2shi2cho",
+      "name": "箕面市 2市2町の窓口（池田市・豊能町・能勢町ぶん）",
+      "area": "osaka",
+      "url": "https://www.city.minoh.lg.jp/syoukou/daikibo.html",
+      "enabled": true,
+      "note": "池田市・豊能町・能勢町はここが窓口。案内ページだが届出件数の記載がある。3自治体で同じURLなので1本にまとめた"
+    },
+    {
+      "id": "kadoma-city",
+      "name": "門真市 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "https://www.city.kadoma.osaka.jp/soshiki/shiminbunkabu/6/3/4/2484.html",
+      "enabled": true,
+      "note": "案内ページと見られる。平成28年度以前は大阪府側にあるとの案内あり。実地で確かめる"
+    },
+    {
+      "id": "osakasayama-city",
+      "name": "大阪狭山市 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "https://www.city.osakasayama.osaka.jp/sosiki/siminseikatsubu/sangyounigiwaizukuri/4/1/1410228705740.html",
+      "enabled": true,
+      "note": "案内ページと見られる。実地で確かめる"
+    },
+    {
+      "id": "kumatori-town",
+      "name": "熊取町 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "https://www.town.kumatori.lg.jp/soshiki/sangyo_shinko/gyomu/sangyo_shinko/shokogyo/2357.html",
+      "enabled": true,
+      "note": "案内ページと見られる。実地で確かめる"
+    },
+    {
+      "id": "izumisano-city",
+      "name": "泉佐野市 届出",
+      "area": "osaka",
+      "url": "https://www.city.izumisano.lg.jp/kakuka/seikatsu/shoko/menu/jigyosyo/todokede/1613433836928.html",
+      "enabled": true,
+      "note": "案内ページと見られる。実地で確かめる"
+    },
+    {
+      "id": "kawachinagano-city",
+      "name": "河内長野市 大規模小売店舗立地法のお知らせ",
+      "area": "osaka",
+      "url": "https://www.city.kawachinagano.lg.jp/soshiki/16/100545.html",
+      "enabled": true,
+      "note": "縦覧の枠はあるが現在掲載ゼロと見られる。届出が出れば載る想定なので取り続ける"
+    },
+    {
+      "id": "sakai-chukibo",
+      "name": "堺市 中規模小売店舗の届出状況",
+      "area": "chukibo",
+      "url": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/chukouritenpo/chukiboichiran.html",
+      "enabled": true,
+      "note": "中規模で一覧を公開している数少ない例。大店立地法が拾えない1000平米以下を拾える"
+    },
+    {
+      "id": "yao-chukibo",
+      "name": "八尾市 中規模小売店舗",
+      "area": "chukibo",
+      "url": "https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012003.html",
+      "enabled": true,
+      "note": "同上。一覧の可能性ありとの判定。実地で確かめる"
+    },
+    {
+      "id": "misaki-town",
+      "name": "岬町 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "",
+      "enabled": false,
+      "note": "移譲先だが、大店立地法の届出ページが検索で見つからなかった（2026-09-11調査）。届出実績が無い可能性"
     }
   ]
 }
