@@ -200,6 +200,8 @@ FOLLOW_TOPIC = re.compile(r"大規模|中規模|小売|大店|届出状況|縦�
 FOLLOW_SKIP = re.compile(r"手引|様式|ワード|エクセル|\.doc|\.xls|要綱|申請書|"
                          r"お問い合わせ|電子申請|検索|一覧表示|ダウンロード")
 FOLLOW_MAX = 12          # 1つの目次から辿る数の上限。相手に迷惑をかけないため
+FOLLOW_MAX_2 = 4         # 2階層目はさらに絞る
+FOLLOW_BUDGET = 32       # 1つの収集先で辿る総数の上限。堺市が25本必要だったので余裕をみた
 
 
 def analyze(text, base_url):
@@ -298,12 +300,17 @@ def report_one(src, res):
         cap = res.get("follow_capped")
         note = f"（{cap[0]}本見つかったが上限{cap[1]}本まで）" if cap else ""
         out.append(f"- **この先を辿った: {len(res['followed'])}本** {note}")
-        for label, a2, err in res["followed"]:
+        for label, a2, depth, err in res["followed"]:
+            mark = "  " * depth
             if err:
-                out.append(f"  - {label[:34]} … 取れなかった（{err}）")
+                out.append(f"  -{mark}{label[:34]} … 取れなかった（{err}）")
             else:
                 extra = f" {a2['biggest']['rows']}行×{a2['biggest']['cols']}列" if a2.get("biggest") else ""
-                out.append(f"  - {label[:34]} … **{a2['verdict']}**{extra}")
+                pdf = f" PDF{a2['pdf_count']}本" if a2.get("pdf_count") else ""
+                out.append(f"  -{mark}{label[:34]} … **{a2['verdict']}**{extra}{pdf}")
+        if res.get("budget_hit"):
+            b, left = res["budget_hit"]
+            out.append(f"  - （上限{b}本に達した。まだ{left}本残っている）")
     out.append("")
     return "\n".join(out)
 
@@ -372,25 +379,52 @@ def main():
 
         # 入口が目次だけのことが多い（堺市・和泉市・阪南市など）。
         # 表が無いページはその先を見に行く。
+        #
+        # さらに、その先も目次のことがある。堺市は
+        #   入口 → 届出の種類（新設・廃止・承継…） → 年度
+        # と2段になっていて、1段だけでは廃止の中身に届かない。
         if res["analysis"]["verdict"] == "わからない":
-            cand = follow_links(text, src["url"])
             res["followed"] = []
-            if len(cand) > FOLLOW_MAX:
-                res["follow_capped"] = (len(cand), FOLLOW_MAX)
-                cand = cand[:FOLLOW_MAX]
-            for url2, label in cand:
+            known = {src["url"]}          # 見たか、これから見る予定のURL
+            queue = []
+
+            def enqueue(links, depth, limit):
+                """まだ見ていないものだけを、上限まで列に並べる。
+
+                親ページへ戻るリンクが上限の枠を食うと、年度が取りこぼされる。
+                数える前に既知のものを除いておく。
+                """
+                fresh = [(u, lb) for u, lb in links if u not in known]
+                for u, lb in fresh[:limit]:
+                    known.add(u)
+                    queue.append((u, lb, depth))
+                return len(fresh)
+
+            n_found = enqueue(follow_links(text, src["url"]), 1, FOLLOW_MAX)
+            if n_found > FOLLOW_MAX:
+                res["follow_capped"] = (n_found, FOLLOW_MAX)
+
+            while queue and len(res["followed"]) < FOLLOW_BUDGET:
+                url2, label, depth = queue.pop(0)
                 time.sleep(WAIT)
                 try:
                     st2, ct2, raw2 = fetch(url2)
                 except Exception as e:
-                    res["followed"].append((label, None, f"{type(e).__name__}"))
+                    res["followed"].append((label, None, depth, f"{type(e).__name__}"))
                     continue
                 t2, _ = to_text(raw2, ct2)
                 a2 = analyze(t2, url2)
                 with open(os.path.join(d, f"{today}--{slug_of(url2)}.html"), "wb") as f:
                     f.write(raw2)
-                res["followed"].append((label, a2, None))
+                res["followed"].append((label, a2, depth, None))
                 counts[a2["verdict"]] = counts.get(a2["verdict"], 0) + 1
+
+                # ここも目次だったら、もう一段だけ潜る
+                if a2["verdict"] == "わからない" and depth < 2:
+                    enqueue(follow_links(t2, url2), depth + 1, FOLLOW_MAX_2)
+
+            if len(res["followed"]) >= FOLLOW_BUDGET and queue:
+                res["budget_hit"] = (FOLLOW_BUDGET, len(queue))
 
         lines.append(report_one(src, res))
         time.sleep(WAIT)
