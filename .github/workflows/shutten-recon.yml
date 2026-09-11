@@ -1,4 +1,4 @@
-name: 大店立地法ページの偵察・保存
+name: 大店立地法の届出をためる
 
 # 手で押して動かす。あわせて毎日1回、朝に自動で走る。
 # 自動を止めたいときは、下の schedule の3行を消す。
@@ -26,6 +26,9 @@ jobs:
       - name: 偵察する
         run: python3 shutten/recon.py ${{ github.event.inputs.area }}
 
+      - name: 届出を取り出す
+        run: python3 shutten/parse.py
+
       - name: 結果をしまう
         run: |
           git config user.name  "github-actions[bot]"
@@ -34,6 +37,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "変わりなし。今日は何も起きていない"
           else
-            git commit -m "大店立地法のページを $(date -u +%Y-%m-%d) の時点で保存した"
+            git commit -m "大店立地法の届出を $(date -u +%Y-%m-%d) の時点でためた"
             git push
           fi
