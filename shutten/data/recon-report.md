@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,293 バイト
+- HTTP 200 / utf-8 / 35,292 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,276 バイト
+- HTTP 200 / utf-8 / 23,277 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -96,7 +96,7 @@
 ### 大阪市 大規模小売店舗立地法 手続き・届出
 
 - URL: https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html
-- メモ: 大阪市は政令市なので府とは別に受理する
+- メモ: Excel 3本（縦覧一覧・届出一覧1.51MB・市内店舗一覧）。URLの組み立ては正しいのに404を返す。大阪府は同じやり方で17本取れているので大阪市固有。Referer を付けて再挑戦中
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 45,619 バイト
 - **判定: Excel**
@@ -187,7 +187,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,228 バイト
+- HTTP 200 / UTF-8 / 554,753 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -270,7 +270,7 @@
 ### 和泉市 届出状況
 
 - URL: https://www.city.osaka-izumi.lg.jp/bizisan/shoukou/rixcchihou/todokedejoukyou/index.html
-- メモ: 移譲市町村。届出状況の一覧ページと判定
+- メモ: 12年分すべてPDF。「届出の概要・縦覧期間等」が58本ある。大阪でいちばん本数が多い
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 39,218 バイト
 - **判定: わからない**
@@ -412,7 +412,7 @@
 ### 大阪狭山市 大規模小売店舗立地法
 
 - URL: https://www.city.osakasayama.osaka.jp/sosiki/siminseikatsubu/sangyounigiwaizukuri/4/1/1410228705740.html
-- メモ: 案内ページと見られる。実地で確かめる
+- メモ: PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 168,967 バイト
 - **判定: PDF**
@@ -442,7 +442,7 @@
 ### 泉佐野市 届出
 
 - URL: https://www.city.izumisano.lg.jp/kakuka/seikatsu/shoko/menu/jigyosyo/todokede/1613433836928.html
-- メモ: 案内ページと見られる。実地で確かめる
+- メモ: PDFが4本あるが、実地で見たら「手引き」「要綱」「しおり」「フロー図」だけで届出の一覧ではなかった（2026-09-11）。一覧を出していない自治体
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 61,437 バイト
 - **判定: PDF**
@@ -457,7 +457,7 @@
 ### 河内長野市 大規模小売店舗立地法のお知らせ
 
 - URL: https://www.city.kawachinagano.lg.jp/soshiki/16/100545.html
-- メモ: 「縦覧リスト」のPDFが1本だけある。辿る先は0本。PDFを読まないと中身が分からない
+- メモ: 「縦覧リスト」PDFが一覧そのもの。設置者と店舗面積まで入っている
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 17,313 バイト
 - **判定: わからない**
