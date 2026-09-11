@@ -227,7 +227,14 @@ def analyze(text, base_url):
     found = [k for k in KEYWORDS if k in text]
     years = sorted(set(re.findall(r"(?:令和|平成)\s*\d{1,2}\s*年", text)))[:8]
 
-    if real and real[0]["rows"] >= 3:
+    # 3行以上を「表」としていたが、それだと中身のある小さい表を見落とす。
+    # 堺市の令和4年度の廃止は「見出し＋1件」の2行で、その1件が
+    # 泉ヶ丘地区センター専門店街の閉店という立派な中身だった。
+    # 行数ではなく、見出しに届出らしい項目が並んでいるかで見る。
+    header_is_real = bool(real) and any(
+        re.search(r"店舗|届出|縦覧|名称|所在地|設置者|面積|廃止|開店", h)
+        for h in real[0]["header"])
+    if real and (real[0]["rows"] >= 3 or (real[0]["rows"] >= 2 and header_is_real)):
         verdict = "表"
     elif excels:
         verdict = "Excel"
