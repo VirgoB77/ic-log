@@ -22,16 +22,30 @@ PNS = "{http://schemas.openxmlformats.org/package/2006/relationships}"
 BUILTIN_DATE = set(range(14, 23)) | set(range(45, 48))
 
 
+def _si_text(si):
+    """文字列ひとつ分のテキストを取り出す。
+
+    Excel はセルに「ふりがな」を一緒に持っている（<rPh>）。
+    中の <t> をまとめて拾うと「イオン東大阪店ヒガシオオサカテン」のように
+    本文のうしろにふりがなが繋がってしまうので、ふりがなは飛ばす。
+    """
+    parts = []
+    for child in si:
+        if child.tag == f"{NS}t":
+            parts.append(child.text or "")
+        elif child.tag == f"{NS}r":          # 書式が変わるところで切れた本文
+            for t in child.findall(f"{NS}t"):
+                parts.append(t.text or "")
+        # <rPh>（ふりがな）と <phoneticPr>（ふりがなの設定）は本文ではない
+    return "".join(parts)
+
+
 def _shared_strings(z):
     try:
         root = ET.fromstring(z.read("xl/sharedStrings.xml"))
     except KeyError:
         return []
-    out = []
-    for si in root.findall(f"{NS}si"):
-        # <si> の下に <t> が散らばることがあるので全部つなぐ
-        out.append("".join(t.text or "" for t in si.iter(f"{NS}t")))
-    return out
+    return [_si_text(si) for si in root.findall(f"{NS}si")]
 
 
 def _date_styles(z):
@@ -133,7 +147,7 @@ def read(path, max_rows=100000):
                     v = c.find(f"{NS}v")
                     if t == "inlineStr":
                         is_ = c.find(f"{NS}is")
-                        val = "".join(x.text or "" for x in is_.iter(f"{NS}t")) if is_ is not None else ""
+                        val = _si_text(is_) if is_ is not None else ""
                     elif t == "s":
                         k = int(v.text) if v is not None and v.text else -1
                         val = shared[k] if 0 <= k < len(shared) else ""
