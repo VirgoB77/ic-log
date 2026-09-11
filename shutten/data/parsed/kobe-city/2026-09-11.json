@@ -1,0 +1,760 @@
+[
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2026-05-29",
+  "notified_raw": "2026年5月29日",
+  "store": "（仮称）i you Town 須磨",
+  "review_from": "2026-06-04",
+  "review_to": "2026-10-04",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1141.pdf",
+   "https://www.city.kobe.lg.jp/documents/10974/koutsu1141.pdf",
+   "https://www.city.kobe.lg.jp/documents/10974/souon1141.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "fb2fc53acfba"
+ },
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2026-02-18",
+  "notified_raw": "2026年2月18日",
+  "store": "神戸市役所本庁舎2号館再整備事業 民間商業施設（仮称）",
+  "review_from": "2026-03-06",
+  "review_to": "2026-07-06",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "593851e74956"
+ },
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2026-01-16",
+  "notified_raw": "2026年1月16日",
+  "store": "（仮称）神戸市灘区新在家北町計画",
+  "review_from": "2026-02-03",
+  "review_to": "2026-06-03",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "d89df25c197c"
+ },
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2026-01-05",
+  "notified_raw": "2026年1月5日",
+  "store": "（仮称）ドラッグコスモス御影店",
+  "review_from": "2026-02-03",
+  "review_to": "2026-06-03",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "43dddea5b16e"
+ },
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2025-09-30",
+  "notified_raw": "2025年9月30日",
+  "store": "（仮称）ハローズ本多聞店",
+  "review_from": "2025-10-21",
+  "review_to": "2026-02-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "2015d313516d"
+ },
+ {
+  "article": "法第5条第1項",
+  "kind": "新設",
+  "notified_on": "2025-06-30",
+  "notified_raw": "2025年6月30日",
+  "store": "（仮称）ドラッグコスモス伊川谷有瀬店",
+  "review_from": "2025-07-15",
+  "review_to": "2026-11-17",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "c632677c3cf6"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-07-27",
+  "notified_raw": "2026年7月27日",
+  "store": "イオンモール神戸北",
+  "review_from": "2026-08-25",
+  "review_to": "2026-12-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1152.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "fd2845240670"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-07-21",
+  "notified_raw": "2026年7月21日",
+  "store": "神戸御幸ビル商業施設",
+  "review_from": "2026-07-25",
+  "review_to": "2026-11-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1151.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "b12af42533ef"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-07-16",
+  "notified_raw": "2026年7月16日",
+  "store": "コープデイズ神戸西",
+  "review_from": "2026-07-25",
+  "review_to": "2026-11-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1150.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "ad508e6ce7cd"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-07-13",
+  "notified_raw": "2026年7月13日",
+  "store": "神戸ダイヤモンドビル",
+  "review_from": "2026-07-25",
+  "review_to": "2026-11-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1149.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "72d5cd8cf085"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-06-22",
+  "notified_raw": "2026年6月22日",
+  "store": "クロスモール須磨",
+  "review_from": "2026-07-03",
+  "review_to": "2026-11-03",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1148.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "3552f409b6c2"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-06-12",
+  "notified_raw": "2026年6月12日",
+  "store": "イズミヤショッピングセンター神戸玉津",
+  "review_from": "2026-06-25",
+  "review_to": "2026-10-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1147.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "f15e66e8e6f2"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-06-11",
+  "notified_raw": "2026年6月11日",
+  "store": "イズミヤショッピングセンター西神戸",
+  "review_from": "2026-06-25",
+  "review_to": "2026-10-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1145.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "d838edd097e7"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-06-11",
+  "notified_raw": "2026年6月11日",
+  "store": "藤原台地区センター エコール・リラ",
+  "review_from": "2026-06-25",
+  "review_to": "2026-10-25",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1144.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "b980f2d655ff"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-29",
+  "notified_raw": "2026年5月29日",
+  "store": "イオン長田南ショッピングセンター",
+  "review_from": "2026-06-04",
+  "review_to": "2026-10-04",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1143.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "0eac1f97d4a1"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-28",
+  "notified_raw": "2026年5月28日",
+  "store": "BRANCH神戸学園都市",
+  "review_from": "2026-06-04",
+  "review_to": "2026-10-04",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1140.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "a16104d7efa5"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-28",
+  "notified_raw": "2026年5月28日",
+  "store": "フレスポ舞子坂",
+  "review_from": "2026-06-04",
+  "review_to": "2026-10-04",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1139.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "f77731944d80"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-25",
+  "notified_raw": "2026年5月25日",
+  "store": "イオンモール神戸南",
+  "review_from": "2026-06-04",
+  "review_to": "2026-10-04",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1138.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "16d4ff4fe213"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-14",
+  "notified_raw": "2026年5月14日",
+  "store": "かすがプラザ",
+  "review_from": "2026-05-21",
+  "review_to": "2026-09-21",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1137.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "67b0f1de8f8c"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-14",
+  "notified_raw": "2026年5月14日",
+  "store": "かりばプラザ",
+  "review_from": "2026-05-21",
+  "review_to": "2026-09-21",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1136.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "f03040f924ec"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-05-11",
+  "notified_raw": "2026年5月11日",
+  "store": "ホームセンターコーナン神戸新在家店",
+  "review_from": "2026-05-14",
+  "review_to": "2026-09-14",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1135.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "ad0aca65543b"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-03-31",
+  "notified_raw": "2026年3月31日",
+  "store": "レバンテ垂水1番館",
+  "review_from": "2026-05-14",
+  "review_to": "2026-09-14",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1134.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "09135ccf3f19"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-03-31",
+  "notified_raw": "2026年3月31日",
+  "store": "ウエステ垂水",
+  "review_from": "2026-05-14",
+  "review_to": "2026-09-14",
+  "docs": [
+   "https://www.city.kobe.lg.jp/documents/10974/todoke1131.pdf"
+  ],
+  "source": "kobe-city",
+  "key": "6a5157c6c141"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-03-19",
+  "notified_raw": "2026年3月19日",
+  "store": "ロイヤルホームセンター東灘魚崎",
+  "review_from": "2026-04-24",
+  "review_to": "2026-08-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "43fe7310fc80"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-03-13",
+  "notified_raw": "2026年3月13日",
+  "store": "三井アウトレットパークマリンピア神戸",
+  "review_from": "2026-04-24",
+  "review_to": "2026-08-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "f364833090d5"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-03-03",
+  "notified_raw": "2026年3月3日",
+  "store": "コストコホールセール神戸倉庫店",
+  "review_from": "2026-04-24",
+  "review_to": "2026-08-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "de9063a6f470"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-02-02",
+  "notified_raw": "2026年2月2日",
+  "store": "御影クラッセ",
+  "review_from": "2026-03-31",
+  "review_to": "2026-07-31",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "999104bf604b"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-26",
+  "notified_raw": "2026年1月26日",
+  "store": "ミント神戸（神戸新聞会館ビル）",
+  "review_from": "2026-03-24",
+  "review_to": "2026-07-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "d96fb04a190d"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-20",
+  "notified_raw": "2026年1月20日",
+  "store": "神戸三田プレミアム・アウトレット",
+  "review_from": "2026-04-24",
+  "review_to": "2026-08-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "11f13a19cec5"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-20",
+  "notified_raw": "2026年1月20日",
+  "store": "サザンモール六甲B612、サザンモール六甲PLUS+",
+  "review_from": "2026-03-31",
+  "review_to": "2026-07-31",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "547b87c9e8d3"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-15",
+  "notified_raw": "2026年1月15日",
+  "store": "MEGAドン・キホーテ神戸学園都市店",
+  "review_from": "2026-02-24",
+  "review_to": "2026-06-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "ea73712d7e86"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-15",
+  "notified_raw": "2026年1月15日",
+  "store": "MEGAドン・キホーテ神戸本店",
+  "review_from": "2026-02-24",
+  "review_to": "2026-06-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "7cd00449e75a"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-05",
+  "notified_raw": "2026年1月5日",
+  "store": "HAT神戸・灘の浜1番館・2番館",
+  "review_from": "2026-02-24",
+  "review_to": "2026-06-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "810f52488247"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2026-01-05",
+  "notified_raw": "2026年1月5日",
+  "store": "藤原台地区センター エコール・リラ",
+  "review_from": "2026-03-03",
+  "review_to": "2026-07-03",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "d7a0e57ea362"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-12-22",
+  "notified_raw": "2025年12月22日",
+  "store": "ホームセンターコーナン神戸新在家店",
+  "review_from": "2026-01-20",
+  "review_to": "2026-05-20",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "a0ab9c5e886c"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-12-09",
+  "notified_raw": "2025年12月9日",
+  "store": "西鈴神鉄ビル",
+  "review_from": "2026-01-20",
+  "review_to": "2026-05-20",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "816981f2f986"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-12-09",
+  "notified_raw": "2025年12月9日",
+  "store": "北鈴神鉄駅ビル",
+  "review_from": "2026-01-20",
+  "review_to": "2026-05-20",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "4231ce3ed299"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-12-09",
+  "notified_raw": "2025年12月9日",
+  "store": "神鉄ビル",
+  "review_from": "2026-01-20",
+  "review_to": "2026-05-20",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "25941bd934c6"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-12-09",
+  "notified_raw": "2025年12月9日",
+  "store": "ビバタウン板宿ビル",
+  "review_from": "2026-01-13",
+  "review_to": "2026-05-13",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "73ceb646dfc5"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-11-19",
+  "notified_raw": "2025年11月19日",
+  "store": "イオンジェームス山店",
+  "review_from": "2025-12-23",
+  "review_to": "2026-04-23",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "112f06d33d96"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-11-19",
+  "notified_raw": "2025年11月19日",
+  "store": "ビバタウン板宿ビル",
+  "review_from": "2025-12-23",
+  "review_to": "2026-04-23",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "2c2c90b3f135"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-11-07",
+  "notified_raw": "2025年11月7日",
+  "store": "スーパーマルハチ鹿の子台店",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "767d2a8c5ac1"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-11-04",
+  "notified_raw": "2025年11月4日",
+  "store": "小束山複合商業施設",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "330ae98e153a"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-10-29",
+  "notified_raw": "2025年10月29日",
+  "store": "ショッピングプラザ エスパ星陵台",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "d631cb2067e6"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-10-29",
+  "notified_raw": "2025年10月29日",
+  "store": "ステップガーデン藤原台",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "1685e29a49c7"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-10-23",
+  "notified_raw": "2025年10月23日",
+  "store": "高浜モザイク",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "efe2973b1792"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-10-23",
+  "notified_raw": "2025年10月23日",
+  "store": "ハーバーランド ダイヤニッセイビル",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "1c2436b3007b"
+ },
+ {
+  "article": "法第6条第1項",
+  "kind": "変更",
+  "notified_on": "2025-10-21",
+  "notified_raw": "2025年10月21日",
+  "store": "イズミヤショッピングセンター神戸玉津",
+  "review_from": "2025-11-25",
+  "review_to": "2026-03-18",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "ae4d0c503aab"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2026-03-31",
+  "notified_raw": "2026年3月31日",
+  "store": "ウエステ垂水",
+  "review_from": "2026-04-24",
+  "review_to": "2026-08-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "87f5a6aef044"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-10-29",
+  "notified_raw": "2025年10月29日",
+  "store": "サザンモール六甲B612、サザンモール六甲PLUS+",
+  "review_from": "2025-11-11",
+  "review_to": "2026-03-11",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "1de8bc6cf681"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-10-27",
+  "notified_raw": "2025年10月27日",
+  "store": "イズミヤショッピングセンター神戸玉津",
+  "review_from": "2025-11-11",
+  "review_to": "2026-03-11",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "639659e475c2"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-08-29",
+  "notified_raw": "2025年8月29日",
+  "store": "（仮称）マルアイ長田店",
+  "review_from": "2025-09-10",
+  "review_to": "2026-01-13",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "cc613970ddef"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-08-22",
+  "notified_raw": "2025年8月22日",
+  "store": "ロイヤルホームセンター東灘魚崎",
+  "review_from": "2025-09-10",
+  "review_to": "2026-01-13",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "7cb72476de88"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-07-07",
+  "notified_raw": "2025年7月7日",
+  "store": "（仮称）ハローズ伊川谷店",
+  "review_from": "2025-07-29",
+  "review_to": "2026-12-01",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "d1efd8c06eb6"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-06-27",
+  "notified_raw": "2025年6月27日",
+  "store": "三井アウトレットパークマリンピア神戸",
+  "review_from": "2025-07-08",
+  "review_to": "2025-11-10",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "2e5564140aa8"
+ },
+ {
+  "article": "法第6条第2項",
+  "kind": "変更",
+  "notified_on": "2025-06-04",
+  "notified_raw": "2025年6月4日",
+  "store": "ダイエーグルメシティ小束山店",
+  "review_from": "2025-06-24",
+  "review_to": "2025-10-24",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "b07a78ee8032"
+ },
+ {
+  "article": "法第11条第3項",
+  "kind": "承継",
+  "notified_on": "2026-06-11",
+  "notified_raw": "2026年6月11日",
+  "store": "イズミヤショッピングセンター神戸玉津",
+  "review_from": null,
+  "review_to": null,
+  "docs": [],
+  "source": "kobe-city",
+  "key": "e8f66f601778"
+ },
+ {
+  "article": "法第11条第3項",
+  "kind": "承継",
+  "notified_on": "2026-05-29",
+  "notified_raw": "2026年5月29日",
+  "store": "イオン長田南ショッピングセンター",
+  "review_from": null,
+  "review_to": null,
+  "docs": [],
+  "source": "kobe-city",
+  "key": "5f384ae7c6ec"
+ },
+ {
+  "article": "法第11条第3項",
+  "kind": "承継",
+  "notified_on": "2026-03-31",
+  "notified_raw": "2026年3月31日",
+  "store": "レバンテ垂水1番館",
+  "review_from": null,
+  "review_to": null,
+  "docs": [],
+  "source": "kobe-city",
+  "key": "f3f94c60e463"
+ },
+ {
+  "article": "法第11条第3項",
+  "kind": "承継",
+  "notified_on": "2026-03-31",
+  "notified_raw": "2026年3月31日",
+  "store": "ウエステ垂水",
+  "review_from": null,
+  "review_to": null,
+  "docs": [],
+  "source": "kobe-city",
+  "key": "9542e7c30446"
+ }
+]
