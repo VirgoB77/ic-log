@@ -1421,6 +1421,16 @@ function rowHtml(c){
 }
 var CKEY = 'meishi.checkcrop', checkCrop = false;
 try { checkCrop = localStorage.getItem(CKEY) === '1'; } catch(e){}
+/* ===== Claude（Anthropic の API）で読む =====
+   鍵はこの端末の中（localStorage）だけに置く。GitHub にも、このページの中にも入れない。
+   鍵を入れていないときは、いままでどおり端末の中だけで読む */
+var AKEY = 'meishi.apikey', apiKey = '';
+var AUSE = 'meishi.useapi', useApi = true;
+try { apiKey = localStorage.getItem(AKEY) || ''; } catch(e){}
+try { useApi = localStorage.getItem(AUSE) !== '0'; } catch(e){}
+var API_URL = 'https://api.anthropic.com/v1/messages';
+var API_MODEL = 'claude-opus-5';
+function apiOn(){ return !!(apiKey && useApi); }
 var VKEY = 'meishi.view', view = 'grid';
 try { if (localStorage.getItem(VKEY) === 'list') view = 'list'; } catch(e){}
 function applyView(){
@@ -1546,6 +1556,106 @@ function ocrProgress(m){
   var pct = Math.max(4, Math.round((m.progress || 0) * 100));
   bar.firstChild.style.width = (m.status === 'recognizing text' ? pct : Math.min(40, pct)) + '%';
   rd.textContent = (names[m.status] || '準備しています') + '　' + pct + '%';
+}
+/* 絵を JPEG にして、base64 の文字列にする（API に送る形） */
+function canvasToB64(cv, maxSide, q){
+  var c = toCanvas(cv, maxSide || 1500);
+  var url = c.toDataURL('image/jpeg', q || 0.82);
+  return { media_type:'image/jpeg', data:url.split(',')[1] };
+}
+/* API を1回呼ぶ。鍵はヘッダで送る（ブラウザから直に呼ぶので、その許可のヘッダも付ける） */
+function claudeCall(body, timeoutMs){
+  var ctl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  var t = setTimeout(function(){ if (ctl) ctl.abort(); }, timeoutMs || 120000);
+  return fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify(body),
+    signal: ctl ? ctl.signal : undefined
+  }).then(function(r){
+    clearTimeout(t);
+    return r.text().then(function(txt){
+      var j = null;
+      try { j = JSON.parse(txt); } catch(e){}
+      if (!r.ok){
+        var msg = (j && j.error && j.error.message) ? j.error.message : ('HTTP ' + r.status);
+        if (r.status === 401) msg = '鍵がちがうか、使えなくなっている';
+        if (r.status === 429) msg = '短い時間に呼びすぎ。少し待つ';
+        if (r.status >= 500) msg = 'Anthropic 側が混んでいる';
+        var e2 = new Error(msg); e2.status = r.status; throw e2;
+      }
+      if (j && j.stop_reason === 'refusal') throw new Error('Claude が読み取りを断った');
+      return j;
+    });
+  }, function(err){
+    clearTimeout(t);
+    throw new Error(err && err.name === 'AbortError' ? '時間がかかりすぎた' : '通信できなかった');
+  });
+}
+function claudeText(j){
+  var out = '';
+  ((j && j.content) || []).forEach(function(b){ if (b && b.type === 'text') out += b.text; });
+  return out.trim();
+}
+/* 名刺の絵を送って、欄ごとに分けて返してもらう */
+var CARD_FIELDS = ['name','kana','company','dept','title','tel','mobile','email','url','addr'];
+function cardSchema(){
+  var pr = { rotate: { type:'integer', enum:[0, 90, 180, 270],
+    description:'文字がまっすぐになるまで、絵を時計回りに何度まわすか' } };
+  CARD_FIELDS.forEach(function(k){ pr[k] = { type:'string' }; });
+  return { type:'object', properties:pr, required:['rotate'].concat(CARD_FIELDS), additionalProperties:false };
+}
+var CARD_PROMPT =
+  'この画像は日本の名刺です。書いてある内容だけを読み取って、指定の形で返してください。\n' +
+  '・name … その人の氏名。姓と名のあいだは半角スペース1つ。会社名・部署・肩書き・標語・ロゴ・資格や免許の番号は入れない。\n' +
+  '・kana … 氏名のふりがな（書いてあるときだけ）。\n' +
+  '・company … 会社名。「株式会社」なども省かずに。支店名や部署は company に入れず dept へ。\n' +
+  '・dept … 部署。title … 肩書き。\n' +
+  '・tel … 固定電話。mobile … 携帯。FAX は入れない。数字はハイフン区切り。\n' +
+  '・email … メールアドレス。url … サイト。\n' +
+  '・addr … 郵便番号と住所。「〒655-0852 神戸市…」のように1行で。\n' +
+  '・rotate … 文字がまっすぐになるまで、この絵を時計回りに何度まわすか。\n' +
+  '読み取れない欄は空の文字列にしてください。推測で埋めないこと。';
+function claudeReadCard(card){
+  var img = canvasToB64(card, 1500, 0.82);
+  return claudeCall({
+    model: API_MODEL,
+    max_tokens: 2000,
+    output_config: { format: { type:'json_schema', schema: cardSchema() } },
+    messages: [{ role:'user', content: [
+      { type:'image', source:{ type:'base64', media_type:img.media_type, data:img.data } },
+      { type:'text', text: CARD_PROMPT }
+    ]}]
+  }).then(function(j){
+    var o = null;
+    try { o = JSON.parse(claudeText(j)); } catch(e){ throw new Error('返事を読めなかった'); }
+    if (!o || typeof o !== 'object') throw new Error('返事を読めなかった');
+    var got = {};
+    CARD_FIELDS.forEach(function(k){ got[k] = String(o[k] == null ? '' : o[k]).trim(); });
+    got._rotate = [0, 90, 180, 270].indexOf(o.rotate) >= 0 ? o.rotate : 0;
+    return got;
+  });
+}
+/* 写真の一部を切り出して、そこの文字だけ読んでもらう（押して読み直すとき） */
+function claudeReadSpot(cv, bb){
+  var c = document.createElement('canvas');
+  var w = Math.max(1, Math.round(bb.x1 - bb.x0)), h = Math.max(1, Math.round(bb.y1 - bb.y0));
+  c.width = w; c.height = h;
+  c.getContext('2d').drawImage(cv, bb.x0, bb.y0, w, h, 0, 0, w, h);
+  var img = canvasToB64(c, 1000, 0.85);
+  return claudeCall({
+    model: API_MODEL,
+    max_tokens: 300,
+    messages: [{ role:'user', content: [
+      { type:'image', source:{ type:'base64', media_type:img.media_type, data:img.data } },
+      { type:'text', text: '名刺の一部です。ここに書かれている文字だけを、そのまま返してください。説明や引用符は付けないこと。読めないときは空で返してください。' }
+    ]}]
+  }, 60000).then(function(j){ return claudeText(j).replace(/[\s　]+/g, ' ').trim(); });
 }
 function medianH(lines){
   var hs = lines.filter(function(L){ return L.c >= 40 && L.h > 0; }).map(function(L){ return L.h; }).sort(function(a, b){ return a - b; });
@@ -1760,6 +1870,14 @@ function readSpot(ev){
   }
   if (bb.x1 - bb.x0 < 8 || bb.y1 - bb.y0 < 8) return;
   busy(true, 'そこを読んでいます…');
+  if (lastOcr.api){                                   /* Claude に、その部分だけ読ませる */
+    claudeReadSpot(cv, bb).then(function(t){
+      busy(false);
+      if (!t){ toast('読めなかった'); return; }
+      showSpot(t);
+    }, function(err){ busy(false); toast(err && err.message ? err.message : '読めなかった'); });
+    return;
+  }
   /* 大きさを2通りで読んで、確からしいほうを採る（社名の「株式会社」だけ小さい、などに備える） */
   var best = hit && hit.c >= 60 ? { t:hit.t, c:hit.c } : null;   /* 最初に読めていた文字も候補に */
   rereadLine(lastOcr.w, cv, bb, '7', 130).then(function(alt){
@@ -1794,8 +1912,47 @@ function showSpot(t){
     });
   });
 }
+/* 鍵を入れていれば Claude に読ませる。入れていない・うまくいかないときは端末の中で読む */
 function runOcr(img){
+  if (!apiOn()) return runLocalOcr(img);
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
+  lastOcr = null;
+  if ($('s-read')) $('s-read').textContent = 'Claude が読んでいます…';
+  if ($('s-bar')) $('s-bar').firstChild.style.width = '35%';
+  claudeReadCard(pendCard || img).then(function(got){
+    if (!$('s-name')) return;
+    /* 文字が横倒しなら、しまう写真もまっすぐに直す */
+    if (got._rotate && pendCard){
+      pendOrient = (pendOrient + got._rotate) % 360; pendOriented = true;
+      buildPend();
+      if ($('s-img')) $('s-img').src = pend.full;
+    }
+    if ($('s-bar')) $('s-bar').hidden = true;
+    var cv = forOcr(pendCard || img);
+    lastOcr = { lines:[], cv:cv, w:null, col:null, medH:Math.round(cv.height * 0.05), api:true };
+    var seen = {}, cand = [];
+    [got.name, got.company, got.dept, got.title].forEach(function(t){
+      t = trim(t); if (t && !seen[t]){ seen[t] = 1; cand.push(t); }
+    });
+    pendCand = cand;
+    setCands();
+    fillFrom(got);
+    var any = got.name || got.company || got.tel || got.email;
+    $('s-read').textContent = any ? 'Claude が読んだ。ちがうところは直す。写真の文字を押すと、そこだけ読み直せる。'
+                                  : 'うまく読めなかった。写真の名前を押すと、そこだけ読み直す。';
+    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
+                                   : '写真は残るので、名前だけ入れておけばよい。') +
+      (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
+  }, function(err){
+    if (!$('s-read')) return;
+    /* うまくいかなかったら、そのわけを出してから、端末の中の読み取りに切りかえる */
+    runLocalOcr(img, 'Claude で読めなかった（' + esc(err && err.message ? err.message : '理由不明') +
+                     '）。いまは端末の中で読んでいます。');
+  });
+}
+function runLocalOcr(img, note){
+  if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false;
+                    $('s-err').innerHTML = note ? '<div class="warn">' + note + '</div>' : ''; }
   var pre = Promise.resolve();
   if (!pendOriented && img === pendCard){
     pre = getWorker().then(function(w){
@@ -2496,6 +2653,18 @@ function openSettings(){
     '<button class="btn" id="g-bk-lite">文字だけ保存（軽い）</button>' +
     '<label for="g-restore">バックアップから復元</label>' +
     '<input type="file" id="g-restore" accept=".json,application/json">' +
+    '<label for="g-key">Claude で読む（読み取りの精度が上がる）</label>' +
+    '<p class="hint" style="margin-top:0">Anthropic の Claude に名刺の写真を送って読ませる。端末の中で読むより正確。' +
+    '鍵（APIキー）を入れたときだけ使う。空にすれば、いままでどおり端末の中だけで読む。</p>' +
+    '<p class="hint"><b>写真がインターネットに出る。</b>人からもらった名刺を外に出したくないときは、空のままにしておくこと。<br>' +
+    '鍵は<b>この端末の中だけ</b>に置く。GitHub にも、このページの中にも入らない。<br>' +
+    '名刺1枚あたり、ざっくり2〜3円かかる（Anthropic の請求）。</p>' +
+    '<input type="password" id="g-key" placeholder="sk-ant-… を貼る" autocomplete="off" spellcheck="false">' +
+    '<div class="row"><button class="btn" id="g-key-save">保存する</button>' +
+    '<button class="btn" id="g-key-test">つながるか試す</button>' +
+    '<button class="btn" id="g-key-clear">消す</button></div>' +
+    '<p class="hint" id="g-key-state"></p>' +
+    '<label class="opt"><input type="checkbox" id="g-api-on"> Claude で読む（切ると端末の中で読む）</label>' +
     '<label>文字を読む準備</label>' +
     '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込む。' +
     'ここで先にすませておくと、外で撮るときに待たない。一度すめば次からは要らない。</p>' +
@@ -2540,6 +2709,45 @@ function openSettings(){
         progressCb = null;
         if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めなかった。電波のあるところでもう一度。';
       });
+    });
+    /* 鍵は伏せ字で出す。貼り直すときだけ全部を書きかえる */
+    var kst = $('g-key-state');
+    function keyMask(){ return apiKey ? (apiKey.slice(0, 7) + '…' + apiKey.slice(-4)) : ''; }
+    function showKeyState(msg){
+      if (!$('g-key-state')) return;
+      $('g-key-state').textContent = msg != null ? msg
+        : (apiKey ? '鍵が入っている（' + keyMask() + '）。' : '鍵はまだ入っていない。端末の中だけで読む。');
+    }
+    showKeyState();
+    $('g-api-on').checked = useApi;
+    $('g-api-on').addEventListener('change', function(){
+      useApi = this.checked;
+      try { localStorage.setItem(AUSE, useApi ? '1' : '0'); } catch(e){}
+      showKeyState(useApi ? null : 'いまは切ってある。端末の中だけで読む。');
+    });
+    $('g-key-save').addEventListener('click', function(){
+      var v = trim($('g-key').value);
+      if (!v){ showKeyState('貼ってから押す。'); return; }
+      apiKey = v;
+      useApi = true;                                   /* 貼ったら使う状態にする */
+      try { localStorage.setItem(AKEY, apiKey); localStorage.setItem(AUSE, '1'); } catch(e){}
+      if ($('g-api-on')) $('g-api-on').checked = true;
+      $('g-key').value = '';
+      showKeyState('保存した（' + keyMask() + '）。この端末の中だけに置いてある。');
+    });
+    $('g-key-clear').addEventListener('click', function(){
+      apiKey = ''; $('g-key').value = '';
+      try { localStorage.removeItem(AKEY); } catch(e){}
+      showKeyState('消した。端末の中だけで読む。');
+    });
+    $('g-key-test').addEventListener('click', function(){
+      var v = trim($('g-key').value) || apiKey;
+      if (!v){ showKeyState('先に鍵を貼る。'); return; }
+      var keep = apiKey; apiKey = v;
+      showKeyState('試しています…');
+      claudeCall({ model:API_MODEL, max_tokens:16, messages:[{ role:'user', content:'ping' }] }, 30000)
+        .then(function(){ showKeyState('つながった。この鍵で読める。'); },
+              function(err){ apiKey = keep; showKeyState('つながらなかった：' + (err && err.message ? err.message : '理由不明')); });
     });
     $('g-check').checked = checkCrop;
     $('g-check').addEventListener('change', function(){

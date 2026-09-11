@@ -1,0 +1,8 @@
+# APIキーなど、外に出してはいけないもの
+.env
+.env.*
+!.env.example
+
+# OSが作るゴミ
+.DS_Store
+Thumbs.db
