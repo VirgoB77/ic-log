@@ -119,6 +119,15 @@ header .sp{flex:1}
 .pic-big{display:block;width:100%;padding:0;border:1px solid var(--rule);border-radius:13px;overflow:hidden;
   background:#0c0b0a;margin-top:14px;cursor:zoom-in}
 .pic-big img{width:100%;display:block}
+.map{margin:14px 0 4px}
+.map iframe{width:100%;height:220px;border:1px solid var(--rule);border-radius:13px;display:block;background:var(--field)}
+.map .mapoff{margin:0 0 8px}
+.maplink{display:block;text-align:center;text-decoration:none;margin-top:8px}
+.pick{margin:8px 0 4px;padding:10px 12px;border:1px solid var(--rule);border-radius:13px;background:var(--card)}
+.pickhd{font-size:13px;font-weight:700;margin:0 0 8px}
+.pick .hint{margin:8px 0 0}
+.wait{margin:18px 0 4px;padding:2px 0 0;border-top:1px solid var(--rule)}
+.waithd{font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:.02em;margin:12px 0 2px}
 .spot{margin:8px 0 4px;padding:9px 11px;border:1px solid var(--rule);border-radius:11px;background:var(--card)}
 .spot .spot-t{font-size:19px;font-weight:700;line-height:1.35;margin-bottom:6px;word-break:break-all}
 .spot .chips{margin-top:0}
@@ -242,7 +251,6 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
   <div id="cards"></div>
   <div id="none" hidden></div>
 
-  <p class="credit">写真も記録もこの端末の中だけ。文字を読むのも端末の中で行います。</p>
 </div>
 
 <div class="cam" id="cam" hidden>
@@ -255,7 +263,7 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
     <video id="cam-video" playsinline muted autoplay></video>
     <canvas class="ov" id="cam-ov"></canvas>
     <div class="box" id="cam-box"></div>
-    <p class="tip" id="cam-tip">名刺を枠のあたりに。四隅を見つけて止まったら、自動で撮ります</p>
+    <p class="tip" id="cam-tip">名刺を枠に合わせてください。四隅を見つけて静止すると、自動で撮ります</p>
   </div>
   <div class="ctl">
     <button class="side" id="cam-pick">写真から選ぶ</button>
@@ -393,7 +401,17 @@ function norm(s){
 }
 
 /* ===================== 名刺 ===================== */
-var F = ['name','kana','company','dept','title','tel','mobile','email','url','addr','met','where','memo'];
+var F = ['name','kana','company','dept','title','tel','mobile','email','url','addr','kind','met','where','memo'];
+/* 名刺に書いてある住所そのままで地図を出す（支店の名刺なら支店の住所のまま） */
+function mapQuery(c){ return trim(c.addr); }
+function mapsAppUrl(c){
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mapQuery(c));
+}
+function mapEmbedUrl(c){
+  if (!mapKey) return '';
+  return 'https://www.google.com/maps/embed/v1/place?key=' + encodeURIComponent(mapKey) +
+         '&q=' + encodeURIComponent(mapQuery(c)) + '&language=ja&region=JP&zoom=16';
+}
 function fullName(c){ return trim(c.name) || (trim(c.company) ? trim(c.company) : '名前がまだ'); }
 function orgLine(c){ return [trim(c.company), trim(c.dept), trim(c.title)].filter(Boolean).join(' '); }
 function matches(c, q){
@@ -851,7 +869,7 @@ function orientScore(w, cv){
 function autoOrient(w, card){
   /* 横長に切れていても、縦書きレイアウトの名刺は文字が横倒しなので、3方向とも試す。
      同点なら正位置（回さない）を優先する */
-  var small = forOcr(card, 1000), best = { k:0, s:-1 }, chain = Promise.resolve();
+  var small = forOcr(card, 640), best = { k:0, s:-1 }, chain = Promise.resolve();
   [0, 1, 3].forEach(function(k){
     chain = chain.then(function(){ return orientScore(w, rotCanvasK(small, k)); })
       .then(function(sc){ if (sc > best.s * 1.15) best = { k:k, s:sc }; });
@@ -1428,6 +1446,8 @@ var AKEY = 'meishi.apikey', apiKey = '';
 var AUSE = 'meishi.useapi', useApi = true;
 try { apiKey = localStorage.getItem(AKEY) || ''; } catch(e){}
 try { useApi = localStorage.getItem(AUSE) !== '0'; } catch(e){}
+var MKEY = 'meishi.mapkey', mapKey = '';
+try { mapKey = localStorage.getItem(MKEY) || ''; } catch(e){}
 var API_URL = 'https://api.anthropic.com/v1/messages';
 var API_MODEL = 'claude-opus-5';
 function apiOn(){ return !!(apiKey && useApi); }
@@ -1452,15 +1472,15 @@ function renderCards(){
   applyView();
   if (!db.cards.length){
     none.hidden = false;
-    none.innerHTML = '<p class="empty">まだ1枚も入っていない。<br>' +
-      '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみる。<br>' +
-      '名前も会社も電話も、写真から自分で読みとる。</p>';
+    none.innerHTML = '<p class="empty">まだ1枚も入っていません。<br>' +
+      '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみてください。<br>' +
+      '名前も会社も電話も、写真から読み取ります。</p>';
   } else if (!list.length){
     none.hidden = false;
-    none.innerHTML = '<p class="empty">見つからなかった。<br>ことばを減らすか、ひらがなだけで探してみる。</p>';
+    none.innerHTML = '<p class="empty">見つかりませんでした。<br>ことばを減らすか、ひらがなだけで探してみてください。</p>';
   } else {
-    $('count').textContent = (q ? list.length + '枚 見つかった' : '新しい順') +
-      (view === 'list' ? '（メモまで出る）' : '');
+    $('count').textContent = (q ? list.length + '枚 見つかりました' : '新しい順') +
+      (view === 'list' ? '（メモまで表示）' : '');
     none.hidden = true;
   }
 }
@@ -1475,8 +1495,16 @@ var pendOrient = 0;      /* 時計回りに何度まわせば正位置か（0/90
 var pendOriented = false;
 var pendCand = [];      /* 読み取った文字の候補 */
 var touched = {};       /* 人が手で直した欄は、読み直しても上書きしない */
-var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','where','memo'];
+var SF = ['name','kana','company','dept','title','tel','mobile','email','url','addr','kind','where','memo'];
 
+function recentValues(key, n){
+  var seen = {}, out = [];
+  for (var i = 0; i < db.cards.length && out.length < n; i++){
+    var w = trim(db.cards[i][key]);
+    if (w && !seen[w]){ seen[w] = 1; out.push(w); }
+  }
+  return out;
+}
 function recentWheres(n){
   var seen = {}, out = [];
   var sorted = db.cards.slice().sort(function(a, b){ return b.ts - a.ts; });
@@ -1487,10 +1515,13 @@ function recentWheres(n){
   return out;
 }
 function saveSheetHtml(){
-  var wh = recentWheres(5).map(function(w){
-    return '<button class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+  function chipsOf(list){
+    return list.map(function(w){
+      return '<button class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+  }
+  var wh = chipsOf(recentWheres(5)), kd = chipsOf(recentValues('kind', 5));
   return '<h2>新しい名刺</h2>' +
-    '<p class="lead" id="s-lead">写真から文字を読んでいます。ちがうところは直せます。</p>' +
+    '<p class="lead" id="s-lead">写真から文字を読んでいます。読み取りを待つあいだに、区分・会った場所・メモを入力できます。</p>' +
     '<button class="pic-big" id="s-pic"><img id="s-img" alt="いま撮った名刺"></button>' +
     '<div class="row" style="margin-top:8px">' +
       '<button class="btn" id="s-crop">切り直す</button>' +
@@ -1500,11 +1531,24 @@ function saveSheetHtml(){
     '<div class="spot" id="s-spot" hidden></div>' +
     '<div id="s-err"></div>' +
     '<label for="s-name">名前</label>' +
-    '<input type="text" class="name-in" id="s-name" placeholder="読めなければ手で入れる" autocomplete="off">' +
+    '<input type="text" class="name-in" id="s-name" placeholder="手で入力できます" autocomplete="off">' +
     '<div class="chips" id="s-cand-name"></div>' +
     '<label for="s-company">会社</label>' +
     '<input type="text" id="s-company" autocomplete="off">' +
     '<div class="chips" id="s-cand-co"></div>' +
+    /* ここは読み取りを待つあいだに入力できる。読み取りの結果で上書きされない */
+    '<div class="wait" id="s-wait">' +
+      '<p class="waithd">読み取りを待つあいだに入力できます</p>' +
+      '<label for="s-kind">区分</label>' +
+      (kd ? '<div class="chips" id="s-kind-chips">' + kd + '</div>' : '') +
+      '<input type="text" id="s-kind" placeholder="例: 取引先" autocomplete="off">' +
+      '<label for="s-where">会った場所</label>' +
+      (wh ? '<div class="chips" id="s-where-chips">' + wh + '</div>' : '') +
+      '<input type="text" id="s-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">' +
+      '<label for="s-memo">メモ</label>' +
+      '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのことでした。"></textarea>' +
+      '<p class="hint">会った日は今日（' + esc(fmtDate(today())) + '）が入ります。</p>' +
+    '</div>' +
     '<details class="more" id="s-more"><summary>電話・メール・住所など<span class="got" id="s-got"></span></summary>' +
       '<div class="half"><div><label for="s-tel">電話</label><input type="tel" id="s-tel" autocomplete="off"></div>' +
       '<div><label for="s-mobile">携帯</label><input type="tel" id="s-mobile" autocomplete="off"></div></div>' +
@@ -1515,12 +1559,7 @@ function saveSheetHtml(){
       '<label for="s-url">サイト</label><input type="text" id="s-url" autocomplete="off">' +
       '<label for="s-kana">よみ</label><input type="text" id="s-kana" autocomplete="off">' +
     '</details>' +
-    '<label for="s-where">どこで会った</label>' +
-    (wh ? '<div class="chips" id="s-where-chips">' + wh + '</div>' : '') +
-    '<input type="text" id="s-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">' +
-    '<label for="s-memo">ひとことメモ</label>' +
-    '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのこと。"></textarea>' +
-    '<button class="btn primary" id="s-save">名刺箱にしまう</button>' +
+    '<button class="btn primary" id="s-save">保存する</button>' +
     '<button class="btn danger" id="s-cancel">やめる</button>';
 }
 function setCands(){
@@ -1540,7 +1579,7 @@ function fillFrom(got){
   ['tel','mobile','email','dept','title','addr','url','kana'].forEach(function(k){
     if ($('s-' + k) && trim($('s-' + k).value)) n++;
   });
-  $('s-got').textContent = n ? '（' + n + '件 入りました）' : '';
+  $('s-got').textContent = n ? '（' + n + '件 読み取りました）' : '';
   if (n && !$('s-more').open) $('s-more').open = false;
 }
 function ocrProgress(m){
@@ -1873,9 +1912,9 @@ function readSpot(ev){
   if (lastOcr.api){                                   /* Claude に、その部分だけ読ませる */
     claudeReadSpot(cv, bb).then(function(t){
       busy(false);
-      if (!t){ toast('読めなかった'); return; }
+      if (!t){ toast('読み取れませんでした'); return; }
       showSpot(t);
-    }, function(err){ busy(false); toast(err && err.message ? err.message : '読めなかった'); });
+    }, function(err){ busy(false); toast(err && err.message ? err.message : '読み取れませんでした'); });
     return;
   }
   /* 大きさを2通りで読んで、確からしいほうを採る（社名の「株式会社」だけ小さい、などに備える） */
@@ -1887,9 +1926,9 @@ function readSpot(ev){
     if (alt && alt.t && (!best || alt.c > best.c)) best = alt;
     busy(false);
     var t = best && best.t ? best.t.replace(/^[\s　|｜\[\]!:;・.,、。]+/, '').trim() : '';
-    if (!t){ toast('読めなかった'); return; }
+    if (!t){ toast('読み取れませんでした'); return; }
     showSpot(t);
-  }, function(){ busy(false); toast('読めなかった'); });
+  }, function(){ busy(false); toast('読み取れませんでした'); });
 }
 function showSpot(t){
   var box = $('s-spot');
@@ -1917,7 +1956,7 @@ function runOcr(img){
   if (!apiOn()) return runLocalOcr(img);
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
   lastOcr = null;
-  if ($('s-read')) $('s-read').textContent = 'Claude が読んでいます…';
+  if ($('s-read')) $('s-read').textContent = 'Claude が読み取っています…';
   if ($('s-bar')) $('s-bar').firstChild.style.width = '35%';
   claudeReadCard(pendCard || img).then(function(got){
     if (!$('s-name')) return;
@@ -1938,19 +1977,23 @@ function runOcr(img){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? 'Claude が読んだ。ちがうところは直す。写真の文字を押すと、そこだけ読み直せる。'
-                                  : 'うまく読めなかった。写真の名前を押すと、そこだけ読み直す。';
-    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
-                                   : '写真は残るので、名前だけ入れておけばよい。') +
-      (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
+    $('s-read').textContent = any ? 'Claude で読み取りました。ちがうところは直してください。写真の文字を押すと、そこだけ読み直せます。'
+                                  : 'うまく読み取れませんでした。写真の名前を押すと、そこだけ読み直せます。';
+    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べています。'
+                                   : '写真は残りますので、名前だけ入力してください。') +
+      (pendCropped ? '' : '　名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。');
   }, function(err){
     if (!$('s-read')) return;
     /* うまくいかなかったら、そのわけを出してから、端末の中の読み取りに切りかえる */
     runLocalOcr(img, 'Claude で読めなかった（' + esc(err && err.message ? err.message : '理由不明') +
-                     '）。いまは端末の中で読んでいます。');
+                     '）。いまは端末の中で読み取っています。');
   });
 }
+/* かかった時間の内訳。?ocr= を付けて開いたときだけ記録する（ふだんは何もしない） */
+function tmark(s){ if (OCRBASE){ (window.__meishiT = window.__meishiT || []).push({ s:s, t:Math.round(performance.now()) }); } }
 function runLocalOcr(img, note){
+  if (OCRBASE) window.__meishiT = [];
+  tmark('はじめ');
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false;
                     $('s-err').innerHTML = note ? '<div class="warn">' + note + '</div>' : ''; }
   var pre = Promise.resolve();
@@ -1959,6 +2002,7 @@ function runLocalOcr(img, note){
       if ($('s-read')) $('s-read').textContent = '向きを確かめています…';
       return autoOrient(w, pendCard);
     }).then(function(k){
+      tmark('向きの判定');
       pendOriented = true;
       if (OCRBASE) window.__meishiOrient = k;
       if (k){ pendOrient = (pendOrient + k*90) % 360; buildPend(); if ($('s-img')) $('s-img').src = pend.full; }
@@ -1966,9 +2010,10 @@ function runLocalOcr(img, note){
   }
   lastOcr = null;
   pre.then(function(){ return readCard(pendCard || img, ocrProgress); }).then(function(res){
+    tmark('3回の読み取り');
     var lines = res.lines;
     if ($('s-read')) $('s-read').textContent = '大きな文字を確かめています…';
-    return bandReread(res).then(function(){ return res; });
+    return bandReread(res).then(function(){ tmark('帯の読み直し'); return res; });
   }).then(function(res){
     var lines = res.lines, got = parseCard(lines, res.cv.width), extra = [];
     if ($('s-read')) $('s-read').textContent = '名前と会社を確かめています…';
@@ -2054,6 +2099,7 @@ function runLocalOcr(img, note){
       if (rom){ got.name = rom.t.replace(/[\s　]+/g, ' ').trim(); extra.push(got.name); }
     });
     return chain.then(function(){
+      tmark('名前と会社の読み直し');
       lastOcr = { lines:lines, cv:res.cv, w:res.w, col:mainColumn(lines), medH:medianH(lines) };
       if (OCRBASE) window.__meishiDebug = { lines:lines, got:got, extra:extra };
       return { lines:lines, got:got, extra:extra };
@@ -2070,18 +2116,18 @@ function runLocalOcr(img, note){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? '読めた。ちがうところは直す。写真の文字を押すと、そこだけ読み直せる。'
-                                  : '文字をうまく読めなかった。写真の名前を押すと、そこだけ読み直す。';
-    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べてある。'
-                                   : '写真は残るので、名前だけ入れておけばよい。') +
-      (pendCropped ? '' : '　名刺の枠を見つけられなかった。「切り直す」で四隅を合わせると読みやすくなる。');
+    $('s-read').textContent = any ? '読み取りました。ちがうところは直してください。写真の文字を押すと、そこだけ読み直せます。'
+                                  : 'うまく読み取れませんでした。写真の名前を押すと、そこだけ読み直せます。';
+    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べています。'
+                                   : '写真は残りますので、名前だけ入力してください。') +
+      (pendCropped ? '' : '　名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。');
   }, function(err){
     if (!$('s-read')) return;
     $('s-bar').hidden = true;
     $('s-read').hidden = true;
-    $('s-err').innerHTML = '<div class="warn">文字を読む部品を取り込めなかった。' +
-      '初めて使うときは電波のあるところで開く必要がある。<br>' +
-      '写真は残るので、名前だけ手で入れてしまってよい。</div>';
+    $('s-err').innerHTML = '<div class="warn">文字を読む部品を取り込めませんでした。' +
+      '初めて使うときは、電波のある場所で開いてください。<br>' +
+      '写真は残りますので、名前だけ手で入力してください。</div>';
   });
 }
 function grabForm(){
@@ -2104,11 +2150,14 @@ function openSave(restore){
     if (restore) setCands();
     $('s-cand-name').addEventListener('click', function(ev){ pickCand(ev, 's-name', 'name'); });
     $('s-cand-co').addEventListener('click', function(ev){ pickCand(ev, 's-company', 'company'); });
-    if ($('s-where-chips')) $('s-where-chips').addEventListener('click', function(ev){
-      var b = ev.target.closest ? ev.target.closest('.chip') : null;
-      if (!b) return;
-      $('s-where').value = b.getAttribute('data-w');
-      touched.where = 1;
+    [['s-where-chips','s-where','where'], ['s-kind-chips','s-kind','kind']].forEach(function(a){
+      if (!$(a[0])) return;
+      $(a[0]).addEventListener('click', function(ev){
+        var b = ev.target.closest ? ev.target.closest('.chip') : null;
+        if (!b) return;
+        $(a[1]).value = b.getAttribute('data-w');
+        touched[a[2]] = 1;
+      });
     });
     $('s-crop').addEventListener('click', openRecrop);
     $('s-rot').addEventListener('click', rotateAndRead);
@@ -2194,13 +2243,13 @@ function openRecrop(){
   var q = pendQuad.map(function(pp){ return [pp[0], pp[1]]; });
   var rr = Math.max(9, W/55), sw = Math.max(2, W/280);
   var h = '<h2>四隅を合わせる</h2>' +
-    '<p class="lead">白い丸をつまんで、名刺の角に置く。合わせたら読み直す。</p>' +
+    '<p class="lead">白い丸をつまんで、名刺の角に合わせてください。</p>' +
     '<div class="cropbox" id="cb"><img src="' + url + '" alt="撮った写真">' +
     '<svg id="cb-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
     '<polygon id="cb-poly" fill="rgba(120,200,120,.16)" stroke="#fff" stroke-width="' + sw + '"></polygon>' +
     '<g id="cb-dots"></g></svg></div>' +
-    '<button class="btn primary" id="cb-ok">これで読み直す</button>' +
-    '<div class="row"><button class="btn" id="cb-all">写真ぜんぶを使う</button>' +
+    '<button class="btn primary" id="cb-ok">読み直す</button>' +
+    '<div class="row"><button class="btn" id="cb-all">全体を使う</button>' +
     '<button class="btn" id="cb-cancel">やめる</button></div>';
   openSheet(h, function(){
     var svg = $('cb-svg'), poly = $('cb-poly'), dots = $('cb-dots'), active = -1;
@@ -2343,11 +2392,11 @@ function liveStep(){
     var tip = $('cam-tip'), bx = $('cam-box');
     if (bx) bx.className = 'box' + (q ? ' found' : '');
     if (tip){
-      tip.textContent = !q ? (liveMiss > 12 ? '見つからないときは、丸ボタンで撮ってもいいにゃ'
-                                            : '名刺を枠のあたりに。机との境がはっきり写るように')
-                      : edge ? '名刺がぜんぶ入るように、少し離す'
-                      : !big ? '名刺が小さい。もう少し近づける'
-                      : stable ? 'そのまま…' : '四隅を見つけた。止めると自動で撮ります';
+      tip.textContent = !q ? (liveMiss > 12 ? '見つからないときは、丸いボタンで撮ってください'
+                                            : '名刺を枠に合わせてください。机との境がはっきり写るようにします')
+                      : edge ? '名刺全体が入るように、少し離してください'
+                      : !big ? '名刺が小さいです。もう少し近づけてください'
+                      : stable ? 'そのままお待ちください' : '四隅を見つけました。静止すると自動で撮ります';
     }
     if (stable && !edge && big && liveArmed && Date.now() - liveShotAt > 2500){ liveShotAt = Date.now(); camCapture(); return; }
   }
@@ -2413,7 +2462,7 @@ function guideFrac(){
 }
 function camCapture(){
   var v = $('cam-video');
-  if (!v.videoWidth){ toast('もう少し待ってから押す'); return; }
+  if (!v.videoWidth){ toast('もう少し待ってから押してください'); return; }
   var hint = guideFrac();
   if (liveQuad) hint = { quad: liveQuad };       /* 映像で見つけていた四隅を、見つけ直せなかったときの控えにする */
   var c = document.createElement('canvas');
@@ -2433,7 +2482,7 @@ function doSave(){
   clearPend();
   closeSheet();
   renderCards();
-  toast('しまった');
+  toast('保存しました');
   window.scrollTo(0, 0);
 }
 
@@ -2460,14 +2509,33 @@ function openCard(id){
   h += fact('携帯', c.mobile, c.mobile ? telLink(c.mobile) : '');
   h += fact('メール', c.email, c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
   h += fact('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '');
-  h += fact('住所', c.addr, c.addr ? esc(c.addr) + '　<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.addr) + '" target="_blank" rel="noopener">地図</a>' : '');
+  h += fact('住所', c.addr);
+  h += fact('区分', c.kind);
   h += fact('会った日', c.met ? fmtDate(c.met) : '');
-  h += fact('どこで', c.where);
+  h += fact('会った場所', c.where);
   h += fact('メモ', c.memo);
   h += '</div>';
+  /* 住所のある名刺だけ、その住所の地図を出す */
+  if (mapQuery(c)){
+    var emb = mapEmbedUrl(c);
+    h += '<div class="map">' +
+      (emb ? '<iframe id="d-map" src="' + esc(emb) + '" title="' + esc(mapQuery(c)) + ' の地図"' +
+             ' loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>'
+           : '<p class="hint mapoff">地図を出すには、設定で Google の鍵（APIキー）を入れてください。</p>') +
+      '<a class="btn maplink" id="d-map-open" href="' + esc(mapsAppUrl(c)) + '" target="_blank" rel="noopener">Googleマップで開く</a>' +
+      '</div>';
+  }
   h += '<div class="row"><button class="btn" id="d-edit">直す</button>' +
-       '<button class="btn" id="d-vcf">連絡先に入れる</button></div>';
-  h += '<div class="row"><button class="btn" id="d-share">この人を送る</button>' +
+       '<button class="btn" id="d-vcf">連絡先に追加</button></div>';
+  h += '<button class="btn" id="d-line">LINEで送る</button>';
+  h += '<div class="pick" id="d-line-pick" hidden>' +
+       '<p class="pickhd">LINEで何を送りますか</p>' +
+       '<div class="row"><button class="btn" id="d-line-text">文字で送る</button>' +
+       '<button class="btn" id="d-line-photo">写真で送る</button></div>' +
+       '<div class="row"><button class="btn" id="d-line-copy">文字をコピー</button>' +
+       '<button class="btn" id="d-line-cancel">やめる</button></div>' +
+       '<p class="hint">区分・会った日・会った場所・メモは送りません。</p></div>';
+  h += '<div class="row"><button class="btn" id="d-share">共有する</button>' +
        '<button class="btn danger" id="d-del">捨てる</button></div>';
   h += '<button class="btn" id="d-close">閉じる</button>';
   openSheet(h, function(){
@@ -2478,10 +2546,19 @@ function openCard(id){
     $('d-edit').addEventListener('click',  function(){ openEdit(id); });
     $('d-vcf').addEventListener('click',   function(){ saveVcf(c); });
     $('d-share').addEventListener('click', function(){ shareCard(c); });
+    $('d-line').addEventListener('click', function(){
+      var box = $('d-line-pick');
+      box.hidden = !box.hidden;
+      if (!box.hidden) box.scrollIntoView({ block:'nearest' });
+    });
+    $('d-line-cancel').addEventListener('click', function(){ $('d-line-pick').hidden = true; });
+    $('d-line-text').addEventListener('click', function(){ $('d-line-pick').hidden = true; lineText(c); });
+    $('d-line-copy').addEventListener('click', function(){ $('d-line-pick').hidden = true; copyText(lineBody(c), 'コピーしました'); });
+    $('d-line-photo').addEventListener('click', function(){ $('d-line-pick').hidden = true; linePhoto(c); });
     $('d-del').addEventListener('click',   function(){
       if (!confirm(fullName(c) + ' の名刺を捨てます。よろしいですか？')) return;
       db.cards = db.cards.filter(function(o){ return o.id !== c.id; });
-      persist(); delShot(c.id); renderCards(); closeSheet(); toast('捨てた');
+      persist(); delShot(c.id); renderCards(); closeSheet(); toast('削除しました');
     });
     $('d-close').addEventListener('click', closeSheet);
   });
@@ -2499,14 +2576,14 @@ function openEdit(id){
     '<div class="half"><div>' + row('dept', '部署') + '</div><div>' + row('title', '役職') + '</div></div>' +
     '<div class="half"><div>' + row('tel', '電話', 'tel') + '</div><div>' + row('mobile', '携帯', 'tel') + '</div></div>' +
     row('email', 'メール', 'email') + row('url', 'サイト') + row('addr', '住所') +
-    row('met', '会った日', 'date') + row('where', 'どこで') +
+    row('kind', '区分') + row('met', '会った日', 'date') + row('where', '会った場所') +
     '<label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea>' +
-    '<button class="btn primary" id="e-ok">直した</button><button class="btn" id="e-cancel">やめる</button>';
+    '<button class="btn primary" id="e-ok">保存する</button><button class="btn" id="e-cancel">やめる</button>';
   openSheet(h, function(){
     $('e-ok').addEventListener('click', function(){
       F.forEach(function(k){ if ($('e-' + k)) c[k] = trim($('e-' + k).value); });
       c.memo = trim($('e-memo').value);
-      persist(); renderCards(); openCard(id); toast('直した');
+      persist(); renderCards(); openCard(id); toast('保存しました');
     });
     $('e-cancel').addEventListener('click', function(){ openCard(id); });
   });
@@ -2568,6 +2645,60 @@ function saveVcfAll(){
   saveFile('めいしばこ_連絡先_' + today() + '.vcf',
     list.map(function(c){ return vcard(c, null); }).join(''), 'text/vcard;charset=utf-8');
 }
+/* LINEに送る文面。区分・会った日・会った場所・メモは入れない */
+function lineBody(c){
+  var t = [];
+  if (trim(c.name)) t.push(trim(c.name));
+  if (trim(c.company)) t.push(trim(c.company));
+  var dt = [trim(c.dept), trim(c.title)].filter(Boolean).join(' ');
+  if (dt) t.push(dt);
+  if (trim(c.tel))    t.push('電話 ' + trim(c.tel));
+  if (trim(c.mobile)) t.push('携帯 ' + trim(c.mobile));
+  if (trim(c.email))  t.push('メール ' + trim(c.email));
+  if (trim(c.addr)){
+    t.push('住所 ' + trim(c.addr));
+    t.push(mapsAppUrl(c));
+  }
+  return t.join('\n');
+}
+/* iPhone のホーム画面から開いたときも外のアプリに渡るように、リンクを作って押す */
+function openOut(url){
+  var a = document.createElement('a');
+  a.href = url; a.target = '_blank'; a.rel = 'noopener';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ if (a.parentNode) a.parentNode.removeChild(a); }, 1000);
+}
+function lineText(c){
+  var body = lineBody(c);
+  if (!body){ toast('送る中身がありません'); return; }
+  openOut('https://line.me/R/msg/text/?' + encodeURIComponent(body));
+}
+function linePhoto(c){
+  if (!c.shot){ toast('この名刺には写真がありません'); return; }
+  busy(true, '写真を用意しています…');
+  getShot(c.id).then(function(sh){
+    busy(false);
+    if (!sh || !sh.full){ toast('写真を読み出せませんでした'); return; }
+    var file = dataUrlToFile(sh.full, (trim(c.name) || '名刺') + '.jpg');
+    if (!file || !navigator.canShare || !navigator.canShare({ files:[file] })){
+      toast('この端末では写真を送れません。写真を長押しして保存してください');
+      showBig(sh.full);
+      return;
+    }
+    navigator.share({ files:[file] })['catch'](function(){});
+  }, function(){ busy(false); toast('写真を読み出せませんでした'); });
+}
+function dataUrlToFile(url, name){
+  try {
+    var parts = String(url).split(',');
+    var mime = (parts[0].match(/:(.*?);/) || [])[1] || 'image/jpeg';
+    var bin = atob(parts[1]), n = bin.length, u8 = new Uint8Array(n);
+    while (n--) u8[n] = bin.charCodeAt(n);
+    return new File([u8], name, { type:mime });
+  } catch(e){ return null; }
+}
 function shareCard(c){
   var t = [fullName(c)];
   if (orgLine(c)) t.push(orgLine(c));
@@ -2583,11 +2714,11 @@ function shareCard(c){
 
 /* ===================== CSV ===================== */
 function buildCSV(){
-  var rows = [['名前','よみ','会社','部署','役職','電話','携帯','メール','サイト','住所','会った日','どこで','メモ','しまった日']];
+  var rows = [['名前','よみ','会社','部署','役職','電話','携帯','メール','サイト','住所','区分','会った日','会った場所','メモ','保存した日']];
   db.cards.forEach(function(c){
     rows.push([trim(c.name), trim(c.kana), trim(c.company), trim(c.dept), trim(c.title),
       trim(c.tel), trim(c.mobile), trim(c.email), trim(c.url), trim(c.addr),
-      c.met || '', trim(c.where), trim(c.memo), ymd(new Date(c.ts))]);
+      trim(c.kind), c.met || '', trim(c.where), trim(c.memo), ymd(new Date(c.ts))]);
   });
   return rows.map(function(r){
     return r.map(function(v){
@@ -2641,48 +2772,57 @@ function openSettings(){
   var h = '<h2>設定</h2>' +
     '<p class="lead" id="g-usage"></p>' +
     '<label>スマホの連絡先に入れる</label>' +
-    '<p class="hint" style="margin-top:0">書き出したファイルを開くと、連絡先アプリに登録できる。' +
-    '1人だけなら、その名刺を開いて「連絡先に入れる」。</p>' +
-    '<button class="btn" id="g-vcf">全員分を書き出す（.vcf）</button>' +
+    '<p class="hint" style="margin-top:0">書き出したファイルを開くと、連絡先アプリに登録できます。' +
+    '1人だけなら、その名刺を開いて「連絡先に追加」を押してください。</p>' +
+    '<button class="btn" id="g-vcf">全員を書き出す</button>' +
     '<label>エクセルに出す</label>' +
     '<div class="row"><button class="btn" id="g-csv-copy">コピー</button>' +
     '<button class="btn" id="g-csv-save">CSVで保存</button></div>' +
     '<label>バックアップ（機種変更・端末の乗り換え用）</label>' +
-    '<p class="hint" style="margin-top:0">名刺はこの端末の中にしかない。<b>月に一度</b>ここから書き出しておくこと。</p>' +
-    '<button class="btn" id="g-bk-full">写真つきで保存（.json）</button>' +
-    '<button class="btn" id="g-bk-lite">文字だけ保存（軽い）</button>' +
+    '<p class="hint" style="margin-top:0">名刺はこの端末の中にしかありません。<b>月に一度</b>、ここから書き出してください。</p>' +
+    '<button class="btn" id="g-bk-full">写真つきで保存</button>' +
+    '<button class="btn" id="g-bk-lite">文字だけ保存</button>' +
     '<label for="g-restore">バックアップから復元</label>' +
     '<input type="file" id="g-restore" accept=".json,application/json">' +
     '<label for="g-key">Claude で読む（読み取りの精度が上がる）</label>' +
-    '<p class="hint" style="margin-top:0">Anthropic の Claude に名刺の写真を送って読ませる。端末の中で読むより正確。' +
-    '鍵（APIキー）を入れたときだけ使う。空にすれば、いままでどおり端末の中だけで読む。</p>' +
-    '<p class="hint"><b>写真がインターネットに出る。</b>人からもらった名刺を外に出したくないときは、空のままにしておくこと。<br>' +
-    '鍵は<b>この端末の中だけ</b>に置く。GitHub にも、このページの中にも入らない。<br>' +
-    '名刺1枚あたり、ざっくり2〜3円かかる（Anthropic の請求）。</p>' +
+    '<p class="hint" style="margin-top:0">Anthropic の Claude に名刺の写真を送って読み取ります。端末の中で読むより正確です。' +
+    '鍵（APIキー）を入れたときだけ使います。空にすると、端末の中だけで読み取ります。</p>' +
+    '<p class="hint"><b>写真がインターネットに出ます。</b>人からもらった名刺を外に出したくないときは、空のままにしてください。<br>' +
+    '鍵は<b>この端末の中だけ</b>に保存します。GitHub にも、このページにも入りません。<br>' +
+    '名刺1枚あたり、2〜3円かかります（Anthropic の請求）。</p>' +
     '<input type="password" id="g-key" placeholder="sk-ant-… を貼る" autocomplete="off" spellcheck="false">' +
     '<div class="row"><button class="btn" id="g-key-save">保存する</button>' +
-    '<button class="btn" id="g-key-test">つながるか試す</button>' +
+    '<button class="btn" id="g-key-test">接続を確認</button>' +
     '<button class="btn" id="g-key-clear">消す</button></div>' +
     '<p class="hint" id="g-key-state"></p>' +
-    '<label class="opt"><input type="checkbox" id="g-api-on"> Claude で読む（切ると端末の中で読む）</label>' +
+    '<label class="opt"><input type="checkbox" id="g-api-on"> Claude で読む（切ると端末の中で読み取ります）</label>' +
+    '<label for="g-mapkey">地図を出す（Google）</label>' +
+    '<p class="hint" style="margin-top:0">名刺の詳細に、住所の地図を出します。Google の鍵（APIキー）を入れたときだけ出ます。' +
+    '空にすると、地図は出ずに「Googleマップで開く」ボタンだけになります。</p>' +
+    '<p class="hint">鍵は<b>この端末の中だけ</b>に保存します。' +
+    'Google 側で、このアプリのURLからだけ・Maps Embed API だけに使えるよう制限してください。</p>' +
+    '<input type="password" id="g-mapkey" placeholder="AIza… を貼る" autocomplete="off" spellcheck="false">' +
+    '<div class="row"><button class="btn" id="g-mapkey-save">保存する</button>' +
+    '<button class="btn" id="g-mapkey-clear">消す</button></div>' +
+    '<p class="hint" id="g-mapkey-state"></p>' +
     '<label>文字を読む準備</label>' +
-    '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込む。' +
-    'ここで先にすませておくと、外で撮るときに待たない。一度すめば次からは要らない。</p>' +
-    '<button class="btn" id="g-warm">いま準備しておく</button>' +
+    '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込みます。' +
+    'ここで先にすませておくと、外で撮るときに待ちません。一度すめば次からは不要です。</p>' +
+    '<button class="btn" id="g-warm">準備する</button>' +
     '<p class="hint" id="g-warm-state"></p>' +
     '<label>撮ったあと</label>' +
     '<label class="opt"><input type="checkbox" id="g-check"> 切り取りを毎回たしかめる</label>' +
-    '<p class="hint">名刺の枠を自分で合わせてから読ませたいときに。ふだんは切っておいてよい。</p>' +
+    '<p class="hint">名刺の枠を自分で合わせてから読み取りたいときに使います。ふだんは切ったままで構いません。</p>' +
     '<label>お試し</label>' +
-    '<button class="btn" id="g-sample">お試し用のサンプルを入れる</button>' +
-    '<button class="btn danger" id="g-wipe">記録をすべて削除</button>' +
+    '<button class="btn" id="g-sample">サンプルを入れる</button>' +
+    '<button class="btn danger" id="g-wipe">すべて削除</button>' +
     '<button class="btn" id="g-close">閉じる</button>';
   openSheet(h, function(){
     if (navigator.storage && navigator.storage.estimate){
       navigator.storage.estimate().then(function(e){
         if (e && e.usage && $('g-usage'))
           $('g-usage').textContent = '名刺 ' + db.cards.length + '枚、写真をふくめて ' +
-            (e.usage / 1048576).toFixed(1) + ' MB 使っている。';
+            (e.usage / 1048576).toFixed(1) + ' MB 使っています。';
       }, function(){});
     } else $('g-usage').textContent = '名刺 ' + db.cards.length + '枚。';
     $('g-vcf').addEventListener('click', saveVcfAll);
@@ -2704,10 +2844,10 @@ function openSettings(){
       };
       getWorker().then(function(){
         progressCb = null;
-        if ($('g-warm-state')) $('g-warm-state').textContent = '準備できた。次からは待たずに読める。';
+        if ($('g-warm-state')) $('g-warm-state').textContent = '準備できました。次からは待たずに読み取れます。';
       }, function(){
         progressCb = null;
-        if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めなかった。電波のあるところでもう一度。';
+        if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めませんでした。電波のある場所でもう一度お試しください。';
       });
     });
     /* 鍵は伏せ字で出す。貼り直すときだけ全部を書きかえる */
@@ -2716,38 +2856,58 @@ function openSettings(){
     function showKeyState(msg){
       if (!$('g-key-state')) return;
       $('g-key-state').textContent = msg != null ? msg
-        : (apiKey ? '鍵が入っている（' + keyMask() + '）。' : '鍵はまだ入っていない。端末の中だけで読む。');
+        : (apiKey ? '鍵が入っています（' + keyMask() + '）。' : '鍵はまだ入っていません。端末の中だけで読み取ります。');
     }
     showKeyState();
     $('g-api-on').checked = useApi;
     $('g-api-on').addEventListener('change', function(){
       useApi = this.checked;
       try { localStorage.setItem(AUSE, useApi ? '1' : '0'); } catch(e){}
-      showKeyState(useApi ? null : 'いまは切ってある。端末の中だけで読む。');
+      showKeyState(useApi ? null : 'いまは切っています。端末の中だけで読み取ります。');
     });
     $('g-key-save').addEventListener('click', function(){
       var v = trim($('g-key').value);
-      if (!v){ showKeyState('貼ってから押す。'); return; }
+      if (!v){ showKeyState('鍵を貼ってから押してください。'); return; }
       apiKey = v;
       useApi = true;                                   /* 貼ったら使う状態にする */
       try { localStorage.setItem(AKEY, apiKey); localStorage.setItem(AUSE, '1'); } catch(e){}
       if ($('g-api-on')) $('g-api-on').checked = true;
       $('g-key').value = '';
-      showKeyState('保存した（' + keyMask() + '）。この端末の中だけに置いてある。');
+      showKeyState('保存しました（' + keyMask() + '）。この端末の中だけに保存しています。');
     });
     $('g-key-clear').addEventListener('click', function(){
       apiKey = ''; $('g-key').value = '';
       try { localStorage.removeItem(AKEY); } catch(e){}
-      showKeyState('消した。端末の中だけで読む。');
+      showKeyState('消しました。端末の中だけで読み取ります。');
     });
     $('g-key-test').addEventListener('click', function(){
       var v = trim($('g-key').value) || apiKey;
-      if (!v){ showKeyState('先に鍵を貼る。'); return; }
+      if (!v){ showKeyState('先に鍵を貼ってください。'); return; }
       var keep = apiKey; apiKey = v;
-      showKeyState('試しています…');
+      showKeyState('確認しています…');
       claudeCall({ model:API_MODEL, max_tokens:16, messages:[{ role:'user', content:'ping' }] }, 30000)
-        .then(function(){ showKeyState('つながった。この鍵で読める。'); },
-              function(err){ apiKey = keep; showKeyState('つながらなかった：' + (err && err.message ? err.message : '理由不明')); });
+        .then(function(){ showKeyState('つながりました。この鍵で読み取れます。'); },
+              function(err){ apiKey = keep; showKeyState('つながりませんでした：' + (err && err.message ? err.message : '理由不明')); });
+    });
+    function showMapState(msg){
+      if (!$('g-mapkey-state')) return;
+      $('g-mapkey-state').textContent = msg != null ? msg
+        : (mapKey ? '鍵が入っています（' + mapKey.slice(0, 6) + '…' + mapKey.slice(-4) + '）。住所のある名刺に地図が出ます。'
+                  : '鍵はまだ入っていません。地図は出ません。');
+    }
+    showMapState();
+    $('g-mapkey-save').addEventListener('click', function(){
+      var v = trim($('g-mapkey').value);
+      if (!v){ showMapState('鍵を貼ってから押してください。'); return; }
+      mapKey = v;
+      try { localStorage.setItem(MKEY, mapKey); } catch(e){}
+      $('g-mapkey').value = '';
+      showMapState('保存しました。住所のある名刺に地図が出ます。');
+    });
+    $('g-mapkey-clear').addEventListener('click', function(){
+      mapKey = ''; $('g-mapkey').value = '';
+      try { localStorage.removeItem(MKEY); } catch(e){}
+      showMapState('消しました。地図は出ません。');
     });
     $('g-check').checked = checkCrop;
     $('g-check').addEventListener('change', function(){
@@ -2807,9 +2967,9 @@ function doRestore(file){
       });
       return chain;
     }).then(function(){
-      busy(false); renderCards(); closeSheet(); toast('もどしました');
+      busy(false); renderCards(); closeSheet(); toast('復元しました');
     }, function(){
-      busy(false); renderCards(); closeSheet(); toast('文字はもどったが、写真はもどせなかった');
+      busy(false); renderCards(); closeSheet(); toast('文字は復元しましたが、写真は復元できませんでした');
     });
   };
   r.onerror = function(){ toast('ファイルを読めませんでした'); };
