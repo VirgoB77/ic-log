@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,293 バイト
+- HTTP 200 / utf-8 / 33,897 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,275 バイト
+- HTTP 200 / utf-8 / 23,276 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -73,7 +73,7 @@
 - URL: https://www.city.himeji.lg.jp/sangyo/0000005793.html
 - メモ: 姫路は1000平米以下の中規模店にも独自条例がある。大店立地法が拾えない層を拾える可能性あり
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 73,655 バイト
+- HTTP 200 / UTF-8 / 73,656 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 1 本 / Excel 0 本
   - PDF: 姫路市中規模小売店舗出店届出要綱 (pdf、124.63KB) → https://www.city.himeji.lg.jp/sangyo/cmsfiles/contents/0000005/5793/201262610301.pdf
