@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "何これ": "大店立地法の届出が出るページの一覧。recon.py がここを順に見に行く",
+    "届出先": "大店立地法の届出先は都道府県と政令指定都市。だから兵庫・大阪でも府県だけでは足りず、神戸市・大阪市・堺市が別に要る",
+    "enabled": "false にすると取りに行かない。URLが未確認のものはここを false にしてある",
+    "追加のしかた": "id（半角・重複なし）、name、url、area を書き足すだけ"
+  },
+  "sources": [
+    {
+      "id": "hyogo-pref-juran",
+      "name": "兵庫県 大規模小売店舗立地法 縦覧状況",
+      "area": "hyogo",
+      "url": "https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html",
+      "note": "本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-pref-top",
+      "name": "兵庫県 大規模小売店舗立地法（案内）",
+      "area": "hyogo",
+      "url": "https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html",
+      "note": "手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用",
+      "enabled": true
+    },
+    {
+      "id": "kobe-city",
+      "name": "神戸市 大規模小売店舗立地法 届出状況等",
+      "area": "hyogo",
+      "url": "https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html",
+      "note": "神戸市は政令市なので県とは別に受理する。ここが抜けると神戸が丸ごと落ちる",
+      "enabled": true
+    },
+    {
+      "id": "amagasaki-city",
+      "name": "尼崎市 大規模小売店舗立地法",
+      "area": "hyogo",
+      "url": "https://www.city.amagasaki.hyogo.jp/sangyo/kigyou/kouri/069rittihou.html",
+      "note": "受理は県のはずだが、市が独自に一覧を載せていることがある。確認用",
+      "enabled": true
+    },
+    {
+      "id": "himeji-city",
+      "name": "姫路市 中規模小売店舗の設置",
+      "area": "hyogo",
+      "url": "https://www.city.himeji.lg.jp/sangyo/0000005793.html",
+      "note": "姫路は1000平米以下の中規模店にも独自条例がある。大店立地法が拾えない層を拾える可能性あり",
+      "enabled": true
+    },
+    {
+      "id": "osaka-pref",
+      "name": "大阪府 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "https://www.pref.osaka.lg.jp/o110060/shogyoshien/daikibokouritenpo/index.html",
+      "note": "本命。2026年4月に手続きがオンライン化し、縦覧も府のHPで見られるようになった",
+      "enabled": true
+    },
+    {
+      "id": "osaka-city",
+      "name": "大阪市 大規模小売店舗立地法 手続き・届出",
+      "area": "osaka",
+      "url": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
+      "note": "大阪市は政令市なので府とは別に受理する",
+      "enabled": true
+    },
+    {
+      "id": "sakai-city",
+      "name": "堺市 大規模小売店舗立地法",
+      "area": "osaka",
+      "url": "",
+      "note": "堺市も政令市なので独自に受理するはず。URLが未確認なので止めてある。見つけたらURLを入れて enabled を true に",
+      "enabled": false
+    },
+    {
+      "id": "takatsuki-city",
+      "name": "高槻市 大規模小売店舗立地法に基づく大阪府への届出一覧",
+      "area": "osaka",
+      "url": "https://www.city.takatsuki.osaka.jp/soshiki/58/102618.html",
+      "note": "市が府への届出を転載している型。府のページより読みやすい形で出していることがある",
+      "enabled": true
+    },
+    {
+      "id": "yao-city",
+      "name": "八尾市 大規模小売店舗の届出状況",
+      "area": "osaka",
+      "url": "https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/1021603.html",
+      "note": "年度ごとに届出状況を出している。年度別ページの作りを見る参考",
+      "enabled": true
+    },
+    {
+      "id": "suita-city",
+      "name": "吹田市 大規模小売店舗の出店に関する届出",
+      "area": "osaka",
+      "url": "https://www.city.suita.osaka.jp/sangyo/1018028/1018041/1011521.html",
+      "note": "同上",
+      "enabled": true
+    },
+    {
+      "id": "tokyo-ref",
+      "name": "（参考）東京都 届出状況一覧 平成12年度〜",
+      "area": "ref",
+      "url": "https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo/8itiran",
+      "note": "対象外だが、20年分を公開している唯一級の例。年間何件出るかの相場を知る用と、一覧ページのお手本として見る",
+      "enabled": true
+    }
+  ]
+}
