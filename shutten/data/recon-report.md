@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-12）
 
-**まとめ: Excel 2件 / PDF 17件 / わからない 41件 / 表 61件**
+**まとめ: Excel 2件 / PDF 17件 / わからない 40件 / 表 50件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDF 44本のうち2MB以下の33本を取った。ただし33本中32本は紙をスキャンした画像で文字が入っておらず、機械では読めない（2026-09-12確認）。読むならOCRが要る。保存はしてあるので、いまは表の3項目（届出日・店名・縦覧期間）だけを使う。2026-09-12から8MB級も取る（上限12MB）。読むにはOCRが要るので別の仕組みで
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,292 バイト
+- HTTP 200 / utf-8 / 35,293 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,277 バイト
+- HTTP 200 / utf-8 / 23,276 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,194 バイト
+- HTTP 200 / UTF-8 / 554,785 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -523,12 +523,12 @@
 - URL: https://web.pref.hyogo.lg.jp/about_link.html
 - メモ: 届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 17,465 バイト
+- HTTP 200 / utf-8 / 17,678 バイト
 - **判定: わからない**
 - 表 1 個 / PDFリンク 0 本 / Excel 0 本
 - いちばん大きい表: 2 行 × 2 列
   - 見出しらしき行: 【HTMLの記述方法】
-<a href="htt
+			<a href="
 - 出てきた言葉: 変更
 
 ### （参考）堺市 リンク・著作権・免責事項
@@ -572,7 +572,7 @@
 - URL: https://web.pref.hyogo.lg.jp/pref/cate3_661.html
 - メモ: 兵庫県の著作権ページから辿ったオープンデータの入口。大店立地法の縦覧状況がオープンデータに含まれるか、利用規約（政府標準利用規約か）を見る（2026-09-12追加）
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 14,907 バイト
+- HTTP 200 / utf-8 / 15,071 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 変更
@@ -602,248 +602,71 @@
 ### （参考）兵庫県 オープンデータカタログ
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php
-- メモ: 兵庫県オープンデータカタログの入口（2026-09-12に保存）。924件。検索フォームは POST（keyword, categories[], licenses[] など）で、一覧は ?p=N_1&asc=data_link_title&displayedresults=10 でめくれる。大店立地法の縦覧状況が登録されているかを、下の p1〜p10（100件ずつ）とキーワード付きURLで確かめる
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 39,273 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 1 本 / Excel 0 本
-- いちばん大きい表: 11 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/3_sakou.pdf
-- 出てきた言葉: 変更
+- メモ: 兵庫県オープンデータカタログの入口。2026-09-12に全924件を100件ずつ10ページで見たが、大店立地法の縦覧状況・届出は登録されていなかった（小売関係は商業統計・経済センサスのみ）。キーワード「大規模小売」も0件。カタログ規約（CC BY 4.0）は縦覧状況には及ばない。止めた
+- **結果: 取りに行かなかった（兵庫県オープンデータカタログの入口。2026-09-12に全924件を100件ずつ10ページで見たが、大店立地法の縦覧状況・届出は登録されていなかった（小売関係は商業統計・経済センサスのみ）。キーワード「大規模小売」も0件。カタログ規約（CC BY 4.0）は縦覧状況には及ばない。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 1/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=1_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 127,011 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 2 本 / Excel 87 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/3_sakou.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/shoukougyoutoukei/2019kogyo/documents/2019chosakekkagaiyo.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kankoubutu/documents/2301-1.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kankoubutu/documents/2302-1.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/oshirase-sougoude-ta/documents/r3-01-kendo.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/oshirase-sougoude-ta/documents/r4-01-kendo.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/oshirase-sougoude-ta/documents/r5-01-kendo.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和5年 / 令和6年 / 令和３年 / 令和４年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 2/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=2_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 124,634 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 9 本 / Excel 87 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/nk02/documents/02_r5meibo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/nk02/documents/01_r6menber.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kf14/documents/000028_hotel_all.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kf14/documents/000028_public_bath_all.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kf14/documents/000028_show_places_all.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/iphs01/kansensho_jyoho/download/documents/2020_opendata.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/jinkou-tochitoukei/documents/jinkou_pyramidshikucho2020.xls
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/iphs01/kansensho_jyoho/documents/2021_opendata.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/iphs01/kansensho_jyoho/download/documents/2021_opendata.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/iphs01/kansensho_jyoho/documents/2022_opendata.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和5年 / 令和6年 / 令和３年 / 令和４年 / 平成13年 / 平成23年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 3/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=3_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 119,335 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 34 本 / Excel 46 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk28/documents/06.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk28/documents/07.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk28/documents/jinzai3.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r4-goriyo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r5-goriyou.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020_report_table.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kankoubutu/documents/6-3kurashi.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/9.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/09.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kankoubutu/documents/6-2kurashishuusei.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和2年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 令和２年 / 令和３年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 4/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=4_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 127,987 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 22 本 / Excel 57 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/sr16/documents/reiwa2nendosyuusei.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk20/documents/r2toushoyosan3.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk25/documents/r3kyuuyo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk25/documents/r3teiin.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/jinkou-tochitoukei/documents/03001.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoiip/documents/hyogoiip-kisetsu.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoiip/documents/hyogoiip-connected.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-chiikikan_bunseki_template_039.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-chiikikan_039bumon.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-186bumon.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 5/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=5_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 119,706 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 27 本 / Excel 44 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/sr16/documents/r1.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/nk10/documents/1sekisantankahyou0506.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/2_chatgpt_01siryo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/chatgpt_02siryo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/r50713siryou.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2019zidouhanbaikinerai.csv
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2019zidousyatou.csv
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2019zitensyatou.csv
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2019syazyounerai.csv
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2019buhinnerai.csv
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和2年 / 令和5年 / 令和５年 / 平成12年 / 平成24年 / 平成7年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 6/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=6_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 128,785 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 7 本 / Excel 59 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2024graph10.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/youran2025-syogyo-kannko.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2026graph10.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2023youran10.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hackathon_report.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kankoubutu/documents/6shoukougyou.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/6shoukougyou.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/6shoukougyou.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r4-03.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r5-03.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和2年 / 令和3年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成12年 / 平成16年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 7/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=7_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 132,573 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 48 本 / Excel 34 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/000122996.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/sr16/documents/000165110.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/sr16/documents/000165111.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/sr16/documents/000172513.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk20/documents/000186051.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kanshikekka_h19.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kanshikekka_h20.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kanshikekka_h21.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/jinkou-tochitoukei/documents/h22-27.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoiip/documents/hyogoiip-2010gen.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和2年 / 平成19年 / 平成20年 / 平成21年 / 平成22年 / 平成23年 / 平成24年 / 平成25年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 8/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=8_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 121,006 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 33 本 / Excel 54 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk25/documents/31teiin.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk20/documents/h31toshoyosan_shinlast.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2023youran7.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2024graph07.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/youran2025-kenchiku-zyutaku.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio1995.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio1997-094bumon.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio1997-034bumon.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r4-02.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/r5-02.xlsx
-- 出てきた言葉: 変更 / 廃止
-- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和7年 / 令和8年 / 平成12年 / 平成13年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 9/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=9_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 118,103 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 60 本 / Excel 30 本
-- いちばん大きい表: 101 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2023youran13.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2024graph13.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/youran2025-kenminkeizai.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2026graph13.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/nk21/documents/midorizei5poster.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/youran2026-01_3.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kenshitei.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/documents/database2026.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/kenminkeizai/documents/2023_5_bunpai.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kentoroku.xlsx
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和3年 / 令和8年 / 令和４年 / 令和７年 / 平成24年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ 一覧 10/10
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?p=10_1&asc=data_link_title&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 50,827 バイト
-- **判定: 表**
-- 表 1 個 / PDFリンク 4 本 / Excel 12 本
-- いちばん大きい表: 25 行 × 10 列
-  - 見出しらしき行: データタイトル | 概要 | ライセンス | カテゴリ | データタイプ | データ時点 | 掲載日 | 形式 | ダウンロード掲載ページ | 組織名
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/youran2025-koukougyo.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/documents/2026graph5.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk37/documents/takasago.pdf
-  - PDF: (名前なし) → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/gai_security.pdf
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-sample10.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-sample01.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-sample02.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-sample03.xlsx
-  - Excel: (名前なし) → https://web.pref.hyogo.lg.jp/kk11/hyogoio/documents/hyogoio2020-sample04.xlsx
-- 出てきた言葉: 変更 / 届出
-- 年度らしき表記: 令和5年
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
 
 ### （参考）兵庫県 オープンデータカタログ キーワード「大規模小売」
 
 - URL: https://web.pref.hyogo.lg.jp/opendata/index.php?keyword=%E5%A4%A7%E8%A6%8F%E6%A8%A1%E5%B0%8F%E5%A3%B2&displayedresults=100
-- メモ: 一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める
-- robots.txt: 許可
-- HTTP 200 / UTF-8 / 26,274 バイト
-- **判定: わからない**
-- 表 0 個 / PDFリンク 0 本 / Excel 0 本
-- 出てきた言葉: 変更
+- メモ: 2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた
+- **結果: 取りに行かなかった（2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた）**
