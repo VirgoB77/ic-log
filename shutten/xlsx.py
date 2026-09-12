@@ -163,3 +163,44 @@ def read(path, max_rows=100000):
                     break
             sheets[name] = rows
     return sheets
+
+
+def read_xls(path, max_rows=100000):
+    """古い .xls を読む。xlrd が入っているときだけ動く。
+
+    .xls は中身がXMLではなく、自前で読むのは割に合わない。
+    大阪市の届出一覧（平成12年からの全届出）がこの形式なので、
+    この形式のためだけに xlrd を使う。無ければ理由を添えて空を返す。
+    """
+    try:
+        import xlrd
+    except ImportError:
+        raise RuntimeError("古い .xls 形式。読むには xlrd が要る（pip install xlrd）")
+    wb = xlrd.open_workbook(path)
+    sheets = {}
+    for sh in wb.sheets():
+        rows = []
+        for i in range(min(sh.nrows, max_rows)):
+            r = []
+            for j in range(sh.ncols):
+                c = sh.cell(i, j)
+                if c.ctype == xlrd.XL_CELL_DATE:
+                    try:
+                        r.append(xlrd.xldate.xldate_as_datetime(c.value, wb.datemode).date().isoformat())
+                    except Exception:
+                        r.append(str(c.value))
+                elif c.ctype == xlrd.XL_CELL_NUMBER:
+                    r.append(str(int(c.value)) if c.value == int(c.value) else str(c.value))
+                else:
+                    r.append(str(c.value).strip())
+            if any(r):
+                rows.append(r)
+        sheets[sh.name] = rows
+    return sheets
+
+
+def read_any(path, max_rows=100000):
+    """拡張子で読み方を選ぶ。"""
+    if path.lower().endswith(".xls"):
+        return read_xls(path, max_rows)
+    return read(path, max_rows)
