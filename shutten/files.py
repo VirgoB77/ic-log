@@ -160,6 +160,29 @@ def download(url, dest, limit=MAX_BYTES, referer=None, timeout=TIMEOUT, opener=N
     return len(data)
 
 
+def recheck(url, dest, src, opener):
+    """手持ちがあるファイルを、もう一度取りに行って結果を一行で返す。
+
+    失敗しても手持ちはそのまま。取れて中身が変わっていたときだけ置き換える。
+    """
+    tmp = dest + ".new"
+    try:
+        n = download(url, tmp, MAX_BYTES, referer=src["url"], timeout=TIMEOUT, opener=opener)
+    except (ValueError, urllib.error.HTTPError, urllib.error.URLError, OSError, TimeoutError) as e:
+        if os.path.exists(tmp):
+            os.remove(tmp)
+        return f"  - 手持ちあり {safe_name(url)} — 取り直し {type(e).__name__}: {str(e)[:60]}（手持ちを使う）"
+    with open(tmp, "rb") as f:
+        new = f.read()
+    with open(dest, "rb") as f:
+        old = f.read()
+    if new == old:
+        os.remove(tmp)
+        return f"  - 手持ちあり {safe_name(url)} — 取り直せた（{n:,}バイト、中身は同じ）"
+    os.replace(tmp, dest)
+    return f"  - **{safe_name(url)}** 取り直せた（{n:,}バイト、中身が変わっていたので置き換えた）"
+
+
 def peek(path):
     """中を開いて、行数と見出しを返す。.xlsx と .pdf に対応。"""
     if path.lower().endswith(".pdf"):
@@ -228,6 +251,13 @@ def main():
         for url, label in links:
             dest = os.path.join(d, safe_name(url))
             if os.path.exists(dest):
+                if opener is not None:
+                    # クッキー経路の収集先は、手持ちがあっても取りに行って通るかを確かめる。
+                    # 大阪市は利用者がブラウザで落としたファイルを同じ名前で置いてあるので、
+                    # 飛ばすと「通るようになったか」がいつまでも分からない。
+                    # 取れて中身が変わっていれば置き換える（更新の検知にもなる）
+                    lines.append(recheck(url, dest, src, opener))
+                    time.sleep(WAIT)
                 skipped += 1
                 continue
             is_pdf = url.lower().endswith(".pdf")
