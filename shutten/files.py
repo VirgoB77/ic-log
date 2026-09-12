@@ -212,8 +212,13 @@ def main():
                              PDF_MAX_BYTES if is_pdf else MAX_BYTES,
                              referer=src["url"],
                              timeout=PDF_TIMEOUT if is_pdf else TIMEOUT)
-            except (urllib.error.HTTPError, urllib.error.URLError, ValueError, OSError,
-                    TimeoutError) as e:
+            except ValueError as e:
+                # 「大きすぎるので見送った」は相手の不調ではない。失敗の連続には数えない。
+                # 兵庫県はリストの先頭3本が8MB級で、ここを失敗と数えて全部打ち切っていた
+                lines.append(f"  - 見送り {safe_name(url)} — {e}")
+                skipped += 1
+                continue
+            except (urllib.error.HTTPError, urllib.error.URLError, OSError, TimeoutError) as e:
                 lines.append(f"  - 取れなかった {safe_name(url)} — {type(e).__name__}: {str(e)[:60]}")
                 failed += 1
                 streak += 1
