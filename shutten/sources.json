@@ -18,7 +18,9 @@
       "enabled": true,
       "pdf": true,
       "pdf_labels": "資料",
-      "pdf_max_mb": 12
+      "pdf_max_mb": 12,
+      "terms": "https://web.pref.hyogo.lg.jp/about_link.html",
+      "terms_name": "リンク・著作権・免責事項"
     },
     {
       "id": "hyogo-pref-top",
@@ -37,7 +39,9 @@
       "enabled": true,
       "pdf": true,
       "pdf_labels": "届出書",
-      "pdf_max_mb": 12
+      "pdf_max_mb": 12,
+      "terms": "https://www.city.kobe.lg.jp/homepage/index.html",
+      "terms_name": "ホームページのご利用案内"
     },
     {
       "id": "amagasaki-city",
@@ -61,7 +65,9 @@
       "area": "osaka",
       "url": "https://www.pref.osaka.lg.jp/o110060/shogyoshien/daikibokouritenpo/index.html",
       "note": "本命。2026年4月に手続きがオンライン化し、縦覧も府のHPで見られるようになった",
-      "enabled": true
+      "enabled": true,
+      "terms": "https://www.pref.osaka.lg.jp/o070050/koho/information/use.html",
+      "terms_name": "著作権・リンクについて"
     },
     {
       "id": "osaka-city",
@@ -70,7 +76,10 @@
       "url": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
       "note": "Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。参照元ヘッダー、ページを先に開いてクッキーを持つ経路、どちらも404のまま（2026-09-12に確認）。名乗りを偽って取る手は使わない。運用は「利用者がブラウザで落として data/files/osaka-city/ に置く」。ページに新しいファイル名が出たら files-report に太字で合図を出す。毎日3本を取り直して、通るようになったら分かる。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している",
       "enabled": true,
-      "session": true
+      "session": true,
+      "terms": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
+      "terms_name": "届出ページ内に CC BY 4.0 と明記",
+      "license": "CC BY 4.0"
     },
     {
       "id": "sakai-city",
@@ -78,7 +87,9 @@
       "area": "osaka",
       "url": "https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html",
       "note": "政令市。新設・名称変更・配置変更が届出種別×年度で整理された階層インデックス。長らく空けていた穴",
-      "enabled": true
+      "enabled": true,
+      "terms": "https://www.city.sakai.lg.jp/aboutweb/linkchosakuken.html",
+      "terms_name": "リンク・著作権・免責事項"
     },
     {
       "id": "takatsuki-city",
@@ -275,6 +286,46 @@
       "url": "https://data.city.osaka.lg.jp/",
       "note": "大阪市の添付ファイルのメタデータを日次CSVで出しているらしいが、/odcsv/ もトップページも GitHub Actions から40秒以内に応答が無かった（2026-09-12、2回）。国外からは見えない可能性が高い。止めた",
       "enabled": false
+    },
+    {
+      "id": "terms-osaka-pref",
+      "name": "（参考）大阪府 著作権・リンクについて",
+      "area": "ref",
+      "url": "https://www.pref.osaka.lg.jp/o070050/koho/information/use.html",
+      "note": "届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）",
+      "enabled": true
+    },
+    {
+      "id": "terms-hyogo-pref",
+      "name": "（参考）兵庫県 リンク・著作権・免責事項",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/about_link.html",
+      "note": "届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）",
+      "enabled": true
+    },
+    {
+      "id": "terms-sakai-city",
+      "name": "（参考）堺市 リンク・著作権・免責事項",
+      "area": "ref",
+      "url": "https://www.city.sakai.lg.jp/aboutweb/linkchosakuken.html",
+      "note": "届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）",
+      "enabled": true
+    },
+    {
+      "id": "terms-kobe-city",
+      "name": "（参考）神戸市 ホームページのご利用案内",
+      "area": "ref",
+      "url": "https://www.city.kobe.lg.jp/homepage/index.html",
+      "note": "届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）",
+      "enabled": true
+    },
+    {
+      "id": "opendata-osaka-www",
+      "name": "（参考）大阪市オープンデータポータル（www側の入口）",
+      "area": "ref",
+      "url": "https://www.city.osaka.lg.jp/contents/wdu290/opendata/",
+      "note": "大阪市の届出ページの下部にある入口。data.city.osaka.lg.jp は GitHub Actions から応答が無かったが、こちらは www 側なので開くはず。日次CSVの置き場が分かるか見る（2026-09-12追加）",
+      "enabled": true
     }
   ]
 }
