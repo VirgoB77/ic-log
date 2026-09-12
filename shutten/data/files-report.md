@@ -1,51 +1,91 @@
 # Excelを取ってきた結果
-**新しく取れた 16本 / すでに持っていた 77本 / 取れなかった 7本**
+**新しく取れた 33本 / すでに持っていた 105本 / 取れなかった 2本**
 
 ### 兵庫県 大規模小売店舗立地法 縦覧状況
 
 - Excel/CSV/PDF のリンク: 43 本
-  - 取れなかった freshbazaarinagawaten.pdf — ValueError: 大きすぎる（8,249,801バイト）ので見送った
-  - 取れなかった drugcosmoskamitenoten.pdf — ValueError: 大きすぎる（6,309,705バイト）ので見送った
-  - 取れなかった takaradushikaisoshikeikaku.pdf — ValueError: 大きすぎる（7,697,371バイト）ので見送った
-  - **3回続けて取れなかったので、この収集先は今日はここまで**（残り43本は次回）
+  - 見送り freshbazaarinagawaten.pdf — 大きすぎる（8,249,801バイト）ので見送った
+  - 見送り drugcosmoskamitenoten.pdf — 大きすぎる（6,309,705バイト）ので見送った
+  - 見送り takaradushikaisoshikeikaku.pdf — 大きすぎる（7,697,371バイト）ので見送った
+  - 見送り maxvalueyasuda.pdf — 大きすぎる（9,057,049バイト）ので見送った
+  - 見送り kohnanprohimejishikamaten.pdf — 大きすぎる（4,214,687バイト）ので見送った
+  - 見送り soyoraono.pdf — 大きすぎる（9,825,322バイト）ので見送った
+  - **oasistownkiserakawanishi.pdf** 129,090バイト … 資料（PDF：127KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeontownhimeji.pdf** 125,043バイト … 資料（PDF：123KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **shimosakabesc.pdf** 129,107バイト … 資料（PDF：127KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **asupatakasagosc.pdf** 283,943バイト … 資料（PDF：278KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeonyashiro.pdf** 278,345バイト … 資料（PDF：272KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **maxvalueinami.pdf** 163,798バイト … 資料（PDF：160KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **maxvaluetoyotomi.pdf** 161,161バイト … 資料（PDF：158KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **marunakasumotomonobe.pdf** 164,052バイト … 資料（PDF：161KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **marketosquarenakayamadera.pdf** 122,248バイト … 資料（PDF：120KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **hankyutakaradukasyogyozonesyogyotou.pdf** 165,684バイト … 資料（PDF：162KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeontowninagawa.pdf** 135,108バイト … 資料（PDF：132KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeonmallitamikoya.pdf** 578,050バイト … 資料（PDF：565KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **maxvaluekinnrakuujitenn.pdf** 142,104バイト … 資料（PDF：139KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **centurygardenfrespo.pdf** 147,814バイト … 資料（PDF：145KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **fretsgardenhimejihanada.pdf** 149,177バイト … 資料（PDF：146KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **coopnishinomiyahigashi.pdf** 192,842バイト … 資料（PDF：189KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **parkurbanasagiri.pdf** 370,394バイト … 資料（PDF：362KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **nitorimiki.pdf** 96,482バイト … 資料（PDF：95KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **ekoorunajio.pdf** 93,828バイト … 資料（PDF：92KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **bivitsutiyama.pdf** 148,991バイト … 資料（PDF：146KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **frespoako.pdf** 153,532バイト … 資料（PDF：150KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeonmiki.pdf** 235,504バイト … 資料（PDF：230KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeonawaji.pdf** 176,447バイト … 資料（PDF：173KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **yamadastorenishinomiyaten.pdf** 151,121バイト … 資料（PDF：148KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **sandaekimaeitibankan.pdf** 498,270バイト … 資料（PDF：487KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeonyamasakishoppingcenter.pdf** 291,609バイト … 資料（PDF：285KB）
+    - シート「(PDF)」 206行  別紙 | 小売業者一覧表（変更後）
+  - **wadayamashoppingcenter.pdf** 282,063バイト … 資料（PDF：276KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeontownkakogawa6-1.pdf** 244,390バイト … 資料（PDF：239KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **furesupoakou.pdf** 175,878バイト … 資料（PDF：172KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **tonarieseiwadai.pdf** 188,682バイト … 資料（PDF：185KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **youmetownhimeji.pdf** 230,601バイト … 資料（PDF：226KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **ekoorunajio_1.pdf** 143,716バイト … 資料（PDF：141KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **kakogawaminamisc.pdf** 107,151バイト … 資料（PDF：105KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - 見送り marketsquarenakayamadera.pdf — 大きすぎる（4,893,756バイト）ので見送った
+  - 見送り hankyutakaradukasyogyozonesyogyotou1.pdf — 大きすぎる（8,186,163バイト）ので見送った
+  - 見送り hankyutakaradukasyogyozonesyogyotou2.pdf — 大きすぎる（5,172,646バイト）ので見送った
+  - 見送り aeontownkakogawa6-2.pdf — 大きすぎる（8,299,279バイト）ので見送った
 
 ### 神戸市 大規模小売店舗立地法 届出状況等
 
 - Excel/CSV/PDF のリンク: 18 本
-  - 取れなかった todoke1141.pdf — ValueError: 大きすぎる（7,898,420バイト）ので見送った
-  - **todoke1152.pdf** 523,479バイト … 届出書（PDF：512KB）
-    - シート「(PDF)」 102行  ¤#Í¥ | ¤#Í¥ | （変更後） | （変更後）
-  - **todoke1151.pdf** 178,482バイト … 届出書（PDF：175KB）
-    - シート「(PDF)」 40行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
-  - **todoke1150.pdf** 229,590バイト … 届出書（PDF：225KB）
-    - シート「(PDF)」 41行  様 | 式 | 第２ | ( | 第６条関係 | ) | ※受理 | 年
-  - **todoke1149.pdf** 379,466バイト … 届出書（PDF：371KB）
-    - シート「(PDF)」 63行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
-  - **todoke1148.pdf** 169,931バイト … 届出書（PDF：166KB）
-    - シート「(PDF)」 39行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
-  - **todoke1147.pdf** 137,096バイト … 届出書（PDF：134KB）
-    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
-  - **todoke1145.pdf** 802,200バイト … 届出書（PDF：784KB）
-    - シート「(PDF)」 111行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
-  - **todoke1144.pdf** 153,227バイト … 届出書（PDF：150KB）
-    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
-  - **todoke1143.pdf** 233,458バイト … 届出書（PDF：228KB）
-    - シート「(PDF)」 77行  en-US  | en-US  | en-US  | en-US  | en-US  | en-US  | en-US  | en-US 
-  - **todoke1140.pdf** 124,470バイト … 届出書（PDF：122KB）
-    - シート「(PDF)」 27行  en-US  | en-US  | en-US  | ※備考 | ※受理年月日 | ※受理番号 | 令和 | 変更する理由
-  - **todoke1139.pdf** 122,748バイト … 届出書（PDF：120KB）
-    - シート「(PDF)」 25行  en-US  | en-US  | en-US  | ※備考 | ※受理年月日 | ※受理番号 | 令和 | 変更する理由
-  - **todoke1138.pdf** 881,851バイト … 届出書（PDF：862KB）
-    - シート「(PDF)」 80行  en-US  | en-US  | en-US2 | ※丁考 | ※受理年月日 | ※受理番号 | のとおり | 専和
-  - **todoke1137.pdf** 131,940バイト … 届出書（PDF：129KB）
-    - シート「(PDF)」 127行  en-US  | en-US  | ※備考
-  - **todoke1136.pdf** 808,388バイト … 届出書（PDF：790KB）
-    - シート「(PDF)」 123行  en-US  | en-US  | ※備考
-  - **todoke1135.pdf** 242,804バイト … 届出書（PDF：238KB）
-    - シート「(PDF)」 38行  様 | ３ | 式 | 変 | 第 | 更 | ２ | の
-  - 取れなかった todoke1134.pdf — ValueError: 大きすぎる（8,909,892バイト）ので見送った
-  - **todoke1131.pdf** 1,972,570バイト … 届出書（PDF：1,927KB）
-    - シート「(PDF)」 7行  ：店舗(3,206㎡) | ：駐輪場(65台) | ：店舗(2,289㎡) | ：店舗(2,676㎡) | ：廃棄物等保管施設(158.0ｍ ) | ：荷さばき施設(84.5㎡) | ：駐輪場(408台)
+  - 見送り todoke1141.pdf — 大きすぎる（7,898,420バイト）ので見送った
+  - 見送り todoke1134.pdf — 大きすぎる（8,909,892バイト）ので見送った
 
 ### 大阪府 大規模小売店舗立地法
 

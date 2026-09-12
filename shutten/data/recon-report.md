@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDFが44本（合計75MB）あり、2MB以下の34本だけ取る。重い10本は図面つきなので取らない
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,292 バイト
+- HTTP 200 / utf-8 / 35,293 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,275 バイト
+- HTTP 200 / utf-8 / 23,277 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -187,7 +187,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,226 バイト
+- HTTP 200 / UTF-8 / 553,192 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
