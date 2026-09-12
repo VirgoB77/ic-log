@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-12）
 
-**まとめ: Excel 3件 / PDF 17件 / わからない 40件 / 表 49件**
+**まとめ: Excel 2件 / PDF 17件 / わからない 40件 / 表 50件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDF 44本のうち2MB以下の33本を取った。ただし33本中32本は紙をスキャンした画像で文字が入っておらず、機械では読めない（2026-09-12確認）。読むならOCRが要る。保存はしてあるので、いまは表の3項目（届出日・店名・縦覧期間）だけを使う。2026-09-12から8MB級も取る（上限12MB）。読むにはOCRが要るので別の仕組みで
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,292 バイト
+- HTTP 200 / utf-8 / 35,293 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -96,7 +96,7 @@
 ### 大阪市 大規模小売店舗立地法 手続き・届出
 
 - URL: https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html
-- メモ: Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。参照元ヘッダー、ページを先に開いてクッキーを持つ経路、どちらも404のまま（2026-09-12に確認）。名乗りを偽って取る手は使わない。運用は「利用者がブラウザで落として data/files/osaka-city/ に置く」。ページに新しいファイル名が出たら files-report に太字で合図を出す。毎日3本を取り直して、通るようになったら分かる。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している
+- メモ: Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。参照元ヘッダー、ページを先に開いてクッキーを持つ経路、どちらも404のまま（2026-09-12に確認）。名乗りを偽って取る手は使わない。運用は「利用者がブラウザで落として data/files/osaka-city/ に置く」。ページに新しいファイル名が出たら files-report に太字で合図を出す。毎日3本を取り直して、通るようになったら分かる。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している。オープンデータカタログ（resource.csv 2,609件）にも届出一覧は無かった（2026-09-12確認）
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 45,619 バイト
 - **判定: Excel**
@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 554,751 バイト
+- HTTP 200 / UTF-8 / 553,226 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -523,12 +523,12 @@
 - URL: https://web.pref.hyogo.lg.jp/about_link.html
 - メモ: 届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 17,678 バイト
+- HTTP 200 / utf-8 / 17,465 バイト
 - **判定: わからない**
 - 表 1 個 / PDFリンク 0 本 / Excel 0 本
 - いちばん大きい表: 2 行 × 2 列
   - 見出しらしき行: 【HTMLの記述方法】
-			<a href="
+<a href="htt
 - 出てきた言葉: 変更
 
 ### （参考）堺市 リンク・著作権・免責事項
@@ -553,17 +553,13 @@
 ### （参考）大阪市オープンデータポータル（www側の入口）
 
 - URL: https://www.city.osaka.lg.jp/contents/wdu290/opendata/
-- メモ: 大阪市の届出ページの下部にある入口（www側）。開けた（2026-09-12）。JavaScript無しでも使えるよう「オープンデータ一覧ファイル（.csv）」= ./csv/resource.csv が置いてあり、全オープンデータのURL一覧らしい。id を osaka- で始めて files.py に拾わせ、この CSV を落として大店立地法の一覧が載っているか見る
-- robots.txt: 許可
-- HTTP 200 / utf-8 / 6,985 バイト
-- **判定: Excel**
-- 表 0 個 / PDFリンク 0 本 / Excel 1 本
-  - Excel: オープンデータ一覧ファイル（.csv） → https://www.city.osaka.lg.jp/contents/wdu290/opendata/csv/resource.csv
+- メモ: 大阪市オープンデータの入口（www側）。開けて、全データのURL一覧 resource.csv（2,609件）を落とした（2026-09-12）。大店立地法で引っかかるのは「環境面の協議件数」の統計4件だけで、届出一覧はオープンデータには無かった。止めた
+- **結果: 取りに行かなかった（大阪市オープンデータの入口（www側）。開けて、全データのURL一覧 resource.csv（2,609件）を落とした（2026-09-12）。大店立地法で引っかかるのは「環境面の協議件数」の統計4件だけで、届出一覧はオープンデータには無かった。止めた）**
 
 ### （参考）神戸市 利用規約・リンク・免責事項など
 
 - URL: https://www.city.kobe.lg.jp/a57337/homepage/rule.html
-- メモ: 「ホームページのご利用案内」から辿った本体。出典表記の書き方を読むために保存する（2026-09-12追加）
+- メモ: 「ホームページのご利用案内」から辿った本体（2026-09-12に読んだ）。著作権の方針はPDF「神戸市ウェブサイト利用規約」に書いてあるので、そのPDFだけ落とす
 - robots.txt: 許可
 - HTTP 200 / UTF-8 / 17,155 バイト
 - **判定: わからない**
@@ -576,7 +572,29 @@
 - URL: https://web.pref.hyogo.lg.jp/pref/cate3_661.html
 - メモ: 兵庫県の著作権ページから辿ったオープンデータの入口。大店立地法の縦覧状況がオープンデータに含まれるか、利用規約（政府標準利用規約か）を見る（2026-09-12追加）
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 15,071 バイト
+- HTTP 200 / utf-8 / 14,907 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 変更
+
+### （参考）兵庫県 関連サイトに掲載のオープンデータ（デジタル戦略課）
+
+- URL: https://web.pref.hyogo.lg.jp/kk26/johoseisaku/opendata.html
+- メモ: 兵庫県オープンデータの入口から辿った本体。利用規約（政府標準利用規約かCC BYか）と、大店立地法の縦覧状況が含まれるかを見る（2026-09-12追加）
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 68,432 バイト
+- **判定: 表**
+- 表 1 個 / PDFリンク 2 本 / Excel 116 本
+- いちばん大きい表: 4 行 × 6 列
+  - 見出しらしき行: 神戸 | 神戸市（外部サイトへリンク） | 北播磨 | 西脇市（外部サイトへリンク）
+			三木市（外部 | 但馬 | 豊岡市（外部サイトへリンク）
+			養父市（外部
+  - PDF: オープンデータカタログページ利用規約（PDF：115KB） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/kiyaku_opendata.pdf
+  - PDF: 犯罪発生状況のウェブサイトに掲載する統一的注記（PDF：67KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/noter7renew.pdf
+  - Excel: 令和7年中の犯罪発生状況（窃盗・自転車盗）（CSV：943KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2025zitensyatou.csv
+  - Excel: 令和7年中の犯罪発生状況（窃盗・オートバイ盗）（CSV：74KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2025ootobaitou.csv
+  - Excel: 令和7年中の犯罪発生状況（窃盗・自動車盗）（CSV：15KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2025zidousyatou.csv
+  - Excel: 令和7年中の犯罪発生状況（窃盗・自動販売機ねらい）（CSV：11KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2025zidouhanbaikinerai.csv
+  - Excel: 令和7年中の犯罪発生状況（窃盗・部品ねらい）（CSV：64KB）（別ウィンドウで開きます） → https://web.pref.hyogo.lg.jp/kk26/johoseisaku/documents/hyogo_2025buhinnerai.csv
+- 出てきた言葉: 変更
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成12年
