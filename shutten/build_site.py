@@ -304,7 +304,7 @@ def about_page(src_meta, today):
         if not m:
             continue
         t = (f'<a href="{esc(m["terms"])}">{esc(m.get("terms_name") or "利用規約")}</a>' if m.get("terms") else "—")
-        lic = esc(m.get("license") or "政府標準利用規約（第2.0版）相当と読んでいます。要確認")
+        lic = esc(m.get("terms_summary") or m.get("license") or "確認中")
         rows.append(f'<tr><td><a href="{esc(m["url"])}">{esc(m["name"])}</a></td><td>{t}</td><td>{lic}</td></tr>')
     cities = [m for i, m in src_meta.items()
               if m.get("enabled") and m.get("area") == "osaka" and i not in main_ids and m.get("url")]
@@ -326,6 +326,10 @@ def about_page(src_meta, today):
 </table></div>
 <p style="font-size:14px">大阪市の届出一覧は <a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a> で提供されています。
 このサイトでは列の選択・並べ替え・表記の統一という加工をしています。</p>
+<p style="font-size:14px">大阪府・兵庫県・堺市のサイト全体の著作権ページは、無断での複製・転用を認めていません（2026年9月12日に確認）。
+このサイトが載せているのは、法律にもとづいて自治体が公告している届出の「店舗名・所在地・面積・日付・届出の種類」という事実の一覧で、
+写真・図面・文章などの著作物は載せていません。事実の一覧や公告は著作権法上の著作物に当たらないと考え、出典を明記したうえで掲載しています。
+自治体から掲載方法について求めがあれば従います。ご指摘は<a href="{rel}contact.html">訂正・削除のご依頼</a>からお願いします。</p>
 <p style="font-size:14px">大阪府から権限移譲を受けた市町の届出ページ（各市町のサイト利用規約に従います）：</p>
 <ul class="list" style="font-size:14px">{city_items}</ul>
 
