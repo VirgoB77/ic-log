@@ -272,8 +272,8 @@
       "id": "osaka-opendata",
       "name": "（参考）大阪市オープンデータポータル 添付ファイル一覧",
       "area": "ref",
-      "url": "https://data.city.osaka.lg.jp/odcsv/",
-      "note": "大阪市の添付ファイルのメタデータを日次CSVで出しているらしい。大阪市の一覧Excelの更新を機械で知る手になるか、まず形を見る",
+      "url": "https://data.city.osaka.lg.jp/",
+      "note": "大阪市の添付ファイルのメタデータを日次CSVで出しているらしい。/odcsv/ は GitHub Actions からでも40秒以内に応答が無かった（2026-09-12）。まず入口のページが開くかを見る。開かなければ国外からは見えない可能性",
       "enabled": true
     }
   ]
