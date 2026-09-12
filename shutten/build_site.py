@@ -26,7 +26,10 @@ from datetime import date
 HERE = os.path.dirname(os.path.abspath(__file__))
 ALL = os.path.join(HERE, "data", "all.json")
 SOURCES = os.path.join(HERE, "sources.json")
-BASE = "/ic-log/shutten/"          # GitHub Pages のプロジェクトサイトの置き場所
+# 公開URL。別リポジトリや独自ドメイン（ogataten-nippo.com）に移すときは環境変数 SITE_URL を変えるだけでよい
+SITE_URL = os.environ.get("SITE_URL", "https://virgob77.github.io/ic-log/shutten/").rstrip("/") + "/"
+HOST = SITE_URL.split("/", 3)[0] + "//" + SITE_URL.split("/", 3)[2]   # https://virgob77.github.io
+BASE = "/" + SITE_URL.split("/", 3)[3]                                  # /ic-log/shutten/
 SITE_NAME = "大型店日報"   # ドメインは ogataten-nippo.com の予定。「出店ウォッチ」は既存メディアと同名で使えない
 CONTACT_URL = ""   # 訂正・削除の依頼フォーム（Googleフォームなど）のURL。決まったらここに入れる
 REPO_ISSUES = "https://github.com/VirgoB77/ic-log/issues/new"
@@ -116,7 +119,7 @@ input.q{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--rule);b
 def page(title, body, rel, desc="", canonical=""):
     """共通の外枠。rel はこのページから見た shutten/ への相対パス（'' か '../'）。"""
     d = esc(desc or TAGLINE)
-    can = f'<link rel="canonical" href="https://virgob77.github.io{BASE}{canonical}">' if canonical is not None else ""
+    can = f'<link rel="canonical" href="{SITE_URL}{canonical}">' if canonical is not None else ""
     return f"""<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -489,7 +492,7 @@ def main():
     with open(os.path.join(HERE, "search.json"), "w", encoding="utf-8") as f:
         json.dump(idx, f, ensure_ascii=False, separators=(",", ":"))
 
-    host = "https://virgob77.github.io" + BASE
+    host = SITE_URL
     sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
           f"<url><loc>{host}</loc><lastmod>{today}</lastmod><changefreq>daily</changefreq></url>"]
     for u in urls:
