@@ -40,6 +40,8 @@ FILES = os.path.join(HERE, "data", "files")
 UA = "shutten-recon/0.1 (+https://github.com/VirgoB77/ic-log)"
 WAIT = 2
 TIMEOUT = 90
+PDF_TIMEOUT = 25          # PDFは1本ずつ多いので短く諦める。90秒×50本で1時間止まった
+FAIL_STREAK = 3           # 同じ収集先で続けてこれだけ失敗したら、今日はその収集先をやめる
 MAX_BYTES = 20 * 1024 * 1024      # 1本がこれより大きければ見送る
 PDF_MAX_BYTES = 2 * 1024 * 1024   # PDFはこれより大きければ見送る（資料の束を避ける）
 WANT = re.compile(r"\.(xlsx|xls|csv)(\?|$)", re.I)
@@ -112,7 +114,7 @@ def safe_name(url):
     return name[:100]
 
 
-def download(url, dest, limit=MAX_BYTES, referer=None):
+def download(url, dest, limit=MAX_BYTES, referer=None, timeout=TIMEOUT):
     """ファイルを落とす。
 
     大阪市はURLの組み立てが正しいのに404を返した（大阪府は同じやり方で17本
@@ -123,7 +125,7 @@ def download(url, dest, limit=MAX_BYTES, referer=None):
     if referer:
         headers["Referer"] = referer
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         size = int(r.headers.get("Content-Length") or 0)
         if size > limit:
             raise ValueError(f"大きすぎる（{size:,}バイト）ので見送った")
@@ -198,20 +200,30 @@ def main():
         d = os.path.join(FILES, sid)
         os.makedirs(d, exist_ok=True)
 
+        streak = 0
         for url, label in links:
             dest = os.path.join(d, safe_name(url))
             if os.path.exists(dest):
                 skipped += 1
                 continue
+            is_pdf = url.lower().endswith(".pdf")
             try:
                 n = download(url, dest,
-                             PDF_MAX_BYTES if url.lower().endswith(".pdf") else MAX_BYTES,
-                             referer=src["url"])
-            except (urllib.error.HTTPError, urllib.error.URLError, ValueError, OSError) as e:
-                lines.append(f"  - 取れなかった {safe_name(url)} — {e}")
+                             PDF_MAX_BYTES if is_pdf else MAX_BYTES,
+                             referer=src["url"],
+                             timeout=PDF_TIMEOUT if is_pdf else TIMEOUT)
+            except (urllib.error.HTTPError, urllib.error.URLError, ValueError, OSError,
+                    TimeoutError) as e:
+                lines.append(f"  - 取れなかった {safe_name(url)} — {type(e).__name__}: {str(e)[:60]}")
                 failed += 1
+                streak += 1
+                if streak >= FAIL_STREAK:
+                    left = sum(1 for u, _ in links if not os.path.exists(os.path.join(d, safe_name(u))))
+                    lines.append(f"  - **{FAIL_STREAK}回続けて取れなかったので、この収集先は今日はここまで**（残り{left}本は次回）")
+                    break
                 time.sleep(WAIT)
                 continue
+            streak = 0
             got += 1
             lines.append(f"  - **{safe_name(url)}** {n:,}バイト … {label}")
             info = peek(dest)
