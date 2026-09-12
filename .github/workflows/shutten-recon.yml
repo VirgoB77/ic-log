@@ -40,6 +40,9 @@ jobs:
       - name: 偵察する
         run: python3 shutten/recon.py ${{ github.event.inputs.area }}
 
+      - name: むかしのページをアーカイブから取ってくる
+        run: python3 shutten/wayback.py || echo "アーカイブが取れなかった。今日の分だけで進む"
+
       - name: 届出を取り出す
         run: python3 shutten/parse.py
 
