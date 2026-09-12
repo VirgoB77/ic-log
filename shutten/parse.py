@@ -85,6 +85,7 @@ def to_iso(s):
     if not s:
         return None
     s = s.replace("元年", "1年")
+    s = re.sub(r"(令和|平成|昭和)\s*(\d{1,2})\s*[（(]\d{4}[)）]\s*年", r"\1\2年", s)   # 令和8(2026)年 → 令和8年
     m = re.search(r"(令和|平成|昭和)\s*(\d{1,2})\s*年\s*(\d{1,2})\s*月\s*(\d{1,2})\s*日", s)
     if m:
         y = ERA[m.group(1)] + int(m.group(2))
@@ -161,6 +162,8 @@ def coerce_date_column(rows, threshold=0.6):
 #   第6条その他 … 変更。面積・営業時間・駐車場などの変更
 #   第11条第3項 … 承継。設置者（建物の持ち主）が変わった
 ARTICLE_MEANS = [
+    (r"^中規模", "中規模"),
+    (r"^附則", "変更"),                 # 附則第5条第1項＝法施行前からある店（既存店）の変更届
     (r"^法?\s*第\s*6\s*条\s*第\s*5\s*項", "廃止"),
     (r"^法?\s*第\s*5\s*条", "新設"),
     (r"^法?\s*第\s*6\s*条", "変更"),
@@ -172,7 +175,18 @@ ARTICLE_MEANS = [
 NOT_A_NOTICE = re.compile(r"意見書|市の意見|県の意見|公表")
 
 
-ARTICLE_IN_TEXT = re.compile(r"(附則第\s*\d+\s*条第\s*\d+\s*項|第\s*\d+\s*条第\s*\d+\s*項|第\s*\d+\s*条)")
+# 「法第6条第5項」「6条5項関係」「附則5条1項」のどれでも拾う
+ARTICLE_IN_TEXT = re.compile(r"(附則)?\s*第?\s*(\d+)\s*条\s*(?:第?\s*(\d+)\s*項)?")
+# 条文が書いていないとき、言葉から決める（上から順に見る）
+ARTICLE_BY_WORD = [
+    (r"中規模", "中規模"),
+    (r"承継", "第11条第3項"),
+    (r"廃止", "第6条第5項"),
+    (r"既存店|附則", "附則第5条第1項"),
+    (r"新設|^大規模小売店舗届出書$", "第5条第1項"),   # 「大規模小売店舗届出書」は新設のときの様式名
+    (r"配置|運営方法|6条2項", "第6条第2項"),
+    (r"名称|代表者|小売業者|6条1項|変更", "第6条第1項"),
+]
 
 # 堺市はページの場所（URL）で種類が分かる
 SLUG_ARTICLE = [
@@ -181,10 +195,27 @@ SLUG_ARTICLE = [
 ]
 
 
-def article_in(text):
-    """「令和7年度 廃止の届出（法第6条第5項関係）について」→「第6条第5項」"""
-    m = ARTICLE_IN_TEXT.search(text or "")
-    return re.sub(r"\s", "", m.group(1)) if m else ""
+def article_in(text, allow_words=True):
+    """「令和7年度 廃止の届出（法第6条第5項関係）について」→「第6条第5項」
+    「新設の届出（5条1項関係）」→「第5条第1項」
+    「届出状況について」→ 空（条文が書いていない）
+    """
+    text = text or ""
+    if re.search(r"中規模", text):
+        return "中規模"
+    m = ARTICLE_IN_TEXT.search(text)
+    if m and m.group(2) in ("5", "6", "8", "11"):
+        art = f"第{m.group(2)}条"
+        if m.group(3):
+            art += f"第{m.group(3)}項"
+        if m.group(1):
+            art = "附則" + art
+        return art
+    if allow_words:
+        for pat, art in ARTICLE_BY_WORD:
+            if re.search(pat, text):
+                return art
+    return ""
 
 
 def means_of(article):
@@ -203,8 +234,9 @@ def norm_head(c):
 # 列名のゆれ → こちらの項目名。上から順に、最初に当たったものを使う。
 # 兵庫県・神戸市・堺市・岸和田市の見出しを全部ここで受ける。
 HTML_COLS = [
+    ("kind_col",    r"^(区分|届出の種類|届出書類名|届出区分)$"),
     ("date",        r"^(届出年月日|届出日|受理日)$"),
-    ("store",       r"^(店舗名称|店舗の名称|届出の名称|大規模小売店舗の名称|店舗名称所在地|名称)"),
+    ("store",       r"^(店舗名称|店舗の名称|届出の名称|大規模小売店舗の名称|建物名称|名称)"),
     ("address",     r"^(店舗の所在地|所在地)$"),
     ("operator",    r"^(設置者|設置する者|建物設置者|設置者名|旧設置者)$"),
     ("new_operator", r"^新設置者$"),
@@ -261,24 +293,36 @@ def extract_generic(page, base_url, how, hint=""):
         if len(rows) < 2:
             continue
 
+        if NOT_A_NOTICE.search(heading):
+            continue
+
+        # 阪南市：1件が「項目名 | 値」の縦長の表。横に倒して1行にする
+        if all(len(c) == 2 for c, _ in rows) and len(rows) >= 4:
+            labels = [c[0] for c, _ in rows]
+            if any(re.search(r"店舗|名称", l) for l in labels) and any("届出" in l for l in labels):
+                links = [u for _, ls in rows for u in ls]
+                rows = [([l for l in labels], []), ([c[1] for c, _ in rows], links)]
+
         if how == "firstrow" and len(rows[0][0]) <= 2:
             article = article_in(rows[0][0][0]) or rows[0][0][0]
             rows = rows[1:]
         else:
-            article = article_in(heading)
+            article = article_in(heading, allow_words=False)
             if not article:
                 for pat, art in SLUG_ARTICLE:
                     if re.search(pat, hint):
                         article = art
                         break
-        if not article or NOT_A_NOTICE.search(heading) or NOT_A_NOTICE.search(article):
-            continue
+            if not article and "chukibo" in hint:
+                article = "中規模"
         if not rows:
             continue
 
         idx = map_columns(rows[0][0])
         if "store" not in idx or "date" not in idx:
             continue
+        # 見出しに条文が無く、行にも区分が無いときだけ、見出しの言葉から推定する
+        heading_article = article or ("" if "kind_col" in idx else article_in(heading))
 
         for cells, links in rows[1:]:
             def cell(k):
@@ -286,15 +330,21 @@ def extract_generic(page, base_url, how, hint=""):
                 return cells[i] if i is not None and i < len(cells) else ""
 
             store, addr_in_name = split_store(cell("store"))
-            if not store or norm_head(store) in ("店舗名称", "店舗の名称", "届出の名称"):
+            if not store or norm_head(store) in ("店舗名称", "店舗の名称", "届出の名称", "届出なし", "なし"):
                 continue
             d = to_iso(cell("date"))
             if not d:
                 continue
+            # 行ごとの区分（松原市「新設」、門真市「法第5条第1項」、熊取町「変更届出書」）
+            article = heading_article
+            if "kind_col" in idx and cell("kind_col"):
+                article = article_in(cell("kind_col")) or article
+            # 阪南市のように、どこにも種類が書いていないページがある。
+            # 店名と届出日がある以上は届出なので、種類不明のまま残す（捨てない）
             a, b = span_of(cell("span"))
             rec = {
                 "article": article,
-                "kind": means_of(article),
+                "kind": means_of(article) if article else "不明",
                 "notified_on": d,
                 "notified_raw": cell("date"),
                 "store": store,
@@ -320,6 +370,20 @@ EXTRACTORS = {
     "kobe-city": dict(base="https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html", how="firstrow"),
     "sakai-city": dict(base="https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html", how="heading"),
     "kishiwada-city": dict(base="https://www.city.kishiwada.lg.jp/page/43-daitentodokede.html", how="heading"),
+    # ここから下は 2026-09-12 に足した移譲市町村と中規模。列名の対応表でどれだけ通るか見る
+    "toyonaka-city": dict(base="https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.html", how="heading"),
+    "minoh-city": dict(base="https://www.city.minoh.lg.jp/syoukou/daikibominoh.html", how="heading"),
+    "hirakata-city": dict(base="https://www.city.hirakata.osaka.jp/0000003373.html", how="heading"),
+    "ibaraki-city": dict(base="https://www.city.ibaraki.osaka.jp/kikou/sangyo/shoukou/menu/daikibotyukibokouritenpo/tensyutsu/48906.html", how="heading"),
+    "matsubara-city": dict(base="https://www.city.matsubara.lg.jp/docs/page3041.html", how="heading"),
+    "sennan-city": dict(base="https://www.city.sennan.lg.jp/kakuka/shiminseikatu/sangyoushinkou/shokorodokakari/town/daikibo/todokede/12417.html", how="heading"),
+    "kadoma-city": dict(base="https://www.city.kadoma.osaka.jp/soshiki/shiminbunkabu/6/3/4/2484.html", how="heading"),
+    "kumatori-town": dict(base="https://www.town.kumatori.lg.jp/soshiki/sangyo_shinko/gyomu/sangyo_shinko/shokogyo/2357.html", how="heading"),
+    "hannan-city": dict(base="https://www.city.hannan.lg.jp/kakuka/mirai/kikaku/daikibokouritennporittihou/index.html", how="heading"),
+    "yao-city": dict(base="https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012008/index.html", how="heading"),
+    "sakai-chukibo": dict(base="https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/chukouritenpo/chukiboichiran.html", how="heading"),
+    "yao-chukibo": dict(base="https://www.city.yao.osaka.jp/sangyou_business/sangyoushinkou_kigyoushien/1012001/1012003.html", how="heading"),
+    "minoh-2shi2cho": dict(base="https://www.city.minoh.lg.jp/syoukou/daikibo.html", how="heading"),
 }
 
 
