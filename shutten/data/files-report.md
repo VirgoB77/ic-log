@@ -16,6 +16,9 @@
 ### 大阪市 大規模小売店舗立地法 手続き・届出
 
 - Excel/CSV のリンク: 3 本
+  - 手持ちあり ju_20260818.xlsx — 取り直し HTTPError: HTTP Error 404: Not Found（手持ちを使う）
+  - 手持ちあり to20260630.xls — 取り直し HTTPError: HTTP Error 404: Not Found（手持ちを使う）
+  - 手持ちあり si20260630.xls — 取り直し HTTPError: HTTP Error 404: Not Found（手持ちを使う）
 
 ### 和泉市 届出状況
 

@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,194 バイト
+- HTTP 200 / UTF-8 / 554,789 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -504,6 +504,6 @@
 
 ### （参考）大阪市オープンデータポータル 添付ファイル一覧
 
-- URL: https://data.city.osaka.lg.jp/odcsv/
-- メモ: 大阪市の添付ファイルのメタデータを日次CSVで出しているらしい。大阪市の一覧Excelの更新を機械で知る手になるか、まず形を見る
+- URL: https://data.city.osaka.lg.jp/
+- メモ: 大阪市の添付ファイルのメタデータを日次CSVで出しているらしい。/odcsv/ は GitHub Actions からでも40秒以内に応答が無かった（2026-09-12）。まず入口のページが開くかを見る。開かなければ国外からは見えない可能性
 - **結果: 取得できなかった — URLError: <urlopen error timed out>**
