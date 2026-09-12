@@ -172,6 +172,21 @@ ARTICLE_MEANS = [
 NOT_A_NOTICE = re.compile(r"意見書|市の意見|県の意見|公表")
 
 
+ARTICLE_IN_TEXT = re.compile(r"(附則第\s*\d+\s*条第\s*\d+\s*項|第\s*\d+\s*条第\s*\d+\s*項|第\s*\d+\s*条)")
+
+# 堺市はページの場所（URL）で種類が分かる
+SLUG_ARTICLE = [
+    (r"shinsetsu", "第5条第1項"), (r"haishi", "第6条第5項"), (r"shokei", "第11条第3項"),
+    (r"haichi", "第6条第2項"), (r"meisho", "第6条第1項"), (r"kizon|fusoku", "附則第5条第1項"),
+]
+
+
+def article_in(text):
+    """「令和7年度 廃止の届出（法第6条第5項関係）について」→「第6条第5項」"""
+    m = ARTICLE_IN_TEXT.search(text or "")
+    return re.sub(r"\s", "", m.group(1)) if m else ""
+
+
 def means_of(article):
     article = article.strip()
     for pat, name in ARTICLE_MEANS:
@@ -180,28 +195,65 @@ def means_of(article):
     return "不明"
 
 
-def guess_columns(header):
-    """見出し行から、どの列が何かを当てる。県ごとに列の順が違うため。"""
+def norm_head(c):
+    """「住 民 等 意 見」「店舗名称 （所在地）」→ 空白・記号を落として比べる。"""
+    return re.sub(r"[\s（）()・、．.]", "", c or "")
+
+
+# 列名のゆれ → こちらの項目名。上から順に、最初に当たったものを使う。
+# 兵庫県・神戸市・堺市・岸和田市の見出しを全部ここで受ける。
+HTML_COLS = [
+    ("date",        r"^(届出年月日|届出日|受理日)$"),
+    ("store",       r"^(店舗名称|店舗の名称|届出の名称|大規模小売店舗の名称|店舗名称所在地|名称)"),
+    ("address",     r"^(店舗の所在地|所在地)$"),
+    ("operator",    r"^(設置者|設置する者|建物設置者|設置者名|旧設置者)$"),
+    ("new_operator", r"^新設置者$"),
+    ("event_on",    r"^(新設日|変更日|廃止日|承継日|開店日|新設する日)$"),
+    ("content",     r"^(変更事項|変更内容|届出内容|届出概要|概要)$"),
+    ("span",        r"縦覧"),
+    ("meeting",     r"^説明会"),
+    ("citizen_opinion", r"^(住民等意見|住民意見|住民等の意見)"),
+    ("city_opinion", r"^(市意見|府意見|県意見)"),
+    ("note",        r"^(備考|市留意事項)$"),
+]
+
+
+def map_columns(header):
+    """見出し行から、どの列が何かを当てる。"""
+    heads = [norm_head(c) for c in header]
     idx = {}
-    for i, h in enumerate(header):
-        if re.search(r"届出.*(年月日|日)|受理", h):
-            idx.setdefault("date", i)
-        elif re.search(r"店舗名|名称", h):
-            idx.setdefault("store", i)
-        elif re.search(r"縦覧", h):
-            idx.setdefault("span", i)
-        elif re.search(r"概要|届出概要|資料", h):
-            idx.setdefault("docs", i)
+    for field, pat in HTML_COLS:
+        for i, hd in enumerate(heads):
+            if hd and re.search(pat, hd) and i not in idx.values():
+                idx[field] = i
+                break
     return idx
+
+
+def split_store(cell):
+    """「コジマNEW堺店 （堺区大仙西町6丁184番地1）」→ 店名と所在地に分ける。
+
+    堺市は1つのセルに両方入れている。岸和田市は「告示文 [PDFファイル／62KB」の
+    ような添付の名残がつくので、それも落とす。
+    """
+    t = re.sub(r"\s*(告示文|縦覧資料|届出書)?\s*\[PDF[^\]]*\]?.*$", "", cell).strip()
+    t = re.sub(r"\s+\d+条\d+項届出.*$", "", t).strip()
+    # 「(仮称)コープ野々井店 (南区野々井…)」のように店名の頭にも括弧があるので、
+    # 最初の括弧ではなく、いちばん後ろの「所在地らしい括弧」で切る
+    m = re.match(r"^(.*)[（(]([^（()）]*(?:区|市|町|丁目|番)[^（()）]*)[)）]?\s*$", t)
+    if m and m.group(1).strip():
+        return m.group(1).strip(), m.group(2).strip()
+    return t, ""
 
 
 # ---------------------------------------------------------------- 読み取る
 
-def extract_generic(page, base_url, article_from):
-    """兵庫県・神戸市に共通の読み方。
+def extract_generic(page, base_url, how, hint=""):
+    """HTMLの表から届出を1件ずつ取り出す。
 
-    article_from が "heading" なら直前の見出しから条文を取り、
-    "firstrow" なら表の1行目の最初のセルから取る（神戸市がこの形）。
+    how が "heading" なら直前の見出しから条文を取り、"firstrow" なら
+    表の1行目の最初のセルから取る（神戸市がこの形）。
+    hint はページのURLなど。堺市は年度別ページのURLに種類が入っている。
     """
     found = []
     for heading, table in tables_with_context(page):
@@ -209,19 +261,22 @@ def extract_generic(page, base_url, article_from):
         if len(rows) < 2:
             continue
 
-        if article_from == "firstrow":
-            article = rows[0][0][0] if rows[0][0] else ""
+        if how == "firstrow" and len(rows[0][0]) <= 2:
+            article = article_in(rows[0][0][0]) or rows[0][0][0]
             rows = rows[1:]
         else:
-            article = heading
-
-        if not article or NOT_A_NOTICE.search(article):
+            article = article_in(heading)
+            if not article:
+                for pat, art in SLUG_ARTICLE:
+                    if re.search(pat, hint):
+                        article = art
+                        break
+        if not article or NOT_A_NOTICE.search(heading) or NOT_A_NOTICE.search(article):
             continue
-
         if not rows:
             continue
-        header = rows[0][0]
-        idx = guess_columns(header)
+
+        idx = map_columns(rows[0][0])
         if "store" not in idx or "date" not in idx:
             continue
 
@@ -230,31 +285,41 @@ def extract_generic(page, base_url, article_from):
                 i = idx.get(k)
                 return cells[i] if i is not None and i < len(cells) else ""
 
-            store = cell("store")
-            if not store:
+            store, addr_in_name = split_store(cell("store"))
+            if not store or norm_head(store) in ("店舗名称", "店舗の名称", "届出の名称"):
                 continue
             d = to_iso(cell("date"))
+            if not d:
+                continue
             a, b = span_of(cell("span"))
-            found.append({
+            rec = {
                 "article": article,
                 "kind": means_of(article),
                 "notified_on": d,
                 "notified_raw": cell("date"),
                 "store": store,
+                "address": cell("address") or addr_in_name,
+                "operator": cell("operator"),
+                "new_operator": cell("new_operator"),
+                "event_on": to_iso(cell("event_on")),
+                "content": cell("content"),
                 "review_from": a,
                 "review_to": b,
+                "meeting": cell("meeting"),
+                "citizen_opinion": cell("citizen_opinion"),
+                "city_opinion": cell("city_opinion"),
+                "note": cell("note"),
                 "docs": [u for u in links if re.search(r"\.(pdf|xlsx?|docx?)$", u, re.I)],
-            })
+            }
+            found.append(rec)
     return found
 
 
 EXTRACTORS = {
-    "hyogo-pref-juran": dict(
-        base="https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html",
-        how="heading"),
-    "kobe-city": dict(
-        base="https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html",
-        how="firstrow"),
+    "hyogo-pref-juran": dict(base="https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html", how="heading"),
+    "kobe-city": dict(base="https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html", how="firstrow"),
+    "sakai-city": dict(base="https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html", how="heading"),
+    "kishiwada-city": dict(base="https://www.city.kishiwada.lg.jp/page/43-daitentodokede.html", how="heading"),
 }
 
 
@@ -264,7 +329,7 @@ def make_key(source, rec):
     これがあるから「今日から消えた＝縦覧が終わった」が分かる。
     店舗名と届出日が変わらないかぎり同じ目印になる。
     """
-    seed = f"{source}|{rec['article']}|{rec['notified_on']}|{rec['store']}"
+    seed = f"{source}|{rec['article']}|{rec['notified_on']}|{rec['store']}|{rec.get('address','')}"
     return hashlib.sha1(seed.encode("utf-8")).hexdigest()[:12]
 
 
@@ -272,7 +337,7 @@ def parse_file(source, path):
     conf = EXTRACTORS[source]
     with open(path, encoding="utf-8", errors="replace") as f:
         page = f.read()
-    recs = extract_generic(page, conf["base"], conf["how"])
+    recs = extract_generic(page, conf["base"], conf["how"], hint=os.path.basename(path))
     for r in recs:
         r["source"] = source
         r["key"] = make_key(source, r)
@@ -287,9 +352,20 @@ def main():
     for source in sorted(EXTRACTORS):
         if only and only != source:
             continue
+        # 同じ日の保存ページ（入口と、そこから辿った先）をまとめて1つにする。
+        # 堺市は入口が目次で、中身は年度別ページに散らばっている
+        by_day = {}
         for path in sorted(glob.glob(os.path.join(RAW, source, "*.html"))):
-            day = os.path.splitext(os.path.basename(path))[0]
-            recs = parse_file(source, path)
+            day = os.path.basename(path)[:10]
+            by_day.setdefault(day, []).append(path)
+        for day, paths in sorted(by_day.items()):
+            recs, seen = [], set()
+            for path in paths:
+                for r in parse_file(source, path):
+                    if r["key"] in seen:          # 入口と年度別ページに同じ表が出ることがある
+                        continue
+                    seen.add(r["key"])
+                    recs.append(r)
             d = os.path.join(OUT, source)
             os.makedirs(d, exist_ok=True)
             with open(os.path.join(d, f"{day}.json"), "w", encoding="utf-8") as f:
@@ -302,7 +378,7 @@ def main():
 
     print(f"# 取り出した結果（合計 {total} 件）\n")
     for source, day, n, kinds in summary:
-        k = " / ".join(f"{a} {b}件" for a, b in sorted(kinds.items()))
+        k = " / ".join(f"{a} {b}件" for a, b in sorted(kinds.items(), key=lambda x: -x[1]))
         print(f"- {source} {day}: **{n}件**（{k}）")
 
     gh = os.environ.get("GITHUB_STEP_SUMMARY")
