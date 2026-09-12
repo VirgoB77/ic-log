@@ -207,9 +207,11 @@ def main():
                 skipped += 1
                 continue
             is_pdf = url.lower().endswith(".pdf")
+            # 収集先ごとにPDFの上限を変えられる（兵庫県の資料は8MB級が本体）
+            pdf_cap = int(src.get("pdf_max_mb", 0) * 1024 * 1024) or PDF_MAX_BYTES
             try:
                 n = download(url, dest,
-                             PDF_MAX_BYTES if is_pdf else MAX_BYTES,
+                             pdf_cap if is_pdf else MAX_BYTES,
                              referer=src["url"],
                              timeout=PDF_TIMEOUT if is_pdf else TIMEOUT)
             except ValueError as e:

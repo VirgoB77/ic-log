@@ -35,6 +35,105 @@ DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 CUMULATIVE = {"osaka-city", "osaka-pref"}   # 過去分を全部含む一覧を出している収集先
 
 
+# ---------------------------------------------------------------- 地域をそろえる
+# 収集先ごとに、都道府県と市が決まっているものはここで決める。None は住所から読む
+SOURCE_PLACE = {
+    "osaka-city": ("大阪府", "大阪市"),   "osaka-pref": ("大阪府", None),
+    "sakai-city": ("大阪府", "堺市"),     "sakai-chukibo": ("大阪府", "堺市"),
+    "hirakata-city": ("大阪府", "枚方市"), "toyonaka-city": ("大阪府", "豊中市"),
+    "ibaraki-city": ("大阪府", "茨木市"),  "kadoma-city": ("大阪府", "門真市"),
+    "kishiwada-city": ("大阪府", "岸和田市"), "matsubara-city": ("大阪府", "松原市"),
+    "sennan-city": ("大阪府", "泉南市"),   "kumatori-town": ("大阪府", "熊取町"),
+    "hannan-city": ("大阪府", "阪南市"),   "yao-city": ("大阪府", "八尾市"),
+    "yao-chukibo": ("大阪府", "八尾市"),   "minoh-city": ("大阪府", "箕面市"),
+    "minoh-2shi2cho": ("大阪府", None),    "kobe-city": ("兵庫県", "神戸市"),
+    "hyogo-pref-juran": ("兵庫県", None),
+}
+# 兵庫県は住所が無いので、店名に入っている地名から当てる（当て推量なので印をつける）
+HYOGO_CITIES = ["神戸", "姫路", "尼崎", "明石", "西宮", "洲本", "芦屋", "伊丹", "相生", "豊岡", "加古川",
+                "赤穂", "西脇", "宝塚", "三木", "高砂", "川西", "小野", "三田", "加西", "丹波篠山", "養父",
+                "丹波", "南あわじ", "朝来", "淡路", "宍粟", "加東", "たつの", "猪名川", "稲美", "播磨",
+                "福崎", "太子", "上郡", "佐用", "香美", "新温泉", "多可", "市川", "神河"]
+WARD = re.compile(r"^(?:大阪市|堺市|神戸市)?([^\s市区町村]{1,4}区)")
+CITY = re.compile(r"^(?:大阪府|兵庫県)?([^\s]{1,6}?[市町村])")
+
+
+def place_of(r):
+    """(都道府県, 市, 区, 当て推量か) を返す。"""
+    pref, city = SOURCE_PLACE.get(r["source"], ("", None))
+    addr = (r.get("address") or "").strip()
+    ward = ""
+    guess = False
+    if r["source"] == "osaka-city":
+        ward = (r.get("ward") or "").strip()
+        ward = ward + "区" if ward and not ward.endswith("区") else ward
+    elif city in ("堺市", "神戸市"):
+        m = WARD.match(addr)
+        ward = m.group(1) if m else ""
+    if city is None:
+        c = (r.get("city") or "").strip()
+        if not c:
+            m = CITY.match(addr)
+            c = m.group(1) if m else ""
+        if not c and r["source"] == "hyogo-pref-juran":
+            store = r.get("store") or ""
+            for name in HYOGO_CITIES:
+                if name in store:
+                    c = name + ("市" if name not in ("猪名川", "稲美", "播磨", "福崎", "太子", "上郡", "佐用",
+                                                       "香美", "新温泉", "多可", "市川", "神河") else "町")
+                    guess = True
+                    break
+        city = c or ""
+    return pref, city, ward, guess
+
+
+# ---------------------------------------------------------------- 収集先をまたいだ重複をまとめる
+# 大阪府が事務を移譲した市町（茨木・豊中・岸和田・箕面・枚方・門真・泉南…）の届出は、
+# その市のページと大阪府の月次Excelの両方に載る。箕面市のページは2つの入口から届く。
+# 同じ届出が2回数えられるので、店名・届出日・条文が同じものを1件にまとめる。
+def norm_store(s):
+    return re.sub(r"[\s（）()仮称・･ー－\-]|株式会社|㈱", "", s or "").lower()
+
+
+def filled(r):
+    return sum(1 for v in r.values() if v not in ("", None, [], 0, False))
+
+
+def merge_across_sources(by_key):
+    groups = defaultdict(list)
+    for r in by_key.values():
+        groups[(norm_store(r["store"]), r["notified_on"], r.get("article", ""))].append(r)
+    out = {}
+    merged_away = 0
+    for g in groups.values():
+        srcs = Counter(r["source"] for r in g)
+        # 収集先が1つだけ、または同じ収集先から2件以上出ている（別の届出）ときは触らない
+        if len(srcs) == 1 or any(n > 1 for n in srcs.values()):
+            for r in g:
+                out[r["key"]] = r
+            continue
+        # 項目が多いものを土台にし、空いている項目を他から埋める。土台の選び方は毎日同じになるようにする
+        g.sort(key=lambda r: (-filled(r), r["source"], r["key"]))
+        base = dict(g[0])
+        for other in g[1:]:
+            for k, v in other.items():
+                if base.get(k) in ("", None, [], 0) and v not in ("", None, [], 0):
+                    base[k] = v
+        snaps = [r for r in g if r.get("mode") == "snapshot"]
+        if snaps:
+            base["mode"] = "snapshot"
+            base["listed"] = any(r.get("listed") for r in snaps)
+            fs = [r["first_seen"] for r in snaps if r.get("first_seen")]
+            ls = [r["last_seen"] for r in snaps if r.get("last_seen")]
+            base["first_seen"] = min(fs) if fs else None
+            base["last_seen"] = max(ls) if ls else None
+        base["sources"] = sorted(srcs)
+        base["merged_keys"] = sorted(r["key"] for r in g if r["key"] != base["key"])
+        out[base["key"]] = base
+        merged_away += len(g) - 1
+    return out, merged_away
+
+
 def load(path):
     with open(path, encoding="utf-8") as f:
         return json.load(f)
@@ -74,6 +173,16 @@ def main():
                     newer["mode"] = cur["mode"]
                     by_key[k] = newer
 
+    # 地域をそろえる（ページで市区町村ごとに束ねるため）
+    for rec in by_key.values():
+        pref, city, ward, guess = place_of(rec)
+        rec["pref"] = pref
+        rec["city"] = city or rec.get("city") or ""
+        rec["ward"] = ward or ""
+        rec["area"] = (city or pref) + (ward if city in ("大阪市", "堺市", "神戸市") else "")
+        if guess:
+            rec["place_guess"] = True
+
     # 最新の保存日に載っているか
     for rec in by_key.values():
         if rec["mode"] == "snapshot":
@@ -81,13 +190,16 @@ def main():
         else:
             rec["listed"] = True
 
+    by_key, merged_away = merge_across_sources(by_key)
+
     all_recs = sorted(by_key.values(),
                       key=lambda r: (r.get("notified_on") or "", r["source"], r["store"]), reverse=True)
     with open(OUT_ALL, "w", encoding="utf-8") as f:
         json.dump(all_recs, f, ensure_ascii=False, indent=1)
 
     # ---- まとめ ----
-    lines = [f"# まとめ（{len(all_recs):,} 件）", ""]
+    lines = [f"# まとめ（{len(all_recs):,} 件）", "",
+             f"収集先をまたいで同じ届出だったものを {merged_away} 件まとめた（移譲市町の届出は市のページと大阪府のExcelの両方に載るため）。", ""]
     lines.append("| 収集先 | 件数 | 新設 | 変更 | 廃止 | 承継 | 最新の保存日 | 消えた |")
     lines.append("| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |")
     per = defaultdict(list)
