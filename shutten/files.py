@@ -32,6 +32,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import http.cookiejar
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, "data", "raw")
@@ -114,18 +115,40 @@ def safe_name(url):
     return name[:100]
 
 
-def download(url, dest, limit=MAX_BYTES, referer=None, timeout=TIMEOUT):
+def browser_session(page_url):
+    """ページを先に開いて、サーバーがくれるクッキーを持った状態を作る。
+
+    大阪市はURLの組み立てが正しくブラウザからは落とせるのに、この仕組みからは
+    404を返す。ページを見ずにいきなりファイルを取りに来る相手を弾いている
+    可能性がある。人がブラウザでするのと同じ順（ページ→リンク）でたどる。
+    名乗り（User-Agent）は変えない。
+    """
+    jar = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+    req = urllib.request.Request(page_url, headers={
+        "User-Agent": UA, "Accept": "text/html,application/xhtml+xml,*/*;q=0.8",
+        "Accept-Language": "ja,en;q=0.5"})
+    try:
+        opener.open(req, timeout=TIMEOUT).read(200000)
+    except Exception:
+        pass
+    return opener
+
+
+def download(url, dest, limit=MAX_BYTES, referer=None, timeout=TIMEOUT, opener=None):
     """ファイルを落とす。
 
     大阪市はURLの組み立てが正しいのに404を返した（大阪府は同じやり方で17本
     取れている）。ファイルを配るときに参照元を見るサーバーがあるので、
     どのページから来たのかを添える。素性は User-Agent に書いてあるとおり。
     """
-    headers = {"User-Agent": UA, "Accept-Language": "ja", "Accept": "*/*"}
+    headers = {"User-Agent": UA, "Accept-Language": "ja,en;q=0.5", "Accept": "*/*",
+               "Accept-Encoding": "identity"}
     if referer:
         headers["Referer"] = referer
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=timeout) as r:
+    open_ = opener.open if opener else urllib.request.urlopen
+    with open_(req, timeout=timeout) as r:
         size = int(r.headers.get("Content-Length") or 0)
         if size > limit:
             raise ValueError(f"大きすぎる（{size:,}バイト）ので見送った")
@@ -201,6 +224,7 @@ def main():
         os.makedirs(d, exist_ok=True)
 
         streak = 0
+        opener = browser_session(src["url"]) if src.get("session") else None
         for url, label in links:
             dest = os.path.join(d, safe_name(url))
             if os.path.exists(dest):
@@ -213,7 +237,8 @@ def main():
                 n = download(url, dest,
                              pdf_cap if is_pdf else MAX_BYTES,
                              referer=src["url"],
-                             timeout=PDF_TIMEOUT if is_pdf else TIMEOUT)
+                             timeout=PDF_TIMEOUT if is_pdf else TIMEOUT,
+                             opener=opener)
             except ValueError as e:
                 # 「大きすぎるので見送った」は相手の不調ではない。失敗の連続には数えない。
                 # 兵庫県はリストの先頭3本が8MB級で、ここを失敗と数えて全部打ち切っていた
