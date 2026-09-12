@@ -1,0 +1,309 @@
+{
+ "aeonawaji": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "store": "イオン淡路店",
+  "address": "淡路志筑新島 1 0番地3",
+  "content": "大規模小売店において小売業を行う者の氏名又は名称及び住所並びに法人に",
+  "applicant": "イオンリテール株式会社",
+  "how": "ocr"
+ },
+ "aeonmallitamikoya": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-25",
+  "store": "イオンモール伊丹昆陽",
+  "address": "伊丹市池尻四丁目1番1号外",
+  "content": "大規模小売店において小売業を行う者の氏名又は名称及び住所並びに法人にあっては",
+  "applicant": "三菱UF 」信託銀行株式会社",
+  "how": "ocr"
+ },
+ "aeonmiki": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-12",
+  "store": "イオン三木店",
+  "address": "三木市大村字砂163 外",
+  "content": "大規模小売店において小売業を行う者の氏名又は名称及び住所並びに法人に",
+  "applicant": "イオンリテール株式会社",
+  "how": "ocr"
+ },
+ "aeontownhimeji": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-04-24",
+  "content": "大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあって",
+  "applicant": "氏名 イオンタウン株式会社",
+  "how": "ocr"
+ },
+ "aeontowninagawa": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-20",
+  "store": "イオンモール猪名川",
+  "address": "兵庫県川辺郡猪名川町白金二丁目1番",
+  "content": "設置者 法人代表者の変更",
+  "applicant": "三井住友信託銀行株式会社",
+  "how": "ocr"
+ },
+ "aeontownkakogawa6-1": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-07-02",
+  "content": "大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては",
+  "how": "ocr"
+ },
+ "aeonyamasakishoppingcenter": {
+  "form": "２",
+  "kind_guess": "",
+  "article": "第６条第１項",
+  "address": "愛媛県松山市大街道二丁目３番地８ 愛媛県松山市大街道二丁目３番地８",
+  "content": "大規模小売店において小売業を行う者の氏名又は名称及び住所並びに法人にあっては",
+  "how": "embedded"
+ },
+ "aeonyashiro": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-11",
+  "store": "イオン社店",
+  "content": "(1) 大規模小売店舗の名称 及び 所在地",
+  "applicant": "イオンリテール株式会社",
+  "how": "ocr"
+ },
+ "asupatakasagosc": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-07",
+  "store": "アスパ高砂ショッピングセンター",
+  "address": "高砂市緑丘二丁目1番40呈",
+  "content": "(1) 大規模小売店舗を設置する者の代表者の氏名",
+  "applicant": "高砂北部開発株式会社",
+  "how": "ocr"
+ },
+ "bivitsutiyama": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-04",
+  "store": "BiVi 土山",
+  "address": "兵庫県加古郡播磨町北野添二丁目 1604番1",
+  "content": "大規模小売店舗を設置している者の住所",
+  "applicant": "大和リース株式会社",
+  "how": "ocr"
+ },
+ "centurygardenfrespo": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "content": "大規模小売店舗を設置する者の住所の変更",
+  "how": "ocr"
+ },
+ "coopnishinomiyahigashi": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-04-01",
+  "content": "大規模小売店舗の設置者の代表者の氏名",
+  "how": "ocr"
+ },
+ "ekoorunajio": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-03",
+  "content": "大規模小売店舗を設置する者の名称及び住所並びに代表者の氏名",
+  "applicant": "氏名又は名称 株式会社KUL",
+  "how": "ocr"
+ },
+ "ekoorunajio_1": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-07-31",
+  "content": "大規模小売店舗を設置する者の代表者の氏名",
+  "applicant": "氏名又は名称 株式会社KUL",
+  "how": "ocr"
+ },
+ "frespoako": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-04",
+  "store": "フレスポ赤穂",
+  "address": "兵庫県赤穂市中広902番1 外",
+  "content": "大規模小売店舗を設置している者の氏名又は名称及び住所",
+  "applicant": "東洋紡不動産株式会社",
+  "how": "ocr"
+ },
+ "fretsgardenhimejihanada": {
+  "article": "第6条第1項",
+  "content": "(1 ) 大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては代表者の氏名",
+  "how": "ocr"
+ },
+ "furesupoakou": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-07-09",
+  "store": "フレスポ赤穂",
+  "address": "兵庫県赤穂市中広902番1 外",
+  "content": "大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあって",
+  "applicant": "東洋編不動産株式会社",
+  "how": "ocr"
+ },
+ "hankyutakaradukasyogyozonesyogyotou": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-18",
+  "store": "阪急宝塚商業ゾーン商業棟",
+  "address": "兵庫県宝塚市栄町一丁目150番1 外56筆",
+  "content": "(1) 大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者の氏名",
+  "applicant": "阪急電鉄株式会社",
+  "how": "ocr"
+ },
+ "kakogawaminamisc": {
+  "how": "ocr"
+ },
+ "marketosquarenakayamadera": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-04-28",
+  "store": "マーケットスクエア中山寺",
+  "address": "兵庫県宝塚市中筋五十目 1番地",
+  "content": "①) 大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者",
+  "how": "ocr"
+ },
+ "marunakasumotomonobe": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2024-11-15",
+  "content": "(1) 大規模小売店舗の名称",
+  "applicant": "株式会社 フジ",
+  "how": "ocr"
+ },
+ "maxvalueinami": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2025-11-20",
+  "content": "(1) 大規模小売店舗の名称",
+  "applicant": "キング醸造 株式会社",
+  "how": "ocr"
+ },
+ "maxvaluekinnrakuujitenn": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-05-27",
+  "content": "(1) 大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては",
+  "applicant": "株式会社ダイエー",
+  "how": "ocr"
+ },
+ "maxvaluetoyotomi": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2025-11-20",
+  "content": "(1) 大規模小売店舗の名称",
+  "applicant": "株式会社 フジ",
+  "how": "ocr"
+ },
+ "nitorimiki": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-03",
+  "content": "大規模小売店舗を設置する者の住所の変更",
+  "how": "ocr"
+ },
+ "oasistownkiserakawanishi": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-04-01",
+  "store": "オアシスタウンキセラ川西",
+  "address": "兵庫県川西市火打一丁目1 6",
+  "content": "(1) 大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者の氏名",
+  "applicant": "三菱Cキャピタルエステートプラス株式会社",
+  "how": "ocr"
+ },
+ "parkurbanasagiri": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-02",
+  "store": "ペークアーバン朝想",
+  "address": "明石市朝霧南町一丁目488番地の13、163番地の1、165番地の1",
+  "content": "(1) 大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあって",
+  "how": "ocr"
+ },
+ "sandaekimaeitibankan": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-17",
+  "content": "(1) 大規模小売店舗を設置する者の氏名又は名称又は住所並びに法人にあっては代表者の氏名",
+  "how": "ocr"
+ },
+ "shimosakabesc": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-04-01",
+  "store": "しもさかべ Shopping Center",
+  "address": "兵庫県尼崎市下坂部3丁目8番、9番の一部、 1 0番の一部",
+  "content": "(1) 大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者の氏名",
+  "applicant": "三菱COキャビタルエステートプラス株式会社",
+  "how": "ocr"
+ },
+ "tonarieseiwadai": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-07-17",
+  "store": "トナリエ清和台",
+  "address": "兵庫県川西市清和台東 8丁目1 番地8",
+  "content": "(1) 大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者の氏名",
+  "applicant": "氏名又は名称 株式会社りそな銀行",
+  "how": "ocr"
+ },
+ "wadayamashoppingcenter": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-23",
+  "store": "和田山ショッピングセンター",
+  "address": "朝来市和田山町枚田岡7 7 4番地",
+  "content": "大規模小売店において小売業を行う者の氏名又は名称及び住所並びに法人に",
+  "applicant": "イオンリテール株式会社",
+  "how": "ocr"
+ },
+ "yamadastorenishinomiyaten": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-06-17",
+  "content": "(1) 大規模小売店舗の名称",
+  "applicant": "名 称 ヤマダストアー株式会社",
+  "how": "ocr"
+ },
+ "youmetownhimeji": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "content": "大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては代表",
+  "applicant": "株式会社 イズミ",
+  "how": "ocr"
+ }
+}

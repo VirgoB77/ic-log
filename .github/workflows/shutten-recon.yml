@@ -56,11 +56,15 @@ jobs:
       - name: まとめる
         run: python3 shutten/merge.py
 
+      # all.json から見せるページを作る（GitHub Pages がそのまま配信する）
+      - name: ページを作る
+        run: python3 shutten/build_site.py
+
       - name: 結果をしまう
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add shutten/data
+          git add shutten/data shutten/index.html shutten/a shutten/k shutten/s shutten/search.json shutten/sitemap.xml shutten/robots.txt
           if git diff --cached --quiet; then
             echo "変わりなし。今日は何も起きていない"
             exit 0

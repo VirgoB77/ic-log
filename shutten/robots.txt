@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /ic-log/shutten/data/
+Sitemap: https://virgob77.github.io/ic-log/shutten/sitemap.xml
