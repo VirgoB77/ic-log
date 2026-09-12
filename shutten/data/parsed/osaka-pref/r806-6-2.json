@@ -1,0 +1,27 @@
+[
+ {
+  "source": "osaka-pref",
+  "file": "r806-6-2.xlsx",
+  "article": "第6条第2項",
+  "kind": "変更",
+  "notified_on": "2026-06-03",
+  "store": "じゃんぼスクエア河内長野",
+  "city": "河内長野市",
+  "address": "河内長野市西之山町５番20",
+  "operator": "賛栄商事（株）",
+  "retailer": "（株）松源",
+  "event_on": "2027-02-04",
+  "area_m2": null,
+  "content": "",
+  "parking": null,
+  "bicycle": null,
+  "open_time": "",
+  "close_time": "",
+  "pref_opinion": "",
+  "pref_recommendation": "",
+  "citizen_opinion": "",
+  "recommendation": "",
+  "note": "10909",
+  "key": "44db7ef2ad6f"
+ }
+]

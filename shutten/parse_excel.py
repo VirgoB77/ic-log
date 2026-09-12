@@ -154,8 +154,114 @@ def parse_osaka_city(path):
     return recs
 
 
+# ------------------------------------------------------------- 大阪府
+
+def norm_head(c):
+    """「１.　大規模小売店舗名」→「大規模小売店舗名」。番号・空白・記号を落として比べる。"""
+    return re.sub(r"[\s０-９0-9．.、（）()㎡㎥台]", "", c or "")
+
+
+# 列名のゆれ → こちらの項目名。最初に当たったものを使う
+PREF_COLS = [
+    ("store",       r"^(店舗の名称|大規模小売店舗名)$"),
+    ("address",     r"^(店舗の所在地|所在地)$"),
+    ("city",        r"^所在市町名$"),
+    ("operator",    r"^(建物設置者名|建物設置者の名称|設置者名)$"),
+    ("retailer",    r"^(主な小売業者の名称|小売業者名)$"),
+    ("notified_on", r"^届出日$"),
+    ("event_on",    r"^(新設日|新設する日|変更する日|変更日|廃止日|基準面積以下となる日)$"),
+    ("area_m2",     r"^(店舗面積|店舗面積の合計)$"),
+    ("content",     r"^(変更する事項|変更内容)$"),
+    ("parking",     r"^駐車場の収容台数$"),
+    ("bicycle",     r"^駐輪場の収容台数$"),
+    ("open_time",   r"^開店時刻$"),
+    ("close_time",  r"^閉店時刻$"),
+    ("pref_opinion", r"^府意見$"),
+    ("pref_recommendation", r"^府勧告$"),
+    ("citizen_opinion", r"^住民等$"),
+    ("recommendation", r"^勧告$"),
+    ("note",        r"^(備考|備考欄)$"),
+]
+
+# ファイル名から、何の届出かを決める
+PREF_KIND = [
+    (r"shinsetsu|-5-1", "第5条第1項", "新設"),
+    (r"haishi|-6-5",    "第6条第5項", "廃止"),
+    (r"fusoku|husoku",  "附則第5条第1項", "変更"),
+    (r"henkou6-2|_6-2|-6-2", "第6条第2項", "変更"),
+    (r"-6-1",           "第6条第1項", "変更"),
+]
+
+
+def kind_from_name(name):
+    for pat, art, kind in PREF_KIND:
+        if re.search(pat, name):
+            return art, kind
+    return "", "不明"
+
+
+def parse_osaka_pref(path):
+    name = os.path.basename(path)
+    article, kind = kind_from_name(name)
+    sheets = xlsx.read_any(path)
+    rows = coerce_date_column(next(iter(sheets.values())))
+
+    # 本当の見出し行＝店舗名の列がある行（上に題名の行がある）
+    h = next((i for i, r in enumerate(rows[:15])
+              if any(re.search(r"店舗名|店舗の名称", c) for c in r)), None)
+    if h is None:
+        return []
+    heads = [norm_head(c) for c in rows[h]]
+    idx = {}
+    for field, pat in PREF_COLS:
+        for i, hd in enumerate(heads):
+            if hd and re.search(pat, hd):
+                idx[field] = i
+                break
+
+    def g(r, k):
+        i = idx.get(k)
+        return clean(r[i]) if i is not None and i < len(r) else ""
+
+    recs = []
+    # 見出しの下に「他」「核店舗１」「届出時」などの小見出し行が2〜3行続くので、
+    # 店舗名と届出日の両方が入っている行だけを1件とみなす
+    for r in rows[h + 1:]:
+        store = g(r, "store")
+        notified = to_iso(g(r, "notified_on"))
+        if not store or not notified:
+            continue
+        recs.append({
+            "source": "osaka-pref",
+            "file": name,
+            "article": article,
+            "kind": kind,
+            "notified_on": notified,
+            "store": store,
+            "city": g(r, "city"),
+            "address": g(r, "address"),
+            "operator": g(r, "operator"),
+            "retailer": g(r, "retailer"),
+            "event_on": to_iso(g(r, "event_on")),
+            "area_m2": num(g(r, "area_m2")),
+            "content": g(r, "content"),
+            "parking": num(g(r, "parking")),
+            "bicycle": num(g(r, "bicycle")),
+            "open_time": g(r, "open_time"),
+            "close_time": g(r, "close_time"),
+            "pref_opinion": g(r, "pref_opinion"),
+            "pref_recommendation": g(r, "pref_recommendation"),
+            "citizen_opinion": g(r, "citizen_opinion"),
+            "recommendation": g(r, "recommendation"),
+            "note": g(r, "note"),
+            "key": make_key("osaka-pref", article, notified, f"{store}|{g(r, 'city')}"),
+        })
+    return recs
+
+
 SOURCES = {
     "osaka-city": ("to*.xls", parse_osaka_city),
+    "osaka-pref": ("*.xlsx", parse_osaka_pref),
 }
 
 
@@ -166,18 +272,20 @@ def main():
         if only and only != sid:
             continue
         for path in sorted(glob.glob(os.path.join(FILES, sid, pattern))):
-            asof = asof_from_name(path) or "unknown"
             recs = fn(path)
             d = os.path.join(OUT, sid)
             os.makedirs(d, exist_ok=True)
-            out = os.path.join(d, f"{asof}.json")
+            # 大阪市は1枚に全部入っているので日付、大阪府は月次に分かれているのでファイル名で置く
+            asof = asof_from_name(path)
+            stem = asof if asof else os.path.splitext(os.path.basename(path))[0]
+            out = os.path.join(d, f"{stem}.json")
             with open(out, "w", encoding="utf-8") as f:
                 json.dump(recs, f, ensure_ascii=False, indent=1)
             kinds = {}
             for r in recs:
                 kinds[r["kind"]] = kinds.get(r["kind"], 0) + 1
             k = " / ".join(f"{a} {b}件" for a, b in sorted(kinds.items(), key=lambda x: -x[1]))
-            lines.append(f"- {sid} {os.path.basename(path)}（{asof}時点）: **{len(recs)}件**（{k}）")
+            lines.append(f"- {sid} {os.path.basename(path)}: **{len(recs)}件**（{k}）")
     text = "\n".join(lines)
     print(text)
     gh = os.environ.get("GITHUB_STEP_SUMMARY")
