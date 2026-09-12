@@ -14,8 +14,10 @@
       "name": "兵庫県 大規模小売店舗立地法 縦覧状況",
       "area": "hyogo",
       "url": "https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html",
-      "note": "本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる",
-      "enabled": true
+      "note": "本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDFが44本（合計75MB）あり、2MB以下の34本だけ取る。重い10本は図面つきなので取らない",
+      "enabled": true,
+      "pdf": true,
+      "pdf_labels": "資料"
     },
     {
       "id": "hyogo-pref-top",
@@ -30,8 +32,10 @@
       "name": "神戸市 大規模小売店舗立地法 届出状況等",
       "area": "hyogo",
       "url": "https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html",
-      "note": "神戸市は政令市なので県とは別に受理する。ここが抜けると神戸が丸ごと落ちる",
-      "enabled": true
+      "note": "政令市なので県とは別に受理。届出ごとの「届出書」PDFが20本（合計35MB）あり、2MB以下の16本だけ取る。交通資料・騒音資料は取らない",
+      "enabled": true,
+      "pdf": true,
+      "pdf_labels": "届出書"
     },
     {
       "id": "amagasaki-city",

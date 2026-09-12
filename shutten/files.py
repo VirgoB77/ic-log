@@ -51,6 +51,12 @@ WANT_PDF = re.compile(r"\.pdf(\?|$)", re.I)
 PDF_IS_DATA = re.compile(r"概要|一覧|リスト|届出状況|縦覧|告示")
 PDF_NOT_DATA = re.compile(r"手引|要綱|しおり|フロー|意見書|様式|記入例|チェックリスト|指針")
 
+# 収集先ごとに、どのラベルが中身かを sources.json の pdf_labels で指定できる。
+# 兵庫県は全部「資料」、神戸市は「届出書」で、上の一般則では拾えない。
+# 大きさは PDF_MAX_BYTES（2MB）で切るので、図面つきの重いものは自然に外れる。
+PDF_LABEL_RULE = {}
+_current_source = None
+
 # PDFそのものが一覧になっている収集先だけ、PDFも落とす。
 # 兵庫県のように「届出1件ごとの資料8MB」を並べているところは対象外。
 # （sources.json の "pdf": true で指定する）
@@ -85,7 +91,14 @@ def excel_links(path, base_url, want=WANT):
             continue
         label = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", m.group(2))).strip()
         if want is WANT_PDF:
-            if PDF_NOT_DATA.search(label) or not PDF_IS_DATA.search(label):
+            if PDF_NOT_DATA.search(label):
+                continue
+            # 収集先ごとの決まり（兵庫県は「資料」、神戸市は「届出書」が中身）
+            rule = PDF_LABEL_RULE.get(_current_source) if _current_source else None
+            if rule:
+                if not re.search(rule, label):
+                    continue
+            elif not PDF_IS_DATA.search(label):
                 continue
         seen.add(url)
         out.append((url, label[:60]))
@@ -159,6 +172,10 @@ def main():
         src = sources.get(sid)
         if not src or not src.get("url"):
             continue
+        global _current_source
+        _current_source = sid
+        if src.get("pdf_labels"):
+            PDF_LABEL_RULE[sid] = src["pdf_labels"]
         raw = newest_raw(sid)
         if not raw:
             lines.append(f"### {src['name']}\n\n- まだページを保存していない\n")
