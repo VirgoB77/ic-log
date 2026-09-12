@@ -27,7 +27,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ALL = os.path.join(HERE, "data", "all.json")
 SOURCES = os.path.join(HERE, "sources.json")
 BASE = "/ic-log/shutten/"          # GitHub Pages のプロジェクトサイトの置き場所
-SITE_NAME = "大型店とどけで帳"   # 仮の名前。「出店ウォッチ」は既存メディアと同名で使えない
+SITE_NAME = "大型店日報"   # ドメインは ogataten-nippo.com の予定。「出店ウォッチ」は既存メディアと同名で使えない
+CONTACT_URL = ""   # 訂正・削除の依頼フォーム（Googleフォームなど）のURL。決まったらここに入れる
+REPO_ISSUES = "https://github.com/VirgoB77/ic-log/issues/new"
+DISCLAIMER = "届出時点の内容です。届出のあとに変更や取下げがあることがあり、実際の開店日・閉店日と異なる場合があります。"
 TAGLINE = "大阪・兵庫の大型店の開店・閉店を、届出が出た日に。"
 
 KIND_ORDER = ["新設", "廃止", "承継", "変更", "中規模", "不明", "意見・勧告"]
@@ -91,7 +94,7 @@ th{color:var(--sub);font-weight:600;font-size:12px;white-space:nowrap}
 td.n{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 td.d{white-space:nowrap;color:var(--sub);font-size:13px}
 .list{list-style:none;padding:0;margin:0}
-.list li{padding:10px 0;border-bottom:1px solid var(--rule)}
+.list li{padding:10px 0;border-bottom:1px solid var(--rule);overflow-wrap:anywhere}
 .list .m{color:var(--sub);font-size:13px;margin-top:2px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .chips a{background:var(--soft);color:var(--ink);padding:4px 12px;border-radius:999px;font-size:14px}
@@ -131,10 +134,10 @@ def page(title, body, rel, desc="", canonical=""):
 <header class="top"><div class="name"><a href="{rel}index.html">{esc(SITE_NAME)}</a></div><div class="tag">{esc(TAGLINE)}</div></header>
 {body}
 <footer>
-<p>出典：各自治体が大規模小売店舗立地法に基づいて公告・縦覧している届出の一覧（大阪府・大阪市・堺市・兵庫県・神戸市ほか各市町）。大阪市の一覧は
-<a href="https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html">CC-BY 4.0</a> で提供されているものです。
-各自治体のページは毎朝1回とりに行き、載らなくなった届出もこのサイトには残しています。</p>
-<p>数値や日付は自治体の公表をそのまま写していますが、写し間違いや公表後の変更がありえます。正確な情報は各届出ページの「出典」から元の自治体ページをご確認ください。開店日・閉店日は「予定」として届け出られたもので、実際と異なることがあります。</p>
+<p>出典：各自治体が大規模小売店舗立地法に基づいて公告・縦覧している届出（大阪府・大阪市・堺市・兵庫県・神戸市と、大阪府から権限移譲を受けた市町）。各届出ページに出典のURLと取得日を載せています。
+毎朝1回とりに行き、自治体のページから消えた届出もこのサイトには残しています。</p>
+<p>{esc(DISCLAIMER)} 写し間違いもありえます。正確な内容は各届出ページの「出典」から自治体のページをご確認ください。</p>
+<p><a href="{rel}about.html">このサイトについて・出典と利用規約</a> ／ <a href="{rel}contact.html">訂正・削除のご依頼</a></p>
 </footer>
 </div></body></html>"""
 
@@ -208,9 +211,23 @@ def detail_page(r, by_ref, src_meta):
             hist = f"<h2>同じ店の届出の流れ</h2><ul class=\"list\">{''.join(links)}</ul>"
 
     src_ids = r.get("sources") or [r["source"]]
-    src_line = "、".join(
-        (f'<a href="{esc(src_meta[i]["url"])}">{esc(src_meta[i]["name"])}</a>' if src_meta.get(i, {}).get("url") else esc(i))
-        for i in src_ids)
+    src_items = []
+    for i in src_ids:
+        m = src_meta.get(i, {})
+        got = r.get("last_seen") or r.get("first_seen") or ""
+        first = r.get("first_seen") or ""
+        when = f"{got}取得" + (f"、最初に確認した日 {first}" if first and first != got else "")
+        if m.get("url"):
+            line = (f'出典：「{esc(m["name"])}」（<a href="{esc(m["url"])}">{esc(m["url"])}</a>、{esc(when)}）を加工して作成')
+        else:
+            line = f"出典：{esc(i)}（{esc(when)}）"
+        sub = []
+        if m.get("license"):
+            sub.append(f'ライセンス：{esc(m["license"])}')
+        if m.get("terms"):
+            sub.append(f'利用規約：<a href="{esc(m["terms"])}">{esc(m.get("terms_name") or m["terms"])}</a>')
+        src_items.append(f"<li>{line}" + (f'<div class="m">{" ／ ".join(sub)}</div>' if sub else "") + "</li>")
+    src_block = '<ul class="list" style="font-size:14px">' + "".join(src_items) + "</ul>"
     status = ""
     if r.get("mode") == "snapshot":
         status = ("いまも自治体のページに載っています" if r.get("listed") else
@@ -236,12 +253,14 @@ def detail_page(r, by_ref, src_meta):
 <p class="lead"><a href="{rel}a/{esc(slug(r['area']))}.html">{esc(r['area'])}</a> › <a href="{rel}k/{esc(r['kind'])}.html">{esc(r['kind'])}</a></p>
 <h1>{esc(r['store'])}</h1>
 <div class="card"><dl class="kv">{''.join(kv)}</dl></div>
+<p class="note">{esc(DISCLAIMER)} 内容に誤りがある場合は<a href="{rel}contact.html">訂正・削除のご依頼</a>からお知らせください。</p>
 {status}
 {ocr_note}
 {hist}
 {docs}
 <h2>出典</h2>
-<p style="font-size:14px">{src_line}（大規模小売店舗立地法に基づく届出の公表ページ）。このサイトが最初に確認した日：{esc(r.get('first_seen') or '—')}</p>
+{src_block}
+<p style="font-size:13px;color:var(--sub)">出典の書き方は各自治体の利用規約に合わせています（<a href="{rel}about.html">出典と利用規約</a>）。</p>
 """
     return page(title, body, rel, desc, canonical=f"s/{r['key']}.html")
 
@@ -274,6 +293,90 @@ def kind_page(kind, rows):
 {table(rows, rel)}
 """
     return page(f"{kind}の届出一覧（大阪・兵庫の大型店）", body, rel, f"{KIND_DESC.get(kind,'')} 大阪府・兵庫県で{len(rows)}件。", canonical=f"k/{kind}.html")
+
+
+def about_page(src_meta, today):
+    rel = ""
+    main_ids = ["osaka-pref", "osaka-city", "sakai-city", "hyogo-pref-juran", "kobe-city"]
+    rows = []
+    for i in main_ids:
+        m = src_meta.get(i)
+        if not m:
+            continue
+        t = (f'<a href="{esc(m["terms"])}">{esc(m.get("terms_name") or "利用規約")}</a>' if m.get("terms") else "—")
+        lic = esc(m.get("license") or "政府標準利用規約（第2.0版）相当と読んでいます。要確認")
+        rows.append(f'<tr><td><a href="{esc(m["url"])}">{esc(m["name"])}</a></td><td>{t}</td><td>{lic}</td></tr>')
+    cities = [m for i, m in src_meta.items()
+              if m.get("enabled") and m.get("area") == "osaka" and i not in main_ids and m.get("url")]
+    city_items = "".join(f'<li><a href="{esc(m["url"])}">{esc(m["name"])}</a></li>' for m in sorted(cities, key=lambda m: m["name"]))
+    body = f"""
+<h1>このサイトについて</h1>
+<p>{esc(SITE_NAME)}は、大規模小売店舗立地法（大店立地法）にもとづいて自治体が公表している「届出」を毎朝1回とりに行き、
+店舗面積1,000㎡を超える大型店の新設・変更・廃止・承継を、届出が出た日に一覧にしているサイトです。
+自治体のページでは縦覧期間（4か月）が過ぎると消えてしまう届出も、このサイトには残しています。</p>
+<p>対象はいま大阪府と兵庫県です。届出先は都道府県と政令指定都市で、大阪府では20の市町に届出先が移譲されているため、それぞれのページを見ています。</p>
+
+<h2>出典と利用規約</h2>
+<p>載せている内容はすべて自治体が公表している届出の一覧・資料からとったもので、このサイトで表の形・並び順・表記をそろえる加工をしています。
+各届出ページに、どの自治体のどのページから、いつとったかを書いています。出典の表記は各自治体の利用規約に従い、
+<b>「出典：『ページ名』（URL、取得日）を加工して作成」</b>の形にしています。</p>
+<div style="overflow-x:auto"><table>
+<tr><th>届出先</th><th>利用規約のページ</th><th>利用条件</th></tr>
+{''.join(rows)}
+</table></div>
+<p style="font-size:14px">大阪市の届出一覧は <a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a> で提供されています。
+このサイトでは列の選択・並べ替え・表記の統一という加工をしています。</p>
+<p style="font-size:14px">大阪府から権限移譲を受けた市町の届出ページ（各市町のサイト利用規約に従います）：</p>
+<ul class="list" style="font-size:14px">{city_items}</ul>
+
+<h2>免責</h2>
+<p>{esc(DISCLAIMER)} 数値や日付は自治体の公表をそのまま写していますが、写し間違いがありえます。
+紙をスキャンしたPDFを文字認識で読んだ項目には、その旨を各ページに書いています。
+正確な内容は、各届出ページの「出典」から自治体のページをご確認ください。このサイトの内容を利用したことによる損害について、運営者は責任を負いかねます。</p>
+
+<h2>訂正・削除のご依頼</h2>
+<p>届出をした事業者の方や関係者の方で、内容の訂正や削除を望まれる場合は、<a href="{rel}contact.html">訂正・削除のご依頼</a>をご覧ください。</p>
+<p style="font-size:13px;color:var(--sub)">このページの更新日：{esc(today)}</p>
+"""
+    return page(f"このサイトについて・出典と利用規約｜{SITE_NAME}", body, rel,
+                desc=f"{SITE_NAME}の出典、各自治体の利用規約、免責、訂正・削除のご依頼について。", canonical="about.html")
+
+
+def contact_page(today):
+    rel = ""
+    if CONTACT_URL:
+        route = f'<p><a href="{esc(CONTACT_URL)}" style="display:inline-block;background:var(--key);color:#fff;padding:10px 18px;border-radius:10px;font-weight:700">依頼フォームを開く</a></p>'
+    else:
+        route = ('<p class="note">専用の依頼フォームを準備しています。用意でき次第このページに載せます。'
+                 f'それまでは <a href="{esc(REPO_ISSUES)}">GitHub の Issue</a>（GitHubのアカウントが必要です）でもお受けします。</p>')
+    body = f"""
+<h1>訂正・削除のご依頼</h1>
+<p>{esc(SITE_NAME)}に載っている届出の内容について、訂正や削除のご依頼を受け付けています。
+届出をした事業者の方、その代理の方、届出に名前が載っている方からのご依頼を優先して対応します。</p>
+
+<h2>ご依頼に書いていただきたいこと</h2>
+<ul class="list">
+<li>対象のページのURL（このサイトの「s/」で始まるページ）</li>
+<li>店舗名と届出日</li>
+<li>訂正か削除か。訂正の場合は、正しい内容</li>
+<li>根拠（自治体の公表と食い違っている、届出を取り下げた、公表期間が終わっている、など）</li>
+<li>ご依頼者のお名前・所属と、返信先</li>
+</ul>
+
+<h2>対応のしかた</h2>
+<ul class="list">
+<li>内容を確認のうえ、原則として7日以内に返信します。</li>
+<li>自治体の公表と食い違っている場合は、公表に合わせて直します。</li>
+<li>自治体の公表そのものの訂正は、このサイトではできません。届出先の自治体窓口へお願いします。</li>
+<li>削除のご依頼は、公表期間が終わった届出や、個人の氏名が含まれる場合などを中心に、個別に判断します。</li>
+</ul>
+
+<h2>送り先</h2>
+{route}
+<p style="font-size:13px;color:var(--sub)">このページの更新日：{esc(today)}</p>
+"""
+    return page(f"訂正・削除のご依頼｜{SITE_NAME}", body, rel,
+                desc=f"{SITE_NAME}に載っている届出の訂正・削除のご依頼について。", canonical="contact.html")
 
 
 def index_page(all_recs, today):
@@ -369,6 +472,11 @@ def main():
 
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8") as f:
         f.write(index_page(recs, today))
+    with open(os.path.join(HERE, "about.html"), "w", encoding="utf-8") as f:
+        f.write(about_page(src_meta, today))
+    with open(os.path.join(HERE, "contact.html"), "w", encoding="utf-8") as f:
+        f.write(contact_page(today))
+    urls += ["about.html", "contact.html"]
 
     idx = [{"k": r["key"], "s": r["store"], "a": r["area"], "d": r["notified_on"], "t": r["kind"]}
            for r in sorted(recs, key=lambda r: r["notified_on"], reverse=True)]
