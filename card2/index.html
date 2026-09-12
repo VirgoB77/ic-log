@@ -2989,12 +2989,7 @@ function openSettings(){
     '<button class="btn" id="g-bk-lite">文字だけ保存</button>' +
     '<label for="g-restore">バックアップから復元</label>' +
     '<input type="file" id="g-restore" accept=".json,application/json">' +
-    '<label for="g-key">Claude で読む（読み取りの精度が上がる）</label>' +
-    '<p class="hint" style="margin-top:0">Anthropic の Claude に名刺の写真を送って読み取ります。端末の中で読むより正確です。' +
-    '鍵（APIキー）を入れたときだけ使います。空にすると、端末の中だけで読み取ります。</p>' +
-    '<p class="hint"><b>写真がインターネットに出ます。</b>人からもらった名刺を外に出したくないときは、空のままにしてください。<br>' +
-    '鍵は<b>この端末の中だけ</b>に保存します。GitHub にも、このページにも入りません。<br>' +
-    '名刺1枚あたり、2〜3円かかります（Anthropic の請求）。</p>' +
+    '<label for="g-key">Claude の鍵（APIキー）</label>' +
     '<input type="password" id="g-key" placeholder="sk-ant-… を貼る" autocomplete="off" spellcheck="false">' +
     '<div class="row"><button class="btn" id="g-key-save">保存する</button>' +
     '<button class="btn" id="g-key-test">接続を確認</button>' +
@@ -3010,11 +3005,6 @@ function openSettings(){
     '<div class="row"><button class="btn" id="g-mapkey-save">保存する</button>' +
     '<button class="btn" id="g-mapkey-clear">消す</button></div>' +
     '<p class="hint" id="g-mapkey-state"></p>' +
-    '<label>文字を読む準備</label>' +
-    '<p class="hint" style="margin-top:0">はじめて名刺を撮るとき、日本語の辞書など数MBを取り込みます。' +
-    'ここで先にすませておくと、外で撮るときに待ちません。一度すめば次からは不要です。</p>' +
-    '<button class="btn" id="g-warm">準備する</button>' +
-    '<p class="hint" id="g-warm-state"></p>' +
     '<label>撮ったあと</label>' +
     '<label class="opt"><input type="checkbox" id="g-check"> 切り取りを毎回たしかめる</label>' +
     '<p class="hint">名刺の枠を自分で合わせてから読み取りたいときに使います。ふだんは切ったままで構いません。</p>' +
@@ -3039,21 +3029,6 @@ function openSettings(){
     $('g-restore').addEventListener('change', function(){
       if (this.files && this.files[0]) doRestore(this.files[0]);
       this.value = '';
-    });
-    $('g-warm').addEventListener('click', function(){
-      var st = $('g-warm-state');
-      st.textContent = '取り込んでいます…';
-      progressCb = function(m){
-        if (!$('g-warm-state')) return;
-        $('g-warm-state').textContent = m.status + '　' + Math.round((m.progress || 0) * 100) + '%';
-      };
-      getWorker().then(function(){
-        progressCb = null;
-        if ($('g-warm-state')) $('g-warm-state').textContent = '準備できました。次からは待たずに読み取れます。';
-      }, function(){
-        progressCb = null;
-        if ($('g-warm-state')) $('g-warm-state').textContent = '取り込めませんでした。電波のある場所でもう一度お試しください。';
-      });
     });
     /* 鍵は伏せ字で出す。貼り直すときだけ全部を書きかえる */
     var kst = $('g-key-state');
