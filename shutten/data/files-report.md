@@ -1,25 +1,37 @@
 # Excelを取ってきた結果
-**新しく取れた 0本 / すでに持っていた 138本 / 取れなかった 2本**
+**新しく取れた 12本 / すでに持っていた 126本 / 取れなかった 2本**
 
 ### 兵庫県 大規模小売店舗立地法 縦覧状況
 
 - Excel/CSV/PDF のリンク: 43 本
-  - 見送り freshbazaarinagawaten.pdf — 大きすぎる（8,249,801バイト）ので見送った
-  - 見送り drugcosmoskamitenoten.pdf — 大きすぎる（6,309,705バイト）ので見送った
-  - 見送り takaradushikaisoshikeikaku.pdf — 大きすぎる（7,697,371バイト）ので見送った
-  - 見送り maxvalueyasuda.pdf — 大きすぎる（9,057,049バイト）ので見送った
-  - 見送り kohnanprohimejishikamaten.pdf — 大きすぎる（4,214,687バイト）ので見送った
-  - 見送り soyoraono.pdf — 大きすぎる（9,825,322バイト）ので見送った
-  - 見送り marketsquarenakayamadera.pdf — 大きすぎる（4,893,756バイト）ので見送った
-  - 見送り hankyutakaradukasyogyozonesyogyotou1.pdf — 大きすぎる（8,186,163バイト）ので見送った
-  - 見送り hankyutakaradukasyogyozonesyogyotou2.pdf — 大きすぎる（5,172,646バイト）ので見送った
-  - 見送り aeontownkakogawa6-2.pdf — 大きすぎる（8,299,279バイト）ので見送った
+  - **freshbazaarinagawaten.pdf** 8,249,801バイト … 資料（PDF：8,057KB）
+    - シート「(PDF)」 1行  ³ãyÅÓÿ½»­^¾î 
+  - **drugcosmoskamitenoten.pdf** 6,309,705バイト … 資料（PDF：6,162KB）
+    - シート「(PDF)」 1行  8ë8:æuÎâºqWD2g
+  - **takaradushikaisoshikeikaku.pdf** 7,697,371バイト … 資料（PDF：7,517KB）
+    - シート「(PDF)」 1行  d¬,;éâTÎª,Øé°( | sêí¬xÞ5X¸à%ÞÉ®<ò | ¿f!òÕºÁþ{ýË9¸ÿ§ | íÓQÉ`%	ZÉÑ
+  - **maxvalueyasuda.pdf** 9,057,049バイト … 資料（PDF：8,845KB）
+    - シート「(PDF)」 263行  4 | 5 | 3 | 8 | 9
+  - **kohnanprohimejishikamaten.pdf** 4,214,687バイト … 資料（PDF：4,116KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **soyoraono.pdf** 9,825,322バイト … 資料（PDF：9,596KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **marketsquarenakayamadera.pdf** 4,893,756バイト … 資料（PDF：4,780KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **hankyutakaradukasyogyozonesyogyotou1.pdf** 8,186,163バイト … 資料1（PDF：7,995KB）
+    - シート「(PDF)」 1行  ù¨6eè:î*	@~h}gù*
+  - **hankyutakaradukasyogyozonesyogyotou2.pdf** 5,172,646バイト … 資料2（PDF：5,052KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **aeontownkakogawa6-2.pdf** 8,299,279バイト … 資料（PDF：8,105KB）
+    - シート「(PDF)」 1行  Ë§¯®Çqáõâ'*ôæ·{6
 
 ### 神戸市 大規模小売店舗立地法 届出状況等
 
 - Excel/CSV/PDF のリンク: 18 本
-  - 見送り todoke1141.pdf — 大きすぎる（7,898,420バイト）ので見送った
-  - 見送り todoke1134.pdf — 大きすぎる（8,909,892バイト）ので見送った
+  - **todoke1141.pdf** 7,898,420バイト … 届出書（PDF：7,714KB）
+    - シート「(PDF)」 265行  最大値騒音( | 最大値騒音( | 店舗敷地境界 | 店舗敷地境界 | ) | )
+  - **todoke1134.pdf** 8,909,892バイト … 届出書（PDF：8,702KB）
+    - シート「(PDF)」 30行  2
 
 ### 大阪府 大規模小売店舗立地法
 
