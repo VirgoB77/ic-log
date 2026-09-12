@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+
+    <meta charset="utf-8">
+
+    <!-- debug -->
+    <!-- <meta name="robots" content="noindex"> -->
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EN1Q8DZCYC"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-EN1Q8DZCYC');
+    </script>
+    
+    <title>大阪市オープンデータポータルサイト</title>
+    <meta name="description" content="大阪市のオープンデータを掲載しています。">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="theme-color" content="#008260">
+
+    <!-- ogp -->
+    <meta property="og:title" content="大阪市オープンデータポータルサイト"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="大阪市のオープンデータを掲載しています。"/>
+    <meta property="og:url" content="https://www.city.osaka.lg.jp/contents/wdu290/opendata/"/>
+    <meta property="og:image" content="https://www.city.osaka.lg.jp/contents/wdu290/opendata/img/logo/ogimage.png"/>
+    <meta property="og:site_name" content="大阪市オープンデータポータルサイト"/>
+    <meta property="og:locale" content="ja_JP"/>
+    <meta property="fb:app_id" content="1950423071901347"/>
+
+    <!-- lib -->
+    <link rel="stylesheet" type='text/css' href="https://fonts.googleapis.com/css?family=Lato%3A400%2C700%7CNoto+Sans+JP%3A400%2C700&#038;ver=5.3.2" media='all' />
+    <link rel="stylesheet" type="text/css" href="css/uikit.min.css">
+    <script src="js/uikit.min.js"></script>
+    <script src="js/uikit-icons.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery.csv-1.0.3.min.js"></script>
+    <!-- <script src="https://kit.fontawesome.com/992ab3d02d.js" crossorigin="anonymous"></script> -->
+    <link href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" rel="stylesheet">
+
+    <!-- customize -->
+    <link rel="stylesheet" type="text/css" href="css/theme.base.css?version=1.0.0">
+    <link rel="stylesheet" type="text/css" href="css/theme.button.css?version=1.0.0">
+    <link rel="stylesheet" type="text/css" href="css/theme.breadcrumb.css?version=1.0.0">
+    <link rel="stylesheet" type="text/css" href="css/theme.header.css?version=1.0.0">
+    <link rel="stylesheet" type="text/css" href="css/theme.page.index.css?version=1.1.1.0">
+    <link rel="stylesheet" type="text/css" media="print" href="css/print.css?version=1.0.0">
+
+</head>
+<body>
+
+    <div id="dialog" class="uk-modal" uk-modal>
+        <div class="uk-modal-dialog uk-margin-auto-vertical">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            <div id="dialog-title" class="uk-modal-header"></div>
+            <div id="dialog-body" class="uk-modal-body"></div>
+            <div class="uk-modal-footer uk-text-right">
+                <button id="dialog-button-close" class="uk-button uk-button-default uk-modal-close" type="button"></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="header" class="uk-navbar-container" uk-sticky>
+        <div class="uk-container uk-container-expand">
+            <nav class="uk-navbar" uk-navbar>
+                <div id="navbar-left" class="uk-navbar-left">
+                    <a class="uk-navbar-item uk-logo" href="./"><img src="img/logo/logo.svg" alt="" height="48px" width="48px"><span class="uk-text-bold uk-text-default">大阪市オープンデータ<br>ポータルサイト</span></a>
+                    <a class="uk-navbar-item tm-scroll" href="#main" uk-scroll><i class="fas fa-angle-down"></i>本文へ</a>
+                </div>
+                <div id="navbar-right" class="uk-navbar-right">
+                    <div class="uk-visible@m uk-flex uk-flex-middle">
+                        <a href="#cat-all" class="uk-link-heading uk-margin-medium-right"><i class="fas fa-search uk-margin-small-right"></i>データを探す</a>
+                        <a href="#page-case" class="uk-link-heading uk-margin-medium-right"><i class="fas fa-book-open uk-margin-small-right"></i>データ活用事例集</a>
+                        <a href="#page-creator" class="uk-button uk-button-primary uk-border-rounded"><i class="fas fa-share uk-margin-small-right"></i>データを活用された方へ</a>
+                    </div>
+                    <div class="uk-position-relative tm-hamburger uk-hidden@m">
+                        <a href="#offcanvas" class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle></a>
+                        <div class="uk-position-absolute"><span>メニュー</span></div>    
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    
+    <div id="ie"></div>
+    
+    <noscript>
+        <div class="uk-padding">
+            <p>このサイトをご覧いただくには、ブラウザの設定でJavascriptを有効にしてください。<br>Javascriptを有効にせずにオープンデータをダウンロードするには、次のファイルに記載のURLをご利用ください。</p>
+            <a href="./csv/resource.csv" class="uk-button uk-button-primary">オープンデータ一覧ファイル（.csv）</a>
+        </div>
+    </noscript>
+    
+    <div id="sidebar-left" class="tm-sidebar-left uk-visible@m">
+        <div class="sidenav">
+            <!-- page.index.js により挿入 -->
+        </div>
+    </div>
+    
+    <div id="main" class="tm-main">
+        <div id="content" class="uk-position-relative">
+            <!-- page.index.js により挿入 -->
+        </div>
+    </div>
+
+    <div id="offcanvas" class="tm-offcanvas" uk-offcanvas="mode: push; overlay: true">
+        <div class="uk-offcanvas-bar">
+            <div class="uk-panel">
+                <div class="sidenav">
+                    <!-- page.index.js により挿入 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/jquery.functions.js?version=1.1.2"></script>
+    <script src="js/page.all.js?version=1.1.2"></script>
+    <script src="js/page.index.js?version=1.1.2"></script>
+    
+    <!-- Sibulla tracking code start -->
+    <script type="text/javascript">
+        (function(){ var b = document.getElementsByTagName('script')[0],sib = document.createElement('script');
+        sib.type = 'text/javascript';sib.async = true;
+        sib.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'ma001.sibulla.com/dekatag/access?id=aGaskA6u';
+        b.parentNode.insertBefore(sib,b);}());
+    </script>
+    <!-- /Sibulla tracking code end -->
+
+</body>
+</html>
