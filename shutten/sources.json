@@ -21,7 +21,7 @@
       "pdf_max_mb": 12,
       "terms": "https://web.pref.hyogo.lg.jp/about_link.html",
       "terms_name": "リンク・著作権・免責事項",
-      "terms_summary": "サイト全体の著作権ページは無断で複製・転用不可（私的使用・引用を除く）。別にオープンデータカタログ（独自の利用規約PDF）があり、縦覧状況がそこに含まれるか確認中"
+      "terms_summary": "サイト全体の著作権ページは無断で複製・転用不可（私的使用・引用を除く）。別にオープンデータカタログ（CC BY 4.0。県HPの規約より優先）があり、縦覧状況がそこに登録されているか確認中"
     },
     {
       "id": "hyogo-pref-top",
@@ -356,17 +356,103 @@
       "name": "（参考）兵庫県 関連サイトに掲載のオープンデータ（デジタル戦略課）",
       "area": "ref",
       "url": "https://web.pref.hyogo.lg.jp/kk26/johoseisaku/opendata.html",
-      "note": "兵庫県オープンデータの本体（2026-09-12に読んだ）。カタログは web.pref.hyogo.lg.jp/opendata/index.php で、カタログ専用の利用規約PDF（kiyaku_opendata.pdf）がある。そのPDFだけ落として読む",
-      "enabled": true,
-      "pdf": true,
-      "pdf_labels": "利用規約"
+      "note": "兵庫県オープンデータの本体（2026-09-12に読んだ）。カタログ専用の利用規約PDF kiyaku_opendata.pdf を落として読んだ：カタログ掲載の著作物は注があるものを除き CC BY 4.0。加工時は「この○○は、以下の著作物を改変して利用しています。[タイトル]、[兵庫県]」と書く。県HPにも同じデータがある場合はカタログ規約が優先（第2条1項）。pdf:true を付けたら同じページのExcel/CSV 116本まで落としてしまったので外した（files.py 側でも参考ソースはExcel/CSVを取らないようにした）",
+      "enabled": true
     },
     {
       "id": "hyogo-opendata-catalog",
       "name": "（参考）兵庫県 オープンデータカタログ",
       "area": "ref",
       "url": "https://web.pref.hyogo.lg.jp/opendata/index.php",
-      "note": "兵庫県のオープンデータカタログの入口。大規模小売店舗立地法の縦覧状況・届出一覧が登録されているかを見る（2026-09-12追加）",
+      "note": "兵庫県オープンデータカタログの入口（2026-09-12に保存）。924件。検索フォームは POST（keyword, categories[], licenses[] など）で、一覧は ?p=N_1&asc=data_link_title&displayedresults=10 でめくれる。大店立地法の縦覧状況が登録されているかを、下の p1〜p10（100件ずつ）とキーワード付きURLで確かめる",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p1",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 1/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=1_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p2",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 2/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=2_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p3",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 3/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=3_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p4",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 4/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=4_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p5",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 5/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=5_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p6",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 6/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=6_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p7",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 7/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=7_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p8",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 8/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=8_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p9",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 9/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=9_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-p10",
+      "name": "（参考）兵庫県 オープンデータカタログ 一覧 10/10",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?p=10_1&asc=data_link_title&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-catalog-kw",
+      "name": "（参考）兵庫県 オープンデータカタログ キーワード「大規模小売」",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?keyword=%E5%A4%A7%E8%A6%8F%E6%A8%A1%E5%B0%8F%E5%A3%B2&displayedresults=100",
+      "note": "一度だけ見る。大店立地法の縦覧状況がカタログに登録されているかを調べる（2026-09-12追加）。見終わったら止める",
       "enabled": true
     }
   ]

@@ -229,7 +229,9 @@ def main():
             lines.append(f"### {src['name']}\n\n- まだページを保存していない\n")
             continue
 
-        links = excel_links(raw, src["url"])
+        # 参考ソース（規約ページなど）は、そのページのExcel/CSVは要らない。
+        # 兵庫県オープンデータの入口で、犯罪統計など117本を落としてしまったことがある
+        links = [] if src.get("area") == "ref" else excel_links(raw, src["url"])
         kinds = ["Excel/CSV"]
         if src.get("pdf"):
             # 辿った先のページにもPDFが下がっているので、そこも見る
