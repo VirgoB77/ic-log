@@ -239,10 +239,19 @@ details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
 .cam{position:fixed;inset:0;z-index:60;background:#0a0b09;color:#fff}
 .cam .stage{position:absolute;inset:0;overflow:hidden;background:#0a0b09}
 .cam video{width:100%;height:100%;object-fit:cover;display:block}
-.cam .ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
-.cam .box{position:absolute;left:10%;width:80%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
-  border:1.5px dashed rgba(255,255,255,.7);border-radius:6px;pointer-events:none}
-.cam .box.found{border-color:transparent}
+/* 名刺の形の枠は見せない（見つからなかったときに切る範囲の目安として、位置だけ持っておく） */
+.cam .box{position:absolute;left:10%;width:80%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);visibility:hidden;pointer-events:none}
+/* 中央の丸。名刺を見つけると光って、ピコン、ピコンと輪が広がる */
+.cam .ping{position:absolute;left:50%;top:50%;width:min(62vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+  border:2px solid rgba(255,255,255,.3);pointer-events:none;transition:border-color .25s,box-shadow .25s}
+.cam .ping i{position:absolute;inset:-2px;border-radius:50%;border:2px solid #c9f24a;opacity:0}
+.cam.found .ping{border-color:#c9f24a;box-shadow:0 0 28px rgba(201,242,74,.35),inset 0 0 28px rgba(201,242,74,.12)}
+.cam.found .ping i{animation:ping 1.4s ease-out infinite}
+.cam.found .ping i+i{animation-delay:.7s}
+@keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){ .cam.found .ping i{animation:none} }
+.confirm-pic{margin-top:14px;border-radius:10px;overflow:hidden;background:#000;box-shadow:0 1px 2px rgba(0,0,0,.25),0 8px 24px rgba(0,0,0,.3)}
+.confirm-pic img{display:block;width:100%}
 .cam .top{position:absolute;top:max(14px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;z-index:2}
 .glass{appearance:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(10,11,9,.55);color:#fff;
   display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex:none}
@@ -262,10 +271,7 @@ details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
 .shotbox .orbit{display:none}
 .shotbox.found .orbit{display:block}
 .shotbox .st{display:none;position:absolute;inset:2px;border-radius:50%;pointer-events:none}
-.shotbox .st.wait{background:conic-gradient(#c9f24a 0 72%,rgba(255,255,255,.18) 72% 100%);
-  -webkit-mask:radial-gradient(circle,transparent 66%,#000 67%);mask:radial-gradient(circle,transparent 66%,#000 67%)}
 .shotbox .st.hurry{border:2px solid rgba(255,255,255,.55)}
-.shotbox.wait .st.wait{display:block}
 .shotbox.hurry .st.hurry{display:block}
 .cam .err{color:#fff;font-size:13.5px;line-height:1.9;padding:26px 22px;text-align:center}
 
@@ -315,20 +321,20 @@ details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
 <div class="cam" id="cam" hidden>
   <div class="stage" id="cam-stage">
     <video id="cam-video" playsinline muted autoplay></video>
-    <canvas class="ov" id="cam-ov"></canvas>
     <div class="box" id="cam-box"></div>
+    <div class="ping" id="cam-ping"><i></i><i></i></div>
   </div>
   <div class="top">
     <button class="glass" id="cam-close" aria-label="閉じる"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
     <button class="glass" id="cam-torch" aria-label="ライト" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
   </div>
-  <div class="tipwrap"><p class="tip" id="cam-tip">名刺を枠に合わせてください。机との境がはっきり写るようにします</p></div>
+  <div class="tipwrap"><p class="tip" id="cam-tip">名刺を画面に入れてください。机との境がはっきり写るようにします</p></div>
   <div class="ctl">
     <button class="glass lg" id="cam-pick" aria-label="写真から選ぶ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
     <div class="shotbox" id="cam-shotbox">
       <div class="orbit" id="cam-orbit"></div>
       <button class="pluto" id="cam-shot" aria-label="撮る"><svg width="74" height="74" viewBox="0 0 74 74"><ellipse cx="15" cy="23" rx="13" ry="9" fill="#6b4029" opacity=".36"/><ellipse cx="61" cy="52" rx="11" ry="7" fill="#6b4029" opacity=".3"/><ellipse cx="52" cy="13" rx="7" ry="4" fill="#6b4029" opacity=".2"/><path d="M37 60C26 52 18 45 20 37 22 30 32 29 37 36 42 29 52 30 54 37 56 45 48 52 37 60Z" fill="#fbf4e8" opacity=".9" transform="rotate(-14 37 44)"/></svg></button>
-      <div class="st wait"></div><div class="st hurry"></div>
+      <div class="st hurry"></div>
     </div>
     <div></div>
   </div>
@@ -1336,8 +1342,6 @@ function rowHtml(c){
     (trim(c.memo) ? '<span class="lmemo">' + esc(c.memo.replace(/\n/g, ' ')) + '</span>' : '') +
     '</button>';
 }
-var CKEY = 'meishi.checkcrop', checkCrop = false;
-try { checkCrop = localStorage.getItem(CKEY) === '1'; } catch(e){}
 /* ===== Claude（Anthropic の API）で読む =====
    鍵はこの端末の中（localStorage）だけに置く。GitHub にも、このページの中にも入れない。
    鍵を入れていないときは、いままでどおり端末の中だけで読む */
@@ -1831,10 +1835,41 @@ function processRaw(raw, hint){
       buildPend();
     } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
     busy(false);
-    if (checkCrop){ openRecrop(); return; }
-    openSave();
-    runOcr(pendCard);
+    openConfirm();
   }, 30);
+}
+var pendFromCam = false;   /* カメラで撮ったか（写真から選んだか） */
+/* 撮った直後：どう切り取れたかを見せて、読み取りに進む前に直せるようにする */
+function openConfirm(){
+  if (!pend) return;
+  var cam20 = IC.camera.replace('width="40" height="40"', 'width="20" height="20"');
+  var h = '<div class="pbody"><h2>切り取りの確認</h2>' +
+    '<div class="confirm-pic"><img id="cf-img" alt="切り取った名刺"></div>' +
+    (pendCropped ? '' : '<p class="reading">名刺の枠を見つけられませんでした。四隅を直すと読みやすくなります。</p>') +
+    '</div>' +
+    '<div class="pfoot"><button class="planet lg" id="cf-back" aria-label="' + (pendFromCam ? '撮り直す' : 'やめる') + '">' + (pendFromCam ? cam20 : IC.x) + '</button>' +
+    '<div class="row"><button class="planet lg" id="cf-rot" aria-label="回す">' + IC.rotate + '</button>' +
+    '<button class="planet lg" id="cf-crop" aria-label="四隅を直す">' + IC.crop + '</button></div>' +
+    '<div class="sunbox"><div class="orbit">' + orbitHtml('save') + '</div>' +
+    '<button class="sun md" id="cf-ok" aria-label="読み取る">' + IC.check + '</button></div></div>';
+  openSheet(h, function(){
+    $('cf-img').src = pend.full;
+    $('cf-rot').addEventListener('click', function(){
+      busy(true, '回しています…');
+      setTimeout(function(){
+        pendOrient = (pendOrient + 90) % 360; pendOriented = true;
+        buildPend(); busy(false);
+        if ($('cf-img')) $('cf-img').src = pend.full;
+      }, 30);
+    });
+    $('cf-crop').addEventListener('click', openRecrop);
+    $('cf-ok').addEventListener('click', function(){ openSave(); runOcr(pendCard); });
+    $('cf-back').addEventListener('click', function(){
+      var again = pendFromCam;
+      clearPend(); closeSheet();
+      if (again) openCamera();
+    });
+  });
 }
 function rotateAndRead(){
   if (!pendRaw) return;
@@ -1854,6 +1889,7 @@ function startCapture(file){
   readImage(file, function(im){
     busy(false);
     if (!im){ toast('写真を読み込めませんでした'); return; }
+    pendFromCam = false;
     processRaw(toCanvas(im, 2400));
   });
 }
@@ -1914,23 +1950,23 @@ function openRecrop(){
       pendQuad = qd; pendCropped = true;
       busy(true, '切り出しています…');
       setTimeout(function(){
-        buildPend(); busy(false); openSave(keep); runOcr(pendCard);
+        buildPend(); busy(false);
+        if (keep){ openSave(keep); runOcr(pendCard); } else openConfirm();
       }, 30);
     }
     $('cb-ok').addEventListener('click', function(){ apply(q); });
     $('cb-all').addEventListener('click', function(){ apply(fullQuad(pendRaw)); });
     $('cb-cancel').addEventListener('click', function(){
-      if (keep){ openSave(keep); return; }
-      apply(pendQuad);   /* 撮った直後なら、このまま読みに進む */
+      if (keep) openSave(keep); else openConfirm();
     });
   });
 }
 
 /* ===== アプリの中のカメラ（シャッター音は鳴らない） ===== */
 var camStream = null, camTrack = null, torchOn = false;
-/* ===== 生きた映像から四隅をさがす（メモアプリの書類スキャンのように） =====
-   200msごとに小さな絵で名刺の四隅をさがし、見つかったら緑の枠で映像に重ねる。
-   枠が1秒ほど動かなければ自動で撮る。撮る前に枠が見えるので、外れていればその場で直せる */
+/* ===== 生きた映像から四隅をさがす =====
+   200msごとに小さな絵で名刺の四隅をさがし、見つかったら中央の丸を光らせる。
+   撮るのは人が丸いボタンを押したときだけ。撮ったあとに切り取りを確認してから読み取る */
 var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0, liveMiss = 0;
 /* 映像は画面いっぱいに切って出している（object-fit:cover）ので、
    映像の全部ではなく、いま画面に見えているところだけをさがす。
@@ -1949,34 +1985,10 @@ function camFrameRect(){
   var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
   return { sc:sc, ox:vr.left - st.left + (vr.width - v.videoWidth*sc) / 2, oy:vr.top - st.top + (vr.height - v.videoHeight*sc) / 2, w:st.width, h:st.height };
 }
-function drawLive(q, stable){
-  var ov = $('cam-ov'), v = $('cam-video');
-  if (!ov || !v.videoWidth) return;
-  var fr = camFrameRect();
-  if (ov.width !== Math.round(fr.w) || ov.height !== Math.round(fr.h)){ ov.width = Math.round(fr.w); ov.height = Math.round(fr.h); }
-  var x = ov.getContext('2d');
-  x.clearRect(0, 0, ov.width, ov.height);
-  if (!q) return;
-  x.beginPath();
-  q.forEach(function(p, i){
-    var px = fr.ox + p[0]*v.videoWidth*fr.sc, py = fr.oy + p[1]*v.videoHeight*fr.sc;
-    if (i) x.lineTo(px, py); else x.moveTo(px, py);
-  });
-  x.closePath();
-  /* 四隅を見つけたら、ライム色の細い線と太い角で囲む（止まると濃くなる） */
-  x.fillStyle = stable ? 'rgba(201,242,74,.16)' : 'rgba(201,242,74,.07)';
-  x.strokeStyle = '#c9f24a'; x.globalAlpha = stable ? .9 : .5; x.lineWidth = 1.5;
-  x.fill(); x.stroke();
-  x.globalAlpha = 1; x.lineWidth = stable ? 4 : 3; x.lineCap = 'round';
-  q.forEach(function(p, i){
-    var a = q[(i + 3) % 4], b = q[(i + 1) % 4];
-    var px = fr.ox + p[0]*v.videoWidth*fr.sc, py = fr.oy + p[1]*v.videoHeight*fr.sc;
-    [a, b].forEach(function(o){
-      var ox = fr.ox + o[0]*v.videoWidth*fr.sc, oy = fr.oy + o[1]*v.videoHeight*fr.sc;
-      var d = Math.sqrt((ox-px)*(ox-px) + (oy-py)*(oy-py)) || 1, L = Math.min(34, d * 0.3);
-      x.beginPath(); x.moveTo(px, py); x.lineTo(px + (ox-px)/d*L, py + (oy-py)/d*L); x.stroke();
-    });
-  });
+/* 名刺を見つけたら、中央の丸を光らせる（四角の枠は描かない） */
+function drawLive(q, good){
+  var cam = $('cam');
+  if (cam) cam.classList.toggle('found', !!good);
 }
 function liveStep(){
   liveTimer = null;
@@ -2008,34 +2020,21 @@ function liveStep(){
       }
       area = Math.abs(area) / 2 / (W * H);
     }
-    /* 枠がしばらく動いていないか（3コマつづけて、コマごとのずれが小さい） */
-    liveHist.push(q); if (liveHist.length > 3) liveHist.shift();
-    var stable = false;
-    if (q && liveHist.length >= 3 && liveHist.every(function(o){ return !!o; })){
-      stable = true;
-      for (var i = 1; i < liveHist.length && stable; i++){
-        for (var k = 0; k < 4; k++){
-          var a = liveHist[i-1][k], b = liveHist[i][k];
-          if (Math.abs(a[0]-b[0]) > 0.03 || Math.abs(a[1]-b[1]) > 0.03){ stable = false; break; }
-        }
-      }
-    }
-    var big = area >= 0.12;                       /* 小さすぎる（遠すぎる）ものでは撮らない */
+    var big = area >= 0.12;                       /* 小さすぎる（遠すぎる）と、見つけた扱いにしない */
     liveQuad = q;
     liveMiss = q ? 0 : liveMiss + 1;
-    drawLive(q, stable && !edge && big);
-    var tip = $('cam-tip'), bx = $('cam-box'), sb = $('cam-shotbox');
-    if (bx) bx.className = 'box' + (q ? ' found' : '');
-    /* シャッター（冥王星）のまわり：見つけたら衛星が回る、止まったら輪がたまる、見つからないままなら白い輪 */
-    if (sb) sb.className = 'shotbox' + (q && !edge && big ? (stable ? ' wait' : ' found') : '') + (!q && liveMiss > 12 ? ' hurry' : '');
+    var good = !!q && !edge && big;
+    drawLive(q, good);
+    var tip = $('cam-tip'), sb = $('cam-shotbox');
+    /* シャッター（冥王星）のまわり：見つけたら衛星が回る、見つからないままなら白い輪。撮るのは人が押したときだけ */
+    if (sb) sb.className = 'shotbox' + (good ? ' found' : '') + (!q && liveMiss > 12 ? ' hurry' : '');
     if (tip){
-      tip.textContent = !q ? (liveMiss > 12 ? '見つからないときは、丸いボタンで撮ってください'
-                                            : '名刺を枠に合わせてください。机との境がはっきり写るようにします')
+      tip.textContent = !q ? (liveMiss > 12 ? '見つからないままでも、丸いボタンで撮れます'
+                                            : '名刺を画面に入れてください。机との境がはっきり写るようにします')
                       : edge ? '名刺全体が入るように、少し離してください'
                       : !big ? '名刺が小さいです。もう少し近づけてください'
-                      : stable ? 'そのままお待ちください' : '四隅を見つけました。静止すると自動で撮ります';
+                      : '見つけました。丸いボタンで撮ってください';
     }
-    if (stable && !edge && big && liveArmed && Date.now() - liveShotAt > 2500){ liveShotAt = Date.now(); camCapture(); return; }
   }
   liveTimer = setTimeout(liveStep, 200);
 }
@@ -2046,8 +2045,8 @@ function openCamera(){
   liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0;
   drawLive(null);
   if ($('cam-shotbox')) $('cam-shotbox').className = 'shotbox';
-  if ($('cam-box')) $('cam-box').className = 'box';
-  if ($('cam-tip')) $('cam-tip').textContent = '名刺を枠に合わせてください。机との境がはっきり写るようにします';
+  $('cam').classList.remove('found');
+  if ($('cam-tip')) $('cam-tip').textContent = '名刺を画面に入れてください。机との境がはっきり写るようにします';
   if (liveTimer) clearTimeout(liveTimer);
   liveTimer = setTimeout(liveStep, 400);
   navigator.mediaDevices.getUserMedia({
@@ -2110,6 +2109,7 @@ function camCapture(){
   c.getContext('2d').drawImage(v, 0, 0);
   if (OCRBASE) window.__camSize = [v.videoWidth, v.videoHeight];
   closeCamera();
+  pendFromCam = true;
   processRaw(toCanvas(c, 3000), hint);
 }
 function doSave(){
@@ -2449,9 +2449,6 @@ function openSettings(){
     '<div class="row"><button class="btn" id="g-mapkey-save">保存する</button>' +
     '<button class="btn" id="g-mapkey-clear">消す</button></div>' +
     '<p class="hint" id="g-mapkey-state"></p>' +
-    '<label>撮ったあと</label>' +
-    '<label class="opt"><input type="checkbox" id="g-check"> 切り取りを毎回たしかめる</label>' +
-    '<p class="hint">名刺の枠を自分で合わせてから読み取りたいときに使います。ふだんは切ったままで構いません。</p>' +
     '<label>お試し</label>' +
     '<button class="btn" id="g-sample">サンプルを入れる</button>' +
     '<button class="btn danger" id="g-wipe">すべて削除</button>' +
@@ -2525,11 +2522,6 @@ function openSettings(){
       mapKey = ''; $('g-mapkey').value = '';
       try { localStorage.removeItem(MKEY); } catch(e){}
       showMapState('消しました。地図は出ません。');
-    });
-    $('g-check').checked = checkCrop;
-    $('g-check').addEventListener('change', function(){
-      checkCrop = this.checked;
-      try { localStorage.setItem(CKEY, checkCrop ? '1' : '0'); } catch(e){}
     });
     $('g-sample').addEventListener('click', function(){
       if (db.cards.length){ toast('名刺があるときは入れられません'); return; }
