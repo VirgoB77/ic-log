@@ -133,10 +133,10 @@ def peek(path):
             return {"error": "文字が取れなかった（紙をスキャンしたPDFかもしれない）"}
         head = max(rows[:4], key=len) if rows else []
         return {"(PDF)": {"rows": len(rows), "header": [c[:20] for c in head[:8]]}}
-    if not path.lower().endswith(".xlsx"):
+    if not path.lower().endswith((".xlsx", ".xls")):
         return None
     try:
-        sheets = xlsx.read(path)
+        sheets = xlsx.read_any(path)
     except Exception as e:
         return {"error": f"{type(e).__name__}: {e}"}
     out = {}
@@ -199,7 +199,7 @@ def main():
             lines.append(f"  - **{safe_name(url)}** {n:,}バイト … {label}")
             info = peek(dest)
             if info is None:
-                lines.append("    - .xls は落としただけ（中を読むには別のライブラリが要る）")
+                lines.append("    - 中は読んでいない")
             elif "error" in info:
                 lines.append(f"    - 開けなかった: {info['error']}")
             else:

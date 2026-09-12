@@ -28,6 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 大阪市の届出一覧（平成12年からの全届出）が古い .xls 形式で、
+      # これを読むためだけに xlrd を入れる。入らなくても他は動く。
+      - name: 古いExcelを読む道具
+        run: pip install -q xlrd || echo "xlrd が入らなかった。.xls は読まずに進む"
+
       - name: 偵察する
         run: python3 shutten/recon.py ${{ github.event.inputs.area }}
 
