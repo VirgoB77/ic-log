@@ -26,7 +26,11 @@ jobs:
   recon:
     runs-on: ubuntu-latest
     steps:
+      # 押したときのコミットではなく、走り出す時点の main から始める。
+      # 前の実行が main を進めたあとに古いところから作ると、保存でぶつかる
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       # 大阪市の届出一覧（平成12年からの全届出）が古い .xls 形式で、
       # これを読むためだけに xlrd を入れる。入らなくても他は動く。
@@ -72,8 +76,11 @@ jobs:
               exit 0
             fi
             echo "押し戻されたので取り込み直す（${i}回目）"
-            git pull --rebase origin main || {
+            # shutten/data の中身は毎回作り直す生成物なので、ぶつかったら今回のほうを採る
+            # （rebase では -X theirs が「いま載せようとしている自分の変更」を指す）
+            git pull --rebase -X theirs origin main || {
               echo "取り込みに失敗した。手で見る必要がある"
+              git rebase --abort 2>/dev/null || true
               exit 1
             }
             sleep $((i * 3))
