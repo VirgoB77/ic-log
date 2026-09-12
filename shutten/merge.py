@@ -134,6 +134,54 @@ def merge_across_sources(by_key):
     return out, merged_away
 
 
+# ---------------------------------------------------------------- OCRで読んだものを流し込む
+# 兵庫県・神戸市はHTMLの表に届出日・店名・縦覧期間しか無く、所在地や設置者は
+# 届出書のPDF（紙をスキャンした画像）の中にある。ocr.py が読んだ結果を、
+# 届出に付いているPDFのファイル名で結びつけて、空いている項目だけ埋める。
+# OCRは誤読がありうるので、どの項目をOCRから取ったかを from_ocr に残す。
+def load_ocr():
+    out = {}
+    for p in glob.glob(os.path.join(HERE, "data", "ocr", "*.json")):
+        out[os.path.splitext(os.path.basename(p))[0]] = load(p)
+    return out
+
+
+def tidy_ocr(v):
+    v = re.sub(r"(?<=[0-9０-９])\s+(?=[0-9０-９])", "", v or "")     # 「1 0番地」→「10番地」
+    v = re.sub(r"\s*[|｜]\s*.*$", "", v)                            # 表の罫線の読み違いを落とす
+    v = re.sub(r"^(?:氏名又は名称|名称|氏名|住所|所在地)\s*[:：]?\s*", "", v)   # 様式の項目名が頭に残ることがある
+    return v.strip(" 　:：")
+
+
+def enrich_from_ocr(by_key, ocr):
+    n = 0
+    for r in by_key.values():
+        table = ocr.get(r["source"])
+        if not table or not r.get("docs"):
+            continue
+        for u in r["docs"]:
+            stem = os.path.splitext(os.path.basename(u))[0]
+            o = table.get(stem)
+            if not o:
+                continue
+            got = []
+            pairs = (("address", "address"), ("operator", "applicant"), ("content", "content"))
+            for field, okey in pairs:
+                if not r.get(field) and o.get(okey):
+                    r[field] = tidy_ocr(o[okey])
+                    got.append(field)
+            if not r.get("area_m2") and o.get("area"):
+                digits = re.sub(r"[^0-9]", "", o["area"])
+                if digits and 100 <= int(digits) <= 300000:
+                    r["area_m2"] = int(digits)
+                    got.append("area_m2")
+            if got:
+                r["from_ocr"] = sorted(set(r.get("from_ocr", []) + got))
+                n += 1
+            break
+    return n
+
+
 def load(path):
     with open(path, encoding="utf-8") as f:
         return json.load(f)
@@ -173,6 +221,16 @@ def main():
                     newer["mode"] = cur["mode"]
                     by_key[k] = newer
 
+    # 最新の保存日に載っているか
+    for rec in by_key.values():
+        if rec["mode"] == "snapshot":
+            rec["listed"] = (rec["last_seen"] == latest_day.get(rec["source"]))
+        else:
+            rec["listed"] = True
+
+    by_key, merged_away = merge_across_sources(by_key)
+    enriched = enrich_from_ocr(by_key, load_ocr())
+
     # 地域をそろえる（ページで市区町村ごとに束ねるため）
     for rec in by_key.values():
         pref, city, ward, guess = place_of(rec)
@@ -183,14 +241,6 @@ def main():
         if guess:
             rec["place_guess"] = True
 
-    # 最新の保存日に載っているか
-    for rec in by_key.values():
-        if rec["mode"] == "snapshot":
-            rec["listed"] = (rec["last_seen"] == latest_day.get(rec["source"]))
-        else:
-            rec["listed"] = True
-
-    by_key, merged_away = merge_across_sources(by_key)
 
     all_recs = sorted(by_key.values(),
                       key=lambda r: (r.get("notified_on") or "", r["source"], r["store"]), reverse=True)
@@ -199,7 +249,8 @@ def main():
 
     # ---- まとめ ----
     lines = [f"# まとめ（{len(all_recs):,} 件）", "",
-             f"収集先をまたいで同じ届出だったものを {merged_away} 件まとめた（移譲市町の届出は市のページと大阪府のExcelの両方に載るため）。", ""]
+             f"収集先をまたいで同じ届出だったものを {merged_away} 件まとめた（移譲市町の届出は市のページと大阪府のExcelの両方に載るため）。",
+             f"スキャンPDFをOCRで読んだ結果から、所在地・設置者などを {enriched} 件に補った。", ""]
     lines.append("| 収集先 | 件数 | 新設 | 変更 | 廃止 | 承継 | 最新の保存日 | 消えた |")
     lines.append("| --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |")
     per = defaultdict(list)

@@ -216,6 +216,11 @@ def detail_page(r, by_ref, src_meta):
         status = ("いまも自治体のページに載っています" if r.get("listed") else
                   f"自治体のページには載らなくなりました（最後に確認した日 {esc(r.get('last_seen'))}）")
         status = f'<p class="note">{status}。このサイトには残しています。</p>'
+    ocr_note = ""
+    if r.get("from_ocr"):
+        names = {"address": "所在地", "operator": "設置者", "content": "内容", "area_m2": "店舗面積"}
+        ocr_note = ('<p class="note">' + "・".join(names.get(k, k) for k in r["from_ocr"]) +
+                    "は、自治体の資料（紙をスキャンしたPDF）を文字認識で読み取ったものです。読み違いがありえます。</p>")
     docs = ""
     if r.get("docs"):
         docs = "<h2>自治体の資料</h2><ul class=\"list\">" + "".join(
@@ -232,6 +237,7 @@ def detail_page(r, by_ref, src_meta):
 <h1>{esc(r['store'])}</h1>
 <div class="card"><dl class="kv">{''.join(kv)}</dl></div>
 {status}
+{ocr_note}
 {hist}
 {docs}
 <h2>出典</h2>
