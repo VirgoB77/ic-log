@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-12）
 
-**まとめ: Excel 3件 / PDF 17件 / わからない 38件 / 表 49件**
+**まとめ: Excel 3件 / PDF 17件 / わからない 40件 / 表 49件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -11,7 +11,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
 - メモ: 本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDF 44本のうち2MB以下の33本を取った。ただし33本中32本は紙をスキャンした画像で文字が入っておらず、機械では読めない（2026-09-12確認）。読むならOCRが要る。保存はしてあるので、いまは表の3項目（届出日・店名・縦覧期間）だけを使う。2026-09-12から8MB級も取る（上限12MB）。読むにはOCRが要るので別の仕組みで
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,293 バイト
+- HTTP 200 / utf-8 / 35,292 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,276 バイト
+- HTTP 200 / utf-8 / 23,277 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,226 バイト
+- HTTP 200 / UTF-8 / 554,751 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -544,7 +544,7 @@
 ### （参考）神戸市 ホームページのご利用案内
 
 - URL: https://www.city.kobe.lg.jp/homepage/index.html
-- メモ: 届出ページの下部から辿った利用規約ページ。出典表記の書き方を読むために保存する（2026-09-12追加）
+- メモ: 届出ページの下部から辿った「ホームページのご利用案内」。中身は目次で、利用規約は /a57337/homepage/rule.html にある（2026-09-12に読んだ）
 - robots.txt: 許可
 - HTTP 200 / UTF-8 / 12,807 バイト
 - **判定: わからない**
@@ -553,9 +553,30 @@
 ### （参考）大阪市オープンデータポータル（www側の入口）
 
 - URL: https://www.city.osaka.lg.jp/contents/wdu290/opendata/
-- メモ: 大阪市の届出ページの下部にある入口。data.city.osaka.lg.jp は GitHub Actions から応答が無かったが、こちらは www 側なので開くはず。日次CSVの置き場が分かるか見る（2026-09-12追加）
+- メモ: 大阪市の届出ページの下部にある入口（www側）。開けた（2026-09-12）。JavaScript無しでも使えるよう「オープンデータ一覧ファイル（.csv）」= ./csv/resource.csv が置いてあり、全オープンデータのURL一覧らしい。id を osaka- で始めて files.py に拾わせ、この CSV を落として大店立地法の一覧が載っているか見る
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 6,985 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 0 本 / Excel 1 本
   - Excel: オープンデータ一覧ファイル（.csv） → https://www.city.osaka.lg.jp/contents/wdu290/opendata/csv/resource.csv
+
+### （参考）神戸市 利用規約・リンク・免責事項など
+
+- URL: https://www.city.kobe.lg.jp/a57337/homepage/rule.html
+- メモ: 「ホームページのご利用案内」から辿った本体。出典表記の書き方を読むために保存する（2026-09-12追加）
+- robots.txt: 許可
+- HTTP 200 / UTF-8 / 17,155 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 1 本 / Excel 0 本
+  - PDF: 神戸市ウェブサイト利用規約（PDF：124KB） → https://www.city.kobe.lg.jp/documents/19135/20170630041802-1.pdf
+- 出てきた言葉: 変更
+
+### （参考）兵庫県 オープンデータ
+
+- URL: https://web.pref.hyogo.lg.jp/pref/cate3_661.html
+- メモ: 兵庫県の著作権ページから辿ったオープンデータの入口。大店立地法の縦覧状況がオープンデータに含まれるか、利用規約（政府標準利用規約か）を見る（2026-09-12追加）
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 15,071 バイト
+- **判定: わからない**
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 変更
