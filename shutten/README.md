@@ -54,6 +54,7 @@ Python 3 だけで動く。入れるものは何もない。
 | `recon.py` | 偵察する本体。取得・判定・保存 |
 | `data/raw/<id>/<日付>.html` | 取ってきたページそのまま。**これがアーカイブの1枚目** |
 | `data/recon-report.md` | 最後に走らせたときの判定結果 |
+| `wayback.py` | いま縦覧中の分しか載らないページ（兵庫県・神戸市）の過去分を、Wayback Machine の月1回の保存から `data/raw/<id>/<日付>.html` に積み直す。1回24本まで、台帳は `data/wayback/<id>.json` |
 
 ## 見に行く先（12件）
 
