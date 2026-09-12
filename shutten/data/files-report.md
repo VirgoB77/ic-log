@@ -1,5 +1,51 @@
 # Excelを取ってきた結果
-**新しく取れた 0本 / すでに持っていた 74本 / 取れなかった 5本**
+**新しく取れた 16本 / すでに持っていた 77本 / 取れなかった 7本**
+
+### 兵庫県 大規模小売店舗立地法 縦覧状況
+
+- Excel/CSV/PDF のリンク: 43 本
+  - 取れなかった freshbazaarinagawaten.pdf — ValueError: 大きすぎる（8,249,801バイト）ので見送った
+  - 取れなかった drugcosmoskamitenoten.pdf — ValueError: 大きすぎる（6,309,705バイト）ので見送った
+  - 取れなかった takaradushikaisoshikeikaku.pdf — ValueError: 大きすぎる（7,697,371バイト）ので見送った
+  - **3回続けて取れなかったので、この収集先は今日はここまで**（残り43本は次回）
+
+### 神戸市 大規模小売店舗立地法 届出状況等
+
+- Excel/CSV/PDF のリンク: 18 本
+  - 取れなかった todoke1141.pdf — ValueError: 大きすぎる（7,898,420バイト）ので見送った
+  - **todoke1152.pdf** 523,479バイト … 届出書（PDF：512KB）
+    - シート「(PDF)」 102行  ¤#Í¥ | ¤#Í¥ | （変更後） | （変更後）
+  - **todoke1151.pdf** 178,482バイト … 届出書（PDF：175KB）
+    - シート「(PDF)」 40行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
+  - **todoke1150.pdf** 229,590バイト … 届出書（PDF：225KB）
+    - シート「(PDF)」 41行  様 | 式 | 第２ | ( | 第６条関係 | ) | ※受理 | 年
+  - **todoke1149.pdf** 379,466バイト … 届出書（PDF：371KB）
+    - シート「(PDF)」 63行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
+  - **todoke1148.pdf** 169,931バイト … 届出書（PDF：166KB）
+    - シート「(PDF)」 39行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
+  - **todoke1147.pdf** 137,096バイト … 届出書（PDF：134KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **todoke1145.pdf** 802,200バイト … 届出書（PDF：784KB）
+    - シート「(PDF)」 111行  様 | 式 | 第 | ２ | （ | 第 | ６ | 条
+  - **todoke1144.pdf** 153,227バイト … 届出書（PDF：150KB）
+    - 開けなかった: 文字が取れなかった（紙をスキャンしたPDFかもしれない）
+  - **todoke1143.pdf** 233,458バイト … 届出書（PDF：228KB）
+    - シート「(PDF)」 77行  en-US  | en-US  | en-US  | en-US  | en-US  | en-US  | en-US  | en-US 
+  - **todoke1140.pdf** 124,470バイト … 届出書（PDF：122KB）
+    - シート「(PDF)」 27行  en-US  | en-US  | en-US  | ※備考 | ※受理年月日 | ※受理番号 | 令和 | 変更する理由
+  - **todoke1139.pdf** 122,748バイト … 届出書（PDF：120KB）
+    - シート「(PDF)」 25行  en-US  | en-US  | en-US  | ※備考 | ※受理年月日 | ※受理番号 | 令和 | 変更する理由
+  - **todoke1138.pdf** 881,851バイト … 届出書（PDF：862KB）
+    - シート「(PDF)」 80行  en-US  | en-US  | en-US2 | ※丁考 | ※受理年月日 | ※受理番号 | のとおり | 専和
+  - **todoke1137.pdf** 131,940バイト … 届出書（PDF：129KB）
+    - シート「(PDF)」 127行  en-US  | en-US  | ※備考
+  - **todoke1136.pdf** 808,388バイト … 届出書（PDF：790KB）
+    - シート「(PDF)」 123行  en-US  | en-US  | ※備考
+  - **todoke1135.pdf** 242,804バイト … 届出書（PDF：238KB）
+    - シート「(PDF)」 38行  様 | ３ | 式 | 変 | 第 | 更 | ２ | の
+  - 取れなかった todoke1134.pdf — ValueError: 大きすぎる（8,909,892バイト）ので見送った
+  - **todoke1131.pdf** 1,972,570バイト … 届出書（PDF：1,927KB）
+    - シート「(PDF)」 7行  ：店舗(3,206㎡) | ：駐輪場(65台) | ：店舗(2,289㎡) | ：店舗(2,676㎡) | ：廃棄物等保管施設(158.0ｍ ) | ：荷さばき施設(84.5㎡) | ：駐輪場(408台)
 
 ### 大阪府 大規模小売店舗立地法
 
@@ -8,15 +54,12 @@
 ### 大阪市 大規模小売店舗立地法 手続き・届出
 
 - Excel/CSV のリンク: 3 本
-  - 取れなかった ju_20260818.xlsx — HTTP Error 404: Not Found
-  - 取れなかった to20260630.xls — HTTP Error 404: Not Found
-  - 取れなかった si20260630.xls — HTTP Error 404: Not Found
 
 ### 和泉市 届出状況
 
 - Excel/CSV/PDF のリンク: 58 本
-  - 取れなかった Ion.pdf — HTTP Error 404: Not Found
-  - 取れなかった marunaka-izumi.pdf — HTTP Error 404: Not Found
+  - 取れなかった Ion.pdf — HTTPError: HTTP Error 404: Not Found
+  - 取れなかった marunaka-izumi.pdf — HTTPError: HTTP Error 404: Not Found
 
 ### 大阪狭山市 大規模小売店舗立地法
 

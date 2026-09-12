@@ -1,4 +1,4 @@
-# 大店立地法 届出ページ 偵察レポート（2026-09-11）
+# 大店立地法 届出ページ 偵察レポート（2026-09-12）
 
 **まとめ: Excel 2件 / PDF 17件 / わからない 34件 / 表 50件**
 
@@ -9,9 +9,9 @@
 ### 兵庫県 大規模小売店舗立地法 縦覧状況
 
 - URL: https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html
-- メモ: 本命。縦覧中の案件が並ぶ。4か月で落ちるので、ここを毎日見るのがアーカイブの芯になる
+- メモ: 本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDFが44本（合計75MB）あり、2MB以下の34本だけ取る。重い10本は図面つきなので取らない
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 35,293 バイト
+- HTTP 200 / utf-8 / 35,292 バイト
 - **判定: 表**
 - 表 3 個 / PDFリンク 44 本 / Excel 0 本
 - いちばん大きい表: 34 行 × 4 列
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,276 バイト
+- HTTP 200 / utf-8 / 23,275 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -44,7 +44,7 @@
 ### 神戸市 大規模小売店舗立地法 届出状況等
 
 - URL: https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html
-- メモ: 神戸市は政令市なので県とは別に受理する。ここが抜けると神戸が丸ごと落ちる
+- メモ: 政令市なので県とは別に受理。届出ごとの「届出書」PDFが20本（合計35MB）あり、2MB以下の16本だけ取る。交通資料・騒音資料は取らない
 - robots.txt: 許可
 - HTTP 200 / UTF-8 / 38,704 バイト
 - **判定: 表**
@@ -96,7 +96,7 @@
 ### 大阪市 大規模小売店舗立地法 手続き・届出
 
 - URL: https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html
-- メモ: Excel 3本（縦覧一覧・届出一覧1.51MB・市内店舗一覧）。URLの組み立ては正しいのに404を返す。大阪府は同じやり方で17本取れているので大阪市固有。Referer を付けて再挑戦中
+- メモ: Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。2026-09-12に利用者がブラウザで落とした5本を data/files/osaka-city/ に置いた。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している。更新分を機械で取る手は未解決（オープンデータポータル data.city.osaka.lg.jp に日次CSVがあるらしい）
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 45,619 バイト
 - **判定: Excel**
@@ -187,7 +187,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,228 バイト
+- HTTP 200 / UTF-8 / 553,226 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
