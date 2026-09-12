@@ -1,0 +1,2340 @@
+
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+
+<title>兵庫県／オープンデータカタログページ</title>
+
+<meta name="author" content="兵庫県" />
+<meta name="viewport" content="width=device-width, maximum-scale=3.0" />
+<meta name="format-detection" content="telephone=no" />
+<link href="/shared/site_rn/style/default.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/shared/site_rn/style/layout.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/shared/templates/free_rn/style/edit.css" rel="stylesheet" type="text/css" media="all" />
+<link href="/shared/site_rn/style/tablet.css" rel="stylesheet" media="only screen and (min-width : 641px) and (max-width : 1024px)" type="text/css" id="tmp_tablet_css" class="mc_css" />
+<link href="/shared/templates/free_rn/style/edit_tb.css" rel="stylesheet" media="only screen and (min-width : 641px) and (max-width : 1024px)" type="text/css" class="mc_css" />
+<link href="/shared/site_rn/style/smartphone.css" rel="stylesheet" media="only screen and (max-width : 640px)" type="text/css" class="mc_css" />
+<link href="/shared/templates/free_rn/style/edit_sp.css" rel="stylesheet" media="only screen and (max-width : 640px)" type="text/css" class="mc_css" />
+<link href="/shared/site_rn/images/favicon/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+<link href="/shared/site_rn/images/favicon/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed" />
+<script type="text/javascript" src="/shared/site_rn/js/jquery.js"></script>
+<script type="text/javascript" src="/shared/site_rn/js/setting.js"></script>
+<script type="text/javascript" src="/shared/system/js/furigana/ysruby.js"></script>
+<script type="text/javascript" src="/shared/js/readspeaker.js"></script>
+<script type="text/javascript" src="/shared/js/ga.js"></script>
+<!-- カレンダー -->
+<link href="/shared/system/js/opendata/jquery-ui.min.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="/shared/system/js/opendata/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/shared/system/js/opendata/jquery.ui.datepicker-ja.js"></script>
+
+<!-- カレンダー -->
+<script type="text/javascript">
+jQuery(function(){
+jQuery.datepicker.setDefaults( jQuery.datepicker.regional[ "ja" ] );
+jQuery("input[id^='dtp_']").datepicker({
+changeMonth: true,
+changeYear: true
+});
+jQuery("#ok").click(function () {
+alert(jQuery("#dtp_str").val());
+});
+
+});
+</script>
+
+
+</head>
+<body class="format_free no_javascript">
+<script type="text/javascript" src="/shared/site_rn/js/init.js"></script>
+<div id="tmp_wrapper">
+<noscript>
+<p>このサイトではJavaScriptを使用したコンテンツ・機能を提供しています。JavaScriptを有効にするとご利用いただけます。</p>
+</noscript>
+<p><a href="#tmp_honbun" class="skip">本文へスキップします。</a></p>
+
+<div id="tmp_wrap_header">
+<div id="tmp_header">
+<div id="tmp_hlogo">
+<p><a href="/index.html"><span>兵庫県 Hyogo Prefecture</span></a></p>
+</div>
+<ul id="tmp_hnavi_s">
+<li id="tmp_hnavi_lmenu"><a href="javascript:void(0);">閲覧支援</a></li>
+<li id="tmp_hnavi_mmenu"><a href="/cnavi/cnavi_kanri.html">情報を探す</a></li>
+<li id="tmp_hnavi_rmenu"><a href="javascript:void(0);">災害・安全情報</a></li>
+</ul>
+<div class="region_info">
+<div class="box_find_info">
+<div class="info_heading">
+<p class="info_title">情報を探す</p>
+</div>
+<div class="info_main">
+<div class="method_wrap">
+<div class="method_search">
+<p><a href="/search/about.html">検索の方法</a></p>
+</div>
+<div id="tmp_search">
+<form action="/search/results.html" id="tmp_gsearch" name="tmp_gsearch">
+<div class="wrap_sch_box">
+<p class="sch_ttl"><label for="tmp_query">キーワードから探す</label></p>
+<p class="sch_box"><input id="tmp_query" name="q" size="31" type="text" /></p>
+</div>
+<div class="wrap_sch_box">
+<p class="sch_btn"><input id="tmp_func_sch_btn" name="sa" type="submit" value="検索" /></p>
+<p id="tmp_search_hidden"><input name="cx" type="hidden" value="016145232941732995403:kz3o2ig-nkm" /> <input name="ie" type="hidden" value="UTF-8" /> <input name="cof" type="hidden" value="FORID:9" /></p>
+</div>
+</form>
+</div>
+</div>
+<div id="tmp_keywords_load">&nbsp;</div>
+</div>
+</div>
+<div class="group_navi">
+<div id="tmp_gnavi">
+<div class="gnavi">
+<ul>
+<li class="glist1"><a href="/cgi-bin/event_cal_multi/calendar.cgi?type=2">イベント募集</a></li>
+<li class="glist2"><a href="/shisetsu/index.html">施設案内</a></li>
+<li class="glist3"><a href="/search/results.html?q=%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F&amp;sa=%E6%A4%9C%E7%B4%A2&amp;cx=016145232941732995403%3Akz3o2ig-nkm&amp;ie=UTF-8&amp;cof=FORID%3A9">よくある質問</a></li>
+<li class="glist4"><a href="/inquiry/inquiry.html">相談窓口</a></li>
+</ul>
+</div>
+</div>
+<div class="search_nav">
+<ul>
+<li class="purpose_search_nav"><a href="/cnavi/cnavi_kanri.html#tmp_purpose_search">目的から探す</a>
+<div id="tmp_purpose_box">
+<div class="sub_search_ttl">
+<p class="sub_search_ttl_text">目的から探す</p>
+<p class="lnavi_close_btn"><a href="javascript:void(0);"><span>閉じる</span></a></p>
+</div>
+<div class="sub_menu_cnt">
+<div class="sub_search_cnt">
+<div class="purpose_navi">
+<ul>
+<li class="purpose_navi1"><a href="/pref/cate3_625.html">入札・公売情報</a></li>
+<li class="purpose_navi2"><a href="/pref/cate2_616.html">職員採用</a></li>
+<li class="purpose_navi3"><a href="/sr13/passport.html">パスポート</a></li>
+<li class="purpose_navi4"><a href="/inquiry/license.html">許認可手続き</a></li>
+<li class="purpose_navi5"><a href="/kk12/ac09_000000032.html">パブリックコメント</a></li>
+<li class="purpose_navi6"><a href="/pref/cate3_661.html">オープンデータ</a></li>
+<li class="purpose_navi7"><a href="/stat/cate2_711.html">統計情報</a></li>
+<li class="purpose_navi8"><a href="/pref/cate2_613.html">県の概要</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li class="category_search_nav"><a href="/cnavi/cnavi_kanri.html#tmp_category_search">分類から探す</a>
+<div id="tmp_category_box">
+<div class="sub_search_ttl">
+<p class="sub_search_ttl_text">分類から探す</p>
+<p class="lnavi_close_btn"><a href="javascript:void(0);"><span>閉じる</span></a></p>
+</div>
+<div class="sub_menu_cnt">
+<div class="sub_search_cnt">
+<div class="category_list_wrap">
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/safe/index.html">防災・安心・安全</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/life/index.html">暮らし・教育</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/health/index.html">健康・医療・福祉</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/town/index.html">まちづくり・環境</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/work/index.html">しごと・産業</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/aff/index.html">食・農林水産</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/interaction/index.html">地域・交流・観光</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/pref/index.html">県政情報・統計（県政情報）</a></div>
+</div>
+<div class="category_box_item">
+<div class="category_item_ttl"><a href="/stat/index.html">県政情報・統計（統計）</a></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li><a href="/org/index.html">組織から探す</a></li>
+</ul>
+</div>
+</div>
+<div class="group_news">
+<div id="tmp_news_load">&nbsp;</div>
+<div class="prefectural_citizens">
+<div class="citizens_image">
+<p><img alt="" height="95" src="/shared/site_rn/images/header/img_info_center.jpg" width="81" /></p>
+</div>
+<div class="citizens_cap">
+<p><a href="/area/index.html">県民局・県民<br />
+センター情報</a></p>
+</div>
+</div>
+<div class="directional_nav">
+<ul>
+<li class="release_link"><a href="/cgi-bin/press/press.cgi">記者発表</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="tmp_means">
+<div class="custom_container">
+<div id="tmp_setting">
+<ul>
+<li class="func_language"><a href="/fl/index.html" lang="en">Foreign Language</a></li>
+<li class="func_browser"><a href="javascript:void(0);" class="func_title">閲覧支援メニュー</a>
+<div id="func_dropdown" class="func_cate">
+<ul>
+<li class="func_change"><a href="/howto/moji.html">文字サイズ・色合い変更</a></li>
+<li class="func_speaker rs_skip"><a accesskey="L" href="//app-eas.readspeaker.com/cgi-bin/rsent?customerid=8960&amp;lang=ja_jp&amp;readid=tmp_main&amp;url=" onclick="readpage(this.href, 'tmp_readspeaker'); return false;" rel="nofollow" class="rs_href">音声読み上げ</a></li>
+<li class="func_furigana"><a data-contents="tmp_main" data-target="tmp_main" href="javascript:void(0);" id="furigana">ふりがなON</a></li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="emergency_aside">
+<ul>
+<li class="link_emergency"><a href="/emergency_info/index.html">災害関連情報</a></li>
+<li class="link_safety"><a href="/safety_info/index.html">安心・安全情報</a></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tmp_sma_menu">
+<div id="tmp_sma_lmenu" class="wrap_sma_sch">
+<div id="tmp_sma_func">&nbsp;</div>
+<p class="close_btn"><a href="javascript:void(0);"><span>閉じる</span></a></p>
+</div>
+<div id="tmp_sma_mmenu" class="wrap_sma_sch">
+<div id="tmp_sma_cnavi">&nbsp;</div>
+<p class="close_btn"><a href="javascript:void(0);"><span>閉じる</span></a></p>
+</div>
+<div id="tmp_sma_rmenu" class="wrap_sma_sch">
+<div id="tmp_sma_info">&nbsp;</div>
+<p class="close_btn"><a href="javascript:void(0);"><span>閉じる</span></a></p>
+</div>
+</div>
+
+<div id="tmp_wrap_main">
+<div id="tmp_main_content">
+<div id="tmp_main" class="column_lnavi">
+<div class="wrap_col_main">
+<div class="col_main">
+<div id="tmp_wrap_navigation">
+<div id="tmp_pankuzu">
+<p><a href="/index.html">ホーム</a> &gt; オープンデータカタログページ</p>
+</div>
+<div id="tmp_wrap_custom_update">
+<div id="tmp_custom_update">
+
+
+
+</div>
+</div>
+</div>
+<p id="tmp_honbun" class="skip">ここから本文です。</p>
+<div id="tmp_readspeaker" class="rs_preserve rs_skip rs_splitbutton rs_addtools rs_exp"></div>
+<div id="tmp_contents">
+
+
+
+
+<h1>オープンデータカタログページ</h1>
+<p>
+	<ul>
+		<li><a href="/kk26/johoseisaku/opendata.html" target="_blank">オープンデータの取組について</a></li>
+	</ul>
+</p>
+	
+<!-- searchform -->
+
+<div id="tmp_opdata_sch">
+<div id="tmp_opdata_sch_ttl">
+<p>検索条件</p>
+</div>
+<div id="tmp_opdata_sch_cnt">
+<form id="searchform" method="post" action="./index.php#tmp_opdata_result" name="searchform" enctype="application/x-www-form-urlencoded" >
+<div id="tmp_opdata_kwd">
+<dl>
+<dt><label for="op_search">キーワード検索</label></dt>
+<dd><p><input id="op_search" type="text" value="" name="keyword" /></p></dd>
+<span style="font-size:12px; margin-left:10px;">※複数指定する場合はスペースで区切って下さい</span>
+</dl>
+</div>
+<div id="tmp_opdata_detail" style="margin-bottom:20px;">
+<div class="opdata_detail_boxl">
+<div id="tmp_opdata_category">
+<div id="tmp_opdata_category_ttl"><p><label for="opdata_category">カテゴリ</label></p></div>
+<div id="tmp_opdata_category_cnt">
+<p>
+<select name="categories[]" size="3"  id="opdata_category" multiple="multiple">
+<option value="指定なし"  >指定なし</option>
+<option value="1"  >防災・安心・安全</option>
+<option value="2"  >暮らし・教育</option>
+<option value="3"  >健康・医療・福祉</option>
+<option value="4"  >まちづくり・環境</option>
+<option value="5"  >しごと・産業</option>
+<option value="6"  >食・農林水産</option>
+<option value="7"  >地域・交流・観光</option>
+<option value="8"  >県政情報・統計（県政情報）</option>
+<option value="9"  >県政情報・統計（統計）</option>
+
+</select>
+</p>
+</div>
+</div>
+<div id="tmp_opdata_category">
+<div id="tmp_opdata_category_ttl"><p><label for="opdata_category">データタイプ</label></p></div>
+<div id="tmp_opdata_category_cnt">
+<p>
+<select name="datatypes[]" size="3"  id="opdata_category" multiple="multiple">
+<option value="指定なし"  >指定なし</option>
+<option value="1"  >統計</option>
+<option value="2"  >地理</option>
+<option value="3"  >測定</option>
+<option value="4"  >その他</option>
+
+</select>
+</p>
+</div>
+</div>
+<div id="tmp_opdata_license">
+<div id="tmp_opdata_license_ttl"><p><label for="opdata_license">ライセンス</label></p></div>
+<div id="tmp_opdata_license_cnt">
+<p>
+<select name="licenses[]" size="3" id="opdata_license" multiple="multiple">
+<option value="指定なし"  >指定なし</option>
+<option value="1"  >CC BY</option>
+<option value="2"  >CC BY-NC</option>
+<option value="3"  >CC BY-SA</option>
+<option value="4"  >CC BY-NC-SA</option>
+<option value="5"  >CC BY-ND</option>
+<option value="6"  >CC BY-NC-ND</option>
+<option value="7"  >著作物ではありません</option>
+
+</select>
+</p>
+</div>
+</div>
+</div>
+
+<div class="opdata_detail_boxr">
+<div class="opdata_detail_box" style="margin-bottom:0;">
+<div id="tmp_opdata_data">
+<div id="tmp_opdata_data2" style="background-color:#FFFFFF;">
+<div id="tmp_opdata_datatime" style="float:none; width:auto; margin:0 0 13px 0; background-color:#F3F4F5;">
+<div id="tmp_opdata_datatime_ttl"><p>データ時点</p></div>
+<div id="tmp_opdata_datatime_cnt" style="padding:33px 0 20px 34px;">
+<p>
+<label for="dtp_str"><input type="text" id="dtp_str" name="data_time_str" value="" />以降</label>
+<label for="dtp_end"><input type="text" id="dtp_end" name="data_time_end" value="" />まで</label>
+</p>
+</div>
+</div>
+<div id="tmp_opdata_datapost" style="float:none; width:auto; margin:0 0 13px 0; background-color:#F3F4F5">
+<div id="tmp_opdata_datapost_ttl"><p>掲載日</p></div>
+<div id="tmp_opdata_datapost_cnt" style="padding:33px 0 20px 34px;">
+<p>
+<label for="dtp_str2"><input type="text" id="dtp_str2" name="data_upddt_str" value="" />以降</label>
+<label for="dtp_end2"><input type="text" id="dtp_end2" name="data_upddt_end" value="" />まで</label>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="tmp_opdata_extension" style="margin:0 0 13px 0;">
+<div id="tmp_opdata_extension_ttl"><p><label for="opdata_extension">形式</label></p></div>
+<div id="tmp_opdata_extension_cnt" style="padding:8px 0 8px 34px;">
+<p>
+<select name="keishikis[]" size="3" id="opdata_extension" multiple="multiple">
+<option value="指定なし"  >指定なし</option>
+<option value="csv"  >csv</option>
+<option value="doc"  >doc</option>
+<option value="docx"  >docx</option>
+<option value="html"  >html</option>
+<option value="lzh"  >lzh</option>
+<option value="pdf"  >pdf</option>
+<option value="pptx"  >pptx</option>
+<option value="xls"  >xls</option>
+<option value="xlsx"  >xlsx</option>
+<option value="xml"  >xml</option>
+<option value="zip"  >zip</option>
+
+</select>
+</p>
+</div>
+</div>
+<div id="tmp_opdata_displayedresults">
+<div id="tmp_opdata_displayedresults2">
+<div id="tmp_opdata_displayedresults_ttl"><p><label for="opdata_displayedresults">表示件数</label></p></div>
+<div id="tmp_opdata_displayedresults_cnt">
+<p>
+<select name="displayedresults" size="1" id="opdata_displayedresults">
+<option value="10"  >１０件表示</option>
+<option value="30"  >３０件表示</option>
+<option value="50"  >５０件表示</option>
+<option value="100" selected >１００件表示</option>
+<option value="100000"  >全て表示</option>
+
+</select>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="opdata_detail_box">
+<div id="tmp_opdata_organization">
+<div id="tmp_opdata_organization2">
+<div id="tmp_opdata_organization_ttl"><p><label for="opdata_organization">組織別</label></p></div>
+<div id="tmp_opdata_organization_cnt">
+<p>
+<select name="dept_codes[]" size="3" id="opdata_organization" multiple="multiple">
+<option value="指定なし"  >指定なし</option>
+<option value="まちづくり部 建築指導課"  >まちづくり部 建築指導課</option>
+<option value="まちづくり部 都市政策課"  >まちづくり部 都市政策課</option>
+<option value="まちづくり部 都市計画課"  >まちづくり部 都市計画課</option>
+<option value="中播磨県民センター 姫路土木事務所"  >中播磨県民センター 姫路土木事務所</option>
+<option value="中播磨県民センター 姫路農業改良普及センター"  >中播磨県民センター 姫路農業改良普及センター</option>
+<option value="企画部 デジタル戦略課"  >企画部 デジタル戦略課</option>
+<option value="企画部 統計課"  >企画部 統計課</option>
+<option value="企画部 計画課"  >企画部 計画課</option>
+<option value="保健医療部 健康増進課"  >保健医療部 健康増進課</option>
+<option value="保健医療部 兵庫県立健康科学研究所"  >保健医療部 兵庫県立健康科学研究所</option>
+<option value="保健医療部 医務課"  >保健医療部 医務課</option>
+<option value="保健医療部 生活衛生課"  >保健医療部 生活衛生課</option>
+<option value="保健医療部 疾病対策課"  >保健医療部 疾病対策課</option>
+<option value="危機管理部 消防保安課"  >危機管理部 消防保安課</option>
+<option value="危機管理部 防災支援課"  >危機管理部 防災支援課</option>
+<option value="土木部　上下水道課"  >土木部　上下水道課</option>
+<option value="土木部　交通政策課"  >土木部　交通政策課</option>
+<option value="土木部　総合治水課"  >土木部　総合治水課</option>
+<option value="土木部　道路企画課"  >土木部　道路企画課</option>
+<option value="淡路県民局 洲本土木事務所"  >淡路県民局 洲本土木事務所</option>
+<option value="環境部 環境整備課"  >環境部 環境整備課</option>
+<option value="産業労働部　労政福祉課"  >産業労働部　労政福祉課</option>
+<option value="産業労働部　地域経済課"  >産業労働部　地域経済課</option>
+<option value="産業労働部　新産業課"  >産業労働部　新産業課</option>
+<option value="産業労働部国際局国際課"  >産業労働部国際局国際課</option>
+<option value="産業労働部観光局観光振興課"  >産業労働部観光局観光振興課</option>
+<option value="県民生活部文化スポーツ局芸術文化課"  >県民生活部文化スポーツ局芸術文化課</option>
+<option value="福祉部　こども政策課"  >福祉部　こども政策課</option>
+<option value="福祉部　ユニバーサル推進課"  >福祉部　ユニバーサル推進課</option>
+<option value="福祉部　総務課"  >福祉部　総務課</option>
+<option value="福祉部　障害福祉課"  >福祉部　障害福祉課</option>
+<option value="福祉部　高齢政策課"  >福祉部　高齢政策課</option>
+<option value="総務部　市町振興課"  >総務部　市町振興課</option>
+<option value="総務部　教育課"  >総務部　教育課</option>
+<option value="総務部職員局人事課"  >総務部職員局人事課</option>
+<option value="財務部 県政改革課"  >財務部 県政改革課</option>
+<option value="財務部 財政課"  >財務部 財政課</option>
+<option value="農林水産部　林務課"  >農林水産部　林務課</option>
+<option value="農林水産部　治山課"  >農林水産部　治山課</option>
+<option value="農林水産部　流通戦略課"  >農林水産部　流通戦略課</option>
+<option value="農林水産部　畜産課"  >農林水産部　畜産課</option>
+<option value="農林水産部　総合農政課"  >農林水産部　総合農政課</option>
+<option value="農林水産部　農地整備課"  >農林水産部　農地整備課</option>
+<option value="農林水産部　農業改良課"  >農林水産部　農業改良課</option>
+<option value="阪神南県民センター 県民躍動室"  >阪神南県民センター 県民躍動室</option>
+
+</select>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tmp_opdata_submit">
+<input id="searchformsubmit" type="submit" name="cmd_submit" value="検索" />
+<input id="searchformclr" type="submit" name="cmd_clear" value="クリア" onclick="location.href='./index.php'; return false;" />
+</div>
+</form>
+</div>
+</div>
+
+<!-- wrap_col_main -->
+
+<div class="page_sending_navi">
+
+<p class="display_page">924件中&nbsp;101～200件表示</p>
+<ul>
+<li><a href="?p=1_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">1</a></li>
+
+<li class="active">2</li>
+
+<li><a href="?p=3_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">3</a></li>
+
+<li><a href="?p=4_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">4</a></li>
+
+<li><a href="?p=5_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">5</a></li>
+
+<li><a href="?p=6_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">6</a></li>
+
+<li><a href="?p=7_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">7</a></li>
+
+<li><a href="?p=8_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">8</a></li>
+
+<li><a href="?p=9_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">9</a></li>
+
+<li><a href="?p=10_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">10</a></li>
+</ul>
+
+</div>
+<div id="tmp_opdata_result">
+<table width="100%" class="datatable" border="1">
+<tr>
+<th width="118">データタイトル
+<a href="?p=2_1&amp;sort&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="98">概要
+<a href="?p=2_1&amp;sort&amp;asc=summary&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="88">ライセンス
+<a href="?p=2_1&amp;sort&amp;asc=license&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="98">カテゴリ
+<a href="?p=2_1&amp;sort&amp;asc=category&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="98">データタイプ
+<a href="?p=2_1&amp;sort&amp;asc=od_data_type&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="83">データ時点
+<a href="?p=2_1&amp;sort&amp;asc=data_time&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="83">掲載日
+<a href="?p=2_1&amp;sort&amp;asc=data_upddt&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="48">形式
+<a href="?p=2_1&amp;sort&amp;asc=data_type&amp;displayedresults=100#tmp_opdata_result"><img src="/shared/templates/free/images/contents/opendata/sort_desc.gif" width="18" height="18" alt="" /></a>
+</th>
+<th width="88">ダウンロード<br>掲載ページ</th>
+<th>組織名</th>
+</tr>
+
+<tr>
+<td>2020年</td>
+<td>2020年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2024-02-01</td>
+<td>2024-02-02</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/download/documents/2020_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/documents/2020_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/download/index.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/index.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2020年兵庫県・市区町人口ピラミッド</td>
+<td>2020年の兵庫県及び県内各市町の人口ピラミッド</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2020-10-01</td>
+<td>2023-01-13</td>
+<td>xls</td>
+<td>
+<a href="/kk11/jinkou-tochitoukei/documents/jinkou_pyramidshikucho2020.xls" onclick="ga('send', 'event', 'opdl:/kk11/jinkou-tochitoukei/jinkoupiramiddo.html', 'click', '/kk11/jinkou-tochitoukei/documents/jinkou_pyramidshikucho2020.xls' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/jinkou-tochitoukei/jinkoupiramiddo.html" onclick="ga('send', 'event', 'oppg:/kk11/jinkou-tochitoukei/jinkoupiramiddo.html', 'click', '/kk11/jinkou-tochitoukei/jinkoupiramiddo.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>2020年工業統計表</td>
+<td>2020年工業統計：年次累計表、県表（従業者規模別、産業中分類別、産業細分類別、品目別）、市区町表（市区町別、産業中分類別）、用地・用水表（産業中分類別、地域別、市町別）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2020-06-01</td>
+<td>2023-01-24</td>
+<td>html</td>
+<td><a href="/kk11/shoukougyoutoukei/2020kogyo/2020kogyotoukeihyou.html" onclick="ga('send', 'event', 'oppg:/kk11/shoukougyoutoukei/2020kogyo/2020kogyotoukeihyou.html', 'click', '/kk11/shoukougyoutoukei/2020kogyo/2020kogyotoukeihyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>2020年工業統計調査結果（確報）</td>
+<td>2020年工業統計調査結果（概要）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2020-06-01</td>
+<td>2023-01-24</td>
+<td>doc</td>
+<td>
+<a href="/kk11/shoukougyoutoukei/2020kogyo/documents/2020kekkagaiyou1.doc" onclick="ga('send', 'event', 'opdl:/kk11/shoukougyoutoukei/2020kogyo/2020kogyosokuhou.html', 'click', '/kk11/shoukougyoutoukei/2020kogyo/documents/2020kekkagaiyou1.doc' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/shoukougyoutoukei/2020kogyo/2020kogyosokuhou.html" onclick="ga('send', 'event', 'oppg:/kk11/shoukougyoutoukei/2020kogyo/2020kogyosokuhou.html', 'click', '/kk11/shoukougyoutoukei/2020kogyo/2020kogyosokuhou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>2021年</td>
+<td>2021年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2024-02-01</td>
+<td>2024-02-02</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/documents/2021_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/documents/2021_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/infectdis2.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/infectdis2.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2021年</td>
+<td>2021年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2024-02-01</td>
+<td>2024-02-02</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/download/documents/2021_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/documents/2021_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/download/index.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/index.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2022年</td>
+<td>2022年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2024-02-01</td>
+<td>2024-02-02</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/documents/2022_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/documents/2022_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/infectdis2.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/infectdis2.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2022年</td>
+<td>2022年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2024-02-01</td>
+<td>2024-02-02</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/download/documents/2022_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/documents/2022_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/download/index.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/index.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2023年</td>
+<td>2023年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2025-01-17</td>
+<td>2025-01-17</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/documents/2023_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/documents/2023_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/infectdis2.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/infectdis2.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2023年</td>
+<td>2023年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2025-01-17</td>
+<td>2025-01-17</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/download/documents/2023_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/documents/2023_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/download/index.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/index.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2023年漁業センサス</td>
+<td>2023年漁業センサス海面漁業調査漁業経営体調査結果（確定値）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-11-01</td>
+<td>2025-03-10</td>
+<td>html</td>
+<td><a href="/kk11/nourinsuisantoukei/gyogyou_census2023-2.html" onclick="ga('send', 'event', 'oppg:/kk11/nourinsuisantoukei/gyogyou_census2023-2.html', 'click', '/kk11/nourinsuisantoukei/gyogyou_census2023-2.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>2024年</td>
+<td>2024年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2025-11-15</td>
+<td>2026-01-30</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/documents/2024_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/documents/2024_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/infectdis2.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/infectdis2.html', 'click', '/iphs01/kansensho_jyoho/infectdis2.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>2024年</td>
+<td>2024年兵庫県感染症発生動向調査</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2025-11-15</td>
+<td>2026-01-30</td>
+<td>xlsx</td>
+<td>
+<a href="/iphs01/kansensho_jyoho/download/documents/2024_opendata.xlsx" onclick="ga('send', 'event', 'opdl:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/documents/2024_opendata.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/iphs01/kansensho_jyoho/download/index.html" onclick="ga('send', 'event', 'oppg:/iphs01/kansensho_jyoho/download/index.html', 'click', '/iphs01/kansensho_jyoho/download/index.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 兵庫県立健康科学研究所</td>
+</tr>
+
+<tr>
+<td>21.県民経済計算</td>
+<td>令和３年兵庫県統計書（県民経済計算）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-21-kenminkeizaikeisan.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-21-kenminkeizaikeisan.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>21.県民経済計算</td>
+<td>令和４年兵庫県統計書（県民経済計算）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-21-kenminkeizai.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-21-kenminkeizai.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>21.県民経済計算</td>
+<td>令和5年兵庫県統計書（県民経済計算）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-21-kenminkeizai.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-21-kenminkeizai.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>21.県民経済計算</td>
+<td>令和6年兵庫県統計書（県民経済計算）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-21-kenminkeizai.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-21-kenminkeizai.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>21.財政</td>
+<td>兵庫県統計書累年データ（財政）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/21ruinen-zaisei-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/21ruinen-zaisei-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>21世紀兵庫長期ビジョン（平成23年12月改訂）</td>
+<td>21世紀兵庫長期ビジョンは、2040年にめざすべき兵庫の将来像を明らかにしたもので、県下10地域の「地域ビジョン」と全県的な視点から見た「全県ビジョン」から構成。（平成13年2月策定、平成23年12月改訂）。全県ビジョン(本編、概要編)、地域ビジョン、ビジョン普及啓発資料等を記載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（県政情報）</td>
+<td>その他</td>
+<td>2014-10-22</td>
+<td>2015-07-01</td>
+<td>html</td>
+<td><a href="/kk07/index_vision2040.html" onclick="ga('send', 'event', 'oppg:/kk07/index_vision2040.html', 'click', '/kk07/index_vision2040.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 計画課</td>
+</tr>
+
+<tr>
+<td>22.警察・司法・消防</td>
+<td>兵庫県統計書累年データ（警察・司法・消防）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/22ruinen-keisatsu-siho-syobo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/22ruinen-keisatsu-siho-syobo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>22.財政</td>
+<td>令和３年兵庫県統計書（財政）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-22-zaisei.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-22-zaisei.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>22.財政</td>
+<td>令和４年兵庫県統計書（財政）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-22-zaisei.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-22-zaisei.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>22.財政</td>
+<td>令和5年兵庫県統計書（財政）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-22-zaisei.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-22-zaisei.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>22.財政</td>
+<td>令和6年兵庫県統計書（財政）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-22-zaisei.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-22-zaisei.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>23.警察・司法・消防</td>
+<td>令和３年兵庫県統計書（警察・司法・消防）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-23-keisatsu.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-23-keisatsu.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>23.警察・司法・消防</td>
+<td>令和４年兵庫県統計書（警察・司法・消防）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-23-keisatu.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-23-keisatu.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>23.警察・司法・消防</td>
+<td>令和5年兵庫県統計書（警察・司法・消防）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-23-keisatu.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-23-keisatu.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>23.警察・司法・消防</td>
+<td>令和6年兵庫県統計書（警察・司法・消防）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-23-keisatusihou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-23-keisatusihou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>24.付録</td>
+<td>令和３年兵庫県統計書（付録）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-24-furoku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-24-furoku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>24.付録</td>
+<td>令和４年兵庫県統計書（付録）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-24-furoku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-24-furoku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>24.付録</td>
+<td>令和5年兵庫県統計書（付録）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-24-furoku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-24-furoku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>24.付録</td>
+<td>令和6年兵庫県統計書（付録）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-24-huroku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-24-huroku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>2経済基盤（労働、事業所、農林漁業、工業、商業）【R5.6.30修正：215、218、221】</td>
+<td>2経済基盤（労働、事業所、農林漁業、工業、商業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2303-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2303-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3.事業所・企業・法人</td>
+<td>令和３年兵庫県統計書（事業所・企業・法人）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-03-jigyosyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-03-jigyosyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3.事業所・企業・法人</td>
+<td>令和４年兵庫県統計書（事業所・企業・法人）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-03-jigyosyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-03-jigyosyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3.事業所・企業・法人</td>
+<td>令和5年兵庫県統計書（事業所・企業・法人）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-03-jigyosyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-03-jigyosyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3.事業所・企業・法人</td>
+<td>令和6年兵庫県統計書（事業所・企業・法人）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-03-jigyousyokigyou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-03-jigyousyokigyou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3.事業所・企業・法人</td>
+<td>兵庫県統計書累年データ（事業所・企業・法人）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/3ruinen-jigyosyo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/3ruinen-jigyosyo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3就業者（第1次～3次産業別就業者数・比率）【R5.6.30修正：65、82】</td>
+<td>3就業者（第1次～3次産業別就業者数・比率）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2312-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2312-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>3市町民経済（市町内総生産、市町民所得）</td>
+<td>3市町民経済（市町内総生産、市町民所得）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2304-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2304-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4.農業</td>
+<td>令和３年兵庫県統計書（農業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-04-nogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-04-nogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4.農業</td>
+<td>令和４年兵庫県統計書（農業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-04-nogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-04-nogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4.農業</td>
+<td>令和5年兵庫県統計書（農業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-04-nogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-04-nogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4.農業</td>
+<td>令和6年兵庫県統計書（農業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-04-nougyou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-04-nougyou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4.農業</td>
+<td>兵庫県統計書累年データ（農業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/4ruinen-nogyo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/4ruinen-nogyo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4市町民経済（市町内総生産、市町民所得）【R5.6.30修正：134】</td>
+<td>4市町民経済（市町内総生産、市町民所得）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2313-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2313-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>4行政基盤（行財政、普通会計決算、公務員・選挙）</td>
+<td>4行政基盤（行財政、普通会計決算、公務員・選挙）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2305-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2305-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5.林業</td>
+<td>令和３年兵庫県統計書（林業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-05-ringyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-05-ringyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5.林業</td>
+<td>令和４年兵庫県統計書（林業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-05-ringyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-05-ringyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5.林業</td>
+<td>令和5年兵庫県統計書（林業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-05-ringyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-05-ringyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5.林業</td>
+<td>令和6年兵庫県統計書（林業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-05-ringyou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-05-ringyou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5.林業</td>
+<td>兵庫県統計書累年データ（林業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/5ruinen-ringyo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/5ruinen-ringyo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5事業所（事業所数、従事者数）</td>
+<td>5事業所（事業所数、従事者数）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2314-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2314-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>5年度委員名簿</td>
+<td>5年度委員名簿</td>
+<td>
+著作物ではありません
+</td>
+<td>食・農林水産</td>
+<td>その他</td>
+<td>2024-02-20</td>
+<td>2024-02-26</td>
+<td>pdf</td>
+<td>
+<a href="/nk02/documents/02_r5meibo.pdf" onclick="ga('send', 'event', 'opdl:/nk02/sougounousei7.html', 'click', '/nk02/documents/02_r5meibo.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/nk02/sougounousei7.html" onclick="ga('send', 'event', 'oppg:/nk02/sougounousei7.html', 'click', '/nk02/sougounousei7.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>農林水産部　総合農政課</td>
+</tr>
+
+<tr>
+<td>5教育（教育、進路）</td>
+<td>5教育（教育、進路）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2306-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2306-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6-1くらし（観光、自動車、道路、住宅）【R5.6.30修正：432、433、434】</td>
+<td>6-1くらし（観光、自動車、道路、住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2307-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2307-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6-2くらし（文化・居住、水道・環境整備）【R5.6.30修正：436】</td>
+<td>6-2くらし（文化・居住、水道・環境整備）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2308-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2308-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6-3くらし（健康・医療、福祉、社会保障）【R5.6.30修正：467、468、469、471、追記：501、502欄外説明】</td>
+<td>6-3くらし（健康・医療、福祉、社会保障）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2309-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2309-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6-4くらし（警察、消防・防災)</td>
+<td>6-4くらし（警察、消防・防災)</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2310-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2310-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6.水産業</td>
+<td>令和３年兵庫県統計書（水産業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-06-suisangyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-06-suisangyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6.水産業</td>
+<td>令和４年兵庫県統計書（水産業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-06-suisangyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-06-suisangyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6.水産業</td>
+<td>令和5年兵庫県統計書（水産業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-06-suisangyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-06-suisangyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6.水産業</td>
+<td>令和6年兵庫県統計書（水産業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-06-suisangyou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-06-suisangyou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6.水産業</td>
+<td>兵庫県統計書累年データ（水産業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/6ruinen-suisangyo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/6ruinen-suisangyo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6商工業（商業事業所数、従業者数、年間販売額、製造業事業所数、従業者数、製造品出荷額等）</td>
+<td>6商工業（商業事業所数、従業者数、年間販売額、製造業事業所数、従業者数、製造品出荷額等）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-28</td>
+<td>2023-06-30</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/kankoubutu/documents/2315-1.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/documents/2315-1.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/kankoubutu/2023sikucyou.html" onclick="ga('send', 'event', 'oppg:/kk11/kankoubutu/2023sikucyou.html', 'click', '/kk11/kankoubutu/2023sikucyou.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>6年度委員名簿</td>
+<td>外部評価結果</td>
+<td>
+著作物ではありません
+</td>
+<td>食・農林水産</td>
+<td>その他</td>
+<td>2025-02-10</td>
+<td>2025-02-28</td>
+<td>pdf</td>
+<td>
+<a href="/nk02/documents/01_r6menber.pdf" onclick="ga('send', 'event', 'opdl:/nk02/sougounousei7.html', 'click', '/nk02/documents/01_r6menber.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/nk02/sougounousei7.html" onclick="ga('send', 'event', 'oppg:/nk02/sougounousei7.html', 'click', '/nk02/sougounousei7.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>農林水産部　総合農政課</td>
+</tr>
+
+<tr>
+<td>7.工業</td>
+<td>兵庫県統計書累年データ（工業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/7ruinen-kogyo-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/7ruinen-kogyo-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>7.鉱工業</td>
+<td>令和３年兵庫県統計書（鉱工業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-07-kokogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-07-kokogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>7.鉱工業</td>
+<td>令和４年兵庫県統計書（鉱工業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-07-kokogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-07-kokogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>7.鉱工業</td>
+<td>令和5年兵庫県統計書（鉱工業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-07-kokogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-07-kokogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>7.鉱工業</td>
+<td>令和6年兵庫県統計書（鉱工業）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-07-koukougyou.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-07-koukougyou.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>8.建築・住宅</td>
+<td>令和３年兵庫県統計書（建築・住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-08-kentiku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-08-kentiku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>8.建築・住宅</td>
+<td>令和４年兵庫県統計書（建築・住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-08-kentiku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-08-kentiku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>8.建築・住宅</td>
+<td>令和5年兵庫県統計書（建築・住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-08-kentiku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-08-kentiku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>8.建築・住宅</td>
+<td>令和6年兵庫県統計書（建築・住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-08-kentikujuutaku.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-08-kentikujuutaku.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>8.建築・住宅</td>
+<td>兵庫県統計書累年データ（建築・住宅）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/8ruinen-kentiku-jyutaku-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/8ruinen-kentiku-jyutaku-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>9.商業・貿易・観光</td>
+<td>令和３年兵庫県統計書（商業・貿易・観光）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2023-03-24</td>
+<td>2023-03-24</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r3-09-syogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r3-09-syogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho03.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho03.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho03.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>9.商業・貿易・観光</td>
+<td>令和４年兵庫県統計書（商業・貿易・観光）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2024-03-22</td>
+<td>2024-03-22</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r4-09-syogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r4-09-syogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho04.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho04.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho04.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>9.商業・貿易・観光</td>
+<td>令和5年兵庫県統計書（商業・貿易・観光）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2025-03-26</td>
+<td>2025-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/oshirase-sougoude-ta/documents/r5-09-syogyo.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/documents/r5-09-syogyo.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/oshirase-sougoude-ta/toukeisho05.html" onclick="ga('send', 'event', 'oppg:/kk11/oshirase-sougoude-ta/toukeisho05.html', 'click', '/kk11/oshirase-sougoude-ta/toukeisho05.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>9.商業・貿易・観光</td>
+<td>令和6年兵庫県統計書（商業・貿易・観光）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/r6-09-syougyouboueki.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/toukeisho06.html', 'click', '/kk11/documents/r6-09-syougyouboueki.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/toukeisho06.html" onclick="ga('send', 'event', 'oppg:/kk11/toukeisho06.html', 'click', '/kk11/toukeisho06.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>9.商業・貿易・観光</td>
+<td>兵庫県統計書累年データ（商業・貿易・観光）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>県政情報・統計（統計）</td>
+<td>統計</td>
+<td>2026-03-26</td>
+<td>2026-03-26</td>
+<td>xlsx</td>
+<td>
+<a href="/kk11/documents/9ruinen-syogyo-boeki-kanko-r6.xlsx" onclick="ga('send', 'event', 'opdl:/kk11/ac08_1_000000123.html', 'click', '/kk11/documents/9ruinen-syogyo-boeki-kanko-r6.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk11/ac08_1_000000123.html" onclick="ga('send', 'event', 'oppg:/kk11/ac08_1_000000123.html', 'click', '/kk11/ac08_1_000000123.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 統計課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2013.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2020-10-29</td>
+<td>2020-10-29</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2013.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2013.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2014.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2020-10-29</td>
+<td>2020-10-29</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2014.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2014.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2015.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2020-10-29</td>
+<td>2020-10-29</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2015.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2015.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2016.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2022-11-24</td>
+<td>2022-11-24</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2016.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2016.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2017.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2022-11-24</td>
+<td>2022-11-24</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2017.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2017.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>99_01標準化該当比_2018.csv</td>
+<td>兵庫県に住所地情報を有する医療保険加入者で特定健診を受診された方の健診結果や問診項目に関する市区町別の分析結果を掲載。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2022-11-24</td>
+<td>2022-11-24</td>
+<td>csv</td>
+<td>
+<a href="/kf17/documents/99_01_2018.csv" onclick="ga('send', 'event', 'opdl:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/documents/99_01_2018.csv' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf17/kenkodukurishienshisutemu.html" onclick="ga('send', 'event', 'oppg:/kf17/kenkodukurishienshisutemu.html', 'click', '/kf17/kenkodukurishienshisutemu.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 健康増進課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>旅館業法許可施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_hotel_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_hotel_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>公衆浴場法許可施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_public_bath_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_public_bath_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>興行場法許可施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_show_places_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_show_places_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>理容師法検査確認施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_barbershop_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_barbershop_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>美容師法検査確認施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_beauty_salon_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_beauty_salon_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>Excel</td>
+<td>クリーニング業法検査確認施設（エクセル）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>xlsx</td>
+<td>
+<a href="/kf14/documents/000028_cleaningbusiness_all.xlsx" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_cleaningbusiness_all.xlsx' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>旅館業法許可施設（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_hotel_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_hotel_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>公衆浴場（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_public_bath_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_public_bath_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>興行場法許可施設（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_show_places_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_show_places_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>理容師法検査確認施設（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_barbershop_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_barbershop_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>美容師法検査確認施設（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_beauty_salon_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_beauty_salon_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PDF</td>
+<td>クリーニング業法検査確認施設（PDF）</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>健康・医療・福祉</td>
+<td>統計</td>
+<td>2026-08-31</td>
+<td>2026-09-10</td>
+<td>pdf</td>
+<td>
+<a href="/kf14/documents/000028_cleaningbusiness_all.pdf" onclick="ga('send', 'event', 'opdl:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/documents/000028_cleaningbusiness_all.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kf14/kankyoueigyoushisetsu_list.html" onclick="ga('send', 'event', 'oppg:/kf14/kankyoueigyoushisetsu_list.html', 'click', '/kf14/kankyoueigyoushisetsu_list.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>保健医療部 生活衛生課</td>
+</tr>
+
+<tr>
+<td>PTメンバー実践・活用レポート</td>
+<td>ChatGPT等生成AI検討PTメンバーにより提出されたChatGPTの活用・実践レポートのまとめです。</td>
+<td>
+<img src="/shared/system/opendata/images/cc-by.png" />
+</td>
+<td>暮らし・教育</td>
+<td>その他</td>
+<td>2023-06-05</td>
+<td>2023-07-06</td>
+<td>pdf</td>
+<td>
+<a href="/kk26/johoseisaku/documents/chatgpt_report.pdf" onclick="ga('send', 'event', 'opdl:/kk26/johoseisaku/ai_project.html', 'click', '/kk26/johoseisaku/documents/chatgpt_report.pdf' );"><img src="/shared/templates/free/images/contents/opendata/download_btn.png" width="88" height="31" alt="ダウンロード" /></a><br>
+<a href="/kk26/johoseisaku/ai_project.html" onclick="ga('send', 'event', 'oppg:/kk26/johoseisaku/ai_project.html', 'click', '/kk26/johoseisaku/ai_project.html' );"><img src="/shared/templates/free/images/contents/opendata/page_btn.png" width="88" height="31" alt="ページへ" /></a></td>
+<td>企画部 デジタル戦略課</td>
+</tr>
+
+</table>
+</div>
+<div class="page_sending_navi">
+
+<p class="display_page">924件中&nbsp;101～200件表示</p>
+<ul>
+<li><a href="?p=1_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">1</a></li>
+
+<li class="active">2</li>
+
+<li><a href="?p=3_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">3</a></li>
+
+<li><a href="?p=4_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">4</a></li>
+
+<li><a href="?p=5_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">5</a></li>
+
+<li><a href="?p=6_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">6</a></li>
+
+<li><a href="?p=7_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">7</a></li>
+
+<li><a href="?p=8_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">8</a></li>
+
+<li><a href="?p=9_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">9</a></li>
+
+<li><a href="?p=10_d&amp;asc=data_link_title&amp;displayedresults=100#tmp_opdata_result">10</a></li>
+</ul>
+
+</div>
+
+
+
+
+</div>
+
+
+<div id="box_recommended" class="box_recommended rs_preserve" style="display:none;">
+<div class="recommended_ttl">
+<p class="ttl_ja">おすすめ記事</p>
+<p class="ttl_en">RECOMMENDED</p>
+</div>
+<div class="recommended_cnt">
+<ul id="recommended_list" class="recommended_list">
+</ul>
+<div class="btn_recommended">
+<a href="/recommend/index.html">おすすめ記事一覧</a>
+</div>
+</div>
+<div class="recommended_btn_close">
+<a href="javascript:void(0)">閉じる</a>
+</div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+<div id="tmp_footer_content">
+<div class="pnavi">
+<div class="custom_container">
+<p class="ptop"><a href="#tmp_header">page top</a></p>
+</div>
+</div>
+
+<div id="tmp_footer">
+<div class="custom_container">
+<div class="footer_front">
+<div class="footer_info">
+<div class="footer_front">
+<div class="footer_aside">
+<div class="footer_logo">
+<p><span>兵庫県庁</span></p>
+</div>
+<div class="company_num">
+<p>法人番号8000020280003</p>
+</div>
+</div>
+<div class="footer_cnt">
+<address>
+<p><span class="dis_code">〒650-8567</span>兵庫県神戸市中央区下山手通5丁目10番1号</p>
+<p><span>電話番号：</span>078-341-7711（代表）</p>
+</address>
+</div>
+</div>
+</div>
+<div class="footer_nav">
+<ul class="fnavi">
+<li><a href="/about_link.html">リンク・著作権・免責事項</a></li>
+<li><a href="/about_handing.html">個人情報の取扱いについて</a></li>
+<li><a href="/accessibility/index.html">ウェブアクセシビリティ方針</a></li>
+<li><a href="/sitemap.html">サイトマップ</a></li>
+</ul>
+</div>
+</div>
+<div class="footer_bellow">
+<div class="directional_button">
+<ul>
+<li><a href="/map.html">県庁までの交通案内</a></li>
+<li><a href="/pref/cate3_610.html">庁舎案内</a></li>
+</ul>
+</div>
+<div class="prefectural_info">
+<p lang="en" xml:lang="en" class="copyright">Copyright &copy; Hyogo Prefectural Government. All rights reserved.</p>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<script type="text/javascript" src="/shared/site_rn/js/function.js"></script>
+<script type="text/javascript" src="/shared/site_rn/js/main.js"></script>
+<script type="text/javascript" src="/shared/system/js/tag/tag.js"></script>
+</body>
+</html>
