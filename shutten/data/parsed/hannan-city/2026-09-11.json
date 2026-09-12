@@ -1,7 +1,7 @@
 [
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2017-02-15",
   "notified_raw": "平成29年2月15日",
   "store": "（仮称）トライアル阪南店",
@@ -18,11 +18,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "d2f1bd4de5c4"
+  "key": "92aaa0574277"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第1項",
+  "kind": "変更",
   "notified_on": "2017-02-28",
   "notified_raw": "平成29年2月28日",
   "store": "スーパーエバグリーン阪南店",
@@ -39,11 +39,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "6f6bbb82def6"
+  "key": "3b902d7f6609"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第5項",
+  "kind": "廃止",
   "notified_on": "2016-05-06",
   "notified_raw": "平成28年5月6日",
   "store": "テックランド大阪阪南店",
@@ -60,11 +60,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "ab1b18793e83"
+  "key": "de8f3adce9fb"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2020-12-11",
   "notified_raw": "令和2年12月11日",
   "store": "（仮称）ドラッグコスモス自然田店",
@@ -81,11 +81,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "e195f7645095"
+  "key": "ad798c0ff54c"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第2項",
+  "kind": "変更",
   "notified_on": "2022-01-11",
   "notified_raw": "令和4年1月11日",
   "store": "オークワわくわくシティ尾崎店",
@@ -102,11 +102,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "081faa81f94b"
+  "key": "6f1cf9bffc11"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第1項",
+  "kind": "変更",
   "notified_on": "2021-04-09",
   "notified_raw": "令和3年4月9日",
   "store": "オークワわくわくシティ尾崎店",
@@ -123,11 +123,11 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "cf58f4f33452"
+  "key": "bc8c1c2ed43a"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第2項",
+  "kind": "変更",
   "notified_on": "2023-07-20",
   "notified_raw": "令和5年7月20日",
   "store": "スーパーエバグリーン阪南店",
@@ -144,6 +144,27 @@
   "note": "",
   "docs": [],
   "source": "hannan-city",
-  "key": "606545772329"
+  "key": "93af4914398c"
+ },
+ {
+  "article": "第6条第1項",
+  "kind": "変更",
+  "notified_on": "2023-07-20",
+  "notified_raw": "令和5年7月20日",
+  "store": "スーパーエバグリーン阪南店",
+  "address": "阪南市黒田453番地1",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": "2023-08-15",
+  "review_to": "2023-12-15",
+  "meeting": "",
+  "citizen_opinion": "なし",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "hannan-city",
+  "key": "7f69983caf71"
  }
 ]

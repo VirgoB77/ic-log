@@ -42,14 +42,22 @@ def text_of(fragment):
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", fragment))).strip()
 
 
+LABEL_BEFORE = re.compile(
+    r"(新設|既存店の変更|施設の配置[^（]{0,12}|店舗名称[^（]{0,14}|廃止|承継)\s*[（(]\s*((?:法?第\s*\d+\s*条\s*第\s*\d+\s*項|附則\s*第?\s*\d+\s*条\s*第?\s*\d+\s*項))\s*関係\s*[)）]\s*届出状況")
+
+
 def tables_with_context(page):
     """表を、その直前の見出しとセットで取り出す。
 
     兵庫県は「第6条第1項」という見出しの下に表を置いているので、
     見出しを覚えておかないと、新設なのか変更なのか分からなくなる。
+
+    阪南市は見出しタグではなく地の文に「新設（法第5条第1項関係）届出状況」と
+    書いて表を置く。見出しが無いときは、表の直前の本文からそれを拾う。
     """
     out = []
     heading = ""
+    last_end = 0
     pattern = r"<(h[1-4])\b[^>]*>(.*?)</\1>|<table\b(.*?)</table>"
     for m in re.finditer(pattern, page, re.S | re.I):
         if m.group(1):
@@ -57,7 +65,14 @@ def tables_with_context(page):
             if t:
                 heading = t
         else:
-            out.append((heading, m.group(3)))
+            between = text_of(page[last_end:m.start()])
+            labels = LABEL_BEFORE.findall(between)
+            ctx = heading
+            if labels:
+                word, art = labels[-1]
+                ctx = f"{word}（{art}関係）届出状況"
+            out.append((ctx, m.group(3)))
+        last_end = m.end()
     return out
 
 
@@ -365,11 +380,66 @@ def extract_generic(page, base_url, how, hint=""):
     return found
 
 
+def extract_blocks(page, base_url):
+    """貝塚市の形：見出し「店舗名：「イオン貝塚店」」の下に箇条書きで
+    「届出の種類：…」「届出日：…」「縦覧期間：…」が並ぶ。表ではない。
+    見出しから次の見出しまでを1件として、その中の文から項目を拾う。
+    """
+    found = []
+    parts = re.split(r"(?=<h[2-4]\b)", page, flags=re.I)
+    for part in parts:
+        m = re.match(r"<h[2-4]\b[^>]*>(.*?)</h[2-4]>(.*)", part, re.S | re.I)
+        if not m:
+            continue
+        head = text_of(m.group(1))
+        sm = re.search(r"店舗名\s*[:：]\s*[「『]?(.+?)[」』]?\s*$", head)
+        if not sm:
+            continue
+        store = sm.group(1).strip()
+        body = text_of(m.group(2))
+
+        def field(label):
+            fm = re.search(label + r"\s*[:：]\s*([^：:]+?)(?=\s(?:届出の種類|届出日|縦覧期間|店舗名|説明会|所在地)\s*[:：]|$)", body)
+            return fm.group(1).strip() if fm else ""
+
+        kind_text = field("届出の種類")
+        d = to_iso(field("届出日"))
+        if not store or not d:
+            continue
+        a, b = span_of(field("縦覧期間"))
+        article = article_in(kind_text)
+        cm = re.search(r"[（(]([^（）()]+)[)）]\s*$", kind_text)
+        links = [urllib.parse.urljoin(base_url, html.unescape(h))
+                 for h in re.findall(r'href=["\']([^"\']+\.pdf)["\']', m.group(2), re.I)]
+        found.append({
+            "article": article,
+            "kind": means_of(article) if article else "不明",
+            "notified_on": d,
+            "notified_raw": field("届出日"),
+            "store": store,
+            "address": field("所在地"),
+            "operator": "",
+            "new_operator": "",
+            "event_on": None,
+            "content": cm.group(1) if cm else kind_text,
+            "review_from": a,
+            "review_to": b,
+            "meeting": field("説明会"),
+            "citizen_opinion": "",
+            "city_opinion": "",
+            "note": "",
+            "docs": links,
+        })
+    return found
+
+
+
 EXTRACTORS = {
     "hyogo-pref-juran": dict(base="https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html", how="heading"),
     "kobe-city": dict(base="https://www.city.kobe.lg.jp/a31812/business/sangyoshinko/shokogyo/koritenporitchi/daitenhp/index.html", how="firstrow"),
     "sakai-city": dict(base="https://www.city.sakai.lg.jp/sangyo/shienyuushi/kojoricchi/daikibo/todokede/index.html", how="heading"),
     "kishiwada-city": dict(base="https://www.city.kishiwada.lg.jp/page/43-daitentodokede.html", how="heading"),
+    "kaizuka-city": dict(base="https://www.city.kaizuka.lg.jp/kakuka/sogoseisaku/sangyo/menu/daitenrittihounituite/daitenrittihoutodokedejoukyou.html", how="blocks"),
     # ここから下は 2026-09-12 に足した移譲市町村と中規模。列名の対応表でどれだけ通るか見る
     "toyonaka-city": dict(base="https://www.city.toyonaka.osaka.jp/machi/sangyoushinkou/kigyoricchi/daikibokouritenpo/todokede.html", how="heading"),
     "minoh-city": dict(base="https://www.city.minoh.lg.jp/syoukou/daikibominoh.html", how="heading"),
@@ -401,7 +471,10 @@ def parse_file(source, path):
     conf = EXTRACTORS[source]
     with open(path, encoding="utf-8", errors="replace") as f:
         page = f.read()
-    recs = extract_generic(page, conf["base"], conf["how"], hint=os.path.basename(path))
+    if conf["how"] == "blocks":
+        recs = extract_blocks(page, conf["base"])
+    else:
+        recs = extract_generic(page, conf["base"], conf["how"], hint=os.path.basename(path))
     for r in recs:
         r["source"] = source
         r["key"] = make_key(source, r)
