@@ -21,7 +21,7 @@
       "pdf_max_mb": 12,
       "terms": "https://web.pref.hyogo.lg.jp/about_link.html",
       "terms_name": "リンク・著作権・免責事項",
-      "terms_summary": "著作権ページ：無断で複製・転用不可（私的使用・引用を除く）。出典表記の形の指定なし。別にオープンデータのページあり（確認中）"
+      "terms_summary": "サイト全体の著作権ページは無断で複製・転用不可（私的使用・引用を除く）。別にオープンデータカタログ（独自の利用規約PDF）があり、縦覧状況がそこに含まれるか確認中"
     },
     {
       "id": "hyogo-pref-top",
@@ -41,9 +41,10 @@
       "pdf": true,
       "pdf_labels": "届出書",
       "pdf_max_mb": 12,
-      "terms": "https://www.city.kobe.lg.jp/homepage/index.html",
-      "terms_name": "ホームページのご利用案内",
-      "terms_summary": "利用規約はPDF「神戸市ウェブサイト利用規約」にまとまっている。読み取り中"
+      "terms": "https://www.city.kobe.lg.jp/documents/19135/20170630041802-1.pdf",
+      "terms_name": "神戸市ウェブサイト利用規約（PDF）",
+      "terms_summary": "サイト全体のコンテンツを、出典を書けば複製・加工・商用利用可（政府標準利用規約 第2.0版に準拠、CC BY 4.0 と互換）。加工した場合は「『○○』（神戸市）（URL）を加工して作成」と書く",
+      "license": "政府標準利用規約（第2.0版）準拠・CC BY 4.0 互換"
     },
     {
       "id": "amagasaki-city",
@@ -337,7 +338,7 @@
       "name": "（参考）神戸市 利用規約・リンク・免責事項など",
       "area": "ref",
       "url": "https://www.city.kobe.lg.jp/a57337/homepage/rule.html",
-      "note": "「ホームページのご利用案内」から辿った本体（2026-09-12に読んだ）。著作権の方針はPDF「神戸市ウェブサイト利用規約」に書いてあるので、そのPDFだけ落とす",
+      "note": "神戸市の利用規約本体（2026-09-12に読んだ）。PDF「神戸市ウェブサイト利用規約」は政府標準利用規約 第2.0版準拠・CC BY 4.0互換で、サイト全体のコンテンツを出典明記で複製・加工・商用利用できる。規約が変わったら分かるよう毎日保存を続ける",
       "enabled": true,
       "pdf": true,
       "pdf_labels": "利用規約"
@@ -355,7 +356,17 @@
       "name": "（参考）兵庫県 関連サイトに掲載のオープンデータ（デジタル戦略課）",
       "area": "ref",
       "url": "https://web.pref.hyogo.lg.jp/kk26/johoseisaku/opendata.html",
-      "note": "兵庫県オープンデータの入口から辿った本体。利用規約（政府標準利用規約かCC BYか）と、大店立地法の縦覧状況が含まれるかを見る（2026-09-12追加）",
+      "note": "兵庫県オープンデータの本体（2026-09-12に読んだ）。カタログは web.pref.hyogo.lg.jp/opendata/index.php で、カタログ専用の利用規約PDF（kiyaku_opendata.pdf）がある。そのPDFだけ落として読む",
+      "enabled": true,
+      "pdf": true,
+      "pdf_labels": "利用規約"
+    },
+    {
+      "id": "hyogo-opendata-catalog",
+      "name": "（参考）兵庫県 オープンデータカタログ",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/opendata/index.php",
+      "note": "兵庫県のオープンデータカタログの入口。大規模小売店舗立地法の縦覧状況・届出一覧が登録されているかを見る（2026-09-12追加）",
       "enabled": true
     }
   ]

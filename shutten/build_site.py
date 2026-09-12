@@ -324,7 +324,8 @@ def about_page(src_meta, today):
 <tr><th>届出先</th><th>利用規約のページ</th><th>利用条件</th></tr>
 {''.join(rows)}
 </table></div>
-<p style="font-size:14px">大阪市の届出一覧は <a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a> で提供されています。
+<p style="font-size:14px">大阪市の届出一覧は <a href="https://creativecommons.org/licenses/by/4.0/deed.ja">CC BY 4.0</a> で、
+神戸市のサイトのコンテンツは政府標準利用規約（第2.0版）準拠（CC BY 4.0 と互換）で提供されています。
 このサイトでは列の選択・並べ替え・表記の統一という加工をしています。</p>
 <p style="font-size:14px">大阪府・兵庫県・堺市のサイト全体の著作権ページは、無断での複製・転用を認めていません（2026年9月12日に確認）。
 このサイトが載せているのは、法律にもとづいて自治体が公告している届出の「店舗名・所在地・面積・日付・届出の種類」という事実の一覧で、
