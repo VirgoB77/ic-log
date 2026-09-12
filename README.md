@@ -56,6 +56,7 @@ https://virgob77.github.io/ic-log/
 | `dist/artifact.html` | 公開用（`build.sh` が生成） |
 | `tenant/` | 2つ目のアプリ「ゆうちメモ」（テナント誘致の連絡メモ）。単体で動く |
 | `card/` | 3つ目のアプリ「めいしばこ」（名刺管理）。単体で動く |
+| `card2/` | 「めいしばこ」の試用版。新しい見た目を試す場所で、名刺のデータは `card/` と共有 |
 | `shutten/` | 大店立地法の届出ページを偵察して保存する道具。GitHub Actions で動く |
 
 ### 作り直すとき
@@ -96,6 +97,7 @@ localStorage ではなく IndexedDB に入れている。
 
 - 使い方: [card/README.md](card/README.md)
 - 公開版: https://virgob77.github.io/ic-log/card/
+- 試用版（新しい見た目を試す版。名刺データは公開版と共有）: https://virgob77.github.io/ic-log/card2/
 
 名刺アプリを使うのが初めてなら、README の
 「便利なところ」「不便なところ・できないこと」を先に読むとよい。
