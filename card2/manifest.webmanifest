@@ -1,13 +1,13 @@
 {
-  "name": "めいしばこ（試用版）",
-  "short_name": "めいしばこ試用",
-  "description": "名刺を撮るだけ。名前も会社も電話も、端末の中で読みとる。",
+  "name": "名刺帖",
+  "short_name": "名刺帖",
+  "description": "名刺を撮るだけ。名前も会社も電話も読み取ります。",
   "lang": "ja",
   "start_url": "./",
   "scope": "./",
   "display": "browser",
-  "background_color": "#f5f4ec",
-  "theme_color": "#4f7042",
+  "background_color": "#0a0b09",
+  "theme_color": "#0a0b09",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },

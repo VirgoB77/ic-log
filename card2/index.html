@@ -3,243 +3,302 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#4f7042">
-<meta name="apple-mobile-web-app-title" content="めいしばこ試用">
-<title>めいしばこ（試用版）</title>
+<meta name="theme-color" content="#0a0b09">
+<meta name="apple-mobile-web-app-title" content="名刺帖">
+<title>名刺帖</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Shippori+Mincho+B1:wght@700&family=Space+Grotesk:wght@600&display=swap">
 <style>
 :root{
-  color-scheme:light;
-  --ground:#f5f4ec; --card:#ffffff; --ink:#1b1d17; --sub:#6f7568; --rule:#e1e2d4; --field:#eef0e6;
-  --key:#4f7042; --key-deep:#33502b; --key-soft:#e7efe1; --on-key:#ffffff;
-  --ok:#3c7a4e; --mute:#868c7d;
-  --shadow:0 1px 2px rgba(30,36,22,.05), 0 10px 30px rgba(30,36,22,.08);
-}
-@media (prefers-color-scheme:dark){
-  :root{
-    color-scheme:dark;
-    --ground:#131510; --card:#1d201a; --ink:#e8ebdf; --sub:#98a08d; --rule:#2f332a; --field:#171a14;
-    --key:#8dba6f; --key-deep:#456b34; --key-soft:#1a2416; --on-key:#12200c;
-    --ok:#7cc48f; --mute:#848b78;
-    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
-  }
+  color-scheme:dark;
+  --g:#0a0b09; --s:#131410; --s2:#1b1d17; --ink:#f2f3ec; --ink2:#b8bbad; --mute:#7d816f; --rule:#262920;
+  --acc:#c9f24a; --accT:#d6f76b; --acc2:#e9ff8a; --accD:#a3cf25; --onAcc:#0f1206; --wash:#1f2a0d;
+  --dim:rgba(0,0,0,.66); --glow:rgba(201,242,74,.5); --orb:rgba(201,242,74,.34);
+  --moon1:#f2f3ea; --moon2:#a2a797; --moonSh:rgba(10,11,9,.26); --moonGlow:rgba(242,243,234,.38);
+  /* 前の版の名前でも使えるようにしておく */
+  --ground:var(--g); --card:var(--s); --sub:var(--ink2); --field:var(--s2); --key:var(--acc); --key-deep:var(--accD);
+  --key-soft:var(--wash); --on-key:var(--onAcc); --ok:var(--accT);
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
+  --serif:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --num:"Space Grotesk","Zen Kaku Gothic New",sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none !important}
 html,body{margin:0;padding:0}
 body{
-  background:var(--ground); color:var(--ink);
-  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",Meiryo,sans-serif;
-  font-size:16px; line-height:1.7; -webkit-text-size-adjust:100%;
+  background:var(--g); color:var(--ink);
+  font-family:"Zen Kaku Gothic New","Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  font-size:16px; line-height:1.6; -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent;
 }
-.mincho{font-family:"Zen Old Mincho","Hiragino Mincho ProN","Yu Mincho",serif}
+.mincho{font-family:var(--serif)}
+button{font:inherit;color:inherit}
+svg{display:block;flex:none}
 
-.wrap{max-width:620px;margin:0 auto;padding:0 16px calc(56px + env(safe-area-inset-bottom))}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+@keyframes orbitSpinR{to{transform:rotate(-360deg)}}
+@keyframes fxRing{0%{transform:rotate(0deg) scale(.5);opacity:.95}100%{transform:rotate(230deg) scale(1.65);opacity:0}}
+@keyframes fxCorona{0%{transform:scale(.5);opacity:.85}100%{transform:scale(2.1);opacity:0}}
+@keyframes fxSun{0%{transform:scale(1)}35%{transform:scale(.9)}100%{transform:scale(1)}}
 
-header{display:flex;align-items:center;gap:10px;padding:max(14px,env(safe-area-inset-top)) 2px 4px}
-header h1{font-family:"Zen Old Mincho",serif;font-size:19px;font-weight:900;letter-spacing:.1em;margin:0}
-header .n{font-size:12px;color:var(--sub);letter-spacing:.04em}
-header .sp{flex:1}
-.gear{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);
-  width:38px;height:38px;border-radius:50%;font-size:17px;line-height:1;cursor:pointer;flex:none;box-shadow:var(--shadow)}
-.gear:focus-visible{outline:2px solid var(--key);outline-offset:2px}
+/* ===== 太陽・惑星・月 ===== */
+.sun{appearance:none;border:0;padding:0;border-radius:50%;cursor:pointer;color:var(--onAcc);
+  display:flex;align-items:center;justify-content:center;position:relative;flex:none;
+  background:radial-gradient(circle at 38% 34%,var(--acc2) 0%,var(--acc) 58%,var(--accD) 100%)}
+.sun.big{width:104px;height:104px;box-shadow:0 0 0 8px var(--wash),0 22px 50px -12px var(--glow),0 0 80px -8px var(--glow)}
+.sun.md{width:62px;height:62px;box-shadow:0 0 0 5px var(--wash),0 14px 30px -10px var(--glow),0 0 40px -6px var(--glow)}
+.sun.sm{width:60px;height:60px;box-shadow:0 0 0 5px var(--wash),0 14px 30px -10px var(--glow)}
+.sun:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+.sun.hit{animation:fxSun .4s cubic-bezier(.2,.7,.2,1)}
+.planet{appearance:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:var(--s);color:var(--ink2);
+  display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;flex:none;text-decoration:none}
+.planet.lg{width:48px;height:48px;background:var(--s2)}
+.planet.acc{border-color:var(--acc);background:var(--s2);color:var(--accT)}
+.planet.acc2{border:1.5px solid var(--acc);background:var(--s2);color:var(--accT)}
+.planet:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.moon{appearance:none;margin-left:auto;position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);padding:0;overflow:hidden;cursor:pointer;flex:none;
+  background:radial-gradient(circle at 36% 32%,var(--moon1) 0%,var(--moon2) 100%);
+  box-shadow:inset -9px -6px 0 -1px var(--moonSh),0 0 22px -4px var(--moonGlow)}
+.moon i{position:absolute;border-radius:50%;background:var(--moonSh)}
+.moon:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.orbit{position:absolute;inset:0;pointer-events:none}
+.ring{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid var(--orb)}
+.pl{position:absolute;left:50%;top:50%;animation:orbitSpin linear infinite}
+.pl.r{animation-name:orbitSpinR}
+.pl i{position:absolute;left:50%;border-radius:50%}
+.sunbox{position:relative;width:84px;height:84px;display:flex;align-items:center;justify-content:center;flex:none}
+.fxwrap{position:fixed;inset:0;pointer-events:none;z-index:300}
+.fxb{position:absolute;width:0;height:0}
+.fxc{position:absolute;border-radius:50%;background:radial-gradient(circle,var(--acc2) 0%,var(--acc) 35%,rgba(0,0,0,0) 70%);animation:fxCorona .7s ease-out forwards}
+.fxr{position:absolute;border-radius:50%;border:1px solid var(--acc);opacity:0;animation:fxRing .9s cubic-bezier(.2,.7,.2,1) forwards}
+.fxr i{position:absolute;transform:translate(-50%,-50%);border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc)}
+@media (prefers-reduced-motion:reduce){ .pl,.fxc,.fxr,.sun.hit{animation:none} .fxr{opacity:0} }
 
-.shoot{display:block;width:100%;border:0;cursor:pointer;color:var(--on-key);border-radius:18px;
-  padding:24px 18px;margin-top:12px;font:inherit;text-align:center;
-  background:linear-gradient(165deg,var(--key),var(--key-deep));box-shadow:var(--shadow);
-  -webkit-tap-highlight-color:transparent;transition:transform .09s ease, filter .15s ease}
-.shoot:active{transform:scale(.985);filter:brightness(.93)}
-.shoot:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.shoot b{display:block;font-size:23px;font-weight:900;letter-spacing:.16em;line-height:1.3}
-.shoot span{display:block;font-size:12.5px;font-weight:700;letter-spacing:.06em;opacity:.9;margin-top:3px}
-.sub-act{display:block;width:100%;margin-top:8px;appearance:none;border:0;background:transparent;
-  color:var(--sub);font:inherit;font-size:13px;font-weight:700;padding:6px;cursor:pointer;text-decoration:underline}
+/* ===== 一覧の画面 ===== */
+.wrap{max-width:620px;margin:0 auto;padding:0 20px calc(40px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;gap:12px;padding:max(16px,env(safe-area-inset-top)) 0 0}
+header .logo{display:flex;align-items:baseline;gap:10px;min-width:0}
+header h1{font-family:var(--serif);font-size:28px;font-weight:700;letter-spacing:.14em;line-height:1;margin:0;white-space:nowrap}
+header .n{font-family:var(--num);font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--mute)}
+.find{position:relative;margin-top:14px}
+.find input[type=search]{width:100%;height:50px;font-family:inherit;font-size:16px;color:var(--ink);background:var(--s);
+  border:1px solid var(--rule);border-radius:25px;padding:0 18px 0 46px;-webkit-appearance:none}
+.find input[type=search]::placeholder{color:var(--mute)}
+.find input[type=search]:focus-visible{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px var(--wash)}
+.find .mag{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--mute);pointer-events:none;display:flex}
+.solar{position:relative;height:272px;display:flex;align-items:center;justify-content:center}
+.solar .pick{position:absolute;left:calc(50% + 60px);top:calc(50% + 35px);box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.listhead{display:flex;align-items:center;justify-content:space-between;padding:0 0 4px}
+.count{font-size:13px;color:var(--mute)}
+.viewsw{display:flex;background:var(--s2);border:1px solid var(--rule);border-radius:999px;padding:3px;gap:2px;flex:none}
+.viewsw button{appearance:none;border:0;background:transparent;color:var(--mute);font:inherit;font-size:13px;line-height:1;
+  font-weight:500;padding:13px 16px;border-radius:999px;cursor:pointer}
+.viewsw button[aria-pressed="true"]{background:var(--acc);color:var(--onAcc);font-weight:700}
+.viewsw button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
-.find{position:relative;margin-top:18px}
-.find input[type=search]{width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--card);
-  border:1px solid var(--rule);border-radius:12px;padding:13px 14px 13px 42px;box-shadow:var(--shadow);-webkit-appearance:none}
-.find input[type=search]:focus-visible{outline:2px solid var(--key);outline-offset:1px}
-.find .mag{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--sub);font-size:15px;pointer-events:none}
+.lrow{display:grid;grid-template-columns:66px minmax(0,1fr) auto;gap:2px 12px;padding:12px 0;border:0;border-bottom:1px solid var(--rule);
+  align-items:start;width:100%;text-align:left;font:inherit;color:var(--ink);background:transparent;cursor:pointer}
+.lrow:focus-visible{outline:2px solid var(--acc);outline-offset:-2px;border-radius:8px}
+.lth{grid-row:1/4;position:relative;width:66px;height:40px;margin-top:3px;border-radius:5px;overflow:hidden;background:var(--s2);
+  border:1px solid var(--rule);box-shadow:0 1px 3px rgba(0,0,0,.16);object-fit:cover;display:block}
+.lth.no{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:17px;font-weight:700;color:var(--mute);letter-spacing:.05em}
+.lnm{display:flex;align-items:center;gap:8px;min-width:0;font-size:18px;font-weight:700;line-height:1.25;letter-spacing:.02em}
+.lnm>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lnew{width:9px;height:9px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);flex:none;display:inline-block}
+.ld{font-family:var(--num);font-size:13px;font-weight:600;color:var(--mute);text-align:right;line-height:1.25;padding-top:4px;letter-spacing:.04em;white-space:nowrap}
+.lco{font-size:14px;color:var(--ink2);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1em}
+.lpl{font-size:12px;color:var(--mute);text-align:right;white-space:nowrap;line-height:1.3;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.lmemo{grid-column:2/-1;font-size:14px;color:var(--mute);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
 
-.listhead{display:flex;align-items:center;gap:10px;margin:18px 2px 0}
-.count{font-size:11.5px;color:var(--sub);letter-spacing:.08em;font-weight:700;flex:1}
-.viewsw{display:flex;gap:3px;background:var(--field);border:1px solid var(--rule);border-radius:9px;padding:3px;flex:none}
-.viewsw button{appearance:none;border:0;background:transparent;color:var(--sub);font:inherit;
-  font-size:12px;font-weight:700;padding:5px 13px;border-radius:7px;cursor:pointer}
-.viewsw button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(30,36,22,.12)}
-.viewsw button:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-
-/* 文字で見る一覧。メモまで出るので、ぱっと見て思い出せる */
-.listwrap{background:var(--card);border:1px solid var(--rule);border-radius:13px;
-  box-shadow:var(--shadow);padding:0 13px;margin-top:9px}
-.lrow{display:flex;gap:11px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
-  background:transparent;border:0;border-top:1px solid var(--rule);padding:11px 0;cursor:pointer}
-.lrow:first-child{border-top:0}
-.lrow:focus-visible{outline:2px solid var(--key);outline-offset:-2px}
-.lth{flex:none;width:54px;height:33px;border-radius:5px;object-fit:cover;display:block;
-  background:var(--field);border:1px solid var(--rule)}
-.lth.no{display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--mute);
-  font-weight:700;letter-spacing:.02em}
-.lbody{flex:1;min-width:0}
-.lnm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.4;word-break:break-word}
-.lco{font-family:"Zen Kaku Gothic New",sans-serif;font-size:11.5px;font-weight:700;color:var(--sub);margin-left:7px}
-.lmemo,.lmeta{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lmemo{font-size:12.5px;color:var(--ink);line-height:1.55;margin-top:1px}
-.lmeta{font-size:11px;color:var(--sub);line-height:1.5}
-.lrow .chev{flex:none;color:var(--sub);font-size:19px;line-height:1}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:9px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;padding-top:8px}
 @media (min-width:520px){ .grid{grid-template-columns:1fr 1fr 1fr} }
-.tile{appearance:none;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink)}
-.tile:focus-visible{outline:2px solid var(--key);outline-offset:3px;border-radius:12px}
-.tile .pic{aspect-ratio:91/55;border-radius:11px;overflow:hidden;background:var(--field);
-  border:1px solid var(--rule);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center}
+.tile{appearance:none;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;font:inherit;color:var(--ink);min-width:0}
+.tile:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:10px}
+.tile .pic{aspect-ratio:91/55;border-radius:8px;overflow:hidden;background:var(--s2);border:1px solid var(--rule);
+  box-shadow:0 1px 3px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center}
 .tile .pic img{width:100%;height:100%;object-fit:cover;display:block}
-.tile .pic .no{font-size:10.5px;color:var(--mute);font-weight:700;letter-spacing:.04em}
-.tile .nm{font-family:"Zen Old Mincho",serif;font-size:15.5px;font-weight:700;line-height:1.45;margin-top:8px;word-break:break-word}
-.tile .co{font-size:11.5px;color:var(--sub);line-height:1.5;margin-top:1px;word-break:break-word;
+.tile .pic .no{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--mute);letter-spacing:.05em}
+.tile .nm{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:700;line-height:1.35;margin-top:8px;min-width:0}
+.tile .nm>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tile .co{font-size:12.5px;color:var(--ink2);line-height:1.45;margin-top:1px;word-break:break-word;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{color:var(--mute);font-size:14px;text-align:center;padding:26px 14px;line-height:2}
 
-.empty{color:var(--sub);font-size:13.5px;text-align:center;padding:34px 14px;line-height:2.1}
-.empty b{color:var(--ink)}
+/* ===== 下から出る画面（新しい名刺・詳細・直す・設定） ===== */
+.sheet{position:fixed;inset:0;z-index:50;background:var(--dim);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--s);width:100%;max-width:620px;height:calc(100% - 58px);height:calc(100dvh - 58px);
+  border-radius:24px 24px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;overflow:hidden}
+.sheet .panel::before{content:"";display:block;width:40px;height:5px;border-radius:3px;background:var(--rule);margin:8px auto 0;flex:none}
+.pbody{flex:1;overflow:auto;padding:10px 18px 28px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.pfoot{padding:10px 18px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--rule);display:flex;align-items:center;
+  justify-content:space-between;gap:8px;background:var(--s);flex:none}
+.pfoot .acts{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex:1}
+.act{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:0;font:inherit;color:var(--ink2);cursor:pointer}
+.act small{font-size:11px;font-weight:600;white-space:nowrap}
+.act.acc{color:var(--accT)}
+.act:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+.sheet h2{font-size:24px;font-weight:700;letter-spacing:.01em;line-height:1.3;margin:0;padding-top:2px;word-break:break-word}
+.thead{display:grid;grid-template-columns:1fr 120px;gap:0 14px;align-items:start}
+.thead .side{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.thead .row2{display:flex;gap:8px}
+.thumb{display:block;width:120px;height:73px;border-radius:6px;overflow:hidden;padding:0;border:0;background:var(--s2);cursor:zoom-in;
+  box-shadow:0 1px 2px rgba(0,0,0,.25),0 4px 12px rgba(0,0,0,.18)}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.thumb.d{width:128px;height:77px}
+.thumb:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
-/* ===== 下から出る画面 ===== */
-.sheet{position:fixed;inset:0;z-index:50;background:rgba(20,14,10,.55);display:flex;align-items:flex-end;justify-content:center}
-.sheet .panel{background:var(--card);width:100%;max-width:620px;max-height:94vh;overflow:auto;
-  border-radius:20px 20px 0 0;padding:18px 16px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow)}
-.sheet h2{font-family:"Zen Old Mincho",serif;margin:2px 0 0;font-size:22px;font-weight:900;letter-spacing:.05em;word-break:break-word}
-.sheet .lead{font-size:13px;color:var(--sub);margin:5px 0 0;word-break:break-word}
-
-.pic-big{display:block;width:100%;padding:0;border:1px solid var(--rule);border-radius:13px;overflow:hidden;
-  background:#0c0b0a;margin-top:14px;cursor:zoom-in}
-.pic-big img{width:100%;display:block}
-.map{margin:14px 0 4px}
-.map iframe{width:100%;height:220px;border:1px solid var(--rule);border-radius:13px;display:block;background:var(--field)}
-.map .mapoff{margin:0 0 8px}
-.maplink{display:block;text-align:center;text-decoration:none;margin-top:8px}
-.pick{margin:8px 0 4px;padding:10px 12px;border:1px solid var(--rule);border-radius:13px;background:var(--card)}
-.pickhd{font-size:13px;font-weight:700;margin:0 0 8px}
-.pick .hint{margin:8px 0 0}
-.wait{margin:18px 0 4px;padding:2px 0 0;border-top:1px solid var(--rule)}
-.waithd{font-size:12.5px;font-weight:700;color:var(--sub);letter-spacing:.02em;margin:12px 0 2px}
-.spot{margin:8px 0 4px;padding:9px 11px;border:1px solid var(--rule);border-radius:11px;background:var(--card)}
-.spot .spot-t{font-size:19px;font-weight:700;line-height:1.35;margin-bottom:6px;word-break:break-all}
-.spot .chips{margin-top:0}
-.hint{font-size:12.5px;color:var(--sub);margin:6px 0 0;line-height:1.5}
-.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
-.viewer img{max-width:100%;max-height:100%;object-fit:contain}
-
-label{display:block;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.1em;margin:17px 0 6px}
-input[type=text],input[type=date],input[type=tel],input[type=email],input[type=search],textarea,select{
-  width:100%;font-family:inherit;font-size:16px;color:var(--ink);background:var(--field);
-  border:1px solid var(--rule);border-radius:10px;padding:12px 13px;-webkit-appearance:none}
-textarea{line-height:1.75;resize:vertical;min-height:70px}
-input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--key);outline-offset:1px}
-.name-in{font-family:"Zen Old Mincho",serif;font-size:21px !important;font-weight:700}
+.fld{margin-top:16px;min-width:0}
+.fld label,.pbody>label,.pbody .lab{display:block;font-size:12.5px;color:var(--mute);font-weight:500;letter-spacing:.04em;margin:0 0 6px}
+.pbody>label{margin-top:22px}
+.fld:focus-within label{color:var(--accT);font-weight:600}
+.fld input,.fld textarea,.fld select,.pbody input[type=password],.pbody input[type=file]{
+  width:100%;font-family:inherit;font-size:18px;color:var(--ink);background:var(--g);border:1px solid var(--rule);
+  border-radius:14px;padding:0 16px;height:56px;-webkit-appearance:none}
+.pbody input[type=file]{padding:14px 16px;font-size:14px;height:auto}
+.fld textarea{height:auto;min-height:92px;padding:14px 16px;line-height:1.6;resize:vertical}
+.fld input:focus,.fld textarea:focus,.pbody input[type=password]:focus{outline:none;border:1.5px solid var(--acc);box-shadow:0 0 0 4px var(--wash)}
+.name-in{font-weight:600;font-size:19px !important;letter-spacing:.02em}
+.strip{position:relative;width:100%;height:76px;border-radius:14px 14px 0 0;overflow:hidden;background:#f6f5f0;border:1.5px solid var(--acc);border-bottom:0;display:none}
+.strip img{display:block;width:100%;height:100%}
+.fld.has-strip .strip{display:block}
+.fld.has-strip input{border-radius:0 0 14px 14px}
 .half{display:flex;gap:10px}
 .half>div{flex:1;min-width:0}
-
-.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 1px 2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:none;appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--sub);font:inherit;
-  font-size:12.5px;font-weight:700;border-radius:999px;padding:6px 13px;cursor:pointer;white-space:nowrap}
-.chip[aria-pressed="true"]{background:var(--key);border-color:var(--key);color:var(--on-key)}
-.chip:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-.cap{font-size:10.5px;font-weight:700;color:var(--mute);letter-spacing:.08em;margin:11px 2px 0}
-
-details.more{margin-top:16px;border-top:1px solid var(--rule);padding-top:4px}
-details.more>summary{list-style:none;cursor:pointer;font-size:13px;font-weight:700;color:var(--key);
-  letter-spacing:.05em;padding:11px 2px}
+.later{margin-top:4px}
+.chips{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;padding:2px 1px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips.scroll::-webkit-scrollbar{display:none}
+.chips:empty{display:none}
+.chip{appearance:none;height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--rule);background:var(--s2);font:inherit;font-size:15px;
+  display:flex;align-items:center;color:var(--ink);cursor:pointer;white-space:nowrap;flex:none;max-width:100%}
+.chip>span{overflow:hidden;text-overflow:ellipsis}
+.chips.kind{margin:0 0 10px}
+.chips.kind .chip{background:var(--s)}
+.chip[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--onAcc);font-weight:700}
+.chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.bar{height:3px;background:var(--s2);border-radius:99px;overflow:hidden;margin-top:14px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .3s ease}
+.reading{font-size:13px;color:var(--mute);margin:8px 0 0;line-height:1.5}
+.warn{font-size:13px;color:var(--accT);background:var(--wash);border:1px solid var(--acc);border-radius:14px;padding:11px 14px;margin-top:12px;line-height:1.7}
+.spot{margin:12px 0 0;padding:12px 14px;border:1.5px solid var(--acc);border-radius:14px;background:var(--g)}
+.spot .spot-t{font-size:19px;font-weight:600;line-height:1.35;margin-bottom:2px;word-break:break-all}
+details.more{margin-top:18px;border-top:1px solid var(--rule)}
+details.more>summary{list-style:none;cursor:pointer;font-size:14px;font-weight:600;color:var(--accT);padding:14px 0;display:flex;align-items:center;gap:8px}
 details.more>summary::-webkit-details-marker{display:none}
-details.more>summary::before{content:"＋ ";font-weight:900}
-details.more[open]>summary::before{content:"− "}
-details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
-
-.btn{appearance:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);font:inherit;font-size:14.5px;
-  font-weight:700;letter-spacing:.04em;border-radius:11px;padding:13px 14px;cursor:pointer;width:100%;margin-top:10px}
-.btn:focus-visible{outline:2px solid var(--key);outline-offset:2px}
-.btn.primary{background:var(--key);border-color:var(--key);color:var(--on-key);font-size:16px;padding:15px}
-.btn.danger{color:var(--key);border-color:var(--key)}
+details.more>summary::before{content:"＋";font-weight:700}
+details.more[open]>summary::before{content:"−"}
+details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
+.btn{appearance:none;border:1px solid var(--rule);background:var(--s2);color:var(--ink);font:inherit;font-size:15px;font-weight:600;
+  border-radius:22px;height:44px;padding:0 16px;cursor:pointer;width:100%;margin-top:10px;display:flex;align-items:center;justify-content:center;white-space:nowrap}
+.btn:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:var(--onAcc);font-weight:700}
+.btn.danger{color:var(--accT);border-color:var(--acc);background:transparent}
 .btn:disabled{opacity:.5;cursor:default}
-.row{display:flex;gap:10px}
+.row{display:flex;gap:8px}
+.hint{font-size:12.5px;color:var(--mute);line-height:1.7;margin:8px 0 0}
+.hint b{color:var(--ink2)}
+.opt{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:14px;font-weight:600;color:var(--ink);letter-spacing:0}
+.opt input{width:22px;height:22px;flex:none;accent-color:var(--acc)}
 
-.facts{margin:16px 0 0;border-top:1px solid var(--rule)}
-.facts .f{display:flex;gap:12px;border-bottom:1px solid var(--rule);padding:11px 2px;align-items:baseline}
-.facts .k{flex:none;width:70px;font-size:11.5px;font-weight:700;color:var(--sub);letter-spacing:.06em}
-.facts .v{flex:1;min-width:0;font-size:15px;word-break:break-word;white-space:pre-wrap}
-.facts .v a{color:var(--key);font-weight:700;text-decoration:none;border-bottom:1px solid var(--key)}
-
-.bar{height:7px;background:var(--field);border-radius:99px;overflow:hidden;margin-top:12px}
-.bar i{display:block;height:100%;background:var(--key);border-radius:99px;transition:width .3s ease}
-.reading{font-size:13px;color:var(--sub);margin:9px 2px 0;font-weight:700}
-.warn{font-size:12.5px;color:var(--key);background:var(--key-soft);border:1px solid var(--key);
-  border-radius:11px;padding:11px 13px;margin-top:12px;line-height:1.75}
-
-.opt{display:flex;align-items:center;gap:10px;margin:14px 0 0;font-size:14px;font-weight:700;color:var(--ink);letter-spacing:0}
-.opt input{width:21px;height:21px;flex:none;accent-color:var(--key)}
-.hint{font-size:11.5px;color:var(--sub);line-height:1.85;margin:8px 2px 0}
-.credit{font-size:10.5px;color:var(--sub);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--ground);
+/* ===== 名刺の詳細 ===== */
+.dtop{display:flex;justify-content:flex-end;margin:-6px 0 2px}
+.dhead{display:grid;grid-template-columns:1fr 128px;gap:0 14px;align-items:start}
+.dname{font-size:28px;font-weight:700;letter-spacing:.01em;line-height:1.2;word-break:break-word}
+.dorg{font-size:14px;color:var(--ink2);margin-top:6px;line-height:1.5;word-break:break-word}
+.suns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.suns a{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;text-decoration:none;color:var(--mute)}
+.suns small{font-family:var(--num);font-size:12px;font-weight:600;letter-spacing:.02em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.facts{margin-top:14px}
+.f{display:grid;grid-template-columns:70px 1fr;gap:0 12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--rule)}
+.f.withbtn{grid-template-columns:70px 1fr 44px;align-items:center;padding:8px 0}
+.f .k{font-size:12.5px;color:var(--mute)}
+.f .v{font-size:16px;line-height:1.5;word-break:break-word;white-space:pre-wrap;min-width:0}
+.f .v a{color:var(--accT);font-weight:600;text-decoration:none}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;border-bottom:1px solid var(--rule)}
+.f2 .f{border-bottom:0;grid-template-columns:70px 1fr;gap:0 8px}
+.num{font-family:var(--num);font-weight:600}
+.map{margin:10px 0 0}
+.map iframe{width:100%;height:200px;border:1px solid var(--rule);border-radius:14px;display:block;background:var(--s2)}
+.linepick{margin-top:14px;padding:12px 14px;border:1px solid var(--rule);border-radius:14px;background:var(--g)}
+.pickhd{font-size:13px;font-weight:600;margin:0 0 4px}
+.del{display:block;margin:28px auto 0;background:none;border:0;color:var(--mute);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:6px}
+.credit{font-size:10.5px;color:var(--mute);text-align:center;letter-spacing:.03em;margin:30px 0 0;opacity:.7}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:80;background:var(--ink);color:var(--g);
   font-size:14px;font-weight:700;padding:12px 20px;border-radius:999px;box-shadow:var(--shadow);max-width:88vw;text-align:center}
-/* ===== その場のカメラ（枠に合わせて撮る。シャッター音は鳴らない） ===== */
-.cam{position:fixed;inset:0;z-index:60;background:#000;display:flex;flex-direction:column}
-.cam .top{display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) 14px 10px;background:#000}
-.cam .top button{appearance:none;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);
-  color:#fff;font:inherit;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer}
-.cam .top .sp{flex:1}
-.cam .stage{position:relative;flex:1;overflow:hidden;background:#000}
+.viewer{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;cursor:zoom-out}
+.viewer img{max-width:100%;max-height:100%;object-fit:contain}
+.viewer.spot{cursor:crosshair}
+.viewer.spot::after{content:"読み直したい文字を押してください";position:absolute;left:50%;top:max(20px,env(safe-area-inset-top));transform:translateX(-50%);
+  padding:8px 16px;border-radius:999px;background:rgba(10,11,9,.7);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.92);font-size:13.5px;white-space:nowrap}
+
+/* ===== カメラ ===== */
+.cam{position:fixed;inset:0;z-index:60;background:#0a0b09;color:#fff}
+.cam .stage{position:absolute;inset:0;overflow:hidden;background:#0a0b09}
 .cam video{width:100%;height:100%;object-fit:cover;display:block}
-.cam .box{position:absolute;left:6%;width:88%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
-  border:2px dashed rgba(255,255,255,.55);border-radius:12px;pointer-events:none}
 .cam .ov{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+.cam .box{position:absolute;left:10%;width:80%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);
+  border:1.5px dashed rgba(255,255,255,.7);border-radius:6px;pointer-events:none}
 .cam .box.found{border-color:transparent}
-.cam .tip{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-size:13px;
-  font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.8);pointer-events:none}
-.cam .ctl{display:flex;align-items:center;gap:12px;padding:16px 18px calc(20px + env(safe-area-inset-bottom));background:#000}
-.cam .ctl .side{flex:1;color:#fff;font:inherit;font-size:12.5px;font-weight:700;background:transparent;
-  border:0;cursor:pointer;text-decoration:underline;opacity:.85}
-.shutter{flex:none;width:74px;height:74px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.3);
-  cursor:pointer;-webkit-tap-highlight-color:transparent}
-.shutter:active{transform:scale(.94)}
+.cam .top{position:absolute;top:max(14px,env(safe-area-inset-top));left:16px;right:16px;display:flex;justify-content:space-between;z-index:2}
+.glass{appearance:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(10,11,9,.55);color:#fff;
+  display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex:none}
+.glass.lg{width:48px;height:48px;justify-self:start}
+.glass.on{background:rgba(201,242,74,.9);color:#0f1206}
+.cam .tipwrap{position:absolute;left:18px;right:18px;bottom:calc(196px + env(safe-area-inset-bottom));display:flex;justify-content:center;pointer-events:none;z-index:2}
+.cam .tip{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 12px;border-radius:999px;background:rgba(10,11,9,.66);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.92);font-size:13.5px;line-height:1.4;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin:0;text-align:left}
+.cam .tip::before{content:"";width:8px;height:8px;border-radius:50%;background:#c9f24a;box-shadow:0 0 10px #c9f24a;flex:none}
+.cam .ctl{position:absolute;left:0;right:0;bottom:calc(40px + env(safe-area-inset-bottom));height:112px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;z-index:2}
+.shotbox{position:relative;width:104px;height:104px;display:flex;align-items:center;justify-content:center}
+.pluto{appearance:none;position:relative;width:74px;height:74px;border-radius:50%;border:0;padding:0;overflow:hidden;cursor:pointer;
+  background:radial-gradient(circle at 40% 36%,#f4e9d6 0%,#ddc3a1 44%,#a3714b 100%);
+  box-shadow:0 0 0 5px rgba(201,242,74,.18),0 0 50px -6px rgba(201,242,74,.5)}
+.pluto svg{position:absolute;left:0;top:0}
+.pluto:active{transform:scale(.94)}
+.shotbox .orbit{display:none}
+.shotbox.found .orbit{display:block}
+.shotbox .st{display:none;position:absolute;inset:2px;border-radius:50%;pointer-events:none}
+.shotbox .st.wait{background:conic-gradient(#c9f24a 0 72%,rgba(255,255,255,.18) 72% 100%);
+  -webkit-mask:radial-gradient(circle,transparent 66%,#000 67%);mask:radial-gradient(circle,transparent 66%,#000 67%)}
+.shotbox .st.hurry{border:2px solid rgba(255,255,255,.55)}
+.shotbox.wait .st.wait{display:block}
+.shotbox.hurry .st.hurry{display:block}
 .cam .err{color:#fff;font-size:13.5px;line-height:1.9;padding:26px 22px;text-align:center}
 
 /* ===== 切り直し（四隅を動かす） ===== */
-.cropbox{position:relative;margin-top:14px;border-radius:11px;overflow:hidden;background:#0c0b0a;touch-action:none}
+.cropbox{position:relative;margin-top:14px;border-radius:14px;overflow:hidden;background:#0c0b0a;touch-action:none}
 .cropbox img{width:100%;display:block}
 .cropbox svg{position:absolute;inset:0;width:100%;height:100%}
 
-.busy{position:fixed;inset:0;z-index:90;background:rgba(20,14,10,.45);display:flex;align-items:center;justify-content:center}
-.busy span{background:var(--card);color:var(--ink);font-size:14px;font-weight:700;padding:15px 24px;border-radius:13px;box-shadow:var(--shadow)}
+.busy{position:fixed;inset:0;z-index:90;background:var(--dim);display:flex;align-items:center;justify-content:center}
+.busy span{background:var(--s2);color:var(--ink);font-size:14px;font-weight:600;padding:15px 24px;border-radius:999px;box-shadow:var(--shadow);border:1px solid var(--rule)}
 </style>
 </head>
 <body>
 
 <div class="wrap">
   <header>
-    <h1>めいしばこ</h1>
-    <span class="n" id="hdn"></span>
-    <span class="sp"></span>
-    <button class="gear" id="btn-gear" aria-label="設定">⚙</button>
+    <div class="logo"><h1>名刺帖</h1><span class="n" id="hdn"></span></div>
+    <button class="moon" id="btn-gear" aria-label="設定"><i style="left:11px;top:14px;width:8px;height:8px"></i><i style="left:24px;top:8px;width:5px;height:5px"></i><i style="left:19px;top:27px;width:4px;height:4px"></i></button>
   </header>
 
-  <button class="shoot" id="btn-shoot">
-    <b>名刺を撮る</b>
-    <span>撮ると、名前や電話を自分で読みとります</span>
-  </button>
-  <button class="sub-act" id="btn-pick">写真から選ぶ</button>
-  <input type="file" id="file-cam" accept="image/*" capture="environment" hidden>
-  <input type="file" id="file-pick" accept="image/*" hidden>
-
   <div class="find">
-    <span class="mag">🔍</span>
+    <span class="mag"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"/><path d="M21 21l-4.5-4.5"/></svg></span>
     <input type="search" id="q" placeholder="名前・会社・場所・メモ　どれでも" autocomplete="off">
   </div>
+
+  <!-- 太陽＝撮る。まわりの小さな惑星＝写真から選ぶ -->
+  <div class="solar">
+    <div class="orbit" id="sun-orbit"></div>
+    <button class="sun big" id="btn-shoot" aria-label="名刺を撮る"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
+    <button class="planet pick" id="btn-pick" aria-label="写真から選ぶ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+  </div>
+  <input type="file" id="file-cam" accept="image/*" capture="environment" hidden>
+  <input type="file" id="file-pick" accept="image/*" hidden>
 
   <div class="listhead" id="listhead" hidden>
     <span class="count" id="count"></span>
@@ -254,26 +313,30 @@ details.more>summary .got{color:var(--ok);font-size:11.5px;margin-left:6px}
 </div>
 
 <div class="cam" id="cam" hidden>
-  <div class="top">
-    <button id="cam-close">閉じる</button>
-    <span class="sp"></span>
-    <button id="cam-torch" hidden>ライト</button>
-  </div>
   <div class="stage" id="cam-stage">
     <video id="cam-video" playsinline muted autoplay></video>
     <canvas class="ov" id="cam-ov"></canvas>
     <div class="box" id="cam-box"></div>
-    <p class="tip" id="cam-tip">名刺を枠に合わせてください。四隅を見つけて静止すると、自動で撮ります</p>
   </div>
+  <div class="top">
+    <button class="glass" id="cam-close" aria-label="閉じる"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <button class="glass" id="cam-torch" aria-label="ライト" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+  </div>
+  <div class="tipwrap"><p class="tip" id="cam-tip">名刺を枠に合わせてください。机との境がはっきり写るようにします</p></div>
   <div class="ctl">
-    <button class="side" id="cam-pick">写真から選ぶ</button>
-    <button class="shutter" id="cam-shot" aria-label="撮る"></button>
-    <span class="side"></span>
+    <button class="glass lg" id="cam-pick" aria-label="写真から選ぶ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+    <div class="shotbox" id="cam-shotbox">
+      <div class="orbit" id="cam-orbit"></div>
+      <button class="pluto" id="cam-shot" aria-label="撮る"><svg width="74" height="74" viewBox="0 0 74 74"><ellipse cx="15" cy="23" rx="13" ry="9" fill="#6b4029" opacity=".36"/><ellipse cx="61" cy="52" rx="11" ry="7" fill="#6b4029" opacity=".3"/><ellipse cx="52" cy="13" rx="7" ry="4" fill="#6b4029" opacity=".2"/><path d="M37 60C26 52 18 45 20 37 22 30 32 29 37 36 42 29 52 30 54 37 56 45 48 52 37 60Z" fill="#fbf4e8" opacity=".9" transform="rotate(-14 37 44)"/></svg></button>
+      <div class="st wait"></div><div class="st hurry"></div>
+    </div>
+    <div></div>
   </div>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="panel" id="panel"></div></div>
 <div class="viewer" id="viewer" hidden><img id="viewer-img" alt="名刺"></div>
+<div class="fxwrap" id="fx"></div>
 
 <script>
 (function(){
@@ -1398,19 +1461,76 @@ function closeSheet(){
   $('panel').innerHTML = '';
   document.body.style.overflow = '';
 }
-$('sheet').addEventListener('click', function(ev){ if (ev.target === $('sheet')) closeSheet(); });
-$('viewer').addEventListener('click', function(){ $('viewer').hidden = true; $('viewer-img').src = ''; });
+/* 暗いところを押したら閉じる。ただし、しまう前の名刺があるときは閉じない（写真が消えてしまうので） */
+$('sheet').addEventListener('click', function(ev){ if (ev.target === $('sheet') && !pend) closeSheet(); });
+$('viewer').addEventListener('click', function(ev){
+  var img = $('viewer-img'), r = img.getBoundingClientRect(), spot = viewerSpot;
+  viewerSpot = false; $('viewer').classList.remove('spot');
+  $('viewer').hidden = true;
+  if (spot && ev.target === img && r.width && r.height){
+    img.src = '';
+    readSpotAt((ev.clientX - r.left) / r.width, (ev.clientY - r.top) / r.height);
+    return;
+  }
+  img.src = '';
+});
 function showBig(src){ if (!src) return; $('viewer-img').src = src; $('viewer').hidden = false; }
 
 /* ===================== 一覧 ===================== */
 var BLANK = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+var IC = {camera:'<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',image:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',image20:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',search:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"/><path d="M21 21l-4.5-4.5"/></svg>',x:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',x18:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',bolt:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',crop:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>',rotate:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></svg>',check:'<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',phone:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.7a2 2 0 0 1 1.7 2z"/></svg>',mobile:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',mail:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M22 6l-10 7L2 6"/></svg>',pin:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',person:'<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>',line:'<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.3 9 9 0 0 1-2.4-.3L6 21l.9-3.2A8.2 8.2 0 0 1 4 11.5C4 6.9 7.8 3.2 12.5 3.2S21 6.9 21 11.5z"/></svg>',share:'<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>',pencil:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',pluto:'<svg width="74" height="74" viewBox="0 0 74 74"><ellipse cx="15" cy="23" rx="13" ry="9" fill="#6b4029" opacity=".36"/><ellipse cx="61" cy="52" rx="11" ry="7" fill="#6b4029" opacity=".3"/><ellipse cx="52" cy="13" rx="7" ry="4" fill="#6b4029" opacity=".2"/><path d="M37 60C26 52 18 45 20 37 22 30 32 29 37 36 42 29 52 30 54 37 56 45 48 52 37 60Z" fill="#fbf4e8" opacity=".9" transform="rotate(-14 37 44)"/></svg>'};
+var lastSavedId = null;   /* いま保存した名刺（一覧で太陽色の点を付ける） */
+function ringHtml(r, o, color){
+  return '<div class="ring" style="width:' + 2*r + 'px;height:' + 2*r + 'px;margin:-' + r + 'px;opacity:' + o +
+    (color ? ';border-color:' + color : '') + '"></div>';
+}
+function planetHtml(r, d, dur, delay, bg, rev){
+  return '<div class="pl' + (rev ? ' r' : '') + '" style="width:' + 2*r + 'px;height:' + 2*r + 'px;margin:-' + r +
+    'px;animation-duration:' + dur + ';animation-delay:' + delay + '"><i style="top:-' + (d/2) + 'px;width:' + d +
+    'px;height:' + d + 'px;margin-left:-' + (d/2) + 'px;background:' + bg + ';box-shadow:0 0 ' + (d+4) + 'px ' + bg + '"></i></div>';
+}
+/* 太陽のまわりの軌道。sun＝一覧の撮るボタン、save＝保存の✓、cam＝シャッター（冥王星）の衛星カロン */
+function orbitHtml(kind){
+  if (kind === 'sun')
+    return ringHtml(72, 1) + ringHtml(100, .7) + ringHtml(126, .45) +
+      planetHtml(72, 7, '16s', '-3s', 'var(--acc)') + planetHtml(100, 5, '28s', '-11s', 'var(--ink2)', true) +
+      planetHtml(126, 4, '46s', '-20s', 'var(--mute)');
+  if (kind === 'save') return ringHtml(38, 1) + planetHtml(38, 5, '9s', '-2s', 'var(--acc)');
+  return '<div style="position:absolute;inset:-8px;transform:rotate(-24deg)"><div style="position:absolute;inset:0;transform:scaleY(.75)">' +
+    ringHtml(58, 1, 'rgba(201,242,74,.8)') + planetHtml(58, 7, '6s', '0s', '#c9f24a') + '</div></div>';
+}
+/* 太陽を押したとき：軌道が広がって惑星が飛ぶ */
+function fx(btn){
+  var wrap = $('fx'); if (!wrap || !btn) return;
+  var bb = btn.getBoundingClientRect(), r = Math.max(bb.width, bb.height) / 2;
+  var x = bb.left + bb.width / 2, y = bb.top + bb.height / 2, h = '';
+  h += '<div class="fxc" style="left:-' + r + 'px;top:-' + r + 'px;width:' + 2*r + 'px;height:' + 2*r + 'px"></div>';
+  for (var i = 0; i < 3; i++){
+    var rr = r + 8 + i * 16, a = i * 2.1 + .6, d = 7 - i;
+    h += '<div class="fxr" style="left:-' + rr + 'px;top:-' + rr + 'px;width:' + 2*rr + 'px;height:' + 2*rr + 'px;animation-delay:' + (i*70) + 'ms">' +
+      '<i style="left:calc(50% + ' + (Math.cos(a)*50).toFixed(2) + '%);top:calc(50% + ' + (Math.sin(a)*50).toFixed(2) + '%);width:' + d + 'px;height:' + d + 'px' +
+      (i ? '' : ';background:var(--acc2)') + '"></i></div>';
+  }
+  var b = document.createElement('div');
+  b.className = 'fxb'; b.style.left = x + 'px'; b.style.top = y + 'px'; b.innerHTML = h;
+  wrap.appendChild(b);
+  btn.classList.remove('hit'); void btn.offsetWidth; btn.classList.add('hit');
+  setTimeout(function(){ btn.classList.remove('hit'); }, 450);
+  setTimeout(function(){ if (b.parentNode) b.parentNode.removeChild(b); }, 1000);
+}
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.sun,.pluto') : null;
+  if (b) fx(b);
+}, true);
+function initialOf(c){ var t = trim(c.name) || trim(c.company); return t ? t.charAt(0) : '？'; }
+function fmtMD(s){ var d = toDate(s); return d ? (d.getMonth()+1) + '/' + d.getDate() : ''; }
 function tileHtml(c){
   var pic = c.shot
     ? '<img src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
-    : '<span class="no">写真なし</span>';
+    : '<span class="no">' + esc(initialOf(c)) + '</span>';
   return '<button class="tile" data-id="' + esc(c.id) + '">' +
     '<span class="pic">' + pic + '</span>' +
-    '<span class="nm">' + esc(fullName(c)) + '</span>' +
+    '<span class="nm"><span>' + esc(fullName(c)) + '</span>' + (c.id === lastSavedId ? '<i class="lnew"></i>' : '') + '</span>' +
     (orgLine(c) ? '<span class="co">' + esc(orgLine(c)) + '</span>' : '') +
     '</button>';
 }
@@ -1427,15 +1547,15 @@ function fillThumbs(root){
 function rowHtml(c){
   var pic = c.shot
     ? '<img class="lth" src="' + BLANK + '" data-th="' + esc(c.id) + '" alt="">'
-    : '<span class="lth no">写真<br>なし</span>';
-  var meta = [c.met ? fmtDate(c.met) : '', trim(c.where)].filter(Boolean).join('　');
+    : '<span class="lth no">' + esc(initialOf(c)) + '</span>';
+  var co = trim(c.name) ? orgLine(c) : '';
   return '<button class="lrow" data-id="' + esc(c.id) + '">' + pic +
-    '<span class="lbody">' +
-      '<span class="lnm">' + esc(fullName(c)) +
-        (orgLine(c) ? '<span class="lco">' + esc(orgLine(c)) + '</span>' : '') + '</span>' +
-      (trim(c.memo) ? '<span class="lmemo">' + esc(c.memo.replace(/\n/g, ' ')) + '</span>' : '') +
-      (meta ? '<span class="lmeta">' + esc(meta) + '</span>' : '') +
-    '</span><span class="chev">›</span></button>';
+    '<span class="lnm"><span>' + esc(fullName(c)) + '</span>' + (c.id === lastSavedId ? '<i class="lnew"></i>' : '') + '</span>' +
+    '<span class="ld">' + esc(c.met ? fmtMD(c.met) : '') + '</span>' +
+    '<span class="lco">' + esc(co) + '</span>' +
+    '<span class="lpl">' + esc(trim(c.where)) + '</span>' +
+    (trim(c.memo) ? '<span class="lmemo">' + esc(c.memo.replace(/\n/g, ' ')) + '</span>' : '') +
+    '</button>';
 }
 var CKEY = 'meishi.checkcrop', checkCrop = false;
 try { checkCrop = localStorage.getItem(CKEY) === '1'; } catch(e){}
@@ -1472,15 +1592,12 @@ function renderCards(){
   applyView();
   if (!db.cards.length){
     none.hidden = false;
-    none.innerHTML = '<p class="empty">まだ1枚も入っていません。<br>' +
-      '<b>名刺を撮る</b>を押して、手元の1枚を撮ってみてください。<br>' +
-      '名前も会社も電話も、写真から読み取ります。</p>';
+    none.innerHTML = '<p class="empty">まだ1枚も入っていません。<br>上の丸いボタンで撮ってください。</p>';
   } else if (!list.length){
     none.hidden = false;
     none.innerHTML = '<p class="empty">見つかりませんでした。<br>ことばを減らすか、ひらがなだけで探してみてください。</p>';
   } else {
-    $('count').textContent = (q ? list.length + '枚 見つかりました' : '新しい順') +
-      (view === 'list' ? '（メモまで表示）' : '');
+    $('count').textContent = q ? list.length + '枚 見つかりました' : '新しい順';
     none.hidden = true;
   }
 }
@@ -1514,57 +1631,101 @@ function recentWheres(n){
   }
   return out;
 }
+function fld(k, lab, inner){
+  return '<div class="fld" id="f-' + k + '"><label for="s-' + k + '">' + lab + '</label>' + inner + '</div>';
+}
 function saveSheetHtml(){
   function chipsOf(list){
     return list.map(function(w){
-      return '<button class="chip" data-w="' + esc(w) + '">' + esc(w) + '</button>'; }).join('');
+      return '<button class="chip" data-w="' + esc(w) + '" aria-pressed="false"><span>' + esc(w) + '</span></button>'; }).join('');
   }
   var wh = chipsOf(recentWheres(5)), kd = chipsOf(recentValues('kind', 5));
-  return '<h2>新しい名刺</h2>' +
-    '<p class="lead" id="s-lead">写真から文字を読んでいます。読み取りを待つあいだに、区分・会った場所・メモを入力できます。</p>' +
-    '<button class="pic-big" id="s-pic"><img id="s-img" alt="いま撮った名刺"></button>' +
-    '<div class="row" style="margin-top:8px">' +
-      '<button class="btn" id="s-crop">切り直す</button>' +
-      '<button class="btn" id="s-rot">回す</button></div>' +
+  return '<div class="pbody">' +
+    '<div class="thead"><h2>新しい名刺</h2>' +
+      '<div class="side"><button class="thumb" id="s-pic" aria-label="写真を大きく見る"><img id="s-img" alt="いま撮った名刺"></button>' +
+      '<div class="row2"><button class="planet" id="s-crop" aria-label="切り直す">' + IC.crop + '</button>' +
+      '<button class="planet" id="s-rot" aria-label="回す">' + IC.rotate + '</button></div></div></div>' +
     '<div class="bar" id="s-bar"><i style="width:6%"></i></div>' +
     '<p class="reading" id="s-read">準備しています…</p>' +
+    '<p class="reading" id="s-lead" hidden></p>' +
     '<div class="spot" id="s-spot" hidden></div>' +
     '<div id="s-err"></div>' +
-    '<label for="s-name">名前</label>' +
-    '<input type="text" class="name-in" id="s-name" placeholder="手で入力できます" autocomplete="off">' +
-    '<div class="chips" id="s-cand-name"></div>' +
-    '<label for="s-company">会社</label>' +
-    '<input type="text" id="s-company" autocomplete="off">' +
-    '<div class="chips" id="s-cand-co"></div>' +
+    fld('name', '名前', '<div class="strip" id="st-name"></div><input type="text" class="name-in" id="s-name" autocomplete="off">' +
+      '<div class="chips scroll" id="s-cand-name"></div>') +
+    fld('company', '会社', '<div class="strip" id="st-company"></div><input type="text" id="s-company" autocomplete="off">' +
+      '<div class="chips scroll" id="s-cand-co"></div>') +
     /* ここは読み取りを待つあいだに入力できる。読み取りの結果で上書きされない */
-    '<div class="wait" id="s-wait">' +
-      '<p class="waithd">読み取りを待つあいだに入力できます</p>' +
-      '<label for="s-kind">区分</label>' +
-      (kd ? '<div class="chips" id="s-kind-chips">' + kd + '</div>' : '') +
-      '<input type="text" id="s-kind" placeholder="例: 取引先" autocomplete="off">' +
-      '<label for="s-where">会った場所</label>' +
-      (wh ? '<div class="chips" id="s-where-chips">' + wh + '</div>' : '') +
-      '<input type="text" id="s-where" placeholder="例: 東京ビッグサイトの展示会" autocomplete="off">' +
-      '<label for="s-memo">メモ</label>' +
-      '<textarea id="s-memo" placeholder="例: 白髪でめがね。倉庫の件で見積がほしいとのことでした。"></textarea>' +
-      '<p class="hint">会った日は今日（' + esc(fmtDate(today())) + '）が入ります。</p>' +
+    '<div class="later" id="s-wait">' +
+      fld('kind', '区分', (kd ? '<div class="chips kind" id="s-kind-chips">' + kd + '</div>' : '') + '<input type="text" id="s-kind" autocomplete="off">') +
+      fld('where', '会った場所', (wh ? '<div class="chips kind" id="s-where-chips">' + wh + '</div>' : '') + '<input type="text" id="s-where" autocomplete="off">') +
+      fld('memo', 'メモ', '<textarea id="s-memo"></textarea>') +
+      '<div class="f" style="margin-top:8px"><div class="k">会った日</div><div class="v num">' + esc(fmtDate(today())) + '</div></div>' +
     '</div>' +
     '<details class="more" id="s-more"><summary>電話・メール・住所など<span class="got" id="s-got"></span></summary>' +
-      '<div class="half"><div><label for="s-tel">電話</label><input type="tel" id="s-tel" autocomplete="off"></div>' +
-      '<div><label for="s-mobile">携帯</label><input type="tel" id="s-mobile" autocomplete="off"></div></div>' +
-      '<label for="s-email">メール</label><input type="email" id="s-email" autocomplete="off" inputmode="email">' +
-      '<div class="half"><div><label for="s-dept">部署</label><input type="text" id="s-dept" autocomplete="off"></div>' +
-      '<div><label for="s-title">役職</label><input type="text" id="s-title" autocomplete="off"></div></div>' +
-      '<label for="s-addr">住所</label><input type="text" id="s-addr" autocomplete="off">' +
-      '<label for="s-url">サイト</label><input type="text" id="s-url" autocomplete="off">' +
-      '<label for="s-kana">よみ</label><input type="text" id="s-kana" autocomplete="off">' +
+      '<div class="half">' + fld('tel', '電話', '<input type="tel" id="s-tel" autocomplete="off">') +
+      fld('mobile', '携帯', '<input type="tel" id="s-mobile" autocomplete="off">') + '</div>' +
+      fld('email', 'メール', '<input type="email" id="s-email" autocomplete="off" inputmode="email">') +
+      '<div class="half">' + fld('dept', '部署', '<input type="text" id="s-dept" autocomplete="off">') +
+      fld('title', '役職', '<input type="text" id="s-title" autocomplete="off">') + '</div>' +
+      fld('addr', '住所', '<input type="text" id="s-addr" autocomplete="off">') +
+      fld('url', 'サイト', '<input type="text" id="s-url" autocomplete="off">') +
+      fld('kana', 'よみ', '<input type="text" id="s-kana" autocomplete="off">') +
     '</details>' +
-    '<button class="btn primary" id="s-save">保存する</button>' +
-    '<button class="btn danger" id="s-cancel">やめる</button>';
+    '</div>' +
+    '<div class="pfoot"><button class="planet lg" id="s-cancel" aria-label="やめる">' + IC.x + '</button>' +
+      '<div class="sunbox"><div class="orbit">' + orbitHtml('save') + '</div>' +
+      '<button class="sun md" id="s-save" aria-label="保存する">' + IC.check + '</button></div></div>';
+}
+/* 欄を押すと、写真のその部分を欄の上に出す（端末の中で読んだときだけ。行の場所が分かっているので） */
+function stripFor(k){
+  var box = $('st-' + k), f = $('f-' + k), inp = $('s-' + k);
+  if (!box || !f || !inp) return;
+  var v = norm(inp.value), L = null;
+  if (v && lastOcr && lastOcr.lines && pendCard){
+    lastOcr.lines.forEach(function(l){
+      if (!l.bb) return;
+      var t = norm(l.t); if (!t) return;
+      if (t.indexOf(v) >= 0 || v.indexOf(t) >= 0){
+        if (!L || Math.abs(t.length - v.length) < Math.abs(norm(L.t).length - v.length)) L = l;
+      }
+    });
+  }
+  if (!L){ hideStrip(k); return; }
+  var cv = lastOcr.cv, sx = pendCard.width / cv.width, sy = pendCard.height / cv.height, pad = L.h * 0.6;
+  var x0 = Math.max(0, (L.bb.x0 - pad) * sx), x1 = Math.min(pendCard.width, (L.bb.x1 + pad) * sx);
+  var y0 = Math.max(0, (L.bb.y0 - pad) * sy), y1 = Math.min(pendCard.height, (L.bb.y1 + pad) * sy);
+  if (x1 - x0 < 4 || y1 - y0 < 4){ hideStrip(k); return; }
+  var bw = Math.max(200, Math.round(f.clientWidth || 300)), bh = 76, sc = Math.min(bw / (x1 - x0), bh / (y1 - y0));
+  var c = document.createElement('canvas'); c.width = bw * 2; c.height = bh * 2;
+  var g = c.getContext('2d'); g.fillStyle = '#f6f5f0'; g.fillRect(0, 0, c.width, c.height);
+  var dw = (x1 - x0) * sc * 2, dh = (y1 - y0) * sc * 2;
+  try { g.drawImage(pendCard, x0, y0, x1 - x0, y1 - y0, (c.width - dw) / 2, (c.height - dh) / 2, dw, dh); } catch(e){ hideStrip(k); return; }
+  box.innerHTML = '<img src="' + c.toDataURL('image/jpeg', 0.8) + '" alt="">';
+  f.classList.add('has-strip');
+}
+function hideStrip(k){
+  var box = $('st-' + k), f = $('f-' + k);
+  if (box) box.innerHTML = '';
+  if (f) f.classList.remove('has-strip');
+}
+/* 区分・会った場所の候補は、いま欄に入っている言葉を光らせる */
+function markChips(k){
+  var box = $('s-' + k + '-chips'), v = $('s-' + k) ? trim($('s-' + k).value) : '';
+  if (!box) return;
+  box.querySelectorAll('.chip').forEach(function(b){
+    b.setAttribute('aria-pressed', b.getAttribute('data-w') === v ? 'true' : 'false');
+  });
+}
+var viewerSpot = false;
+/* 写真を大きく出す。文字を押すと、そこだけ読み直す */
+function openSpotViewer(){
+  if (!pend) return;
+  viewerSpot = true; $('viewer').classList.add('spot');
+  showBig(pend.full);
 }
 function setCands(){
   var h = pendCand.map(function(t){
-    return '<button class="chip" data-v="' + esc(t) + '">' + esc(t) + '</button>'; }).join('');
+    return '<button class="chip" data-v="' + esc(t) + '"><span>' + esc(t) + '</span></button>'; }).join('');
   if (!$('s-cand-name')) return;
   $('s-cand-name').innerHTML = h;
   $('s-cand-co').innerHTML = h;
@@ -1882,10 +2043,14 @@ function inkBands(cv, col){
 /* 写真の文字を押したら、そこだけ読み直して、どの欄に入れるか選んでもらう */
 var lastOcr = null;
 function readSpot(ev){
-  if (!lastOcr || !pend){ if (pend) showBig(pend.full); return; }
-  var img = $('s-img'), r = img.getBoundingClientRect();
-  if (!r.width || !r.height) return;
-  var fx = (ev.clientX - r.left) / r.width, fy = (ev.clientY - r.top) / r.height;
+  var img = $('s-img'), r = img ? img.getBoundingClientRect() : null;
+  if (!r || !r.width || !r.height) return;
+  readSpotAt((ev.clientX - r.left) / r.width, (ev.clientY - r.top) / r.height);
+}
+/* 写真の中の位置（0〜1の割合）を押したとして、そこの文字を読み直す */
+function readSpotAt(fx, fy){
+  if (!pend) return;
+  if (!lastOcr){ toast('読み取りが終わるまでお待ちください'); return; }
   if (fx < 0 || fx > 1 || fy < 0 || fy > 1) return;
   var cv = lastOcr.cv, x = fx * cv.width, y = fy * cv.height, hit = null;
   lastOcr.lines.forEach(function(L){
@@ -1936,8 +2101,8 @@ function showSpot(t){
   var fields = [['name','名前'], ['company','会社'], ['dept','部署'], ['title','役職']];
   box.hidden = false;
   box.innerHTML = '<div class="spot-t" id="s-spot-t"></div><div class="chips">' +
-    fields.map(function(f){ return '<button class="chip" data-k="' + f[0] + '">' + f[1] + 'に入れる</button>'; }).join('') +
-    '<button class="chip" data-k="">やめる</button></div>';
+    fields.map(function(f){ return '<button class="chip" data-k="' + f[0] + '"><span>' + f[1] + 'に入れる</span></button>'; }).join('') +
+    '<button class="chip" data-k=""><span>やめる</span></button></div>';
   $('s-spot-t').textContent = t;
   box.querySelectorAll('button').forEach(function(b){
     b.addEventListener('click', function(){
@@ -1977,11 +2142,11 @@ function runOcr(img){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? 'Claude で読み取りました。ちがうところは直してください。写真の文字を押すと、そこだけ読み直せます。'
-                                  : 'うまく読み取れませんでした。写真の名前を押すと、そこだけ読み直せます。';
-    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べています。'
-                                   : '写真は残りますので、名前だけ入力してください。') +
-      (pendCropped ? '' : '　名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。');
+    $('s-read').textContent = any ? 'Claude で読み取りました。ちがうところは直してください。写真を開いて文字を押すと、そこだけ読み直せます。'
+                                  : 'うまく読み取れませんでした。写真を開いて名前を押すと、そこだけ読み直せます。';
+    $('s-lead').textContent = pendCropped ? '' : '名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。';
+    $('s-lead').hidden = !$('s-lead').textContent;
+    ['name','company'].forEach(function(k){ if (document.activeElement === $('s-' + k)) stripFor(k); });
   }, function(err){
     if (!$('s-read')) return;
     /* うまくいかなかったら、そのわけを出してから、端末の中の読み取りに切りかえる */
@@ -2116,11 +2281,11 @@ function runLocalOcr(img, note){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? '読み取りました。ちがうところは直してください。写真の文字を押すと、そこだけ読み直せます。'
-                                  : 'うまく読み取れませんでした。写真の名前を押すと、そこだけ読み直せます。';
-    $('s-lead').textContent = (any ? '押すだけで直せる候補を、欄の下に並べています。'
-                                   : '写真は残りますので、名前だけ入力してください。') +
-      (pendCropped ? '' : '　名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。');
+    $('s-read').textContent = any ? '読み取りました。ちがうところは直してください。写真を開いて文字を押すと、そこだけ読み直せます。'
+                                  : 'うまく読み取れませんでした。写真を開いて名前を押すと、そこだけ読み直せます。';
+    $('s-lead').textContent = pendCropped ? '' : '名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。';
+    $('s-lead').hidden = !$('s-lead').textContent;
+    ['name','company'].forEach(function(k){ if (document.activeElement === $('s-' + k)) stripFor(k); });
   }, function(err){
     if (!$('s-read')) return;
     $('s-bar').hidden = true;
@@ -2140,12 +2305,20 @@ function openSave(restore){
   if (!restore){ touched = {}; pendCand = []; }
   openSheet(saveSheetHtml(), function(){
     $('s-img').src = pend.full;
-    $('s-pic').addEventListener('click', readSpot);
+    $('s-pic').addEventListener('click', openSpotViewer);
     SF.forEach(function(k){
       var el = $('s-' + k);
       if (!el) return;
-      el.addEventListener('input', function(){ touched[k] = 1; });
+      el.addEventListener('input', function(){
+        touched[k] = 1;
+        if (k === 'kind' || k === 'where') markChips(k);
+        if (k === 'name' || k === 'company') stripFor(k);
+      });
       if (restore && restore[k] != null) el.value = restore[k];
+    });
+    ['name', 'company'].forEach(function(k){
+      $('s-' + k).addEventListener('focus', function(){ stripFor(k); });
+      $('s-' + k).addEventListener('blur', function(){ setTimeout(function(){ hideStrip(k); }, 150); });
     });
     if (restore) setCands();
     $('s-cand-name').addEventListener('click', function(ev){ pickCand(ev, 's-name', 'name'); });
@@ -2157,8 +2330,10 @@ function openSave(restore){
         if (!b) return;
         $(a[1]).value = b.getAttribute('data-w');
         touched[a[2]] = 1;
+        markChips(a[2]);
       });
     });
+    markChips('kind'); markChips('where');
     $('s-crop').addEventListener('click', openRecrop);
     $('s-rot').addEventListener('click', rotateAndRead);
     $('s-save').addEventListener('click', doSave);
@@ -2242,15 +2417,16 @@ function openRecrop(){
   var url = toCanvas(pendRaw, 1100).toDataURL('image/jpeg', 0.82);
   var q = pendQuad.map(function(pp){ return [pp[0], pp[1]]; });
   var rr = Math.max(9, W/55), sw = Math.max(2, W/280);
-  var h = '<h2>四隅を合わせる</h2>' +
-    '<p class="lead">白い丸をつまんで、名刺の角に合わせてください。</p>' +
+  var h = '<div class="pbody"><h2>四隅を合わせる</h2>' +
+    '<p class="reading">丸をつまんで、名刺の角に合わせてください。</p>' +
     '<div class="cropbox" id="cb"><img src="' + url + '" alt="撮った写真">' +
     '<svg id="cb-svg" viewBox="0 0 ' + W + ' ' + H + '">' +
-    '<polygon id="cb-poly" fill="rgba(120,200,120,.16)" stroke="#fff" stroke-width="' + sw + '"></polygon>' +
-    '<g id="cb-dots"></g></svg></div>' +
-    '<button class="btn primary" id="cb-ok">読み直す</button>' +
-    '<div class="row"><button class="btn" id="cb-all">全体を使う</button>' +
-    '<button class="btn" id="cb-cancel">やめる</button></div>';
+    '<polygon id="cb-poly" fill="rgba(201,242,74,.16)" stroke="#c9f24a" stroke-width="' + sw + '"></polygon>' +
+    '<g id="cb-dots"></g></svg></div></div>' +
+    '<div class="pfoot"><button class="planet lg" id="cb-cancel" aria-label="やめる">' + IC.x + '</button>' +
+    '<button class="btn" id="cb-all" style="width:auto;margin:0">全体を使う</button>' +
+    '<div class="sunbox"><div class="orbit">' + orbitHtml('save') + '</div>' +
+    '<button class="sun md" id="cb-ok" aria-label="読み直す">' + IC.check + '</button></div></div>';
   openSheet(h, function(){
     var svg = $('cb-svg'), poly = $('cb-poly'), dots = $('cb-dots'), active = -1;
     function draw(){
@@ -2258,7 +2434,7 @@ function openRecrop(){
       var g = '';
       for (var i = 0; i < 4; i++)
         g += '<circle cx="' + q[i][0] + '" cy="' + q[i][1] + '" r="' + rr +
-             '" fill="#fff" stroke="#3a6b34" stroke-width="' + sw + '"></circle>';
+             '" fill="#f2f3ec" stroke="#0a0b09" stroke-width="' + sw + '"></circle>';
       dots.innerHTML = g;
     }
     function at(ev){
@@ -2338,10 +2514,20 @@ function drawLive(q, stable){
     if (i) x.lineTo(px, py); else x.moveTo(px, py);
   });
   x.closePath();
-  x.fillStyle = stable ? 'rgba(120,200,110,.28)' : 'rgba(120,200,110,.14)';
-  x.strokeStyle = stable ? '#8fe08a' : '#cfeacb';
-  x.lineWidth = stable ? 4 : 3;
+  /* 四隅を見つけたら、ライム色の細い線と太い角で囲む（止まると濃くなる） */
+  x.fillStyle = stable ? 'rgba(201,242,74,.16)' : 'rgba(201,242,74,.07)';
+  x.strokeStyle = '#c9f24a'; x.globalAlpha = stable ? .9 : .5; x.lineWidth = 1.5;
   x.fill(); x.stroke();
+  x.globalAlpha = 1; x.lineWidth = stable ? 4 : 3; x.lineCap = 'round';
+  q.forEach(function(p, i){
+    var a = q[(i + 3) % 4], b = q[(i + 1) % 4];
+    var px = fr.ox + p[0]*v.videoWidth*fr.sc, py = fr.oy + p[1]*v.videoHeight*fr.sc;
+    [a, b].forEach(function(o){
+      var ox = fr.ox + o[0]*v.videoWidth*fr.sc, oy = fr.oy + o[1]*v.videoHeight*fr.sc;
+      var d = Math.sqrt((ox-px)*(ox-px) + (oy-py)*(oy-py)) || 1, L = Math.min(34, d * 0.3);
+      x.beginPath(); x.moveTo(px, py); x.lineTo(px + (ox-px)/d*L, py + (oy-py)/d*L); x.stroke();
+    });
+  });
 }
 function liveStep(){
   liveTimer = null;
@@ -2389,8 +2575,10 @@ function liveStep(){
     liveQuad = q;
     liveMiss = q ? 0 : liveMiss + 1;
     drawLive(q, stable && !edge && big);
-    var tip = $('cam-tip'), bx = $('cam-box');
+    var tip = $('cam-tip'), bx = $('cam-box'), sb = $('cam-shotbox');
     if (bx) bx.className = 'box' + (q ? ' found' : '');
+    /* シャッター（冥王星）のまわり：見つけたら衛星が回る、止まったら輪がたまる、見つからないままなら白い輪 */
+    if (sb) sb.className = 'shotbox' + (q && !edge && big ? (stable ? ' wait' : ' found') : '') + (!q && liveMiss > 12 ? ' hurry' : '');
     if (tip){
       tip.textContent = !q ? (liveMiss > 12 ? '見つからないときは、丸いボタンで撮ってください'
                                             : '名刺を枠に合わせてください。机との境がはっきり写るようにします')
@@ -2408,6 +2596,9 @@ function openCamera(){
   document.body.style.overflow = 'hidden';
   liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0;
   drawLive(null);
+  if ($('cam-shotbox')) $('cam-shotbox').className = 'shotbox';
+  if ($('cam-box')) $('cam-box').className = 'box';
+  if ($('cam-tip')) $('cam-tip').textContent = '名刺を枠に合わせてください。机との境がはっきり写るようにします';
   if (liveTimer) clearTimeout(liveTimer);
   liveTimer = setTimeout(liveStep, 400);
   navigator.mediaDevices.getUserMedia({
@@ -2480,6 +2671,7 @@ function doSave(){
   persist();
   if (pend) putShot(c.id, pend);
   clearPend();
+  lastSavedId = c.id;
   closeSheet();
   renderCards();
   toast('保存しました');
@@ -2493,51 +2685,61 @@ function cardById(id){
 }
 function siteUrl(u){ u = trim(u); return u ? (/^https?:\/\//i.test(u) ? u : 'https://' + u) : ''; }
 function telLink(v){ return '<a href="tel:' + esc(String(v).replace(/[^0-9+]/g, '')) + '">' + esc(v) + '</a>'; }
-function fact(k, v, html){
+function fact(k, v, html, cls){
   if (!trim(v)) return '';
-  return '<div class="f"><div class="k">' + esc(k) + '</div><div class="v">' + (html || esc(v)) + '</div></div>';
+  return '<div class="f' + (cls ? ' ' + cls : '') + '"><div class="k">' + esc(k) + '</div><div class="v">' + (html || esc(v)) + '</div></div>';
 }
+function digitsOf(v){ return String(v).replace(/[^0-9+]/g, ''); }
 function openCard(id){
   var c = cardById(id);
   if (!c) return;
-  var h = '<h2>' + esc(fullName(c)) + '</h2>';
-  if (orgLine(c)) h += '<p class="lead">' + esc(orgLine(c)) + '</p>';
-  if (c.shot) h += '<button class="pic-big" id="d-pic"><img id="d-img" alt="名刺"></button>';
-  h += '<div class="facts">';
-  h += fact('よみ', c.kana);
-  h += fact('電話', c.tel, c.tel ? telLink(c.tel) : '');
-  h += fact('携帯', c.mobile, c.mobile ? telLink(c.mobile) : '');
-  h += fact('メール', c.email, c.email ? '<a href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
-  h += fact('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '');
-  h += fact('住所', c.addr);
-  h += fact('区分', c.kind);
-  h += fact('会った日', c.met ? fmtDate(c.met) : '');
-  h += fact('会った場所', c.where);
-  h += fact('メモ', c.memo);
-  h += '</div>';
-  /* 住所のある名刺だけ、その住所の地図を出す */
-  if (mapQuery(c)){
-    var emb = mapEmbedUrl(c);
-    h += '<div class="map">' +
-      (emb ? '<iframe id="d-map" src="' + esc(emb) + '" title="' + esc(mapQuery(c)) + ' の地図"' +
-             ' loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>'
-           : '<p class="hint mapoff">地図を出すには、設定で Google の鍵（APIキー）を入れてください。</p>') +
-      '<a class="btn maplink" id="d-map-open" href="' + esc(mapsAppUrl(c)) + '" target="_blank" rel="noopener">Googleマップで開く</a>' +
-      '</div>';
+  /* 電話・携帯・メールは3つの太陽。番号だけを下に添える */
+  function sunLink(href, icon, text, label){
+    return trim(text) ? '<a href="' + esc(href) + '" aria-label="' + label + '"><span class="sun sm">' + icon + '</span><small>' + esc(text) + '</small></a>' : '';
   }
-  h += '<div class="row"><button class="btn" id="d-edit">直す</button>' +
-       '<button class="btn" id="d-vcf">連絡先に追加</button></div>';
-  h += '<button class="btn" id="d-line">LINEで送る</button>';
-  h += '<div class="pick" id="d-line-pick" hidden>' +
-       '<p class="pickhd">LINEで何を送りますか</p>' +
-       '<div class="row"><button class="btn" id="d-line-text">文字で送る</button>' +
-       '<button class="btn" id="d-line-photo">写真で送る</button></div>' +
-       '<div class="row"><button class="btn" id="d-line-copy">文字をコピー</button>' +
-       '<button class="btn" id="d-line-cancel">やめる</button></div>' +
-       '<p class="hint">区分・会った日・会った場所・メモは送りません。</p></div>';
-  h += '<div class="row"><button class="btn" id="d-share">共有する</button>' +
-       '<button class="btn danger" id="d-del">捨てる</button></div>';
-  h += '<button class="btn" id="d-close">閉じる</button>';
+  function act(id, icon, txt, label, acc){
+    return '<button class="act' + (acc ? ' acc' : '') + '" id="' + id + '" aria-label="' + label + '">' +
+      '<span class="planet lg' + (acc ? ' acc2' : '') + '">' + icon + '</span><small>' + txt + '</small></button>';
+  }
+  var suns = sunLink('tel:' + digitsOf(c.tel), IC.phone, c.tel, '電話をかける') +
+             sunLink('tel:' + digitsOf(c.mobile), IC.mobile, c.mobile, '携帯にかける') +
+             sunLink('mailto:' + trim(c.email), IC.mail, c.email, 'メールを書く');
+  var emb = mapQuery(c) ? mapEmbedUrl(c) : '';
+  var h = '<div class="pbody">' +
+    '<div class="dtop"><button class="planet" id="d-close" aria-label="閉じる">' + IC.x18 + '</button></div>' +
+    '<div class="dhead"><div><div class="dname">' + esc(fullName(c)) + '</div>' +
+      (orgLine(c) ? '<div class="dorg">' + esc(orgLine(c).replace(/ /g, '　')) + '</div>' : '') + '</div>' +
+      (c.shot ? '<button class="thumb d" id="d-pic" aria-label="写真を大きく見る"><img id="d-img" alt="名刺"></button>' : '<span></span>') +
+    '</div>' +
+    (suns ? '<div class="suns">' + suns + '</div>' : '') +
+    '<div class="facts">' +
+    fact('よみ', c.kana) +
+    fact('サイト', c.url, c.url ? '<a href="' + esc(siteUrl(c.url)) + '" target="_blank" rel="noopener">' + esc(c.url) + '</a>' : '') +
+    /* 住所のある名刺だけ、右の惑星で地図を開ける。鍵が入っていれば地図も出す */
+    (mapQuery(c) ? '<div class="f withbtn"><div class="k">住所</div><div class="v">' + esc(c.addr) + '</div>' +
+      '<a class="planet acc" id="d-map-open" href="' + esc(mapsAppUrl(c)) + '" target="_blank" rel="noopener" aria-label="地図で開く">' + IC.pin + '</a></div>' +
+      (emb ? '<div class="map"><iframe id="d-map" src="' + esc(emb) + '" title="' + esc(mapQuery(c)) + ' の地図"' +
+             ' loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>' : '') : '') +
+    ((trim(c.kind) || c.met) ? '<div class="f2">' + fact('区分', c.kind) +
+      fact('会った日', c.met ? fmtDate(c.met) : '', c.met ? '<span class="num">' + esc(fmtDate(c.met)) + '</span>' : '') + '</div>' : '') +
+    fact('会った場所', c.where) +
+    fact('メモ', c.memo) +
+    '</div>' +
+    '<div class="linepick" id="d-line-pick" hidden>' +
+      '<p class="pickhd">LINEで何を送りますか</p>' +
+      '<div class="row"><button class="btn" id="d-line-text">文字で送る</button>' +
+      '<button class="btn" id="d-line-photo">写真で送る</button></div>' +
+      '<div class="row"><button class="btn" id="d-line-copy">文字をコピー</button>' +
+      '<button class="btn" id="d-line-cancel">やめる</button></div>' +
+      '<p class="hint">区分・会った日・会った場所・メモは送りません。</p></div>' +
+    '<button class="del" id="d-del">この名刺を捨てる</button>' +
+    '</div>' +
+    '<div class="pfoot"><div class="acts">' +
+      act('d-vcf', IC.person, '連絡先', '連絡先に追加') +
+      act('d-line', IC.line, 'LINE', 'LINEで送る') +
+      act('d-share', IC.share, '共有', '共有する') +
+      act('d-edit', IC.pencil, '編集', '編集', true) +
+    '</div></div>';
   openSheet(h, function(){
     if (c.shot){
       getShot(c.id).then(function(s){ if (s && s.full && $('d-img')) $('d-img').src = s.full; });
@@ -2567,18 +2769,21 @@ function openEdit(id){
   var c = cardById(id);
   if (!c) return;
   function row(k, lab, type){
-    return '<label for="e-' + k + '">' + lab + '</label><input type="' + (type || 'text') +
-      '" id="e-' + k + '" value="' + esc(c[k] || '') + '" autocomplete="off">';
+    return '<div class="fld"><label for="e-' + k + '">' + lab + '</label><input type="' + (type || 'text') +
+      '" id="e-' + k + '" value="' + esc(c[k] || '') + '" autocomplete="off"></div>';
   }
-  var h = '<h2>名刺を直す</h2>' +
-    '<label for="e-name">名前</label><input type="text" class="name-in" id="e-name" value="' + esc(c.name || '') + '" autocomplete="off">' +
+  var h = '<div class="pbody"><h2>名刺を直す</h2>' +
+    '<div class="fld"><label for="e-name">名前</label><input type="text" class="name-in" id="e-name" value="' + esc(c.name || '') + '" autocomplete="off"></div>' +
     row('kana', 'よみ') + row('company', '会社') +
-    '<div class="half"><div>' + row('dept', '部署') + '</div><div>' + row('title', '役職') + '</div></div>' +
-    '<div class="half"><div>' + row('tel', '電話', 'tel') + '</div><div>' + row('mobile', '携帯', 'tel') + '</div></div>' +
+    '<div class="half">' + row('dept', '部署') + row('title', '役職') + '</div>' +
+    '<div class="half">' + row('tel', '電話', 'tel') + row('mobile', '携帯', 'tel') + '</div>' +
     row('email', 'メール', 'email') + row('url', 'サイト') + row('addr', '住所') +
     row('kind', '区分') + row('met', '会った日', 'date') + row('where', '会った場所') +
-    '<label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea>' +
-    '<button class="btn primary" id="e-ok">保存する</button><button class="btn" id="e-cancel">やめる</button>';
+    '<div class="fld"><label for="e-memo">メモ</label><textarea id="e-memo">' + esc(c.memo || '') + '</textarea></div>' +
+    '</div>' +
+    '<div class="pfoot"><button class="planet lg" id="e-cancel" aria-label="やめる">' + IC.x + '</button>' +
+    '<div class="sunbox"><div class="orbit">' + orbitHtml('save') + '</div>' +
+    '<button class="sun md" id="e-ok" aria-label="保存する">' + IC.check + '</button></div></div>';
   openSheet(h, function(){
     $('e-ok').addEventListener('click', function(){
       F.forEach(function(k){ if ($('e-' + k)) c[k] = trim($('e-' + k).value); });
@@ -2642,7 +2847,7 @@ function saveVcf(c){
 function saveVcfAll(){
   var list = db.cards.filter(function(c){ return trim(c.name) || trim(c.company); });
   if (!list.length){ toast('書き出せる名刺がありません'); return; }
-  saveFile('めいしばこ_連絡先_' + today() + '.vcf',
+  saveFile('名刺帖_連絡先_' + today() + '.vcf',
     list.map(function(c){ return vcard(c, null); }).join(''), 'text/vcard;charset=utf-8');
 }
 /* LINEに送る文面。区分・会った日・会った場所・メモは入れない */
@@ -2769,11 +2974,11 @@ function saveFile(name, data, mime){
 
 /* ===================== 設定 ===================== */
 function openSettings(){
-  var h = '<h2>設定</h2>' +
+  var h = '<div class="pbody"><h2>設定</h2>' +
     '<p class="lead" id="g-usage"></p>' +
     '<label>スマホの連絡先に入れる</label>' +
     '<p class="hint" style="margin-top:0">書き出したファイルを開くと、連絡先アプリに登録できます。' +
-    '1人だけなら、その名刺を開いて「連絡先に追加」を押してください。</p>' +
+    '1人だけなら、その名刺を開いて「連絡先」を押してください。</p>' +
     '<button class="btn" id="g-vcf">全員を書き出す</button>' +
     '<label>エクセルに出す</label>' +
     '<div class="row"><button class="btn" id="g-csv-copy">コピー</button>' +
@@ -2816,7 +3021,7 @@ function openSettings(){
     '<label>お試し</label>' +
     '<button class="btn" id="g-sample">サンプルを入れる</button>' +
     '<button class="btn danger" id="g-wipe">すべて削除</button>' +
-    '<button class="btn" id="g-close">閉じる</button>';
+    '</div><div class="pfoot"><button class="planet lg" id="g-close" aria-label="閉じる">' + IC.x + '</button><span></span></div>';
   openSheet(h, function(){
     if (navigator.storage && navigator.storage.estimate){
       navigator.storage.estimate().then(function(e){
@@ -2828,7 +3033,7 @@ function openSettings(){
     $('g-vcf').addEventListener('click', saveVcfAll);
     $('g-csv-copy').addEventListener('click', function(){ copyText(buildCSV(), 'CSVをコピーしました'); });
     $('g-csv-save').addEventListener('click', function(){
-      saveFile('めいしばこ_名簿_' + today() + '.csv', '﻿' + buildCSV(), 'text/csv;charset=utf-8;'); });
+      saveFile('名刺帖_名簿_' + today() + '.csv', '﻿' + buildCSV(), 'text/csv;charset=utf-8;'); });
     $('g-bk-full').addEventListener('click', function(){ doBackup(true); });
     $('g-bk-lite').addEventListener('click', function(){ doBackup(false); });
     $('g-restore').addEventListener('change', function(){
@@ -2935,14 +3140,14 @@ function openSettings(){
 function doBackup(withPhotos){
   var base = { app:'meishibako', v:2, at:new Date().toISOString(), cards:db.cards };
   if (!withPhotos){
-    saveFile('めいしばこ_バックアップ_文字だけ_' + today() + '.json', JSON.stringify(base), 'application/json');
+    saveFile('名刺帖_バックアップ_文字だけ_' + today() + '.json', JSON.stringify(base), 'application/json');
     return;
   }
   busy(true, '写真をまとめています…');
   IDB.all().then(function(rows){
     busy(false);
     base.shots = (rows || []).filter(function(r){ return r && r.id && r.id.indexOf('__') !== 0; });
-    saveFile('めいしばこ_バックアップ_' + today() + '.json', JSON.stringify(base), 'application/json');
+    saveFile('名刺帖_バックアップ_' + today() + '.json', JSON.stringify(base), 'application/json');
   }, function(){ busy(false); toast('写真を読み出せませんでした'); });
 }
 function doRestore(file){
@@ -3042,7 +3247,7 @@ $('cam-torch').addEventListener('click', function(){
   if (!camTrack || !camTrack.applyConstraints) return;
   torchOn = !torchOn;
   camTrack.applyConstraints({ advanced: [{ torch: torchOn }] })['catch'](function(){ torchOn = false; });
-  $('cam-torch').textContent = torchOn ? 'ライト 切' : 'ライト';
+  $('cam-torch').classList.toggle('on', torchOn);
 });
 $('btn-pick').addEventListener('click',  function(){ $('file-pick').click(); });
 $('file-cam').addEventListener('change',  function(){ startCapture(this.files[0]); this.value = ''; });
@@ -3066,6 +3271,8 @@ document.addEventListener('keydown', function(ev){
   if (!$('viewer').hidden){ $('viewer').hidden = true; $('viewer-img').src = ''; }
   else if (!$('sheet').hidden && !pend) closeSheet();
 });
+$('sun-orbit').innerHTML = orbitHtml('sun');
+$('cam-orbit').innerHTML = orbitHtml('cam');
 renderCards();
 })();
 </script>
