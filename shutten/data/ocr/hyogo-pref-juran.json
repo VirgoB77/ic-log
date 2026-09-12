@@ -305,5 +305,65 @@
   "content": "大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては代表",
   "applicant": "株式会社 イズミ",
   "how": "ocr"
+ },
+ "aeontownkakogawa6-2": {
+  "how": "embedded"
+ },
+ "drugcosmoskamitenoten": {
+  "how": "embedded"
+ },
+ "freshbazaarinagawaten": {
+  "how": "embedded"
+ },
+ "hankyutakaradukasyogyozonesyogyotou1": {
+  "how": "embedded"
+ },
+ "hankyutakaradukasyogyozonesyogyotou2": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第4項",
+  "date": "2026-05-18",
+  "store": "阪急宝塚商業ゾーン商業棟",
+  "address": "兵庫県宝塚市栄町一丁目150番1 外56筆",
+  "applicant": "阪急電鉄株式会社",
+  "how": "ocr"
+ },
+ "kohnanprohimejishikamaten": {
+  "article": "第5条第1項",
+  "date": "2026-07-31",
+  "store": "(仮称コーナンPRO 姫路飾磨店",
+  "address": "兵庫県姫路市飾磨区細江 110",
+  "applicant": "名 称 コーナン商事株式会社",
+  "how": "ocr"
+ },
+ "marketsquarenakayamadera": {
+  "form": "3",
+  "kind_guess": "廃止",
+  "article": "第6条第2項",
+  "date": "2026-04-28",
+  "how": "ocr"
+ },
+ "maxvalueyasuda": {
+  "form": "１",
+  "kind_guess": "",
+  "article": "第５条第１項",
+  "date": "2026-07-28",
+  "store": "(左称)マックスバリュ瘜田店  住居地域  駐車場 －  荷庫ばき施設③ 32㎡",
+  "address": "兵庫県加古川市尾上町瘜田480 ほか  (2) 駐輪場の位置及び収容台数  位  置 ２つ以上 54",
+  "area": "3,313",
+  "how": "embedded"
+ },
+ "soyoraono": {
+  "form": "1",
+  "kind_guess": "新設",
+  "article": "第5条第1項",
+  "date": "2026-07-31",
+  "store": "(仮称) そよら小野",
+  "address": "兵庫県小野市王子町宇太良右兵門池 868 番地",
+  "applicant": "イオシンリテール株式会社",
+  "how": "ocr"
+ },
+ "takaradushikaisoshikeikaku": {
+  "how": "embedded"
  }
 }

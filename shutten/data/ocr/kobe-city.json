@@ -90,5 +90,19 @@
  },
  "todoke1152": {
   "how": "embedded"
+ },
+ "todoke1134": {
+  "form": "2",
+  "kind_guess": "変更",
+  "article": "第6条第1項",
+  "date": "2026-03-31",
+  "store": "レバンテ垂水1番館 .        .   ]",
+  "address": "神戸市垂水区目向一丁目 4番1",
+  "content": "ーー",
+  "how": "ocr"
+ },
+ "todoke1141": {
+  "area": "617",
+  "how": "embedded"
  }
 }
