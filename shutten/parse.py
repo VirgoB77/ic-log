@@ -95,6 +95,11 @@ def to_iso(s):
     m = re.search(r"(\d{4})[/-](\d{1,2})[/-](\d{1,2})", s)
     if m:
         return f"{int(m.group(1)):04d}-{int(m.group(2)):02d}-{int(m.group(3)):02d}"
+    # 「R1.5.30」「H30.4.1」のように頭文字で略した和暦（大阪市のExcelにある）
+    m = re.search(r"\b([RHS])\s*(\d{1,2})[.．](\d{1,2})[.．](\d{1,2})", s)
+    if m:
+        base = {"R": 2018, "H": 1988, "S": 1925}[m.group(1)]
+        return f"{base + int(m.group(2)):04d}-{int(m.group(3)):02d}-{int(m.group(4)):02d}"
     return None
 
 
