@@ -43,7 +43,7 @@
       "pdf_max_mb": 12,
       "terms": "https://www.city.kobe.lg.jp/homepage/index.html",
       "terms_name": "ホームページのご利用案内",
-      "terms_summary": "ご利用案内の先の「利用規約・リンク・免責事項など」を確認中"
+      "terms_summary": "利用規約はPDF「神戸市ウェブサイト利用規約」にまとまっている。読み取り中"
     },
     {
       "id": "amagasaki-city",
@@ -77,7 +77,7 @@
       "name": "大阪市 大規模小売店舗立地法 手続き・届出",
       "area": "osaka",
       "url": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
-      "note": "Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。参照元ヘッダー、ページを先に開いてクッキーを持つ経路、どちらも404のまま（2026-09-12に確認）。名乗りを偽って取る手は使わない。運用は「利用者がブラウザで落として data/files/osaka-city/ に置く」。ページに新しいファイル名が出たら files-report に太字で合図を出す。毎日3本を取り直して、通るようになったら分かる。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している",
+      "note": "Excel 3本。サーバーがこの仕組みからの取得に404を返す（ブラウザからは落とせる）。参照元ヘッダー、ページを先に開いてクッキーを持つ経路、どちらも404のまま（2026-09-12に確認）。名乗りを偽って取る手は使わない。運用は「利用者がブラウザで落として data/files/osaka-city/ に置く」。ページに新しいファイル名が出たら files-report に太字で合図を出す。毎日3本を取り直して、通るようになったら分かる。届出一覧.xls は平成12年からの全届出1,421件・75列で、いちばん濃い。大阪市はこのページのデータを CC-BY 4.0 で提供すると明記している。オープンデータカタログ（resource.csv 2,609件）にも届出一覧は無かった（2026-09-12確認）",
       "enabled": true,
       "session": true,
       "terms": "https://www.city.osaka.lg.jp/keizaisenryaku/page/0000373985.html",
@@ -329,16 +329,18 @@
       "name": "（参考）大阪市オープンデータポータル（www側の入口）",
       "area": "ref",
       "url": "https://www.city.osaka.lg.jp/contents/wdu290/opendata/",
-      "note": "大阪市の届出ページの下部にある入口（www側）。開けた（2026-09-12）。JavaScript無しでも使えるよう「オープンデータ一覧ファイル（.csv）」= ./csv/resource.csv が置いてあり、全オープンデータのURL一覧らしい。id を osaka- で始めて files.py に拾わせ、この CSV を落として大店立地法の一覧が載っているか見る",
-      "enabled": true
+      "note": "大阪市オープンデータの入口（www側）。開けて、全データのURL一覧 resource.csv（2,609件）を落とした（2026-09-12）。大店立地法で引っかかるのは「環境面の協議件数」の統計4件だけで、届出一覧はオープンデータには無かった。止めた",
+      "enabled": false
     },
     {
       "id": "terms-kobe-city-rule",
       "name": "（参考）神戸市 利用規約・リンク・免責事項など",
       "area": "ref",
       "url": "https://www.city.kobe.lg.jp/a57337/homepage/rule.html",
-      "note": "「ホームページのご利用案内」から辿った本体。出典表記の書き方を読むために保存する（2026-09-12追加）",
-      "enabled": true
+      "note": "「ホームページのご利用案内」から辿った本体（2026-09-12に読んだ）。著作権の方針はPDF「神戸市ウェブサイト利用規約」に書いてあるので、そのPDFだけ落とす",
+      "enabled": true,
+      "pdf": true,
+      "pdf_labels": "利用規約"
     },
     {
       "id": "hyogo-opendata",
@@ -346,6 +348,14 @@
       "area": "ref",
       "url": "https://web.pref.hyogo.lg.jp/pref/cate3_661.html",
       "note": "兵庫県の著作権ページから辿ったオープンデータの入口。大店立地法の縦覧状況がオープンデータに含まれるか、利用規約（政府標準利用規約か）を見る（2026-09-12追加）",
+      "enabled": true
+    },
+    {
+      "id": "hyogo-opendata-terms",
+      "name": "（参考）兵庫県 関連サイトに掲載のオープンデータ（デジタル戦略課）",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/kk26/johoseisaku/opendata.html",
+      "note": "兵庫県オープンデータの入口から辿った本体。利用規約（政府標準利用規約かCC BYか）と、大店立地法の縦覧状況が含まれるかを見る（2026-09-12追加）",
       "enabled": true
     }
   ]
