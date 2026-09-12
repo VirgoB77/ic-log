@@ -277,6 +277,11 @@ def main():
                 continue
             except (urllib.error.HTTPError, urllib.error.URLError, OSError, TimeoutError) as e:
                 lines.append(f"  - 取れなかった {safe_name(url)} — {type(e).__name__}: {str(e)[:60]}")
+                if opener is not None:
+                    # 大阪市は機械からは取れないと分かっている（2026-09-12時点）。
+                    # ページに新しいファイル名が出たら、人がブラウザで落として置く合図にする
+                    lines.append(f"  - **新しいファイル名 {safe_name(url)} がページに出ています。"
+                                 f"ブラウザで落として data/files/{sid}/ に置いてください**")
                 failed += 1
                 streak += 1
                 if streak >= FAIL_STREAK:
