@@ -166,7 +166,7 @@ def cut_sections(text):
 
 # ---------------------------------------------------------------- 公告の文字 → 記録
 ARTICLE = re.compile(r"第\s*([0-9０-９]+)\s*条\s*(?:の\s*[0-9０-９]+\s*)?第\s*([0-9０-９]+)\s*項")
-DATE_LINE = re.compile(r"^\s*((?:平成|令和|昭和)\s*[0-9０-９元]+\s*年\s*[0-9０-９]+\s*月\s*[0-9０-９]+\s*日)\s*$")
+DATE_LINE = re.compile(r"^\s*((?:平成|令和|昭和)\s*[0-9０-９元]+\s*年\s*[0-9０-９]+\s*月\s*[0-9０-９]+\s*日)\s*(?:ほか|など|から.*)?\s*$")   # 「令和７年８月１日ほか」も日付の行
 ITEM = re.compile(r"^\s*([0-9０-９]{1,2})\s+(\S.*)$")
 
 
@@ -273,9 +273,8 @@ def parse_section(kind, lines, issue):
             if not t or re.match(r"^[アイウエ]\s", t) or re.search(r"変更[前後]", t) or re.match(r"^[(（]", t):
                 continue
             heads.append(re.sub(r"\s+", " ", t))
-            if len(heads) >= 3:
-                break
-        rec["content"] = "；".join(dict.fromkeys(heads))[:120]
+            break                                   # 事項名だけ。表の中身（住所・代表者の氏名）は取らない
+        rec["content"] = heads[0][:80] if heads else ""
     k, v = item(r"縦覧場所及び縦覧期間|縦覧場所")
     pm = re.search(r"(阪神南|阪神北|東播磨|北播磨|中播磨|西播磨|但馬|丹波|淡路)", "\n".join(v))
     if pm:
