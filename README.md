@@ -107,7 +107,7 @@ localStorage ではなく IndexedDB に入れている。
 **4か月で公開ページから落ちる**。毎日とっておけば、そのうち誰も持っていない記録になる。
 
 この仕組みは 2026-09-13 に [VirgoB77/ogataten-nippo](https://github.com/VirgoB77/ogataten-nippo) へ
-履歴ごと移した。公開ページは https://virgob77.github.io/ogataten-nippo/ 。
+履歴ごと移した。公開ページは https://ogataten-nippo.com/ 。
 `shutten/` に残っているのは、古い URL を新しい場所へ送る案内ページだけ。
 
 ## 3つの保存場所は別
