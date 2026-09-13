@@ -81,7 +81,7 @@ CSS = """
 @media (prefers-color-scheme:dark){:root{--bg:#141517;--card:#1d1f23;--ink:#e8e6e1;--sub:#a1a7b0;--rule:#2e3138;--key:#7aa2ff;--soft:#24272d}}
 *{box-sizing:border-box}html{color-scheme:light dark}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,"Hiragino Sans","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif;padding:0 16px 48px}
-a{color:var(--key);text-decoration:none}a:hover{text-decoration:underline}
+a{color:var(--key);text-decoration:none;overflow-wrap:anywhere}a:hover{text-decoration:underline}
 .wrap{max-width:880px;margin:0 auto}
 header.top{padding:20px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:20px}
 header.top .name{font-weight:700;font-size:15px;letter-spacing:.02em}
@@ -388,6 +388,59 @@ def contact_page(today):
                 desc=f"{SITE_NAME}に載っている届出の訂正・削除のご依頼について。", canonical="contact.html")
 
 
+KOHO = os.path.join(HERE, "data", "koho", "hyogo-notices.json")
+KOHO_KINDS = ["新設", "変更", "廃止", "市町の意見", "その他"]
+
+
+def koho_page(notices, src_meta, today):
+    """兵庫県公報の目録から数えた、大店立地法の公告の件数（2007年〜）。"""
+    rel = ""
+    by_year = defaultdict(Counter)
+    by_month = defaultdict(Counter)
+    for n in notices:
+        if not n.get("date"):
+            continue
+        k = n["kind"] if n["kind"] in KOHO_KINDS else "その他"
+        by_year[n["date"][:4]][k] += 1
+        by_month[n["date"][:7]][k] += 1
+
+    def row(label, c, href=None):
+        cells = "".join(f'<td class="n">{c.get(k, 0) or "–"}</td>' for k in KOHO_KINDS)
+        total = sum(c.get(k, 0) for k in ("新設", "変更", "廃止"))
+        lab = f'<a href="{href}">{esc(label)}</a>' if href else esc(label)
+        return f"<tr><td>{lab}</td>{cells}<td class=\"n\"><b>{total}</b></td></tr>"
+
+    head = "<tr><th></th>" + "".join(f"<th>{esc(k)}</th>" for k in KOHO_KINDS) + "<th>届出の合計</th></tr>"
+    years = "".join(row(f"{y}年", by_year[y]) for y in sorted(by_year, reverse=True))
+    months = "".join(row(f"{ym[:4]}年{int(ym[5:])}月", by_month[ym]) for ym in sorted(by_month, reverse=True)[:24])
+    total = sum(sum(c.get(k, 0) for k in ("新設", "変更", "廃止")) for c in by_year.values())
+    first = min(n["date"] for n in notices if n.get("date"))
+    last = max(n["date"] for n in notices if n.get("date"))
+    m = src_meta.get("hyogo-koho-mokuroku", {})
+    body = f"""
+<p class="lead"><a href="{rel}index.html">トップ</a> › 兵庫県の推移</p>
+<h1>兵庫県の大型店の届出、2007年からの推移</h1>
+<p>兵庫県が出している<b>県公報の目録</b>には、大規模小売店舗立地法にもとづく公告が 1 件 1 行で載っています。
+公告の件名には店舗名がありませんが、「新設」「変更」「廃止」の別と公告日（縦覧が始まる日）が分かるので、
+兵庫県（神戸市を除く）で年にどれだけ届出が出ているかを {first[:4]} 年から数えられます。</p>
+<div class="stat"><div><b>{total:,}</b><span>届出の公告（{first[:4]}〜{last[:4]}年）</span></div>
+<div><b>{sum(c.get("新設", 0) for c in by_year.values()):,}</b><span>うち新設</span></div>
+<div><b>{sum(c.get("廃止", 0) for c in by_year.values()):,}</b><span>うち廃止</span></div></div>
+<p class="note">「市町の意見」は、届出に対して市や町が出した意見の公告で、届出そのものではないので合計に入れていません。
+神戸市の届出は神戸市が別に公告するため、ここには含まれません。</p>
+<h2>年ごと</h2>
+<div style="overflow-x:auto"><table>{head}{years}</table></div>
+<h2>最近 24 か月</h2>
+<div style="overflow-x:auto"><table>{head}{months}</table></div>
+<h2>この数字の元</h2>
+<p style="font-size:14px">出典：「{esc(m.get("name", "兵庫県公報 検索用目録"))}」（<a href="{esc(m.get("url", ""))}">{esc(m.get("url", ""))}</a>、{esc(today)}取得）を加工して作成。
+目録の「公告」シートから件名に「大規模小売」を含む行を数えました。公告の本文（店舗名・所在地など）は公報の本体にあり、順に読み取っていく予定です。</p>
+"""
+    return page(f"兵庫県の大型店の届出、2007年からの推移｜{SITE_NAME}", body, rel,
+                desc=f"兵庫県公報の目録から数えた、大規模小売店舗立地法の新設・変更・廃止の届出の件数。{first[:4]}年から。",
+                canonical="hyogo-koho.html")
+
+
 def index_page(all_recs, today):
     rel = ""
     future = sorted([r for r in all_recs if (r.get("event_on") or r.get("planned_on") or "") > today],
@@ -422,6 +475,7 @@ def index_page(all_recs, today):
 
 <h2>市区町村から</h2>
 <div class="chips">{area_chips}</div>
+<p style="font-size:14px">兵庫県は届出のページに過去分が無いため、<a href="hyogo-koho.html">県公報の目録から数えた 2007 年からの推移</a>を別に載せています。</p>
 
 <h2>種類から</h2>
 <div class="chips">{kind_chips}</div>
@@ -486,6 +540,13 @@ def main():
     with open(os.path.join(HERE, "contact.html"), "w", encoding="utf-8") as f:
         f.write(contact_page(today))
     urls += ["about.html", "contact.html"]
+    if os.path.exists(KOHO):
+        with open(KOHO, encoding="utf-8") as f:
+            notices = json.load(f)
+        if notices:
+            with open(os.path.join(HERE, "hyogo-koho.html"), "w", encoding="utf-8") as f:
+                f.write(koho_page(notices, src_meta, today))
+            urls.append("hyogo-koho.html")
 
     idx = [{"k": r["key"], "s": r["store"], "a": r["area"], "d": r["notified_on"], "t": r["kind"]}
            for r in sorted(recs, key=lambda r: r["notified_on"], reverse=True)]
