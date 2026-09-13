@@ -467,7 +467,7 @@
       "url": "https://web.pref.hyogo.lg.jp/kk32/pa13_000000105.html",
       "files": true,
       "enabled": true,
-      "note": "兵庫県公報の目録Excel（2007年1月〜）。大店立地法の公告（第5条第3項など）が目録に載っていれば、2007年からの届出の一覧を組める。まず Excel を落として中身を見る（2026-09-13追加）"
+      "note": "兵庫県公報の目録 Excel（2007年1月〜、年1冊、20冊）。「公告」シートに大店立地法の公告が 2007〜2025 年で 2,032 件（変更 1,262 / 新設 326 / 廃止 48 / 市町の意見 377 ほか）。件名に店舗名は無いが、種類・公告日・担当・公報番号が分かる。koho.py が数える。2015年以降は発行日が Excel の通し番号（2026-09-13に読んだ）"
     },
     {
       "id": "hyogo-bukai",
@@ -499,8 +499,8 @@
       "pdf": true,
       "pdf_labels": "届出|一覧",
       "pdf_max_mb": 12,
-      "enabled": true,
-      "note": "令和5年度末で公表終了と書いてあるが、令和5年度 新設届出一覧 PDF（ritti_todogai_5_R5fy.pdf）などが残っている。全国分で兵庫県も入る。政府標準利用規約のはず。まずページと PDF を落として形を見る（2026-09-13追加）"
+      "enabled": false,
+      "note": "robots.txt で機械の取得が拒否されているので取りに行かない（2026-09-13確認）。内容は政府標準利用規約なので、利用者がブラウザで落とした PDF（ritti_todogai_*.pdf）を data/files/meti/ に置いてもらい、それを読む"
     },
     {
       "id": "jcsc-daitenhou",
@@ -509,6 +509,49 @@
       "url": "https://www.jcsc.or.jp/sc_data/sc_open/daitenhou",
       "enabled": true,
       "note": "経産省が経済産業局ごとにまとめた月次の新設届出を転載しているページ。2006年7月分からの月別ページがあるらしく、経産省の公表終了後も更新が続いている。民間団体なので利用規約を先に読む。まずページの形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "hyogo-koho-index",
+      "name": "（参考）兵庫県公報 月別一覧",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/kk32/pa13_000000081.html",
+      "enabled": true,
+      "note": "公報本体（PDF）への入口。目録の公報番号から本体をたどる URL の形を知るために保存する（2026-09-13追加）"
+    },
+    {
+      "id": "hyogo-koho-month-r5",
+      "name": "（参考）兵庫県公報 令和5年6月の号一覧",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/kk32/koho/202306.html",
+      "enabled": true,
+      "note": "1か月分のページの形と、号ごとの PDF の URL の形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "hyogo-koho-month-h22",
+      "name": "（参考）兵庫県公報 平成22年12月の号一覧",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/kk32/pa13_000000162.html",
+      "enabled": true,
+      "note": "古い年のページの形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "jcsc-daitenhou-month",
+      "name": "（参考）日本SC協会 大店立地法新設届出情報 2026年7月",
+      "area": "ref",
+      "url": "https://www.jcsc.or.jp/pt_location/p_20260821_114467",
+      "pdf": true,
+      "pdf_labels": "近畿|届出|一覧|全国",
+      "pdf_max_mb": 5,
+      "enabled": true,
+      "note": "月別ページの形（表か PDF か、経済産業局ごとか）と、利用規約の書き方を見る。転載してよいかは規約を読んでから（2026-09-13追加）"
+    },
+    {
+      "id": "jcsc-daitenhou-old",
+      "name": "（参考）日本SC協会 大店立地法新設届出情報 2014年以前",
+      "area": "ref",
+      "url": "https://www.jcsc.or.jp/public_policy/location/index.html",
+      "enabled": true,
+      "note": "2006年7月分からの月別ページの入口らしい。形を見る（2026-09-13追加）"
     }
   ]
 }

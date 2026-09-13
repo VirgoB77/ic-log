@@ -55,6 +55,9 @@ jobs:
       - name: Excelから届出を取り出す
         run: python3 shutten/parse_excel.py
 
+      - name: 兵庫県公報の目録から公告を数える
+        run: python3 shutten/koho.py || echo "公報の目録が読めなかった。今日は数えずに進む"
+
       # 日ごとの取り出し結果を1件1行にまとめ、消えた届出とこれからの予定を出す
       - name: まとめる
         run: python3 shutten/merge.py
@@ -67,7 +70,7 @@ jobs:
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add shutten/data shutten/index.html shutten/about.html shutten/contact.html shutten/a shutten/k shutten/s shutten/search.json shutten/sitemap.xml shutten/robots.txt
+          git add shutten/data shutten/index.html shutten/about.html shutten/contact.html shutten/hyogo-koho.html shutten/a shutten/k shutten/s shutten/search.json shutten/sitemap.xml shutten/robots.txt
           if git diff --cached --quiet; then
             echo "変わりなし。今日は何も起きていない"
             exit 0
