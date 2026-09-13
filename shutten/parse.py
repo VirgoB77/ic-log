@@ -125,7 +125,14 @@ def span_of(s):
         return None, None
     parts = re.split(r"～|~|から", s, maxsplit=1)
     a = to_iso(parts[0])
-    b = to_iso(parts[1]) if len(parts) > 1 else None
+    b = None
+    if len(parts) > 1:
+        tail = parts[1]
+        # 兵庫県2024年の表は「令和6年5月28日～ 同年9月30日」と書く。同年は前の年を借りる
+        m = re.match(r"\s*同年\s*(.+)", tail)
+        if m and a:
+            tail = f"{a[:4]}年{m.group(1)}"
+        b = to_iso(tail)
     return a, b
 
 
@@ -200,8 +207,21 @@ ARTICLE_BY_WORD = [
     (r"既存店|附則", "附則第5条第1項"),
     (r"新設|^大規模小売店舗届出書$", "第5条第1項"),   # 「大規模小売店舗届出書」は新設のときの様式名
     (r"配置|運営方法|6条2項", "第6条第2項"),
-    (r"名称|代表者|小売業者|6条1項|変更", "第6条第1項"),
+    (r"名称|代表者|小売業者|6条1項", "第6条第1項"),
+    # 「変更」だけでは第6条第1項・第2項・附則・第8条第7項のどれか分からないので、条文は空のまま
+    # 種類（変更）だけを KIND_BY_WORD で拾う
 ]
+
+# 条文が分からなくても、言葉から届出の種類だけは分かる
+KIND_BY_WORD = [(r"中規模", "中規模"), (r"承継", "承継"), (r"廃止", "廃止"), (r"新設", "新設"), (r"変更", "変更")]
+
+
+def kind_of_words(*texts):
+    for t in texts:
+        for pat, name in KIND_BY_WORD:
+            if t and re.search(pat, t):
+                return name
+    return ""
 
 # 堺市はページの場所（URL）で種類が分かる
 SLUG_ARTICLE = [
@@ -249,10 +269,10 @@ def norm_head(c):
 # 列名のゆれ → こちらの項目名。上から順に、最初に当たったものを使う。
 # 兵庫県・神戸市・堺市・岸和田市の見出しを全部ここで受ける。
 HTML_COLS = [
-    ("kind_col",    r"^(区分|届出の種類|届出書類名|届出区分)$"),
+    ("kind_col",    r"^(区分|届出の種類|届出書類名|届出区分|届出種別)$"),   # 届出種別: 兵庫県2024年の表
     ("date",        r"^(届出年月日|届出日|受理日)$"),
     ("store",       r"^(店舗名称|店舗の名称|届出の名称|大規模小売店舗の名称|建物名称|名称)"),
-    ("address",     r"^(店舗の所在地|所在地)$"),
+    ("address",     r"^(店舗の所在地|所在地|所在)$"),                 # 所在: 兵庫県2024年の表（市名だけ）
     ("operator",    r"^(設置者|設置する者|建物設置者|設置者名|旧設置者)$"),
     ("new_operator", r"^新設置者$"),
     ("event_on",    r"^(新設日|変更日|廃止日|承継日|開店日|新設する日)$"),
@@ -319,7 +339,10 @@ def extract_generic(page, base_url, how, hint=""):
                 rows = [([l for l in labels], []), ([c[1] for c, _ in rows], links)]
 
         if how == "firstrow" and len(rows[0][0]) <= 2:
-            article = article_in(rows[0][0][0]) or rows[0][0][0]
+            label = rows[0][0][0]
+            article = article_in(label)
+            if not article:
+                heading = f"{heading} {label}"        # 種類の言葉（変更など）は見出し側で拾う
             rows = rows[1:]
         else:
             article = article_in(heading, allow_words=False)
@@ -359,7 +382,7 @@ def extract_generic(page, base_url, how, hint=""):
             a, b = span_of(cell("span"))
             rec = {
                 "article": article,
-                "kind": means_of(article) if article else "不明",
+                "kind": means_of(article) if article else (kind_of_words(cell("kind_col"), heading) or "不明"),
                 "notified_on": d,
                 "notified_raw": cell("date"),
                 "store": store,
@@ -413,7 +436,7 @@ def extract_blocks(page, base_url):
                  for h in re.findall(r'href=["\']([^"\']+\.pdf)["\']', m.group(2), re.I)]
         found.append({
             "article": article,
-            "kind": means_of(article) if article else "不明",
+            "kind": means_of(article) if article else (kind_of_words(kind_text) or "不明"),
             "notified_on": d,
             "notified_raw": field("届出日"),
             "store": store,
