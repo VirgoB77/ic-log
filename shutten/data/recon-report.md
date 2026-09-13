@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-13）
 
-**まとめ: Excel 2件 / PDF 19件 / わからない 41件 / 拒否 1件 / 表 63件**
+**まとめ: Excel 2件 / PDF 21件 / わからない 41件 / 失敗 3件 / 表 51件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -29,7 +29,7 @@
 - URL: https://web.pref.hyogo.lg.jp/ks21/r03_daitennrittihou.html
 - メモ: 手引と様式のページ。過去分の一覧が別にぶら下がっていないか確かめる用
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 23,276 バイト
+- HTTP 200 / utf-8 / 23,277 バイト
 - **判定: Excel**
 - 表 0 個 / PDFリンク 8 本 / Excel 1 本
   - PDF: 手続の流れ（PDF：91KB） → https://web.pref.hyogo.lg.jp/ks21/documents/tetuduki011121.pdf
@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,194 バイト
+- HTTP 200 / UTF-8 / 553,226 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -674,7 +674,7 @@
 ### （参考）兵庫県公報 検索用目録（Excel）
 
 - URL: https://web.pref.hyogo.lg.jp/kk32/pa13_000000105.html
-- メモ: 兵庫県公報の目録Excel（2007年1月〜）。大店立地法の公告（第5条第3項など）が目録に載っていれば、2007年からの届出の一覧を組める。まず Excel を落として中身を見る（2026-09-13追加）
+- メモ: 兵庫県公報の目録 Excel（2007年1月〜、年1冊、20冊）。「公告」シートに大店立地法の公告が 2007〜2025 年で 2,032 件（変更 1,262 / 新設 326 / 廃止 48 / 市町の意見 377 ほか）。件名に店舗名は無いが、種類・公告日・担当・公報番号が分かる。koho.py が数える。2015年以降は発行日が Excel の通し番号（2026-09-13に読んだ）
 - robots.txt: 許可
 - HTTP 200 / utf-8 / 23,779 バイト
 - **判定: 表**
@@ -726,29 +726,66 @@
 ### （参考）経済産業省 大店立地法の届出状況について
 
 - URL: https://www.meti.go.jp/policy/economy/distribution/daikibo/todokede.html
-- メモ: 令和5年度末で公表終了と書いてあるが、令和5年度 新設届出一覧 PDF（ritti_todogai_5_R5fy.pdf）などが残っている。全国分で兵庫県も入る。政府標準利用規約のはず。まずページと PDF を落として形を見る（2026-09-13追加）
-- **結果: 取りに行かなかった（robots.txt で拒否されている）**
+- メモ: robots.txt で機械の取得が拒否されているので取りに行かない（2026-09-13確認）。内容は政府標準利用規約なので、利用者がブラウザで落とした PDF（ritti_todogai_*.pdf）を data/files/meti/ に置いてもらい、それを読む
+- **結果: 取りに行かなかった（robots.txt で機械の取得が拒否されているので取りに行かない（2026-09-13確認）。内容は政府標準利用規約なので、利用者がブラウザで落とした PDF（ritti_todogai_*.pdf）を data/files/meti/ に置いてもらい、それを読む）**
 
 ### （参考）日本ショッピングセンター協会 大店立地法新設届出情報
 
 - URL: https://www.jcsc.or.jp/sc_data/sc_open/daitenhou
 - メモ: 経産省が経済産業局ごとにまとめた月次の新設届出を転載しているページ。2006年7月分からの月別ページがあるらしく、経産省の公表終了後も更新が続いている。民間団体なので利用規約を先に読む。まずページの形を見る（2026-09-13追加）
+- **結果: 取得できなかった — URLError: <urlopen error timed out>**
+
+### （参考）兵庫県公報 月別一覧
+
+- URL: https://web.pref.hyogo.lg.jp/kk32/pa13_000000081.html
+- メモ: 公報本体（PDF）への入口。目録の公報番号から本体をたどる URL の形を知るために保存する（2026-09-13追加）
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 37,850 バイト
+- HTTP 200 / utf-8 / 25,480 バイト
 - **判定: わからない**
-- 表 0 個 / PDFリンク 1 本 / Excel 0 本
-  - PDF: 役員名簿 → https://www.jcsc.or.jp/list/offcer_list.pdf
-- 出てきた言葉: 新設 / 届出
-- **この先を辿った: 12本** 
-  -  2026/08/21 更新 大店立地法新設届出情報 2026年7月 … **表** 18行×7列 PDF1本
-  -  2026/07/21 更新 大店立地法新設届出情報 2026年6月 … **表** 45行×7列 PDF1本
-  -  2026/06/22 更新 大店立地法新設届出情報 2026年5月 … **表** 48行×7列 PDF1本
-  -  2026/05/22 更新 大店立地法新設届出情報 2026年4月 … **表** 50行×7列 PDF1本
-  -  2026/04/24 更新 大店立地法新設届出情報 2026年3月 … **表** 62行×7列 PDF1本
-  -  2026/03/30 更新 大店立地法新設届出情報 2026年2月 … **表** 52行×7列 PDF1本
-  -  2026/03/02 更新 大店立地法新設届出情報 2026年1月 … **表** 37行×7列 PDF1本
-  -  2026/01/19 更新 大店立地法新設届出情報 2025年12月 … **表** 54行×7列 PDF1本
-  -  2025/12/22 更新 大店立地法新設届出情報 2025年11月 … **表** 38行×7列 PDF1本
-  -  2025/11/21 更新 大店立地法新設届出情報 2025年10月 … **表** 45行×7列 PDF1本
-  -  2025/10/27 更新 大店立地法新設届出情報 2025年9月 … **表** 55行×7列 PDF1本
-  -  2025/09/29 更新 大店立地法新設届出情報 2025年8月 … **表** 41行×7列 PDF1本
+- 表 0 個 / PDFリンク 0 本 / Excel 0 本
+- 出てきた言葉: 変更
+- 年度らしき表記: 令和2年 / 令和3年 / 令和4年 / 令和5年 / 令和6年 / 令和7年 / 令和8年 / 平成18年
+
+### （参考）兵庫県公報 令和5年6月の号一覧
+
+- URL: https://web.pref.hyogo.lg.jp/kk32/koho/202306.html
+- メモ: 1か月分のページの形と、号ごとの PDF の URL の形を見る（2026-09-13追加）
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 17,144 バイト
+- **判定: PDF**
+- 表 0 個 / PDFリンク 21 本 / Excel 0 本
+  - PDF: 兵庫県公報目録(令和5年6月)（PDF：164KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/202306m.pdf
+  - PDF: 6月1日号外（PDF：89KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g1.pdf
+  - PDF: 6月1日第2号外（PDF：130KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g2.pdf
+  - PDF: 6月1日第3号外（PDF：73KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g3.pdf
+  - PDF: 6月2日第418号（PDF：280KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230602t.pdf
+- 出てきた言葉: 変更
+- 年度らしき表記: 令和5年
+
+### （参考）兵庫県公報 平成22年12月の号一覧
+
+- URL: https://web.pref.hyogo.lg.jp/kk32/pa13_000000162.html
+- メモ: 古い年のページの形を見る（2026-09-13追加）
+- robots.txt: 許可
+- HTTP 200 / utf-8 / 17,799 バイト
+- **判定: PDF**
+- 表 0 個 / PDFリンク 28 本 / Excel 0 本
+  - PDF: 兵庫県公報目録（平成22年12月）（PDF：199KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000170919.pdf
+  - PDF: 12月1日　号外（PDF：131KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000167546.pdf
+  - PDF: 12月2日　号外（PDF：88KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000168434.pdf
+  - PDF: 12月3日　第2241号（PDF：312KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000167874.pdf
+  - PDF: 12月3日　号外（PDF：94KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000168324.pdf
+- 出てきた言葉: 変更
+- 年度らしき表記: 平成22年
+
+### （参考）日本SC協会 大店立地法新設届出情報 2026年7月
+
+- URL: https://www.jcsc.or.jp/pt_location/p_20260821_114467
+- メモ: 月別ページの形（表か PDF か、経済産業局ごとか）と、利用規約の書き方を見る。転載してよいかは規約を読んでから（2026-09-13追加）
+- **結果: 取得できなかった — URLError: <urlopen error timed out>**
+
+### （参考）日本SC協会 大店立地法新設届出情報 2014年以前
+
+- URL: https://www.jcsc.or.jp/public_policy/location/index.html
+- メモ: 2006年7月分からの月別ページの入口らしい。形を見る（2026-09-13追加）
+- **結果: 取得できなかった — URLError: <urlopen error timed out>**
