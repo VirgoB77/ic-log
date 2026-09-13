@@ -166,14 +166,14 @@ def cut_sections(text):
 
 # ---------------------------------------------------------------- 公告の文字 → 記録
 ARTICLE = re.compile(r"第\s*([0-9０-９]+)\s*条\s*(?:の\s*[0-9０-９]+\s*)?第\s*([0-9０-９]+)\s*項")
-DATE_LINE = re.compile(r"^\s*((?:平成|令和|昭和)\s*[0-9０-９元]+\s*年\s*[0-9０-９]+\s*月\s*[0-9０-９]+\s*日)\s*$")
+DATE_LINE = re.compile(r"^\s*((?:平成|令和|昭和)\s*[0-9０-９元]+\s*年\s*[0-9０-９]+\s*月\s*[0-9０-９]+\s*日)\s*(?:ほか|など|から.*)?\s*$")   # 「令和７年８月１日ほか」も日付の行
 ITEM = re.compile(r"^\s*([0-9０-９]{1,2})\s+(\S.*)$")
 
 
 def value_after(lines, i, label):
     """「名称 ダイソーひめじ岡田店」形式なら同じ行から、無ければ次の空でない行から値を取る。"""
     ln = lines[i]
-    m = re.search(rf"{label}\s+(\S.*)$", ln)
+    m = re.search(rf"{label}\s+(\S.*)$", ln)   # label は「名\s*称」のような空白ゆれ込みの正規表現
     if m:
         return m.group(1).strip()
     for j in range(i + 1, min(i + 4, len(lines))):
@@ -198,7 +198,7 @@ def parse_section(kind, lines, issue):
     for ln in lines:
         m = ITEM.match(ln)
         if m and int(z2h(m.group(1))) <= 15 and not re.match(r"^\s*[0-9０-９]+\s*[,，]", ln):
-            cur = z2h(m.group(2))
+            cur = re.sub(r"\s+", "", z2h(m.group(2)))
             items[cur] = []
         elif cur is not None:
             items[cur].append(ln)
@@ -214,19 +214,20 @@ def parse_section(kind, lines, issue):
     # 名称・所在地
     k, v = item(r"名称及び所在地")
     for i, ln in enumerate(v):
-        if re.search(r"^\s*名称", ln) and "store" not in rec:
-            rec["store"] = value_after(v, i, "名称")
-        elif re.search(r"^\s*所在地", ln) and "address" not in rec:
-            rec["address"] = re.sub(r"\s+", "", value_after(v, i, "所在地"))
+        if re.search(r"^\s*名\s*称", ln) and "store" not in rec:
+            rec["store"] = value_after(v, i, r"名\s*称")
+        elif re.search(r"^\s*所\s*在\s*地", ln) and "address" not in rec:
+            rec["address"] = re.sub(r"\s+", "", value_after(v, i, r"所\s*在\s*地"))
     # 設置者（法人名だけ。住所・代表者名は取らない）
     k, v = item(r"設置(している|する)者")
     for i, ln in enumerate(v):
-        if re.match(r"^\s*名称\s+\S", ln) and not re.search(r"名称\s+住所|代表者", ln):
-            rec["operator"] = first_column(re.sub(r"^\s*名称\s+", "", ln))
+        sq = squash(ln)
+        if re.match(r"^名称\S", sq) and not re.match(r"^名称(住所|代表者)", sq):
+            rec["operator"] = first_column(re.sub(r"^\s*名\s*称\s+", "", ln))
             break
-        if re.match(r"^\s*名称\s*$", ln) or re.search(r"名称\s+住所|名称\s+代表者", ln):
+        if sq == "名称" or re.match(r"^名称(住所|代表者)", sq):
             for ln2 in v[i + 1:i + 4]:
-                if ln2.strip() and not re.search(r"^\s*(住所|代表者)", ln2):
+                if ln2.strip() and not re.match(r"^(住所|代表者)", squash(ln2)):
                     rec["operator"] = first_column(ln2)
                     break
             break
@@ -234,14 +235,15 @@ def parse_section(kind, lines, issue):
     k, v = item(r"小売業を行う者")
     names = []
     for i, ln in enumerate(v):
-        if re.match(r"^\s*名称\s+\S", ln) and not re.search(r"名称\s+(住所|代表者)", ln):
-            names.append(first_column(re.sub(r"^\s*名称\s+", "", ln)))
-        elif re.search(r"名称\s+(代表者|住所)", ln) or re.match(r"^\s*名称\s*$", ln):
+        sq = squash(ln)
+        if re.match(r"^名称\S", sq) and not re.match(r"^名称(住所|代表者)", sq):
+            names.append(first_column(re.sub(r"^\s*名\s*称\s+", "", ln)))
+        elif re.match(r"^名称(代表者|住所)", sq) or sq == "名称":
             for ln2 in v[i + 1:]:
-                s = ln2.strip()
-                if not s or re.match(r"^(住所|代表者)", s):
+                s2 = squash(ln2)
+                if not s2 or re.match(r"^(住所|代表者)", s2):
                     continue
-                if re.match(r"^[0-9０-９]", s):
+                if re.match(r"^[0-9]", s2):
                     break
                 names.append(first_column(ln2))
             break
@@ -265,15 +267,18 @@ def parse_section(kind, lines, issue):
             break
     if kind == "変更":
         k, v = item(r"変更事項")
-        head = next((ln.strip() for ln in v if ln.strip() and not re.match(r"^\s*[(（]", ln)), "")
-        rec["content"] = re.sub(r"\s+", " ", head)[:80]
-    k, v = item(r"縦覧場所及び縦覧期間")
-    for ln in v:
-        if "県民" in ln or "土木事務所" in ln:
-            pm = re.search(r"(阪神南|阪神北|東播磨|北播磨|中播磨|西播磨|但馬|丹波|淡路)", ln)
-            if pm:
-                rec["region"] = pm.group(1)
-            break
+        heads = []
+        for ln in v:
+            t = re.sub(r"^\s*[(（][0-9０-９]+[)）]\s*", "", ln).strip()    # 「(1) 変更事項名」の番号を外す
+            if not t or re.match(r"^[アイウエ]\s", t) or re.search(r"変更[前後]", t) or re.match(r"^[(（]", t):
+                continue
+            heads.append(re.sub(r"\s+", " ", t))
+            break                                   # 事項名だけ。表の中身（住所・代表者の氏名）は取らない
+        rec["content"] = heads[0][:80] if heads else ""
+    k, v = item(r"縦覧場所及び縦覧期間|縦覧場所")
+    pm = re.search(r"(阪神南|阪神北|東播磨|北播磨|中播磨|西播磨|但馬|丹波|淡路)", "\n".join(v))
+    if pm:
+        rec["region"] = pm.group(1)
     rec["review_from"] = issue["date"]
     if not rec.get("notified_on") or not rec.get("store"):
         return None
