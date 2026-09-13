@@ -104,16 +104,9 @@ header .n{font-family:var(--num);font-size:13px;font-weight:600;letter-spacing:.
   font:inherit;font-size:15px;color:var(--ink);border-radius:10px;cursor:pointer;text-align:left}
 .sortmenu button[aria-pressed="true"]{color:var(--accT);font-weight:700}
 .sortmenu button:focus-visible{outline:2px solid var(--acc)}
-/* 縦長の名刺は切らずに全体を入れ、うしろに同じ写真をぼかして敷く（黒い帯を出さない） */
+/* 縦長の名刺は切らずに全体を入れる。空いたところは画面の地の色のまま（枠も影も出さない） */
 img.v{object-fit:contain !important}
-.vbg{position:relative;background-size:cover;background-position:center;background-repeat:no-repeat}
-.vbg::before{content:"";position:absolute;inset:-14%;background:inherit;background-size:cover;background-position:center;
-  filter:blur(18px) saturate(.45) brightness(.3);z-index:0}
-/* 名刺のまわりを少し落として、白い名刺が浮いて見えるようにする */
-.vbg::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:radial-gradient(120% 90% at 50% 50%,rgba(0,0,0,0) 40%,rgba(0,0,0,.35) 100%);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-.vbg>img{position:relative;z-index:1}
+.vbg{background:transparent !important;border-color:transparent !important;box-shadow:none !important}
 .viewsw{display:flex;background:var(--s2);border:1px solid var(--rule);border-radius:999px;padding:3px;gap:2px;flex:none}
 .viewsw button{appearance:none;border:0;background:transparent;color:var(--mute);font:inherit;font-size:13px;line-height:1;
   font-weight:500;padding:13px 16px;border-radius:999px;cursor:pointer}
@@ -1349,7 +1342,6 @@ function fitV(el){
     el.classList.toggle('v', v);
     if (!box || box.nodeType !== 1) return;
     box.classList.toggle('vbg', v);
-    box.style.backgroundImage = v ? 'url("' + el.src + '")' : '';
   };
   el.addEventListener('load', mark);
   if (el.complete && el.naturalWidth) mark();
