@@ -52,6 +52,7 @@ svg{display:block;flex:none}
 .sun.big{width:104px;height:104px;box-shadow:0 0 0 8px var(--wash),0 22px 50px -12px var(--glow),0 0 80px -8px var(--glow)}
 .sun.md{width:62px;height:62px;box-shadow:0 0 0 5px var(--wash),0 14px 30px -10px var(--glow),0 0 40px -6px var(--glow)}
 .sun.sm{width:60px;height:60px;box-shadow:0 0 0 5px var(--wash),0 14px 30px -10px var(--glow)}
+.sun.xs{width:48px;height:48px;box-shadow:0 0 0 4px var(--wash),0 10px 24px -8px var(--glow)}
 .sun:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
 .sun.hit{animation:fxSun .4s cubic-bezier(.2,.7,.2,1)}
 .planet{appearance:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--rule);background:var(--s);color:var(--ink2);
@@ -243,11 +244,12 @@ details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
 .cam .box{position:absolute;left:10%;width:80%;aspect-ratio:91/55;top:50%;transform:translateY(-50%);visibility:hidden;pointer-events:none}
 /* 中央の丸。名刺を見つけると光って、ピコン、ピコンと輪が広がる */
 .cam .ping{position:absolute;left:50%;top:50%;width:min(62vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
-  border:2px solid rgba(255,255,255,.3);pointer-events:none;transition:border-color .25s,box-shadow .25s}
+  border:2px solid rgba(255,255,255,.3);pointer-events:none;
+  transition:left .2s ease-out,top .2s ease-out,width .2s ease-out,border-color .25s,box-shadow .25s}
 .cam .ping i{position:absolute;inset:-2px;border-radius:50%;border:2px solid #c9f24a;opacity:0}
 .cam.found .ping{border-color:#c9f24a;box-shadow:0 0 28px rgba(201,242,74,.35),inset 0 0 28px rgba(201,242,74,.12)}
-.cam.found .ping i{animation:ping 1.4s ease-out infinite}
-.cam.found .ping i+i{animation-delay:.7s}
+.cam.found .ping i{animation:ping 2.4s ease-out infinite}
+.cam.found .ping i+i{animation-delay:1.2s}
 @keyframes ping{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.3);opacity:0}}
 @media (prefers-reduced-motion:reduce){ .cam.found .ping i{animation:none} }
 .confirm-pic{margin-top:14px;border-radius:10px;overflow:hidden;background:#000;box-shadow:0 1px 2px rgba(0,0,0,.25),0 8px 24px rgba(0,0,0,.3)}
@@ -1847,11 +1849,12 @@ function openConfirm(){
     '<div class="confirm-pic"><img id="cf-img" alt="切り取った名刺"></div>' +
     (pendCropped ? '' : '<p class="reading">名刺の枠を見つけられませんでした。四隅を直すと読みやすくなります。</p>') +
     '</div>' +
-    '<div class="pfoot"><button class="planet lg" id="cf-back" aria-label="' + (pendFromCam ? '撮り直す' : 'やめる') + '">' + (pendFromCam ? cam20 : IC.x) + '</button>' +
-    '<div class="row"><button class="planet lg" id="cf-rot" aria-label="回す">' + IC.rotate + '</button>' +
-    '<button class="planet lg" id="cf-crop" aria-label="四隅を直す">' + IC.crop + '</button></div>' +
-    '<div class="sunbox"><div class="orbit">' + orbitHtml('save') + '</div>' +
-    '<button class="sun md" id="cf-ok" aria-label="読み取る">' + IC.check + '</button></div></div>';
+    '<div class="pfoot"><div class="acts">' +
+    '<button class="act" id="cf-back" aria-label="' + (pendFromCam ? '撮り直す' : 'やめる') + '"><span class="planet lg">' + (pendFromCam ? cam20 : IC.x) + '</span><small>' + (pendFromCam ? '撮り直す' : 'やめる') + '</small></button>' +
+    '<button class="act" id="cf-rot" aria-label="回す"><span class="planet lg">' + IC.rotate + '</span><small>回す</small></button>' +
+    '<button class="act" id="cf-crop" aria-label="四隅を直す"><span class="planet lg">' + IC.crop + '</span><small>四隅を直す</small></button>' +
+    '<button class="act acc" id="cf-ok" aria-label="読み取る"><span class="sun xs">' + IC.check.replace('width="28" height="28"', 'width="24" height="24"') + '</span><small>読み取る</small></button>' +
+    '</div></div>';
   openSheet(h, function(){
     $('cf-img').src = pend.full;
     $('cf-rot').addEventListener('click', function(){
@@ -1985,15 +1988,31 @@ function camFrameRect(){
   var sc = Math.max(vr.width / v.videoWidth, vr.height / v.videoHeight);
   return { sc:sc, ox:vr.left - st.left + (vr.width - v.videoWidth*sc) / 2, oy:vr.top - st.top + (vr.height - v.videoHeight*sc) / 2, w:st.width, h:st.height };
 }
-/* 名刺を見つけたら、中央の丸を光らせる（四角の枠は描かない） */
+/* 名刺を見つけたら、丸を名刺の上に動かして光らせる（四角の枠は描かない）。
+   見つけているあいだは名刺を追い、見失ったら中央に戻る */
 function drawLive(q, good){
-  var cam = $('cam');
-  if (cam) cam.classList.toggle('found', !!good);
+  var cam = $('cam'), ping = $('cam-ping'), v = $('cam-video');
+  if (!cam || !ping) return;
+  cam.classList.toggle('found', !!good);
+  if (q && v && v.videoWidth){
+    var fr = camFrameRect(), pts = q.map(function(p){
+      return [fr.ox + p[0]*v.videoWidth*fr.sc, fr.oy + p[1]*v.videoHeight*fr.sc];
+    });
+    var cx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4, cy = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
+    var w = Math.hypot(pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]), h = Math.hypot(pts[3][0]-pts[0][0], pts[3][1]-pts[0][1]);
+    var d = Math.max(120, Math.min(340, Math.min(w, h) * 0.95));
+    ping.style.left = cx.toFixed(1) + 'px'; ping.style.top = cy.toFixed(1) + 'px'; ping.style.width = d.toFixed(0) + 'px';
+  } else {
+    ping.style.left = ''; ping.style.top = ''; ping.style.width = '';
+  }
 }
+if (OCRBASE) window.__drawLive = drawLive;
 function liveStep(){
   liveTimer = null;
   var v = $('cam-video');
-  if (!camStream || $('cam').hidden) return;
+  if ($('cam').hidden) return;
+  /* まだカメラが立ち上がっていない（初回は許可を待つぶん遅い）。止めずに待つ */
+  if (!camStream){ liveTimer = setTimeout(liveStep, 200); return; }
   if (v.videoWidth && v.readyState >= 2){
     var src = camVisibleSrc();
     if (!src){ liveTimer = setTimeout(liveStep, 200); return; }
@@ -2059,6 +2078,7 @@ function openCamera(){
     v.srcObject = st;
     var pl = v.play();
     if (pl && pl['catch']) pl['catch'](function(){});
+    if (!liveTimer && !$('cam').hidden) liveTimer = setTimeout(liveStep, 100);
     try {
       if (camTrack.applyConstraints)
         camTrack.applyConstraints({ advanced: [{ focusMode: 'continuous' }] })['catch'](function(){});
