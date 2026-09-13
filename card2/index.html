@@ -1860,7 +1860,7 @@ function runOcr(img){
   });
 }
 /* かかった時間の内訳。?ocr= を付けて開いたときだけ記録する（ふだんは何もしない） */
-if (OCRBASE){ window.__quadHelp = { quadH:quadH, mapH:mapH, unrotPt:unrotPt, polyArea:polyArea, applyClaudeQuad:applyClaudeQuad }; }
+if (OCRBASE){ window.__quadHelp = { growQuad:growQuad, findQuadIn:findQuadIn, quadH:quadH, mapH:mapH, unrotPt:unrotPt, polyArea:polyArea, applyClaudeQuad:applyClaudeQuad }; }
 function tmark(s){ if (OCRBASE){ (window.__meishiT = window.__meishiT || []).push({ s:s, t:Math.round(performance.now()) }); } }
 function grabForm(){
   var o = {};
@@ -1936,16 +1936,45 @@ function fracQuad(c, f){
   var x = f.x*c.width, y = f.y*c.height, w = f.w*c.width, h = f.h*c.height;
   return [[x,y], [x+w,y], [x+w,y+h], [x,y+h]];
 }
-/* hint … カメラの枠（画面に対する割合）。名刺を見つけられなかったときはここで切る */
+/* 四隅を、中心から少しだけ外へ広げる（判定が粗いぶんの余裕） */
+function growQuad(q, f){
+  var cx = (q[0][0] + q[1][0] + q[2][0] + q[3][0]) / 4, cy = (q[0][1] + q[1][1] + q[2][1] + q[3][1]) / 4;
+  return q.map(function(p){ return [cx + (p[0]-cx)*(1+f), cy + (p[1]-cy)*(1+f)]; });
+}
+/* 画面に見えていた範囲だけを見て四隅をさがし、写真ぜんぶの座標に直して返す。
+   写真には画面の外（左右）まで写っているので、そこの白い紙などにまどわされない */
+function findQuadIn(raw, vis){
+  var vx = vis.x*raw.width, vy = vis.y*raw.height, vw = vis.w*raw.width, vh = vis.h*raw.height;
+  if (vw < 40 || vh < 40) return null;
+  var sw = Math.min(1200, Math.round(vw)), sh = Math.max(1, Math.round(vh * sw / vw));
+  var c = document.createElement('canvas');
+  c.width = sw; c.height = sh;
+  try { c.getContext('2d').drawImage(raw, vx, vy, vw, vh, 0, 0, sw, sh); } catch(e){ return null; }
+  var q = findQuad(c);
+  if (!q) return null;
+  return q.map(function(p){ return [vx + p[0]/sw*vw, vy + p[1]/sh*vh]; });
+}
+/* hint … 画面で見つけていた四隅・見えていた範囲・カメラの枠（いずれも画面に対する割合） */
 function processRaw(raw, hint){
   busy(true, '名刺を切り出しています…');
   setTimeout(function(){
     try {
       pendRaw = raw; pendOrient = 0; pendOriented = false;
-      var qd = findQuad(raw);
+      var full = raw.width * raw.height, qd = null;
+      var live = (hint && hint.quad) ? hint.quad.map(function(q){ return [q[0]*raw.width, q[1]*raw.height]; }) : null;
+      /* 1. 撮った時点で丸が名刺に乗っていたなら、そこを切る（見ていたとおりに切れる） */
+      if (live && hint.strong) qd = growQuad(live, 0.015);
+      /* 2. でなければ、画面に見えていた範囲の中でさがす */
+      if (!qd && hint && hint.vis) qd = findQuadIn(raw, hint.vis);
+      /* 3. それでもだめなら写真ぜんぶでさがす。ほぼ写真いっぱいの答えは、見つかっていないのと同じ */
+      if (!qd){
+        var q3 = findQuad(raw);
+        if (q3 && polyArea(q3) < full * 0.9) qd = q3;
+        else if (live) qd = growQuad(live, 0.015);
+        else qd = q3;
+      }
       pendCropped = !!qd;
-      if (!qd && hint && hint.quad){ qd = hint.quad.map(function(q){ return [q[0]*raw.width, q[1]*raw.height]; }); pendCropped = true; }
-      else if (!qd && hint){ qd = fracQuad(raw, hint); pendCropped = true; }
+      if (!qd && hint && hint.x != null){ qd = fracQuad(raw, hint); pendCropped = true; }
       pendQuad = qd || fullQuad(raw);
       buildPend();
     } catch(e){ busy(false); toast('写真を扱えませんでした'); return; }
@@ -2085,7 +2114,7 @@ var camStream = null, camTrack = null, torchOn = false;
    撮るのは人が丸いボタンを押したときだけ。撮ったあとに切り取りを確認してから読み取る */
 var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0, liveMiss = 0;
 /* 1コマ見失っただけで丸が真ん中に戻らないよう、少しのあいだ前の場所を保つ */
-var liveHold = 0, liveLast = null, pingAt = null;
+var liveHold = 0, liveLast = null, pingAt = null, liveFresh = false;
 /* 映像は画面いっぱいに切って出している（object-fit:cover）ので、
    映像の全部ではなく、いま画面に見えているところだけをさがす。
    見えていない外側の机や、となりの物にまどわされない */
@@ -2170,6 +2199,7 @@ function liveStep(){
     liveQuad = q;
     liveMiss = q ? 0 : liveMiss + 1;
     var good = !!q && !edge && big;
+    liveFresh = good;                          /* いまのコマで、ちゃんと見つけているか */
     if (good){ liveHold = 10; liveLast = q; }
     else if (!q && liveHold > 0){ liveHold--; q = liveLast; good = true; }
     drawLive(q, good);
@@ -2190,7 +2220,7 @@ function openCamera(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
   $('cam').hidden = false;
   document.body.style.overflow = 'hidden';
-  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0; liveHold = 0; liveLast = null; pingAt = null;
+  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0; liveHold = 0; liveLast = null; pingAt = null; liveFresh = false;
   drawLive(null);
   if ($('cam-shotbox')) $('cam-shotbox').className = 'shotbox';
   $('cam').classList.remove('found');
@@ -2251,8 +2281,10 @@ function guideFrac(){
 function camCapture(){
   var v = $('cam-video');
   if (!v.videoWidth){ toast('もう少し待ってから押してください'); return; }
-  var hint = guideFrac();
-  if (liveQuad) hint = { quad: liveQuad };       /* 映像で見つけていた四隅を、見つけ直せなかったときの控えにする */
+  var hint = guideFrac() || {};
+  if (liveQuad){ hint.quad = liveQuad; hint.strong = liveFresh; }   /* 画面で丸が乗っていた四隅 */
+  var vis = camVisibleSrc();                     /* 画面に見えていた範囲（写真の外側は見ない） */
+  if (vis) hint.vis = { x:vis.x / v.videoWidth, y:vis.y / v.videoHeight, w:vis.w / v.videoWidth, h:vis.h / v.videoHeight };
   var c = document.createElement('canvas');
   c.width = v.videoWidth; c.height = v.videoHeight;
   c.getContext('2d').drawImage(v, 0, 0);
