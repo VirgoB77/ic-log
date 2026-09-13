@@ -18860,6 +18860,31 @@
   "area": "和泉市"
  },
  {
+  "article": "第6条第5項",
+  "kind": "廃止",
+  "source": "hyogo-koho",
+  "gazette_date": "2025-02-04",
+  "gazette_no": "588",
+  "docs": [
+   "https://web.pref.hyogo.lg.jp/kk32/koho/documents/20250204t.pdf"
+  ],
+  "store": "マックスバリュ豊富店",
+  "address": "姫路市豊富町御蔭字四辻󠄀1291―２",
+  "event_on": "2025-02-16",
+  "notified_on": "2025-01-20",
+  "area_m2": 1491,
+  "review_from": "2025-02-04",
+  "key": "f496e93d2cb0",
+  "first_seen": null,
+  "last_seen": null,
+  "mode": "cumulative",
+  "listed": true,
+  "pref": "兵庫県",
+  "city": "姫路市",
+  "ward": "",
+  "area": "姫路市"
+ },
+ {
   "source": "osaka-pref",
   "file": "r703-6-1.xlsx",
   "article": "第6条第1項",

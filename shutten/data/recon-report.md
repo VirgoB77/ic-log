@@ -1,6 +1,6 @@
 # 大店立地法 届出ページ 偵察レポート（2026-09-13）
 
-**まとめ: Excel 2件 / PDF 21件 / わからない 42件 / 表 64件**
+**まとめ: Excel 2件 / PDF 19件 / わからない 42件 / 表 64件**
 
 「そのページが機械で読める形か」だけを見ている。
 判定が **表** か **Excel** なら自動化しやすい。**PDF** なら一手間、
@@ -186,7 +186,7 @@
 - URL: https://www.sangyo-rodo.metro.tokyo.lg.jp/chushou/shoko/chiiki/daikibo
 - メモ: 前のURLは一覧ページではなかった。親ページに変更。年度別の一覧はこの下にぶら下がっている
 - robots.txt: 許可
-- HTTP 200 / UTF-8 / 553,226 バイト
+- HTTP 200 / UTF-8 / 553,224 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 縦覧 / 届出
@@ -572,7 +572,7 @@
 - URL: https://web.pref.hyogo.lg.jp/pref/cate3_661.html
 - メモ: 兵庫県の著作権ページから辿ったオープンデータの入口。大店立地法の縦覧状況がオープンデータに含まれるか、利用規約（政府標準利用規約か）を見る（2026-09-12追加）
 - robots.txt: 許可
-- HTTP 200 / utf-8 / 15,071 バイト
+- HTTP 200 / utf-8 / 14,907 バイト
 - **判定: わからない**
 - 表 0 個 / PDFリンク 0 本 / Excel 0 本
 - 出てきた言葉: 変更
@@ -767,34 +767,14 @@
 ### （参考）兵庫県公報 令和5年6月の号一覧
 
 - URL: https://web.pref.hyogo.lg.jp/kk32/koho/202306.html
-- メモ: 1か月分のページ。号ごとの PDF は /kk32/koho/documents/YYYYMMDDt.pdf（定期号）・…gN.pdf（号外）。目録の（発行日, 公報番号）→ この一覧の「M月D日第N号」で本体にたどり着ける。公告の本文の形を見るため、廃止（6/13 第421号）と変更（6/20 第423号）の号を1回だけ落とす（2026-09-13）
-- robots.txt: 許可
-- HTTP 200 / utf-8 / 17,144 バイト
-- **判定: PDF**
-- 表 0 個 / PDFリンク 21 本 / Excel 0 本
-  - PDF: 兵庫県公報目録(令和5年6月)（PDF：164KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/202306m.pdf
-  - PDF: 6月1日号外（PDF：89KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g1.pdf
-  - PDF: 6月1日第2号外（PDF：130KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g2.pdf
-  - PDF: 6月1日第3号外（PDF：73KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230601g3.pdf
-  - PDF: 6月2日第418号（PDF：280KB） → https://web.pref.hyogo.lg.jp/kk32/koho/documents/20230602t.pdf
-- 出てきた言葉: 変更
-- 年度らしき表記: 令和5年
+- メモ: 1か月分のページ。号ごとの PDF は /kk32/koho/documents/YYYYMMDDt.pdf（定期号）・…gN.pdf（号外）。目録の（発行日, 公報番号）→ この一覧の「M月D日第N号」で本体にたどり着ける。公告の本文の形を見るため、廃止（6/13 第421号）と変更（6/20 第423号）の号を1回だけ落とす（2026-09-13）。形は分かったので止めた（本体は koho_pdf.py が読む）
+- **結果: 取りに行かなかった（1か月分のページ。号ごとの PDF は /kk32/koho/documents/YYYYMMDDt.pdf（定期号）・…gN.pdf（号外）。目録の（発行日, 公報番号）→ この一覧の「M月D日第N号」で本体にたどり着ける。公告の本文の形を見るため、廃止（6/13 第421号）と変更（6/20 第423号）の号を1回だけ落とす（2026-09-13）。形は分かったので止めた（本体は koho_pdf.py が読む））**
 
 ### （参考）兵庫県公報 平成22年12月の号一覧
 
 - URL: https://web.pref.hyogo.lg.jp/kk32/pa13_000000162.html
-- メモ: 古い年のページ。号ごとの PDF は /kk32/documents/000NNNNNN.pdf と番号だけで、ラベル「12月3日　第2241号」で見分ける。新設2件・変更2件が載る 12/24 第2247号と、廃止が載る 12/10 第2243号を1回だけ落とす（2026-09-13）
-- robots.txt: 許可
-- HTTP 200 / utf-8 / 17,799 バイト
-- **判定: PDF**
-- 表 0 個 / PDFリンク 28 本 / Excel 0 本
-  - PDF: 兵庫県公報目録（平成22年12月）（PDF：199KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000170919.pdf
-  - PDF: 12月1日　号外（PDF：131KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000167546.pdf
-  - PDF: 12月2日　号外（PDF：88KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000168434.pdf
-  - PDF: 12月3日　第2241号（PDF：312KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000167874.pdf
-  - PDF: 12月3日　号外（PDF：94KB） → https://web.pref.hyogo.lg.jp/kk32/documents/000168324.pdf
-- 出てきた言葉: 変更
-- 年度らしき表記: 平成22年
+- メモ: 古い年のページ。号ごとの PDF は /kk32/documents/000NNNNNN.pdf と番号だけで、ラベル「12月3日　第2241号」で見分ける。新設2件・変更2件が載る 12/24 第2247号と、廃止が載る 12/10 第2243号を1回だけ落とす（2026-09-13）。形は分かったので止めた（本体は koho_pdf.py が読む）
+- **結果: 取りに行かなかった（古い年のページ。号ごとの PDF は /kk32/documents/000NNNNNN.pdf と番号だけで、ラベル「12月3日　第2241号」で見分ける。新設2件・変更2件が載る 12/24 第2247号と、廃止が載る 12/10 第2243号を1回だけ落とす（2026-09-13）。形は分かったので止めた（本体は koho_pdf.py が読む））**
 
 ### （参考）日本SC協会 大店立地法新設届出情報 2026年7月
 
@@ -814,3 +794,9 @@
 - URL: https://www.jcsc.or.jp/public_policy/location/index.html
 - メモ: 2014年以前の月別ページの入口。転載はしない方針にしたので止めた（2026-09-13）
 - **結果: 取りに行かなかった（2014年以前の月別ページの入口。転載はしない方針にしたので止めた（2026-09-13））**
+
+### 兵庫県公報（大規模小売店舗立地法の公告）
+
+- URL: https://web.pref.hyogo.lg.jp/kk32/pa13_000000081.html
+- メモ: koho_pdf.py が作る。目録（2007年〜）の公告 1,636 件を、月別一覧→月ページ→号の PDF とたどって本体を読む。公告には店舗名・所在地・設置者・小売業者・店舗面積・新設（変更・廃止）の日・届出年月日・縦覧場所が書いてある。PDF は残さず、大店立地法の公告の部分だけ data/koho/text/ に文字で残す。1回40号ずつ新しいほうから。recon には取りに行かせないので enabled は false（2026-09-13）
+- **結果: 取りに行かなかった（koho_pdf.py が作る。目録（2007年〜）の公告 1,636 件を、月別一覧→月ページ→号の PDF とたどって本体を読む。公告には店舗名・所在地・設置者・小売業者・店舗面積・新設（変更・廃止）の日・届出年月日・縦覧場所が書いてある。PDF は残さず、大店立地法の公告の部分だけ data/koho/text/ に文字で残す。1回40号ずつ新しいほうから。recon には取りに行かせないので enabled は false（2026-09-13））**
