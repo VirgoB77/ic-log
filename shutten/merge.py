@@ -76,13 +76,17 @@ def place_of(r):
             m = CITY.match(addr)
             c = m.group(1) if m else ""
         if not c and r["source"] == "hyogo-pref-juran":
-            store = r.get("store") or ""
-            for name in HYOGO_CITIES:
-                if name in store:
-                    c = name + ("市" if name not in ("猪名川", "稲美", "播磨", "福崎", "太子", "上郡", "佐用",
-                                                       "香美", "新温泉", "多可", "市川", "神河") else "町")
-                    guess = True
-                    break
+            towns = ("猪名川", "稲美", "播磨", "福崎", "太子", "上郡", "佐用", "香美", "新温泉", "多可", "市川", "神河")
+            # 2024年の表は「所在」列に「姫路」「朝来」と市名だけ書いてある。これは当て推量ではない
+            if addr in HYOGO_CITIES:
+                c = addr + ("町" if addr in towns else "市")
+            else:
+                store = r.get("store") or ""
+                for name in HYOGO_CITIES:
+                    if name in store:
+                        c = name + ("町" if name in towns else "市")
+                        guess = True
+                        break
         city = c or ""
     return pref, city, ward, guess
 
@@ -102,13 +106,16 @@ def filled(r):
 def merge_across_sources(by_key):
     groups = defaultdict(list)
     for r in by_key.values():
-        groups[(norm_store(r["store"]), r["notified_on"], r.get("article", ""))].append(r)
+        groups[(norm_store(r["store"]), r["notified_on"])].append(r)
     out = {}
     merged_away = 0
     for g in groups.values():
         srcs = Counter(r["source"] for r in g)
-        # 収集先が1つだけ、または同じ収集先から2件以上出ている（別の届出）ときは触らない
-        if len(srcs) == 1 or any(n > 1 for n in srcs.values()):
+        # 収集先が1つだけ、または同じ収集先から2件以上出ている（別の届出）ときは触らない。
+        # 条文が食い違うときも別の届出（同じ日に6条1項と6条2項を出すことがある）。
+        # 条文が空（「変更」としか書いていない市のページ）なら、相手の条文に合わせてまとめる
+        arts = {r.get("article", "") for r in g} - {""}
+        if len(srcs) == 1 or any(n > 1 for n in srcs.values()) or len(arts) > 1:
             for r in g:
                 out[r["key"]] = r
             continue
