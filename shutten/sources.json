@@ -14,7 +14,7 @@
       "name": "兵庫県 大規模小売店舗立地法 縦覧状況",
       "area": "hyogo",
       "url": "https://web.pref.hyogo.lg.jp/ks21/wd24_000000018.html",
-      "note": "本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDF 44本のうち2MB以下の33本を取った。ただし33本中32本は紙をスキャンした画像で文字が入っておらず、機械では読めない（2026-09-12確認）。読むならOCRが要る。保存はしてあるので、いまは表の3項目（届出日・店名・縦覧期間）だけを使う。2026-09-12から8MB級も取る（上限12MB）。読むにはOCRが要るので別の仕組みで。いま縦覧中の分しか載らないので、Wayback Machine の月1回の保存から過去分を積み直す（wayback.py、2026-09-12〜）",
+      "note": "本命。縦覧中の案件が並ぶ。届出ごとの「資料」PDF 44本のうち2MB以下の33本を取った。ただし33本中32本は紙をスキャンした画像で文字が入っておらず、機械では読めない（2026-09-12確認）。読むならOCRが要る。保存はしてあるので、いまは表の3項目（届出日・店名・縦覧期間）だけを使う。2026-09-12から8MB級も取る（上限12MB）。読むにはOCRが要るので別の仕組みで。いま縦覧中の分しか載らないので、Wayback Machine の月1回の保存から過去分を積み直す（wayback.py、2026-09-12〜）。2019〜2023年のページは一覧を todokede_jyuuranYYMMDD.pdf に置いていたので、その PDF もアーカイブから前方一致で拾う",
       "enabled": true,
       "pdf": true,
       "pdf_labels": "資料",
@@ -22,7 +22,10 @@
       "terms": "https://web.pref.hyogo.lg.jp/about_link.html",
       "terms_name": "リンク・著作権・免責事項",
       "terms_summary": "サイト全体の著作権ページは無断で複製・転用不可（私的使用・引用を除く）。出典表記の形の指定なし。オープンデータカタログ（CC BY 4.0）には縦覧状況は登録されていない（2026年9月12日に全924件を確認）",
-      "wayback": true
+      "wayback": true,
+      "wayback_prefix": [
+        "https://web.pref.hyogo.lg.jp/ks21/documents/todokede_jyuuran"
+      ]
     },
     {
       "id": "hyogo-pref-top",
@@ -456,6 +459,56 @@
       "url": "https://web.pref.hyogo.lg.jp/opendata/index.php?keyword=%E5%A4%A7%E8%A6%8F%E6%A8%A1%E5%B0%8F%E5%A3%B2&displayedresults=100",
       "note": "2026-09-12に一度見た。924件の一覧に大店立地法の縦覧状況・届出は無く、キーワード「大規模小売」も0件だった。止めた",
       "enabled": false
+    },
+    {
+      "id": "hyogo-koho-mokuroku",
+      "name": "（参考）兵庫県公報 検索用目録（Excel）",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/kk32/pa13_000000105.html",
+      "files": true,
+      "enabled": true,
+      "note": "兵庫県公報の目録Excel（2007年1月〜）。大店立地法の公告（第5条第3項など）が目録に載っていれば、2007年からの届出の一覧を組める。まず Excel を落として中身を見る（2026-09-13追加）"
+    },
+    {
+      "id": "hyogo-bukai",
+      "name": "（参考）兵庫県 まちづくり審議会 大規模小売店舗等立地部会",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/ks21/wd24_000000025.html",
+      "pdf": true,
+      "pdf_labels": "議案|議事|結果",
+      "pdf_max_mb": 3,
+      "enabled": true,
+      "note": "部会の議案PDFに店舗名・所在地・届出日・条文が載る（新設と主な変更だけ）。第56回(2016)〜第119回(2023)あたりまで PDF が残っているらしい。まず落として形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "hyogo-shingikai",
+      "name": "（参考）兵庫県 まちづくり審議会（調査審議の結果）",
+      "area": "ref",
+      "url": "https://web.pref.hyogo.lg.jp/ks18/wd20_000000202.html",
+      "pdf": true,
+      "pdf_labels": "調査審議|審議の結果|大規模小売",
+      "pdf_max_mb": 3,
+      "enabled": true,
+      "note": "「大規模小売店舗等立地部会における調査審議の結果（令和7年2月分〜令和8年2月分）」のような年次PDFがある。まず落として形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "meti-todokede",
+      "name": "（参考）経済産業省 大店立地法の届出状況について",
+      "area": "ref",
+      "url": "https://www.meti.go.jp/policy/economy/distribution/daikibo/todokede.html",
+      "pdf": true,
+      "pdf_labels": "届出|一覧",
+      "pdf_max_mb": 12,
+      "enabled": true,
+      "note": "令和5年度末で公表終了と書いてあるが、令和5年度 新設届出一覧 PDF（ritti_todogai_5_R5fy.pdf）などが残っている。全国分で兵庫県も入る。政府標準利用規約のはず。まずページと PDF を落として形を見る（2026-09-13追加）"
+    },
+    {
+      "id": "jcsc-daitenhou",
+      "name": "（参考）日本ショッピングセンター協会 大店立地法新設届出情報",
+      "area": "ref",
+      "url": "https://www.jcsc.or.jp/sc_data/sc_open/daitenhou",
+      "enabled": true,
+      "note": "経産省が経済産業局ごとにまとめた月次の新設届出を転載しているページ。2006年7月分からの月別ページがあるらしく、経産省の公表終了後も更新が続いている。民間団体なので利用規約を先に読む。まずページの形を見る（2026-09-13追加）"
     }
   ]
 }
