@@ -258,7 +258,7 @@ details.more>summary .got{color:var(--mute);font-size:12px;font-weight:500}
 /* 中央の丸。名刺を見つけると光って、ピコン、ピコンと輪が広がる */
 .cam .ping{position:absolute;left:50%;top:50%;width:min(62vw,300px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
   border:2px solid rgba(255,255,255,.3);pointer-events:none;
-  transition:left .2s ease-out,top .2s ease-out,width .2s ease-out,border-color .25s,box-shadow .25s}
+  transition:left .35s ease-out,top .35s ease-out,width .35s ease-out,border-color .25s,box-shadow .25s}
 .cam .ping i{position:absolute;inset:-2px;border-radius:50%;border:2px solid #c9f24a;opacity:0}
 .cam.found .ping{border-color:#c9f24a;box-shadow:0 0 28px rgba(201,242,74,.35),inset 0 0 28px rgba(201,242,74,.12)}
 .cam.found .ping i{animation:ping 2.4s ease-out infinite}
@@ -2085,7 +2085,7 @@ var camStream = null, camTrack = null, torchOn = false;
    撮るのは人が丸いボタンを押したときだけ。撮ったあとに切り取りを確認してから読み取る */
 var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0, liveMiss = 0;
 /* 1コマ見失っただけで丸が真ん中に戻らないよう、少しのあいだ前の場所を保つ */
-var liveHold = 0, liveLast = null;
+var liveHold = 0, liveLast = null, pingAt = null;
 /* 映像は画面いっぱいに切って出している（object-fit:cover）ので、
    映像の全部ではなく、いま画面に見えているところだけをさがす。
    見えていない外側の机や、となりの物にまどわされない */
@@ -2116,8 +2116,20 @@ function drawLive(q, good){
     var cx = (pts[0][0] + pts[1][0] + pts[2][0] + pts[3][0]) / 4, cy = (pts[0][1] + pts[1][1] + pts[2][1] + pts[3][1]) / 4;
     var w = Math.hypot(pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]), h = Math.hypot(pts[3][0]-pts[0][0], pts[3][1]-pts[0][1]);
     var d = Math.max(120, Math.min(340, Math.min(w, h) * 0.95));
-    ping.style.left = cx.toFixed(1) + 'px'; ping.style.top = cy.toFixed(1) + 'px'; ping.style.width = d.toFixed(0) + 'px';
+    /* 見つけた場所へ一気に飛ばさず、少しずつ寄せる。
+       手ぶれの細かなゆれでは動かず、大きく動いたときだけ速く追いつく */
+    if (!pingAt) pingAt = { x:cx, y:cy, d:d };
+    else {
+      var far = Math.abs(cx - pingAt.x) > fr.w * 0.25 || Math.abs(cy - pingAt.y) > fr.h * 0.25;
+      var t = far ? 0.5 : 0.16;
+      pingAt.x += (cx - pingAt.x) * t;
+      pingAt.y += (cy - pingAt.y) * t;
+      pingAt.d += (d - pingAt.d) * t;
+    }
+    ping.style.left = pingAt.x.toFixed(1) + 'px'; ping.style.top = pingAt.y.toFixed(1) + 'px';
+    ping.style.width = pingAt.d.toFixed(0) + 'px';
   } else {
+    pingAt = null;
     ping.style.left = ''; ping.style.top = ''; ping.style.width = '';
   }
 }
@@ -2154,11 +2166,11 @@ function liveStep(){
       }
       area = Math.abs(area) / 2 / (W * H);
     }
-    var big = area >= 0.07;                       /* 小さすぎる（遠すぎる）と、見つけた扱いにしない */
+    var big = area >= 0.05;                       /* 画面に対して小さすぎる（遠すぎる）と、見つけた扱いにしない */
     liveQuad = q;
     liveMiss = q ? 0 : liveMiss + 1;
     var good = !!q && !edge && big;
-    if (good){ liveHold = 4; liveLast = q; }
+    if (good){ liveHold = 10; liveLast = q; }
     else if (!q && liveHold > 0){ liveHold--; q = liveLast; good = true; }
     drawLive(q, good);
     var tip = $('cam-tip'), sb = $('cam-shotbox');
@@ -2178,7 +2190,7 @@ function openCamera(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
   $('cam').hidden = false;
   document.body.style.overflow = 'hidden';
-  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0; liveHold = 0; liveLast = null;
+  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0; liveHold = 0; liveLast = null; pingAt = null;
   drawLive(null);
   if ($('cam-shotbox')) $('cam-shotbox').className = 'shotbox';
   $('cam').classList.remove('found');
