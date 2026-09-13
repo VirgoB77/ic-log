@@ -1,7 +1,7 @@
 [
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-02-22",
   "notified_raw": "令和4年2月22日",
   "store": "ドラッグコスモス舞多聞店",
@@ -22,7 +22,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-12-24",
   "notified_raw": "令和3年12月24日",
   "store": "ケーズデンキ北神戸鹿の子台店",
@@ -42,8 +42,8 @@
   "key": "022070b75d37"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-12-15",
   "notified_raw": "令和3年12月15日",
   "store": "神戸北町複合商業施設",
@@ -60,11 +60,32 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
+  "key": "3f79d6220299"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2021-12-15",
+  "notified_raw": "令和3年12月15日",
+  "store": "神戸北町複合商業施設",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "店舗名称、設置者名称・代表者、小売業者",
+  "docs": [],
+  "source": "kobe-city",
   "key": "62a2e833905f"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-08",
   "notified_raw": "令和3年11月8日",
   "store": "スーパービバホーム神戸玉津インター店",
@@ -85,7 +106,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-02",
   "notified_raw": "令和3年11月2日",
   "store": "TerrasMa",
@@ -106,7 +127,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-01",
   "notified_raw": "令和3年11月1日",
   "store": "神戸三田プレミアム・アウトレット",
@@ -126,8 +147,8 @@
   "key": "fcbc51e3b16c"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-10-29",
   "notified_raw": "令和3年10月29日",
   "store": "（仮称）スーパーマルハチ柳原店",
@@ -144,11 +165,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "8f487f480b87"
+  "key": "5ee3f2ea1ef6"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-10-11",
   "notified_raw": "令和3年10月11日",
   "store": "エムワンスクウェア",
@@ -165,11 +186,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "cf020059e26c"
+  "key": "2d9f831182c3"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "神戸阪急",
@@ -189,8 +210,29 @@
   "key": "f3f8186c800b"
  },
  {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2021-09-30",
+  "notified_raw": "令和3年9月30日",
+  "store": "神戸阪急",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "923cc3745883"
+ },
+ {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "ショッピングプラザ エスパ星陵台",
@@ -211,7 +253,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "ドラッグコスモス井吹台店",
@@ -232,7 +274,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-24",
   "notified_raw": "令和3年9月24日",
   "store": "ドラッグコスモス井吹台店",
@@ -253,7 +295,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "コトノハコ神戸",
@@ -274,7 +316,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "マックスバリュ須磨海浜公園駅前店",
@@ -295,7 +337,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "春日野道NKビル",
@@ -316,7 +358,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-23",
   "notified_raw": "令和3年8月23日",
   "store": "プリコ神戸",
@@ -337,7 +379,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-12",
   "notified_raw": "令和3年8月12日",
   "store": "須磨パティオ",
@@ -358,7 +400,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "マックスバリュ長田南店",
@@ -379,7 +421,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "マックスバリュ塩屋北店",
@@ -400,7 +442,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "ホームセンターコーナン神戸新在家店",
@@ -420,8 +462,8 @@
   "key": "1a65805f83c7"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-07-30",
   "notified_raw": "令和3年7月30日",
   "store": "(仮称)コープ北鈴蘭台",
@@ -438,11 +480,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "0b23cc2bf7ac"
+  "key": "a109bed6522d"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-07-20",
   "notified_raw": "令和3年7月20日",
   "store": "（仮称）クロスモール須磨",
@@ -459,11 +501,11 @@
   "note": "縦覧に対する意見書の提出が2件ありました",
   "docs": [],
   "source": "kobe-city",
-  "key": "4c32275a42fb"
+  "key": "bf8bf20f0f8c"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-07-16",
   "notified_raw": "令和3年7月16日",
   "store": "神戸ファッションプラザ",
@@ -480,11 +522,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "c1227a55d89d"
+  "key": "623cdfcd7f85"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-07-19",
   "notified_raw": "令和3年7月19日",
   "store": "須磨パティオ",
@@ -505,7 +547,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-28",
   "notified_raw": "令和3年6月28日",
   "store": "ホームセンターコーナン名谷店",
@@ -526,7 +568,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-24",
   "notified_raw": "令和3年6月24日",
   "store": "ルッカ名谷",
@@ -547,7 +589,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-14",
   "notified_raw": "令和3年6月14日",
   "store": "コーナン名谷店",
@@ -568,7 +610,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-18",
   "notified_raw": "令和3年5月18日",
   "store": "阪急オアシス三宮店",
@@ -589,7 +631,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-17",
   "notified_raw": "令和3年5月17日",
   "store": "フレスポ舞子坂",
@@ -610,7 +652,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-17",
   "notified_raw": "令和3年5月17日",
   "store": "BRANCH神戸学園都市",
@@ -631,7 +673,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-03-31",
   "notified_raw": "令和3年3月31日",
   "store": "御影クラッセ",
@@ -651,8 +693,8 @@
   "key": "f5202068f567"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-03-19",
   "notified_raw": "令和3年3月19日",
   "store": "(仮称)須磨区高倉台再開発計画",
@@ -669,11 +711,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "d49ef9d986f5"
+  "key": "a96852b7ed51"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-02-04",
   "notified_raw": "令和3年2月4日",
   "store": "(仮称)スーパービバホーム神戸玉津インター店",
@@ -690,11 +732,11 @@
   "note": "縦覧に対する意見書の提出が1件ありました",
   "docs": [],
   "source": "kobe-city",
-  "key": "80d377a58daa"
+  "key": "7137550128c0"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2020-12-28",
   "notified_raw": "令和2年12月28日",
   "store": "(仮称)ニトリ神戸長田店",
@@ -711,11 +753,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "9411de66d451"
+  "key": "d8078c5884c6"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2020-12-10",
   "notified_raw": "令和2年12月10日",
   "store": "ウエステ垂水",
@@ -732,11 +774,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "33ac61ae3b55"
+  "key": "19b5a24c5452"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2020-12-04",
   "notified_raw": "令和2年12月4日",
   "store": "山陽マルナカ水谷店",
@@ -756,8 +798,8 @@
   "key": "ec08ddf23101"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2020-11-19",
   "notified_raw": "令和2年11月19日",
   "store": "(仮称)神戸北町複合商業施設",
@@ -774,6 +816,6 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "2237348c1bea"
+  "key": "4361e8013f8c"
  }
 ]

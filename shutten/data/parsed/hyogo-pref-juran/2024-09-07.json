@@ -1,17 +1,17 @@
 [
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-09",
   "notified_raw": "令和6年5月9日",
   "store": "ハローズ姫路飾磨店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-05-28",
-  "review_to": null,
+  "review_to": "2024-09-30",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -20,21 +20,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240528t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "73c8a96dbaea"
+  "key": "f247b8f86e3f"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-24",
   "notified_raw": "令和6年4月24日",
   "store": "ケーズデンキ和田山店",
-  "address": "",
+  "address": "朝来",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-05-28",
-  "review_to": null,
+  "review_to": "2024-09-30",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -43,21 +43,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240528t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "a0a87e55ee04"
+  "key": "36208332544b"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-04",
   "notified_raw": "令和6年6月4日",
   "store": "（仮称）コーナンPRO川西加茂店",
-  "address": "",
+  "address": "川西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -66,21 +66,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "a390fae8d92b"
+  "key": "913bf66f9a5a"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-03",
   "notified_raw": "令和6年6月3日",
   "store": "（仮称）柏原パーク",
-  "address": "",
+  "address": "丹波",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -89,21 +89,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "c249b5596483"
+  "key": "a9f5df63772e"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-28",
   "notified_raw": "令和6年5月28日",
   "store": "イオン三木店",
-  "address": "",
+  "address": "三木",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -112,21 +112,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "2a6cea9a7d92"
+  "key": "12c40beadd93"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-31",
   "notified_raw": "令和6年5月31日",
   "store": "ホームセンターコーナン三田対中店",
-  "address": "",
+  "address": "三田",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -135,21 +135,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "8247a163c6f0"
+  "key": "ef6e20a5375c"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-17",
   "notified_raw": "令和6年6月17日",
   "store": "ジュンテンドー加西店",
-  "address": "",
+  "address": "加西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-05",
-  "review_to": null,
+  "review_to": "2024-11-05",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -158,21 +158,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240705t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "99d3bc92e021"
+  "key": "8272717aa7b7"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-20",
   "notified_raw": "令和6年6月20日",
   "store": "（仮称）ダイレックス川西山下店",
-  "address": "",
+  "address": "川西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-09",
-  "review_to": null,
+  "review_to": "2024-11-11",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -181,21 +181,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240709t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "421fe3872ab8"
+  "key": "c1683b37ced3"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-28",
   "notified_raw": "令和6年6月28日",
   "store": "ケーズデンキ氷上店",
-  "address": "",
+  "address": "丹波",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-23",
-  "review_to": null,
+  "review_to": "2024-11-25",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -204,21 +204,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240723t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "e7d9bad192f3"
+  "key": "ac2d93d3834f"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-28",
   "notified_raw": "令和6年6月28日",
   "store": "（仮称）V・drug大塩店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-30",
-  "review_to": null,
+  "review_to": "2024-12-02",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -227,21 +227,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240730t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "7121d60da188"
+  "key": "f9fd9d0217b6"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "（仮称）ドラッグコスモス丹波篠山店",
-  "address": "",
+  "address": "丹波篠山",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-06",
-  "review_to": null,
+  "review_to": "2024-12-06",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -250,21 +250,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240806t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "3a53efb13f65"
+  "key": "fd4ec8662250"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "PLiCO西明石",
-  "address": "",
+  "address": "明石",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-13",
-  "review_to": null,
+  "review_to": "2024-12-13",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -273,21 +273,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240813t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "24268ee52d2b"
+  "key": "bd60574c3f1b"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-08-23",
   "notified_raw": "令和6年8月23日",
   "store": "モールラフィーネ",
-  "address": "",
+  "address": "三田",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-23",
-  "review_to": null,
+  "review_to": "2024-12-23",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -296,6 +296,6 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240823t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "fbcb36da194c"
+  "key": "cf7c8f53651c"
  }
 ]

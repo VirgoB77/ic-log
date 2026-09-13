@@ -1,7 +1,7 @@
 [
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-29",
   "notified_raw": "2025年8月29日",
   "store": "（仮称）マルアイ長田店",
@@ -22,7 +22,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-22",
   "notified_raw": "2025年8月22日",
   "store": "ロイヤルホームセンター東灘魚崎",
@@ -43,7 +43,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-06",
   "notified_raw": "2025年8月6日",
   "store": "クロスモール須磨",
@@ -64,7 +64,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-07-17",
   "notified_raw": "2025年7月17日",
   "store": "ソレイユ西代",
@@ -85,7 +85,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-07-07",
   "notified_raw": "2025年7月7日",
   "store": "（仮称）ハローズ伊川谷店",
@@ -105,8 +105,8 @@
   "key": "f7ab18eaa5ed"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2025-06-30",
   "notified_raw": "2025年6月30日",
   "store": "（仮称）ドラッグコスモス伊川谷有瀬店",
@@ -123,11 +123,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "27fa9193a636"
+  "key": "226a1e4d524a"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-27",
   "notified_raw": "2025年6月27日",
   "store": "三井アウトレットパークマリンピア神戸",
@@ -148,7 +148,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-17",
   "notified_raw": "2025年6月17日",
   "store": "イオン長田南ショッピングセンター",
@@ -169,7 +169,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-04",
   "notified_raw": "2025年6月4日",
   "store": "ダイエーグルメシティ小束山店",
@@ -190,7 +190,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-30",
   "notified_raw": "2025年5月30日",
   "store": "イオンモール神戸南",
@@ -210,8 +210,8 @@
   "key": "e063506424ae"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2025-05-28",
   "notified_raw": "2025年5月28日",
   "store": "ロイヤルホームセンター伊川谷",
@@ -228,11 +228,32 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
+  "key": "dc6823792bb4"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2025-05-28",
+  "notified_raw": "2025年5月28日",
+  "store": "ロイヤルホームセンター伊川谷",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "設置者代表者",
+  "docs": [],
+  "source": "kobe-city",
   "key": "6dbf2dec6181"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-21",
   "notified_raw": "2025年5月21日",
   "store": "三井アウトレットパークマリンピア神戸",
@@ -253,7 +274,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-19",
   "notified_raw": "2025年5月19日",
   "store": "ＮＭＦ神戸名谷ビル",
@@ -274,7 +295,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-08",
   "notified_raw": "2025年5月8日",
   "store": "イオンつくしが丘店",
@@ -294,8 +315,29 @@
   "key": "7c0b42d0e5c7"
  },
  {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2025-05-08",
+  "notified_raw": "2025年5月8日",
+  "store": "イオンつくしが丘店",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "9f4dad1bb759"
+ },
+ {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-03-31",
   "notified_raw": "2025年3月31日",
   "store": "NMF神戸名谷ビル",
@@ -316,7 +358,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-03-27",
   "notified_raw": "2025年3月27日",
   "store": "イズミヤショッピングセンター西神戸",
@@ -337,7 +379,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-21",
   "notified_raw": "2025年2月21日",
   "store": "御影クラッセ",
@@ -358,7 +400,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-14",
   "notified_raw": "2025年2月14日",
   "store": "かりばプラザ",
@@ -378,8 +420,8 @@
   "key": "2d765e9fe16b"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第5項",
+  "kind": "廃止",
   "notified_on": "2025-02-10",
   "notified_raw": "2025年2月10日",
   "store": "ダイエー新在家店",
@@ -396,11 +438,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "64ae7daf2448"
+  "key": "861020aba1bc"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "G－７モール北神戸",
@@ -421,7 +463,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "ＢＲＡＮＣＨ神戸学園都市",
@@ -442,7 +484,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "フレスポ舞子坂",
@@ -463,7 +505,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-01-15",
   "notified_raw": "2025年1月15日",
   "store": "ミント神戸（神戸新聞会館ビル）",
@@ -483,8 +525,8 @@
   "key": "777766c91382"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "（仮称）オーケー垂水小束山店",
@@ -501,11 +543,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "b6d6bdc226b7"
+  "key": "fd2bebf1ece3"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-27",
   "notified_raw": "2024年12月27日",
   "store": "神戸ファッションプラザ",
@@ -526,7 +568,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-25",
   "notified_raw": "2024年12月25日",
   "store": "ハーバーランドダイヤニッセイビル",
@@ -547,7 +589,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-25",
   "notified_raw": "2024年12月25日",
   "store": "高浜モザイク",
@@ -568,7 +610,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-11-08",
   "notified_raw": "2024年11月8日",
   "store": "神戸御幸ビル商業施設",
@@ -588,8 +630,8 @@
   "key": "b39d42b9aa83"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-07",
   "notified_raw": "2024年11月7日",
   "store": "（仮称）イエローハット神戸垂水店",
@@ -606,11 +648,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "6b6812e52517"
+  "key": "93c54ce18b61"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-03",
   "notified_raw": "2024年10月3日",
   "store": "雲井通6丁目地区市街地再開発ビル",
@@ -630,8 +672,29 @@
   "key": "3eabcbd3ab81"
  },
  {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2024-10-03",
+  "notified_raw": "2024年10月3日",
+  "store": "雲井通6丁目地区市街地再開発ビル",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "e744ba9019ad"
+ },
+ {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-02",
   "notified_raw": "2024年10月2日",
   "store": "新長田駅前ビル",
@@ -652,7 +715,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "神戸相互ビル",
@@ -673,7 +736,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ長田店",
@@ -694,7 +757,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ下山手通店",
@@ -715,7 +778,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ須磨鷹取店",
@@ -736,7 +799,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ神戸駅前店",
@@ -757,7 +820,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ春日野道店",
@@ -777,8 +840,8 @@
   "key": "a647d9fcf311"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-09-26",
   "notified_raw": "2024年9月26日",
   "store": "（仮称）マルアイ長田店",
@@ -795,11 +858,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "4e4c6a0e3327"
+  "key": "8f57e3eb5aab"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-20",
   "notified_raw": "2024年9月20日",
   "store": "ジェームス山商業施設",
@@ -820,7 +883,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-12",
   "notified_raw": "2024年9月12日",
   "store": "神戸阪急",
@@ -841,7 +904,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-06",
   "notified_raw": "2024年9月6日",
   "store": "ジェームス山商業施設",
@@ -861,8 +924,8 @@
   "key": "4f959f57a81e"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第5項",
+  "kind": "廃止",
   "notified_on": "2024-09-03",
   "notified_raw": "2024年9月3日",
   "store": "エピタ神戸三宮",
@@ -877,6 +940,27 @@
   "citizen_opinion": "",
   "city_opinion": "",
   "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "dd7bbc706caf"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2024-09-03",
+  "notified_raw": "2024年9月3日",
+  "store": "エピタ神戸三宮",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "店舗名称、設置者代表者",
   "docs": [],
   "source": "kobe-city",
   "key": "f9c05631f120"

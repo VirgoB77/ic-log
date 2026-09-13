@@ -1,7 +1,7 @@
 [
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-03-31",
   "notified_raw": "2025年3月31日",
   "store": "NMF神戸名谷ビル",
@@ -21,8 +21,8 @@
   "key": "5f060740d1fd"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "（仮称）オーケー垂水小束山店",
@@ -39,11 +39,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "b6d6bdc226b7"
+  "key": "fd2bebf1ece3"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-07",
   "notified_raw": "2024年11月7日",
   "store": "(仮称)イエローハット神戸垂水店",
@@ -60,11 +60,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "07ba5f09fc2e"
+  "key": "ad757b288d90"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-02",
   "notified_raw": "2024年10月2日",
   "store": "新長田駅前ビル",
@@ -84,8 +84,8 @@
   "key": "a8e207109ec1"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-09-26",
   "notified_raw": "2024年9月26日",
   "store": "（仮称）マルアイ長田店",
@@ -102,11 +102,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "4e4c6a0e3327"
+  "key": "8f57e3eb5aab"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-20",
   "notified_raw": "2024年9月20日",
   "store": "ジェームス山商業施設",
@@ -126,8 +126,8 @@
   "key": "ee00fd89a8b8"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2024-07-11",
   "notified_raw": "2024年7月11日",
   "store": "カナート西神戸店",
@@ -144,11 +144,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "6f6c8e1a1832"
+  "key": "c7270dbee407"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-18",
   "notified_raw": "2024年6月18日",
   "store": "BRANCH神戸学園都市",
@@ -169,7 +169,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-18",
   "notified_raw": "2024年6月18日",
   "store": "フレスポ舞子坂",
@@ -190,7 +190,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-14",
   "notified_raw": "2024年6月14日",
   "store": "MEGAドン・キホーテ神戸本店",
@@ -210,8 +210,8 @@
   "key": "661ec8df4355"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-13",
   "notified_raw": "2024年6月13日",
   "store": "（仮称）ラ・ムー名谷店",
@@ -228,11 +228,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "d9761b9aef20"
+  "key": "a7b5787a5f9e"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-04",
   "notified_raw": "2024年6月4日",
   "store": "RICセントラルタワー",
@@ -253,7 +253,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-13",
   "notified_raw": "2024年5月13日",
   "store": "ホームセンターコーナン神戸新在家店",
@@ -274,7 +274,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-26",
   "notified_raw": "2024年4月26日",
   "store": "ステップガーデン藤原台",
@@ -295,7 +295,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-18",
   "notified_raw": "2024年4月18日",
   "store": "ステップガーデン藤原台",
@@ -316,7 +316,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエー舞子ショッパーズプラザ",
@@ -337,7 +337,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエーグルメシティ本山店",
@@ -358,7 +358,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ショッパーズプラザ鈴蘭台",
@@ -379,7 +379,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエーグルメシティ小束山店",
@@ -400,7 +400,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエー新在家店",
@@ -421,7 +421,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-04",
   "notified_raw": "2024年4月4日",
   "store": "大丸神戸店",
@@ -441,8 +441,8 @@
   "key": "510098094ffc"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-03-29",
   "notified_raw": "2024年3月29日",
   "store": "(仮称)ドラッグコスモス伊川谷店",
@@ -459,11 +459,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "70a74b004b04"
+  "key": "81b178ee313e"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-19",
   "notified_raw": "2024年3月19日",
   "store": "RICセントラルタワー",
@@ -484,7 +484,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-15",
   "notified_raw": "2024年3月15日",
   "store": "御影クラッセ",
@@ -505,7 +505,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-15",
   "notified_raw": "2024年3月15日",
   "store": "新長田駅前ビル",
@@ -525,8 +525,8 @@
   "key": "21fe4c8a6e4e"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2024-02-13",
   "notified_raw": "2024年2月13日",
   "store": "ステップガーデン藤原台",
@@ -543,11 +543,11 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "af87412b7e1b"
+  "key": "872a344223e4"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-12",
   "notified_raw": "2024年1月12日",
   "store": "高浜モザイク",
@@ -568,7 +568,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-12",
   "notified_raw": "2024年1月12日",
   "store": "ハーバーランドダイヤニッセイビル",
@@ -589,7 +589,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-11",
   "notified_raw": "2024年1月11日",
   "store": "サザンモール六甲B612、サザンモール2nd street",
@@ -610,7 +610,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-10",
   "notified_raw": "2024年1月10日",
   "store": "ショッピングプラザエスパ星陵台",
@@ -631,7 +631,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-04",
   "notified_raw": "2024年1月4日",
   "store": "ホームセンターコーナン神戸新在家店",

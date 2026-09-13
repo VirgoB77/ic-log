@@ -8770,12 +8770,12 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2025-12-09",
   "notified_raw": "令和7年12月9日",
   "store": "オーケー北伊丹店",
-  "address": "",
+  "address": "伊丹",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -8790,7 +8790,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20250107t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "4dc5c1a6bb28",
+  "key": "94f0132de88f",
   "first_seen": "2025-01-12",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
@@ -8798,8 +8798,7 @@
   "pref": "兵庫県",
   "city": "伊丹市",
   "ward": "",
-  "area": "伊丹市",
-  "place_guess": true
+  "area": "伊丹市"
  },
  {
   "article": "第6条第1項",
@@ -11772,7 +11771,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-29",
   "notified_raw": "2025年8月29日",
   "store": "（仮称）マルアイ長田店",
@@ -11959,7 +11958,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-22",
   "notified_raw": "2025年8月22日",
   "store": "ロイヤルホームセンター東灘魚崎",
@@ -12318,7 +12317,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-08-06",
   "notified_raw": "2025年8月6日",
   "store": "クロスモール須磨",
@@ -12681,7 +12680,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-07-17",
   "notified_raw": "2025年7月17日",
   "store": "ソレイユ西代",
@@ -12771,7 +12770,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-07-07",
   "notified_raw": "2025年7月7日",
   "store": "（仮称）ハローズ伊川谷店",
@@ -12925,35 +12924,6 @@
   "area": "大阪市此花区"
  },
  {
-  "article": "",
-  "kind": "不明",
-  "notified_on": "2025-06-30",
-  "notified_raw": "2025年6月30日",
-  "store": "（仮称）ドラッグコスモス伊川谷有瀬店",
-  "address": "",
-  "operator": "",
-  "new_operator": "",
-  "event_on": null,
-  "content": "",
-  "review_from": null,
-  "review_to": null,
-  "meeting": "",
-  "citizen_opinion": "",
-  "city_opinion": "",
-  "note": "",
-  "docs": [],
-  "source": "kobe-city",
-  "key": "27fa9193a636",
-  "first_seen": "2025-10-13",
-  "last_seen": "2025-10-13",
-  "mode": "snapshot",
-  "listed": false,
-  "pref": "兵庫県",
-  "city": "神戸市",
-  "ward": "",
-  "area": "神戸市"
- },
- {
   "article": "第5条第1項",
   "kind": "新設",
   "notified_on": "2025-06-30",
@@ -12973,7 +12943,7 @@
   "docs": [],
   "source": "kobe-city",
   "key": "226a1e4d524a",
-  "first_seen": "2026-06-09",
+  "first_seen": "2025-10-13",
   "last_seen": "2026-09-13",
   "mode": "snapshot",
   "listed": true,
@@ -12984,7 +12954,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-27",
   "notified_raw": "2025年6月27日",
   "store": "三井アウトレットパークマリンピア神戸",
@@ -13535,7 +13505,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-17",
   "notified_raw": "2025年6月17日",
   "store": "イオン長田南ショッピングセンター",
@@ -13935,7 +13905,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-06-04",
   "notified_raw": "2025年6月4日",
   "store": "ダイエーグルメシティ小束山店",
@@ -14241,7 +14211,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-30",
   "notified_raw": "2025年5月30日",
   "store": "イオンモール神戸南",
@@ -14374,8 +14344,8 @@
   "place_guess": true
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2025-05-28",
   "notified_raw": "2025年5月28日",
   "store": "ロイヤルホームセンター伊川谷",
@@ -14390,6 +14360,35 @@
   "citizen_opinion": "",
   "city_opinion": "",
   "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "dc6823792bb4",
+  "first_seen": "2025-10-13",
+  "last_seen": "2025-10-13",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2025-05-28",
+  "notified_raw": "2025年5月28日",
+  "store": "ロイヤルホームセンター伊川谷",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "設置者代表者",
   "docs": [],
   "source": "kobe-city",
   "key": "6dbf2dec6181",
@@ -14519,7 +14518,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-21",
   "notified_raw": "2025年5月21日",
   "store": "三井アウトレットパークマリンピア神戸",
@@ -14618,7 +14617,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-19",
   "notified_raw": "2025年5月19日",
   "store": "ＮＭＦ神戸名谷ビル",
@@ -14888,7 +14887,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-05-08",
   "notified_raw": "2025年5月8日",
   "store": "イオンつくしが丘店",
@@ -14906,6 +14905,35 @@
   "docs": [],
   "source": "kobe-city",
   "key": "7c0b42d0e5c7",
+  "first_seen": "2025-10-13",
+  "last_seen": "2025-10-13",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2025-05-08",
+  "notified_raw": "2025年5月8日",
+  "store": "イオンつくしが丘店",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "9f4dad1bb759",
   "first_seen": "2025-10-13",
   "last_seen": "2025-10-13",
   "mode": "snapshot",
@@ -15948,7 +15976,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-03-31",
   "notified_raw": "2025年3月31日",
   "store": "NMF神戸名谷ビル",
@@ -16018,7 +16046,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-03-27",
   "notified_raw": "2025年3月27日",
   "store": "イズミヤショッピングセンター西神戸",
@@ -16811,7 +16839,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-21",
   "notified_raw": "2025年2月21日",
   "store": "御影クラッセ",
@@ -17011,7 +17039,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-14",
   "notified_raw": "2025年2月14日",
   "store": "かりばプラザ",
@@ -17151,8 +17179,8 @@
   "area": "茨木市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第5項",
+  "kind": "廃止",
   "notified_on": "2025-02-10",
   "notified_raw": "2025年2月10日",
   "store": "ダイエー新在家店",
@@ -17169,7 +17197,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "64ae7daf2448",
+  "key": "861020aba1bc",
   "first_seen": "2025-10-13",
   "last_seen": "2025-10-13",
   "mode": "snapshot",
@@ -17213,7 +17241,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "ＢＲＡＮＣＨ神戸学園都市",
@@ -17241,8 +17269,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "（仮称）オーケー垂水小束山店",
@@ -17259,7 +17287,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "b6d6bdc226b7",
+  "key": "fd2bebf1ece3",
   "first_seen": "2025-05-24",
   "last_seen": "2025-10-13",
   "mode": "snapshot",
@@ -17271,7 +17299,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "フレスポ舞子坂",
@@ -17300,7 +17328,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-02-07",
   "notified_raw": "2025年2月7日",
   "store": "G－７モール北神戸",
@@ -17953,7 +17981,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2025-01-15",
   "notified_raw": "2025年1月15日",
   "store": "ミント神戸（神戸新聞会館ビル）",
@@ -18072,7 +18100,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-27",
   "notified_raw": "2024年12月27日",
   "store": "神戸ファッションプラザ",
@@ -18101,7 +18129,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-25",
   "notified_raw": "2024年12月25日",
   "store": "高浜モザイク",
@@ -18130,7 +18158,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-12-25",
   "notified_raw": "2024年12月25日",
   "store": "ハーバーランドダイヤニッセイビル",
@@ -18984,12 +19012,12 @@
   "area": "堺市堺区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-20",
   "notified_raw": "令和6年11月20日",
   "store": "（仮称）ドラッグコスモス加古川平岡店",
-  "address": "",
+  "address": "加古川",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -19004,7 +19032,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241210t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "50f1a04833b5",
+  "key": "9058849efb97",
   "first_seen": "2025-01-12",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
@@ -19012,8 +19040,7 @@
   "pref": "兵庫県",
   "city": "加古川市",
   "ward": "",
-  "area": "加古川市",
-  "place_guess": true
+  "area": "加古川市"
  },
  {
   "source": "osaka-city",
@@ -19069,12 +19096,12 @@
   "area": "大阪市鶴見区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-15",
   "notified_raw": "令和6年11月15日",
   "store": "（仮称）ドラッグコスモスたつの神岡店",
-  "address": "",
+  "address": "たつの",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -19089,7 +19116,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241129t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "1b0186b116a1",
+  "key": "3b3aa29ddc4e",
   "first_seen": "2024-12-08",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
@@ -19097,12 +19124,11 @@
   "pref": "兵庫県",
   "city": "たつの市",
   "ward": "",
-  "area": "たつの市",
-  "place_guess": true
+  "area": "たつの市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-11-08",
   "notified_raw": "2024年11月8日",
   "store": "神戸御幸ビル商業施設",
@@ -19159,8 +19185,8 @@
   "area": "堺市南区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-07",
   "notified_raw": "2024年11月7日",
   "store": "（仮称）イエローハット神戸垂水店",
@@ -19177,7 +19203,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "6b6812e52517",
+  "key": "93c54ce18b61",
   "first_seen": "2025-10-13",
   "last_seen": "2025-10-13",
   "mode": "snapshot",
@@ -19188,8 +19214,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-07",
   "notified_raw": "2024年11月7日",
   "store": "(仮称)イエローハット神戸垂水店",
@@ -19206,7 +19232,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "07ba5f09fc2e",
+  "key": "ad757b288d90",
   "first_seen": "2025-01-26",
   "last_seen": "2025-05-24",
   "mode": "snapshot",
@@ -19821,11 +19847,11 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-21",
   "notified_raw": "令和6年10月21日",
   "store": "カワベ姫路城東店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -19840,7 +19866,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241112t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "dcfb3fc0415d",
+  "key": "daefd60a227d",
   "first_seen": "2024-12-08",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
@@ -19848,8 +19874,7 @@
   "pref": "兵庫県",
   "city": "姫路市",
   "ward": "",
-  "area": "姫路市",
-  "place_guess": true
+  "area": "姫路市"
  },
  {
   "article": "第5条第1項",
@@ -20119,7 +20144,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-03",
   "notified_raw": "2024年10月3日",
   "store": "雲井通6丁目地区市街地再開発ビル",
@@ -20147,8 +20172,37 @@
   "area": "神戸市"
  },
  {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2024-10-03",
+  "notified_raw": "2024年10月3日",
+  "store": "雲井通6丁目地区市街地再開発ビル",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "e744ba9019ad",
+  "first_seen": "2025-10-13",
+  "last_seen": "2025-10-13",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-02",
   "notified_raw": "2024年10月2日",
   "store": "新長田駅前ビル",
@@ -20177,11 +20231,11 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-02",
   "notified_raw": "令和6年10月2日",
   "store": "グンゼタウンセンターつかしん",
-  "address": "",
+  "address": "尼崎",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -20196,15 +20250,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241018t_1.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "f0789b655057",
+  "key": "fccc8c8b394a",
   "first_seen": "2024-12-08",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "尼崎市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "尼崎市"
  },
  {
   "source": "osaka-pref",
@@ -20292,11 +20346,11 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-30",
   "notified_raw": "令和6年9月30日",
   "store": "生鮮＆業務スーパ―ボトルワールドOK今津店",
-  "address": "",
+  "address": "西宮",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -20311,15 +20365,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241018t_1.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "c7acefea53e5",
+  "key": "6a57e1aa5337",
   "first_seen": "2024-12-08",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "西宮市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "西宮市"
  },
  {
   "source": "osaka-pref",
@@ -20355,7 +20409,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "神戸相互ビル",
@@ -20384,7 +20438,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ須磨鷹取店",
@@ -20413,7 +20467,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ長田店",
@@ -20442,7 +20496,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ神戸駅前店",
@@ -20471,7 +20525,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ春日野道店",
@@ -20500,7 +20554,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-27",
   "notified_raw": "2024年9月27日",
   "store": "ライフ下山手通店",
@@ -20568,8 +20622,8 @@
   "area": "大阪市住之江区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-09-26",
   "notified_raw": "2024年9月26日",
   "store": "（仮称）マルアイ長田店",
@@ -20586,7 +20640,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "4e4c6a0e3327",
+  "key": "8f57e3eb5aab",
   "first_seen": "2025-01-26",
   "last_seen": "2025-10-13",
   "mode": "snapshot",
@@ -20755,7 +20809,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-20",
   "notified_raw": "2024年9月20日",
   "store": "ジェームス山商業施設",
@@ -20784,7 +20838,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-12",
   "notified_raw": "2024年9月12日",
   "store": "神戸阪急",
@@ -20963,7 +21017,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-06",
   "notified_raw": "2024年9月6日",
   "store": "ジェームス山商業施設",
@@ -21113,8 +21167,8 @@
   "area": "大阪市北区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第6条第5項",
+  "kind": "廃止",
   "notified_on": "2024-09-03",
   "notified_raw": "2024年9月3日",
   "store": "エピタ神戸三宮",
@@ -21129,6 +21183,35 @@
   "citizen_opinion": "",
   "city_opinion": "",
   "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "dd7bbc706caf",
+  "first_seen": "2025-10-13",
+  "last_seen": "2025-10-13",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2024-09-03",
+  "notified_raw": "2024年9月3日",
+  "store": "エピタ神戸三宮",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "店舗名称、設置者代表者",
   "docs": [],
   "source": "kobe-city",
   "key": "f9c05631f120",
@@ -21852,12 +21935,12 @@
   "area": "大阪市城東区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-08-27",
   "notified_raw": "令和6年8月27日",
   "store": "（仮称）マルアイ南広畑店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -21872,15 +21955,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240913t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "387f897b1191",
+  "key": "52e922a10efc",
   "first_seen": "2024-12-08",
   "last_seen": "2025-01-12",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "姫路市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "姫路市"
  },
  {
   "article": "第6条第1項",
@@ -21913,17 +21996,17 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-08-23",
   "notified_raw": "令和6年8月23日",
   "store": "モールラフィーネ",
-  "address": "",
+  "address": "三田",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-23",
-  "review_to": null,
+  "review_to": "2024-12-23",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -21932,15 +22015,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240823t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "fbcb36da194c",
+  "key": "cf7c8f53651c",
   "first_seen": "2024-09-07",
   "last_seen": "2024-12-08",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "三田市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "三田市"
  },
  {
   "source": "osaka-pref",
@@ -22374,18 +22457,18 @@
   "area": "堺市堺区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "（仮称）ドラッグコスモス丹波篠山店",
-  "address": "",
+  "address": "丹波篠山",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-06",
-  "review_to": null,
+  "review_to": "2024-12-06",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -22394,7 +22477,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240806t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "3a53efb13f65",
+  "key": "fd4ec8662250",
   "first_seen": "2024-09-07",
   "last_seen": "2024-12-08",
   "mode": "snapshot",
@@ -22402,22 +22485,21 @@
   "pref": "兵庫県",
   "city": "丹波篠山市",
   "ward": "",
-  "area": "丹波篠山市",
-  "place_guess": true
+  "area": "丹波篠山市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "PLiCO西明石",
-  "address": "",
+  "address": "明石",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-13",
-  "review_to": null,
+  "review_to": "2024-12-13",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -22426,7 +22508,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240813t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "24268ee52d2b",
+  "key": "bd60574c3f1b",
   "first_seen": "2024-09-07",
   "last_seen": "2024-12-08",
   "mode": "snapshot",
@@ -22434,8 +22516,7 @@
   "pref": "兵庫県",
   "city": "明石市",
   "ward": "",
-  "area": "明石市",
-  "place_guess": true
+  "area": "明石市"
  },
  {
   "source": "osaka-pref",
@@ -22632,8 +22713,8 @@
   "area": "枚方市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2024-07-11",
   "notified_raw": "2024年7月11日",
   "store": "カナート西神戸店",
@@ -22650,7 +22731,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "6f6c8e1a1832",
+  "key": "c7270dbee407",
   "first_seen": "2025-01-26",
   "last_seen": "2025-05-24",
   "mode": "snapshot",
@@ -22938,18 +23019,18 @@
   "area": "大阪市此花区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-28",
   "notified_raw": "令和6年6月28日",
   "store": "（仮称）V・drug大塩店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-30",
-  "review_to": null,
+  "review_to": "2024-12-02",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -22958,29 +23039,29 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240730t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "7121d60da188",
+  "key": "f9fd9d0217b6",
   "first_seen": "2024-09-07",
   "last_seen": "2024-12-08",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "姫路市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "姫路市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-28",
   "notified_raw": "令和6年6月28日",
   "store": "ケーズデンキ氷上店",
-  "address": "",
+  "address": "丹波",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-23",
-  "review_to": null,
+  "review_to": "2024-11-25",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -22989,15 +23070,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240723t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "e7d9bad192f3",
+  "key": "ac2d93d3834f",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "丹波市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "丹波市"
  },
  {
   "source": "osaka-pref",
@@ -23402,18 +23483,18 @@
   "area": "八尾市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-20",
   "notified_raw": "令和6年6月20日",
   "store": "（仮称）ダイレックス川西山下店",
-  "address": "",
+  "address": "川西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-09",
-  "review_to": null,
+  "review_to": "2024-11-11",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -23422,7 +23503,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240709t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "421fe3872ab8",
+  "key": "c1683b37ced3",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -23430,12 +23511,11 @@
   "pref": "兵庫県",
   "city": "川西市",
   "ward": "",
-  "area": "川西市",
-  "place_guess": true
+  "area": "川西市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-18",
   "notified_raw": "2024年6月18日",
   "store": "フレスポ舞子坂",
@@ -23464,7 +23544,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-18",
   "notified_raw": "2024年6月18日",
   "store": "BRANCH神戸学園都市",
@@ -23493,17 +23573,17 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-17",
   "notified_raw": "令和6年6月17日",
   "store": "ジュンテンドー加西店",
-  "address": "",
+  "address": "加西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-05",
-  "review_to": null,
+  "review_to": "2024-11-05",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -23512,7 +23592,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240705t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "99d3bc92e021",
+  "key": "8272717aa7b7",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -23520,8 +23600,7 @@
   "pref": "兵庫県",
   "city": "加西市",
   "ward": "",
-  "area": "加西市",
-  "place_guess": true
+  "area": "加西市"
  },
  {
   "source": "osaka-city",
@@ -23574,7 +23653,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-14",
   "notified_raw": "2024年6月14日",
   "store": "MEGAドン・キホーテ神戸本店",
@@ -23602,8 +23681,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-13",
   "notified_raw": "2024年6月13日",
   "store": "（仮称）ラ・ムー名谷店",
@@ -23620,7 +23699,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "d9761b9aef20",
+  "key": "a7b5787a5f9e",
   "first_seen": "2024-08-06",
   "last_seen": "2025-05-24",
   "mode": "snapshot",
@@ -23965,7 +24044,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-06-04",
   "notified_raw": "2024年6月4日",
   "store": "RICセントラルタワー",
@@ -23993,18 +24072,18 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-04",
   "notified_raw": "令和6年6月4日",
   "store": "（仮称）コーナンPRO川西加茂店",
-  "address": "",
+  "address": "川西",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24013,7 +24092,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "a390fae8d92b",
+  "key": "913bf66f9a5a",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -24021,8 +24100,7 @@
   "pref": "兵庫県",
   "city": "川西市",
   "ward": "",
-  "area": "川西市",
-  "place_guess": true
+  "area": "川西市"
  },
  {
   "source": "osaka-city",
@@ -24073,18 +24151,18 @@
   "area": "大阪市港区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-03",
   "notified_raw": "令和6年6月3日",
   "store": "（仮称）柏原パーク",
-  "address": "",
+  "address": "丹波",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24093,29 +24171,29 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "c249b5596483",
+  "key": "a9f5df63772e",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "丹波市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "丹波市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-31",
   "notified_raw": "令和6年5月31日",
   "store": "ホームセンターコーナン三田対中店",
-  "address": "",
+  "address": "三田",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24124,7 +24202,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "8247a163c6f0",
+  "key": "ef6e20a5375c",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -24132,22 +24210,21 @@
   "pref": "兵庫県",
   "city": "三田市",
   "ward": "",
-  "area": "三田市",
-  "place_guess": true
+  "area": "三田市"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-28",
   "notified_raw": "令和6年5月28日",
   "store": "イオン三木店",
-  "address": "",
+  "address": "三木",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-06-18",
-  "review_to": null,
+  "review_to": "2024-10-18",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24156,7 +24233,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240618t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "2a6cea9a7d92",
+  "key": "12c40beadd93",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -24164,8 +24241,7 @@
   "pref": "兵庫県",
   "city": "三木市",
   "ward": "",
-  "area": "三木市",
-  "place_guess": true
+  "area": "三木市"
  },
  {
   "source": "osaka-pref",
@@ -24559,7 +24635,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-13",
   "notified_raw": "2024年5月13日",
   "store": "ホームセンターコーナン神戸新在家店",
@@ -24634,17 +24710,17 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-05-09",
   "notified_raw": "令和6年5月9日",
   "store": "ハローズ姫路飾磨店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-05-28",
-  "review_to": null,
+  "review_to": "2024-09-30",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24653,7 +24729,7 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240528t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "73c8a96dbaea",
+  "key": "f247b8f86e3f",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
@@ -24661,8 +24737,7 @@
   "pref": "兵庫県",
   "city": "姫路市",
   "ward": "",
-  "area": "姫路市",
-  "place_guess": true
+  "area": "姫路市"
  },
  {
   "source": "osaka-city",
@@ -24714,7 +24789,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-26",
   "notified_raw": "2024年4月26日",
   "store": "ステップガーデン藤原台",
@@ -24743,17 +24818,17 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-24",
   "notified_raw": "令和6年4月24日",
   "store": "ケーズデンキ和田山店",
-  "address": "",
+  "address": "朝来",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-05-28",
-  "review_to": null,
+  "review_to": "2024-09-30",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -24762,15 +24837,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240528t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "a0a87e55ee04",
+  "key": "36208332544b",
   "first_seen": "2024-09-07",
   "last_seen": "2024-09-07",
   "mode": "snapshot",
   "listed": false,
   "pref": "兵庫県",
-  "city": "",
+  "city": "朝来市",
   "ward": "",
-  "area": "兵庫県"
+  "area": "朝来市"
  },
  {
   "article": "第6条第1項",
@@ -24811,7 +24886,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-18",
   "notified_raw": "2024年4月18日",
   "store": "ステップガーデン藤原台",
@@ -24840,7 +24915,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエー舞子ショッパーズプラザ",
@@ -24869,7 +24944,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエー新在家店",
@@ -24898,7 +24973,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエーグルメシティ本山店",
@@ -24927,7 +25002,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ダイエーグルメシティ小束山店",
@@ -24956,7 +25031,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-16",
   "notified_raw": "2024年4月16日",
   "store": "ショッパーズプラザ鈴蘭台",
@@ -25137,7 +25212,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-04-04",
   "notified_raw": "2024年4月4日",
   "store": "大丸神戸店",
@@ -25261,8 +25336,8 @@
   "area": "大阪市中央区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-03-29",
   "notified_raw": "2024年3月29日",
   "store": "(仮称)ドラッグコスモス伊川谷店",
@@ -25279,7 +25354,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "70a74b004b04",
+  "key": "81b178ee313e",
   "first_seen": "2024-05-24",
   "last_seen": "2025-05-24",
   "mode": "snapshot",
@@ -25526,7 +25601,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-19",
   "notified_raw": "2024年3月19日",
   "store": "RICセントラルタワー",
@@ -25555,7 +25630,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-19",
   "notified_raw": "2024年3月19日",
   "store": "IRCセントラルタワー",
@@ -25613,7 +25688,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-15",
   "notified_raw": "2024年3月15日",
   "store": "新長田駅前ビル",
@@ -25642,7 +25717,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-03-15",
   "notified_raw": "2024年3月15日",
   "store": "御影クラッセ",
@@ -25889,8 +25964,8 @@
   "area": "枚方市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2024-02-13",
   "notified_raw": "2024年2月13日",
   "store": "ステップガーデン藤原台",
@@ -25907,7 +25982,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "af87412b7e1b",
+  "key": "872a344223e4",
   "first_seen": "2024-05-24",
   "last_seen": "2025-05-24",
   "mode": "snapshot",
@@ -26351,7 +26426,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-12",
   "notified_raw": "2024年1月12日",
   "store": "高浜モザイク",
@@ -26380,7 +26455,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-12",
   "notified_raw": "2024年1月12日",
   "store": "ハーバーランドダイヤニッセイビル",
@@ -26409,7 +26484,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-11",
   "notified_raw": "2024年1月11日",
   "store": "サザンモール六甲B612、サザンモール2nd street",
@@ -26438,7 +26513,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-10",
   "notified_raw": "2024年1月10日",
   "store": "ショッピングプラザエスパ星陵台",
@@ -26496,7 +26571,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-01-04",
   "notified_raw": "2024年1月4日",
   "store": "ホームセンターコーナン神戸新在家店",
@@ -26633,8 +26708,8 @@
   "area": "大阪市西成区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2023-12-25",
   "notified_raw": "2023年12月25日",
   "store": "（仮称）三井アウトレットパークマリンピア神戸建替計画",
@@ -26651,7 +26726,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "e6d1f4ce18ca",
+  "key": "db9a6e7ec3d4",
   "first_seen": "2024-05-24",
   "last_seen": "2025-01-26",
   "mode": "snapshot",
@@ -26691,8 +26766,8 @@
   "area": "堺市南区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2023-12-01",
   "notified_raw": "2023年12月1日",
   "store": "神戸三宮雲井通5丁目地区第一種市街地再開発事業",
@@ -26709,7 +26784,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "dc2381fa7e5d",
+  "key": "1b1b956fdaa7",
   "first_seen": "2024-05-24",
   "last_seen": "2025-01-26",
   "mode": "snapshot",
@@ -26721,7 +26796,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-12-01",
   "notified_raw": "2023年12月1日",
   "store": "ホームセンターコーナン名谷店",
@@ -26779,7 +26854,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-11-28",
   "notified_raw": "2023年11月28日",
   "store": "アスタくにづか3番館",
@@ -26900,7 +26975,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-11-07",
   "notified_raw": "2023年11月7日",
   "store": "神戸三田プレミアム・アウトレット",
@@ -28293,8 +28368,8 @@
   "area": "枚方市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2023-09-08",
   "notified_raw": "2023年9月8日",
   "store": "（仮称）ザグザグ高津橋店",
@@ -28311,7 +28386,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "c1922b0c2e69",
+  "key": "41e3fe2bdb04",
   "first_seen": "2024-05-24",
   "last_seen": "2025-01-26",
   "mode": "snapshot",
@@ -28772,7 +28847,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-07-31",
   "notified_raw": "2023年7月31日",
   "store": "TerrasMa",
@@ -29013,7 +29088,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-07-12",
   "notified_raw": "2023年7月12日",
   "store": "神戸御幸ビル商業施設",
@@ -29256,8 +29331,8 @@
   "area": "茨木市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2023-06-30",
   "notified_raw": "2023年6月30日",
   "store": "（仮称）スーパーマルハチ伊川谷店",
@@ -29274,7 +29349,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "b7c0298f7471",
+  "key": "9400dbcf0601",
   "first_seen": "2024-05-24",
   "last_seen": "2025-01-26",
   "mode": "snapshot",
@@ -29731,7 +29806,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-06-12",
   "notified_raw": "2023年6月12日",
   "store": "神戸北町複合商業施設",
@@ -29760,7 +29835,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-06-01",
   "notified_raw": "2023年6月1日",
   "store": "ルッカ名谷",
@@ -30214,7 +30289,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-04-20",
   "notified_raw": "2023年4月20日",
   "store": "リファーレ横尾",
@@ -30243,7 +30318,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-04-20",
   "notified_raw": "2023年4月20日",
   "store": "プレンティ二番館",
@@ -30272,7 +30347,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-04-20",
   "notified_raw": "2023年4月20日",
   "store": "プレンティ一番館",
@@ -30301,7 +30376,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-04-20",
   "notified_raw": "2023年4月20日",
   "store": "セリオ",
@@ -30359,7 +30434,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-04-07",
   "notified_raw": "2023年4月7日",
   "store": "スーパービバホーム神戸玉津インター店",
@@ -30471,7 +30546,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-29",
   "notified_raw": "2023年3月29日",
   "store": "イオンモール神戸北",
@@ -30561,7 +30636,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-24",
   "notified_raw": "2023年3月24日",
   "store": "阪神ファミリーショップ青木",
@@ -30590,7 +30665,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-24",
   "notified_raw": "2023年3月24日",
   "store": "御影クラッセ",
@@ -30619,7 +30694,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-16",
   "notified_raw": "2023年3月16日",
   "store": "テックランド神戸和田岬店・ニトリ神戸和田岬店",
@@ -30647,8 +30722,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2023-03-16",
   "notified_raw": "2023年3月16日",
   "store": "テックランド神戸和田岬店 ニトリ神戸和田岬店",
@@ -30665,7 +30740,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "58092bcaf37f",
+  "key": "2e933c140254",
   "first_seen": "2024-05-24",
   "last_seen": "2024-08-06",
   "mode": "snapshot",
@@ -30677,7 +30752,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-16",
   "notified_raw": "2023年3月16日",
   "store": "テックランド神戸和田岬店",
@@ -30948,7 +31023,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-03-02",
   "notified_raw": "2023年3月2日",
   "store": "小束山複合商業施設",
@@ -31189,7 +31264,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-02-06",
   "notified_raw": "2023年2月6日",
   "store": "IKEA神戸",
@@ -31217,8 +31292,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2023-02-03",
   "notified_raw": "2023年2月3日",
   "store": "（仮称）ザグザグ垂水名谷店",
@@ -31235,7 +31310,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "12be9eaddb58",
+  "key": "30f5c84a408e",
   "first_seen": "2023-04-01",
   "last_seen": "2024-08-06",
   "mode": "snapshot",
@@ -31247,7 +31322,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-02-01",
   "notified_raw": "2023年2月1日",
   "store": "ロイヤルホームセンター伊川谷",
@@ -31360,7 +31435,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2023-01-30",
   "notified_raw": "2023年1月30日",
   "store": "ミント神戸(神戸新聞会館ビル)",
@@ -32337,7 +32412,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-11-01",
   "notified_raw": "令和4年11月1日",
   "store": "ステップガーデン藤原台",
@@ -32366,7 +32441,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-11-01",
   "notified_raw": "令和4年11月1日",
   "store": "ショッピングプラザ エスパ星陵台",
@@ -32522,7 +32597,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-14",
   "notified_raw": "令和4年10月14日",
   "store": "ケーズデンキ西神戸店",
@@ -32551,7 +32626,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-14",
   "notified_raw": "令和4年10月14日",
   "store": "ケーズデンキ北神戸鹿の子台店",
@@ -32580,7 +32655,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-14",
   "notified_raw": "令和4年10月14日",
   "store": "ケーズデンキガーデンシティ垂水店",
@@ -32609,7 +32684,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-14",
   "notified_raw": "令和4年10月14日",
   "store": "ケーズHAT神戸メディカルモール",
@@ -32667,7 +32742,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-07",
   "notified_raw": "令和4年10月7日",
   "store": "住吉ターミナルビル",
@@ -32696,7 +32771,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-07",
   "notified_raw": "令和4年10月7日",
   "store": "プリコ神戸",
@@ -32725,7 +32800,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-10-07",
   "notified_raw": "令和4年10月7日",
   "store": "プリコ六甲道（中央館）",
@@ -33334,7 +33409,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-09-21",
   "notified_raw": "令和4年9月21日",
   "store": "コープリビング甲南",
@@ -33407,7 +33482,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-09-02",
   "notified_raw": "令和4年9月2日",
   "store": "ブルメール舞多聞",
@@ -33687,7 +33762,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-08-02",
   "notified_raw": "令和4年8月2日",
   "store": "DCM神戸北町店",
@@ -33744,8 +33819,8 @@
   "area": "茨木市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2022-07-29",
   "notified_raw": "令和4年7月29日",
   "store": "神戸ダイヤモンドビル",
@@ -33762,7 +33837,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "a0573e8151a2",
+  "key": "f663d09fe8fb",
   "first_seen": "2022-12-02",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -33969,7 +34044,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-07-19",
   "notified_raw": "令和4年7月19日",
   "store": "かりばプラザ",
@@ -33998,7 +34073,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-07-19",
   "notified_raw": "令和4年7月19日",
   "store": "かすがプラザ",
@@ -34085,7 +34160,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-07-08",
   "notified_raw": "令和4年7月8日",
   "store": "須磨パティオ",
@@ -34114,7 +34189,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-07-06",
   "notified_raw": "令和4年7月6日",
   "store": "須磨パティオ",
@@ -34294,7 +34369,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-06-24",
   "notified_raw": "令和4年6月24日",
   "store": "ハウジング・デザイン・センター神戸",
@@ -34352,7 +34427,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-06-14",
   "notified_raw": "令和4年6月14日",
   "store": "マックスバリュ大池店",
@@ -34570,7 +34645,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-06-06",
   "notified_raw": "令和4年6月6日",
   "store": "ステップガーデン藤原台",
@@ -34599,7 +34674,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-06-06",
   "notified_raw": "令和4年6月6日",
   "store": "IKEA神戸",
@@ -34842,7 +34917,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-05-30",
   "notified_raw": "令和4年5月30日",
   "store": "クロスモール須磨",
@@ -34871,7 +34946,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-05-24",
   "notified_raw": "令和4年5月24日",
   "store": "ミント神戸（神戸新聞会館ビル）",
@@ -35045,7 +35120,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-05-11",
   "notified_raw": "令和4年5月11日",
   "store": "神戸御幸ビル商業施設",
@@ -35517,7 +35592,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-03-31",
   "notified_raw": "令和4年3月31日",
   "store": "御影クラッセ",
@@ -35545,8 +35620,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2022-03-30",
   "notified_raw": "令和4年3月30日",
   "store": "御影クラッセ",
@@ -35563,7 +35638,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "9567ab59443c",
+  "key": "a1f68c451910",
   "first_seen": "2022-12-02",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -35873,8 +35948,8 @@
   "area": "大阪市阿倍野区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2022-03-22",
   "notified_raw": "令和4年3月22日",
   "store": "ドン・キホーテ神戸脇浜店",
@@ -35891,7 +35966,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "f2bd0c9bcb22",
+  "key": "59c3a326524d",
   "first_seen": "2022-12-02",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -35902,8 +35977,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2022-03-22",
   "notified_raw": "令和4年3月22日",
   "store": "ドン・キホーテ垂水店",
@@ -35920,7 +35995,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "8f0220e89cc6",
+  "key": "cfeaeeabcb1d",
   "first_seen": "2022-12-02",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -35932,7 +36007,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-03-22",
   "notified_raw": "令和4年3月22日",
   "store": "MEGAドン・キホーテ神戸本店",
@@ -35961,7 +36036,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-03-22",
   "notified_raw": "令和4年3月22日",
   "store": "MEGAドン・キホーテ神戸学園都市店",
@@ -36279,7 +36354,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-02-22",
   "notified_raw": "令和4年2月22日",
   "store": "ドラッグコスモス舞多聞店",
@@ -36366,7 +36441,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-02-09",
   "notified_raw": "令和4年2月9日",
   "store": "ドラッグコスモスコスモス舞多聞店",
@@ -36395,7 +36470,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-02-07",
   "notified_raw": "令和4年2月7日",
   "store": "高浜モザイク",
@@ -36424,7 +36499,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2022-02-07",
   "notified_raw": "令和4年2月7日",
   "store": "ハーバーランド ダイヤニッセイビル",
@@ -36737,7 +36812,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-12-24",
   "notified_raw": "令和3年12月24日",
   "store": "ケーズデンキ北神戸鹿の子台店",
@@ -36794,8 +36869,8 @@
   "area": "枚方市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-12-15",
   "notified_raw": "令和3年12月15日",
   "store": "神戸北町複合商業施設",
@@ -36810,6 +36885,35 @@
   "citizen_opinion": "",
   "city_opinion": "",
   "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "3f79d6220299",
+  "first_seen": "2022-08-17",
+  "last_seen": "2023-04-01",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
+  "article": "",
+  "kind": "変更",
+  "notified_on": "2021-12-15",
+  "notified_raw": "令和3年12月15日",
+  "store": "神戸北町複合商業施設",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "店舗名称、設置者名称・代表者、小売業者",
   "docs": [],
   "source": "kobe-city",
   "key": "62a2e833905f",
@@ -37315,7 +37419,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-08",
   "notified_raw": "令和3年11月8日",
   "store": "スーパービバホーム神戸玉津インター店",
@@ -37373,7 +37477,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-02",
   "notified_raw": "令和3年11月2日",
   "store": "TerrasMa",
@@ -37402,7 +37506,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-11-01",
   "notified_raw": "令和3年11月1日",
   "store": "神戸三田プレミアム・アウトレット",
@@ -37430,8 +37534,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-10-29",
   "notified_raw": "令和3年10月29日",
   "store": "（仮称）スーパーマルハチ柳原店",
@@ -37448,7 +37552,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "8f487f480b87",
+  "key": "5ee3f2ea1ef6",
   "first_seen": "2022-08-17",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -37715,8 +37819,8 @@
   "area": "大阪市平野区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-10-11",
   "notified_raw": "令和3年10月11日",
   "store": "エムワンスクウェア",
@@ -37733,7 +37837,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "cf020059e26c",
+  "key": "2d9f831182c3",
   "first_seen": "2022-08-17",
   "last_seen": "2023-04-01",
   "mode": "snapshot",
@@ -37910,7 +38014,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "神戸阪急",
@@ -37938,8 +38042,37 @@
   "area": "神戸市"
  },
  {
+  "article": "第11条第3項",
+  "kind": "承継",
+  "notified_on": "2021-09-30",
+  "notified_raw": "令和3年9月30日",
+  "store": "神戸阪急",
+  "address": "",
+  "operator": "",
+  "new_operator": "",
+  "event_on": null,
+  "content": "",
+  "review_from": null,
+  "review_to": null,
+  "meeting": "",
+  "citizen_opinion": "",
+  "city_opinion": "",
+  "note": "",
+  "docs": [],
+  "source": "kobe-city",
+  "key": "923cc3745883",
+  "first_seen": "2022-08-17",
+  "last_seen": "2023-04-01",
+  "mode": "snapshot",
+  "listed": false,
+  "pref": "兵庫県",
+  "city": "神戸市",
+  "ward": "",
+  "area": "神戸市"
+ },
+ {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "ドラッグコスモス井吹台店",
@@ -37968,7 +38101,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-30",
   "notified_raw": "令和3年9月30日",
   "store": "ショッピングプラザ エスパ星陵台",
@@ -38072,7 +38205,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-09-24",
   "notified_raw": "令和3年9月24日",
   "store": "ドラッグコスモス井吹台店",
@@ -38183,7 +38316,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "春日野道NKビル",
@@ -38212,7 +38345,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "マックスバリュ須磨海浜公園駅前店",
@@ -38241,7 +38374,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-31",
   "notified_raw": "令和3年8月31日",
   "store": "コトノハコ神戸",
@@ -38357,7 +38490,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-23",
   "notified_raw": "令和3年8月23日",
   "store": "プリコ神戸",
@@ -38386,7 +38519,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-12",
   "notified_raw": "令和3年8月12日",
   "store": "須磨パティオ",
@@ -38508,7 +38641,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "マックスバリュ長田南店",
@@ -38537,7 +38670,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "マックスバリュ塩屋北店",
@@ -38566,7 +38699,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-08-05",
   "notified_raw": "令和3年8月5日",
   "store": "ホームセンターコーナン神戸新在家店",
@@ -38640,8 +38773,8 @@
   "area": "大阪市天王寺区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-07-30",
   "notified_raw": "令和3年7月30日",
   "store": "(仮称)コープ北鈴蘭台",
@@ -38658,7 +38791,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "0b23cc2bf7ac",
+  "key": "a109bed6522d",
   "first_seen": "2022-08-17",
   "last_seen": "2022-12-02",
   "mode": "snapshot",
@@ -38816,8 +38949,8 @@
   "area": "堺市南区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-07-20",
   "notified_raw": "令和3年7月20日",
   "store": "（仮称）クロスモール須磨",
@@ -38834,7 +38967,7 @@
   "note": "縦覧に対する意見書の提出が2件ありました",
   "docs": [],
   "source": "kobe-city",
-  "key": "4c32275a42fb",
+  "key": "bf8bf20f0f8c",
   "first_seen": "2022-08-17",
   "last_seen": "2022-12-02",
   "mode": "snapshot",
@@ -38846,7 +38979,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-07-19",
   "notified_raw": "令和3年7月19日",
   "store": "須磨パティオ",
@@ -38874,8 +39007,8 @@
   "area": "神戸市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2021-07-16",
   "notified_raw": "令和3年7月16日",
   "store": "神戸ファッションプラザ",
@@ -38892,7 +39025,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "c1227a55d89d",
+  "key": "623cdfcd7f85",
   "first_seen": "2022-08-17",
   "last_seen": "2022-12-02",
   "mode": "snapshot",
@@ -39165,7 +39298,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-28",
   "notified_raw": "令和3年6月28日",
   "store": "ホームセンターコーナン名谷店",
@@ -39252,7 +39385,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-24",
   "notified_raw": "令和3年6月24日",
   "store": "ルッカ名谷",
@@ -39400,7 +39533,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-06-14",
   "notified_raw": "令和3年6月14日",
   "store": "コーナン名谷店",
@@ -39757,7 +39890,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-18",
   "notified_raw": "令和3年5月18日",
   "store": "阪急オアシス三宮店",
@@ -39815,7 +39948,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-17",
   "notified_raw": "令和3年5月17日",
   "store": "フレスポ舞子坂",
@@ -39844,7 +39977,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-05-17",
   "notified_raw": "令和3年5月17日",
   "store": "BRANCH神戸学園都市",
@@ -40205,7 +40338,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2021-03-31",
   "notified_raw": "令和3年3月31日",
   "store": "御影クラッセ",
@@ -40484,8 +40617,8 @@
   "area": "羽曳野市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-03-19",
   "notified_raw": "令和3年3月19日",
   "store": "(仮称)須磨区高倉台再開発計画",
@@ -40502,7 +40635,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "d49ef9d986f5",
+  "key": "a96852b7ed51",
   "first_seen": "2022-08-17",
   "last_seen": "2022-08-17",
   "mode": "snapshot",
@@ -40974,8 +41107,8 @@
   "area": "東大阪市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2021-02-04",
   "notified_raw": "令和3年2月4日",
   "store": "(仮称)スーパービバホーム神戸玉津インター店",
@@ -40992,7 +41125,7 @@
   "note": "縦覧に対する意見書の提出が1件ありました",
   "docs": [],
   "source": "kobe-city",
-  "key": "80d377a58daa",
+  "key": "7137550128c0",
   "first_seen": "2022-08-17",
   "last_seen": "2022-08-17",
   "mode": "snapshot",
@@ -41535,8 +41668,8 @@
   "area": "枚方市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2020-12-28",
   "notified_raw": "令和2年12月28日",
   "store": "(仮称)ニトリ神戸長田店",
@@ -41553,7 +41686,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "9411de66d451",
+  "key": "d8078c5884c6",
   "first_seen": "2022-08-17",
   "last_seen": "2022-08-17",
   "mode": "snapshot",
@@ -41731,8 +41864,8 @@
   "area": "阪南市"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第11条第3項",
+  "kind": "承継",
   "notified_on": "2020-12-10",
   "notified_raw": "令和2年12月10日",
   "store": "ウエステ垂水",
@@ -41749,7 +41882,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "33ac61ae3b55",
+  "key": "19b5a24c5452",
   "first_seen": "2022-08-17",
   "last_seen": "2022-08-17",
   "mode": "snapshot",
@@ -41808,7 +41941,7 @@
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2020-12-04",
   "notified_raw": "令和2年12月4日",
   "store": "山陽マルナカ水谷店",
@@ -41924,8 +42057,8 @@
   "area": "大阪市淀川区"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2020-11-19",
   "notified_raw": "令和2年11月19日",
   "store": "(仮称)神戸北町複合商業施設",
@@ -41942,7 +42075,7 @@
   "note": "",
   "docs": [],
   "source": "kobe-city",
-  "key": "2237348c1bea",
+  "key": "4361e8013f8c",
   "first_seen": "2022-08-17",
   "last_seen": "2022-08-17",
   "mode": "snapshot",
@@ -56983,7 +57116,7 @@
   "event_on": null,
   "content": "(1)大規模小売店舗を設置する者の氏名又は名称及び住所並びに法人にあっては代表者の氏名 (2)大規模小売店舗において小売業を行う者の氏名又は名称及び住所並びに法人にあっては代表者の氏名 ※詳細は下記の届出概要を参照",
   "review_from": "2017-03-07",
-  "review_to": null,
+  "review_to": "2017-07-07",
   "meeting": "",
   "citizen_opinion": "なし",
   "city_opinion": "",
@@ -57044,7 +57177,7 @@
   "event_on": null,
   "content": "",
   "review_from": "2017-02-22",
-  "review_to": null,
+  "review_to": "2017-06-22",
   "meeting": "平成29年4月11日（火曜日）19時～20時 箱の浦東住民センター（阪南市箱の浦1-76）",
   "citizen_opinion": "なし",
   "city_opinion": "",

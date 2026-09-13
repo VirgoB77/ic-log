@@ -1,17 +1,17 @@
 [
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-06-28",
   "notified_raw": "令和6年6月28日",
   "store": "（仮称）V・drug大塩店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-07-30",
-  "review_to": null,
+  "review_to": "2024-12-02",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -20,21 +20,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240730t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "7121d60da188"
+  "key": "f9fd9d0217b6"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "（仮称）ドラッグコスモス丹波篠山店",
-  "address": "",
+  "address": "丹波篠山",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-06",
-  "review_to": null,
+  "review_to": "2024-12-06",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -43,21 +43,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240806t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "3a53efb13f65"
+  "key": "fd4ec8662250"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-07-22",
   "notified_raw": "令和6年7月22日",
   "store": "PLiCO西明石",
-  "address": "",
+  "address": "明石",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-13",
-  "review_to": null,
+  "review_to": "2024-12-13",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -66,21 +66,21 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240813t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "24268ee52d2b"
+  "key": "bd60574c3f1b"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-08-23",
   "notified_raw": "令和6年8月23日",
   "store": "モールラフィーネ",
-  "address": "",
+  "address": "三田",
   "operator": "",
   "new_operator": "",
   "event_on": null,
   "content": "",
   "review_from": "2024-08-23",
-  "review_to": null,
+  "review_to": "2024-12-23",
   "meeting": "",
   "citizen_opinion": "",
   "city_opinion": "",
@@ -89,15 +89,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240823t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "fbcb36da194c"
+  "key": "cf7c8f53651c"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-08-27",
   "notified_raw": "令和6年8月27日",
   "store": "（仮称）マルアイ南広畑店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -112,15 +112,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20240913t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "387f897b1191"
+  "key": "52e922a10efc"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-09-30",
   "notified_raw": "令和6年9月30日",
   "store": "生鮮＆業務スーパ―ボトルワールドOK今津店",
-  "address": "",
+  "address": "西宮",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -135,15 +135,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241018t_1.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "c7acefea53e5"
+  "key": "6a57e1aa5337"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-02",
   "notified_raw": "令和6年10月2日",
   "store": "グンゼタウンセンターつかしん",
-  "address": "",
+  "address": "尼崎",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -158,15 +158,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241018t_1.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "f0789b655057"
+  "key": "fccc8c8b394a"
  },
  {
   "article": "",
-  "kind": "不明",
+  "kind": "変更",
   "notified_on": "2024-10-21",
   "notified_raw": "令和6年10月21日",
   "store": "カワベ姫路城東店",
-  "address": "",
+  "address": "姫路",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -181,15 +181,15 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241112t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "dcfb3fc0415d"
+  "key": "daefd60a227d"
  },
  {
-  "article": "",
-  "kind": "不明",
+  "article": "第5条第1項",
+  "kind": "新設",
   "notified_on": "2024-11-15",
   "notified_raw": "令和6年11月15日",
   "store": "（仮称）ドラッグコスモスたつの神岡店",
-  "address": "",
+  "address": "たつの",
   "operator": "",
   "new_operator": "",
   "event_on": null,
@@ -204,6 +204,6 @@
    "https://web.pref.hyogo.lg.jp/ks21/documents/20241129t.pdf"
   ],
   "source": "hyogo-pref-juran",
-  "key": "1b0186b116a1"
+  "key": "3b3aa29ddc4e"
  }
 ]
