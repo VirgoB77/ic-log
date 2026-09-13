@@ -57,7 +57,7 @@ https://virgob77.github.io/ic-log/
 | `tenant/` | 2つ目のアプリ「ゆうちメモ」（テナント誘致の連絡メモ）。単体で動く |
 | `card2/` | 3つ目のアプリ「名刺帖」（名刺管理）。単体で動く。Claude で読み取る |
 | `card/` | 前の版「めいしばこ」の跡地。`card2/` へ転送するだけ |
-| `shutten/` | 大店立地法の届出ページを偵察して保存する道具。GitHub Actions で動く |
+| `shutten/` | 「大型店日報」の跡地。本体は [ogataten-nippo](https://github.com/VirgoB77/ogataten-nippo) に移した。ここは新しい場所へ転送するだけ |
 
 ### 作り直すとき
 
@@ -101,15 +101,14 @@ localStorage ではなく IndexedDB に入れている。
 名刺アプリを使うのが初めてなら、README の
 「便利なところ」「不便なところ・できないこと」を先に読むとよい。
 
-## 4つ目：大店立地法ウォッチ（まだ道具だけ）
+## 4つ目：大型店日報（別のリポジトリに移した）
 
 大きなお店ができる・なくなることは、開店の8か月以上前に届出として公開され、
 **4か月で公開ページから落ちる**。毎日とっておけば、そのうち誰も持っていない記録になる。
 
-いまは「兵庫と大阪の各ページが機械で読める形か」を確かめる偵察の道具だけがある。
-上の3つと違ってスマホアプリではなく、GitHub のサーバーの上で動く。
-
-- 使い方: [shutten/README.md](shutten/README.md)
+この仕組みは 2026-09-13 に [VirgoB77/ogataten-nippo](https://github.com/VirgoB77/ogataten-nippo) へ
+履歴ごと移した。公開ページは https://virgob77.github.io/ogataten-nippo/ 。
+`shutten/` に残っているのは、古い URL を新しい場所へ送る案内ページだけ。
 
 ## 3つの保存場所は別
 
