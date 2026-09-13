@@ -212,7 +212,7 @@ def main():
         sources = {s["id"]: s for s in json.load(f)["sources"]}
 
     wanted = sys.argv[1:] or [s for s, v in sources.items()
-                              if s.startswith("osaka") or v.get("pdf")]
+                              if s.startswith("osaka") or v.get("pdf") or v.get("files")]
     lines = ["# Excelを取ってきた結果", ""]
     got = skipped = failed = 0
 
@@ -231,7 +231,7 @@ def main():
 
         # 参考ソース（規約ページなど）は、そのページのExcel/CSVは要らない。
         # 兵庫県オープンデータの入口で、犯罪統計など117本を落としてしまったことがある
-        links = [] if src.get("area") == "ref" else excel_links(raw, src["url"])
+        links = [] if (src.get("area") == "ref" and not src.get("files")) else excel_links(raw, src["url"])
         kinds = ["Excel/CSV"]
         if src.get("pdf"):
             # 辿った先のページにもPDFが下がっているので、そこも見る
