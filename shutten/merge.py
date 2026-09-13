@@ -109,16 +109,16 @@ def merge_across_sources(by_key):
         groups[(norm_store(r["store"]), r["notified_on"])].append(r)
     out = {}
     merged_away = 0
-    for g in groups.values():
+
+    def settle(g):
+        """同じ店・同じ届出日の一群を、1件にまとめるか、そのまま置くか。"""
+        nonlocal merged_away
         srcs = Counter(r["source"] for r in g)
-        # 収集先が1つだけ、または同じ収集先から2件以上出ている（別の届出）ときは触らない。
-        # 条文が食い違うときも別の届出（同じ日に6条1項と6条2項を出すことがある）。
-        # 条文が空（「変更」としか書いていない市のページ）なら、相手の条文に合わせてまとめる
-        arts = {r.get("article", "") for r in g} - {""}
-        if len(srcs) == 1 or any(n > 1 for n in srcs.values()) or len(arts) > 1:
+        # 収集先が1つだけ、または同じ収集先から2件以上出ている（別の届出）ときは触らない
+        if len(srcs) == 1 or any(n > 1 for n in srcs.values()):
             for r in g:
                 out[r["key"]] = r
-            continue
+            return
         # 項目が多いものを土台にし、空いている項目を他から埋める。土台の選び方は毎日同じになるようにする
         g.sort(key=lambda r: (-filled(r), r["source"], r["key"]))
         base = dict(g[0])
@@ -138,6 +138,23 @@ def merge_across_sources(by_key):
         base["merged_keys"] = sorted(r["key"] for r in g if r["key"] != base["key"])
         out[base["key"]] = base
         merged_away += len(g) - 1
+
+    for g in groups.values():
+        # 条文が食い違うものは別の届出（同じ日に6条1項と6条2項を出すことがある）。
+        # 条文が空（「変更」としか書いていない市のページ）のものは、相手の条文が1つに決まるときだけ寄せる
+        arts = {r.get("article", "") for r in g} - {""}
+        if len(arts) <= 1:
+            settle(g)
+            continue
+        by_art = defaultdict(list)
+        for r in g:
+            by_art[r.get("article", "")].append(r)
+        for art, sub in by_art.items():
+            if art == "":
+                for r in sub:
+                    out[r["key"]] = r
+            else:
+                settle(sub)
     return out, merged_away
 
 
