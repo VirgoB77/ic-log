@@ -32,7 +32,7 @@ OUT_ALL = os.path.join(HERE, "data", "all.json")
 OUT_SUM = os.path.join(HERE, "data", "summary.md")
 
 DAY = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-CUMULATIVE = {"osaka-city", "osaka-pref"}   # 過去分を全部含む一覧を出している収集先
+CUMULATIVE = {"osaka-city", "osaka-pref", "hyogo-bukai"}   # 過去分を全部含む一覧を出している収集先（部会の議案も過去の届出を含む）
 
 
 # ---------------------------------------------------------------- 地域をそろえる
@@ -47,7 +47,7 @@ SOURCE_PLACE = {
     "hannan-city": ("大阪府", "阪南市"),   "yao-city": ("大阪府", "八尾市"),
     "yao-chukibo": ("大阪府", "八尾市"),   "minoh-city": ("大阪府", "箕面市"),
     "minoh-2shi2cho": ("大阪府", None),    "kobe-city": ("兵庫県", "神戸市"),
-    "hyogo-pref-juran": ("兵庫県", None),
+    "hyogo-pref-juran": ("兵庫県", None), "hyogo-bukai": ("兵庫県", None),
 }
 # 兵庫県は住所が無いので、店名に入っている地名から当てる（当て推量なので印をつける）
 HYOGO_CITIES = ["神戸", "姫路", "尼崎", "明石", "西宮", "洲本", "芦屋", "伊丹", "相生", "豊岡", "加古川",
