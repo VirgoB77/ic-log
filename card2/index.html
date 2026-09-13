@@ -821,14 +821,38 @@ function solve8(A, b){
   for (var i4 = 0; i4 < 8; i4++) out.push(b[i4] / A[i4][i4]);
   return out;
 }
-function warp(src, qd, outW, outH){
+/* 切り出したあとの絵の座標から、撮ったままの写真の座標に戻すための係数 */
+function quadH(qd, outW, outH){
   var dst = [[0,0], [outW,0], [outW,outH], [0,outH]], A = [], b = [];
   for (var i = 0; i < 4; i++){
     var X = dst[i][0], Y = dst[i][1], u = qd[i][0], v = qd[i][1];
     A.push([X, Y, 1, 0, 0, 0, -X*u, -Y*u]); b.push(u);
     A.push([0, 0, 0, X, Y, 1, -X*v, -Y*v]); b.push(v);
   }
-  var hh = solve8(A, b);
+  return solve8(A, b);
+}
+function mapH(hh, x, y){
+  var den = hh[6]*x + hh[7]*y + 1;
+  return [(hh[0]*x + hh[1]*y + hh[2]) / den, (hh[3]*x + hh[4]*y + hh[5]) / den];
+}
+/* k回まわしたあとの絵の点を、まわす前の点に戻す */
+function unrotPt(x, y, cw, ch, k){
+  k = ((k % 4) + 4) % 4;
+  var co = [1, 0, -1, 0][k], si = [0, 1, 0, -1][k];
+  var W = (k % 2) ? ch : cw, H = (k % 2) ? cw : ch;
+  var ex = x - cw/2, ey = y - ch/2;
+  return [ex*co + ey*si + W/2, -ex*si + ey*co + H/2];
+}
+function polyArea(pts){
+  var a = 0;
+  for (var i = 0; i < pts.length; i++){
+    var p1 = pts[i], p2 = pts[(i+1) % pts.length];
+    a += p1[0]*p2[1] - p2[0]*p1[1];
+  }
+  return Math.abs(a) / 2;
+}
+function warp(src, qd, outW, outH){
+  var hh = quadH(qd, outW, outH);
   if (!hh) return null;
   var sc = toCanvas(src, Math.max(src.width, src.height));
   var sd;
@@ -1638,9 +1662,14 @@ function claudeText(j){
 var CARD_FIELDS = ['name','kana','company','dept','title','tel','mobile','email','url','addr'];
 function cardSchema(){
   var pr = { rotate: { type:'integer', enum:[0, 90, 180, 270],
-    description:'文字がまっすぐになるまで、絵を時計回りに何度まわすか' } };
+    description:'文字がまっすぐになるまで、絵を時計回りに何度まわすか' },
+    quad: { type:'array',
+      description:'絵の中で名刺が占める四角形の四隅。左上・右上・右下・左下の順',
+      items: { type:'object',
+        properties:{ x:{ type:'number' }, y:{ type:'number' } },
+        required:['x','y'], additionalProperties:false } } };
   CARD_FIELDS.forEach(function(k){ pr[k] = { type:'string' }; });
-  return { type:'object', properties:pr, required:['rotate'].concat(CARD_FIELDS), additionalProperties:false };
+  return { type:'object', properties:pr, required:['rotate','quad'].concat(CARD_FIELDS), additionalProperties:false };
 }
 var CARD_PROMPT =
   'この画像は日本の名刺です。書いてある内容だけを読み取って、指定の形で返してください。\n' +
@@ -1652,6 +1681,9 @@ var CARD_PROMPT =
   '・email … メールアドレス。url … サイト。\n' +
   '・addr … 郵便番号と住所。「〒655-0852 神戸市…」のように1行で。\n' +
   '・rotate … 文字がまっすぐになるまで、この絵を時計回りに何度まわすか。\n' +
+  '・quad … この絵のどこに名刺があるかの四隅。絵の左上を x:0,y:0、右下を x:1,y:1 とした割合で、' +
+  '左上・右上・右下・左下の順に4つ。机や指など名刺の外側は含めないこと。' +
+  '名刺が絵いっぱいに写っているときは 0 と 1 に近い値になります。\n' +
   '読み取れない欄は空の文字列にしてください。推測で埋めないこと。';
 function claudeReadCard(card){
   var img = canvasToB64(card, 1500, 0.82);
@@ -1670,6 +1702,11 @@ function claudeReadCard(card){
     var got = {};
     CARD_FIELDS.forEach(function(k){ got[k] = String(o[k] == null ? '' : o[k]).trim(); });
     got._rotate = [0, 90, 180, 270].indexOf(o.rotate) >= 0 ? o.rotate : 0;
+    got._quad = null;
+    if (Array.isArray(o.quad) && o.quad.length === 4){
+      var qq = o.quad.map(function(pt){ return [Number(pt && pt.x), Number(pt && pt.y)]; });
+      if (qq.every(function(pt){ return isFinite(pt[0]) && isFinite(pt[1]); })) got._quad = qq;
+    }
     return got;
   });
 }
@@ -1751,6 +1788,30 @@ function showSpot(t){
   });
 }
 /* 鍵を入れていれば Claude に読ませる。入れていない・うまくいかないときは端末の中で読む */
+/* Claude が返した四隅で、しまう写真を切り直す。
+   送った絵は「切り出して・回したあと」のものなので、回す前 → 撮ったままの写真、と順に戻す。
+   いまの切り取りでほぼ足りている（絵の95%以上）ときは、何もしない */
+function applyClaudeQuad(q, cw, ch, orient){
+  if (!q || !pendRaw || !pendQuad || !cw || !ch) return false;
+  var pts = q.map(function(p){ return [p[0]*cw, p[1]*ch]; });
+  var frac = polyArea(pts) / (cw * ch);
+  if (!(frac > 0.15 && frac < 0.95)) return false;
+  var k = ((orient / 90) % 4 + 4) % 4;
+  var un = pts.map(function(p){ return unrotPt(p[0], p[1], cw, ch, k); });
+  var ww = (k % 2) ? ch : cw, wh = (k % 2) ? cw : ch;
+  var hh = quadH(pendQuad, ww, wh);
+  if (!hh) return false;
+  var raw = [];
+  for (var i = 0; i < 4; i++){
+    var r = mapH(hh, un[i][0], un[i][1]);
+    if (!isFinite(r[0]) || !isFinite(r[1])) return false;
+    raw.push([Math.max(0, Math.min(pendRaw.width, r[0])), Math.max(0, Math.min(pendRaw.height, r[1]))]);
+  }
+  var a = quadSize(raw);
+  if (a.w < 80 || a.h < 50) return false;
+  pendQuad = raw; pendCropped = true;
+  return true;
+}
 function runOcr(img){
   if ($('s-bar')) { $('s-bar').hidden = false; $('s-read').hidden = false; $('s-err').innerHTML = ''; }
   lastOcr = null;
@@ -1763,9 +1824,11 @@ function runOcr(img){
   if ($('s-bar')) $('s-bar').firstChild.style.width = '35%';
   claudeReadCard(pendCard || img).then(function(got){
     if (!$('s-name')) return;
-    /* 文字が横倒しなら、しまう写真もまっすぐに直す */
-    if (got._rotate && pendCard){
-      pendOrient = (pendOrient + got._rotate) % 360; pendOriented = true;
+    /* 名刺の外側まで写っていたら切り直し、文字が横倒しならまっすぐに直す */
+    var sent = pendCard || img, recut = false;
+    if (pendCard) recut = applyClaudeQuad(got._quad, sent.width, sent.height, pendOrient);
+    if (got._rotate && pendCard){ pendOrient = (pendOrient + got._rotate) % 360; pendOriented = true; }
+    if ((recut || got._rotate) && pendCard){
       buildPend();
       if ($('s-img')) $('s-img').src = pend.full;
     }
@@ -1780,8 +1843,9 @@ function runOcr(img){
     setCands();
     fillFrom(got);
     var any = got.name || got.company || got.tel || got.email;
-    $('s-read').textContent = any ? 'Claude で読み取りました。ちがうところは直してください。写真を開いて文字を押すと、そこだけ読み直せます。'
-                                  : 'うまく読み取れませんでした。写真を開いて名前を押すと、そこだけ読み直せます。';
+    $('s-read').textContent = (any ? 'Claude で読み取りました。ちがうところは直してください。写真を開いて文字を押すと、そこだけ読み直せます。'
+                                   : 'うまく読み取れませんでした。写真を開いて名前を押すと、そこだけ読み直せます。') +
+      (recut ? '　名刺のまわりが写っていたので、写真も切り直しました。' : '');
     $('s-lead').textContent = pendCropped ? '' : '名刺の枠を見つけられませんでした。「切り直す」で四隅を合わせると読みやすくなります。';
     $('s-lead').hidden = !$('s-lead').textContent;
     ['name','company'].forEach(function(k){ if (document.activeElement === $('s-' + k)) stripFor(k); });
@@ -1796,6 +1860,7 @@ function runOcr(img){
   });
 }
 /* かかった時間の内訳。?ocr= を付けて開いたときだけ記録する（ふだんは何もしない） */
+if (OCRBASE){ window.__quadHelp = { quadH:quadH, mapH:mapH, unrotPt:unrotPt, polyArea:polyArea, applyClaudeQuad:applyClaudeQuad }; }
 function tmark(s){ if (OCRBASE){ (window.__meishiT = window.__meishiT || []).push({ s:s, t:Math.round(performance.now()) }); } }
 function grabForm(){
   var o = {};
@@ -2019,6 +2084,8 @@ var camStream = null, camTrack = null, torchOn = false;
    200msごとに小さな絵で名刺の四隅をさがし、見つかったら中央の丸を光らせる。
    撮るのは人が丸いボタンを押したときだけ。撮ったあとに切り取りを確認してから読み取る */
 var liveTimer = null, liveQuad = null, liveHist = [], liveArmed = false, liveShotAt = 0, liveMiss = 0;
+/* 1コマ見失っただけで丸が真ん中に戻らないよう、少しのあいだ前の場所を保つ */
+var liveHold = 0, liveLast = null;
 /* 映像は画面いっぱいに切って出している（object-fit:cover）ので、
    映像の全部ではなく、いま画面に見えているところだけをさがす。
    見えていない外側の机や、となりの物にまどわされない */
@@ -2064,7 +2131,7 @@ function liveStep(){
   if (v.videoWidth && v.readyState >= 2){
     var src = camVisibleSrc();
     if (!src){ liveTimer = setTimeout(liveStep, 200); return; }
-    var W = 260, H = Math.max(1, Math.round(src.h * W / src.w));
+    var W = 360, H = Math.max(1, Math.round(src.h * W / src.w));
     var c = document.createElement('canvas');
     c.width = W; c.height = H;
     var qd = null;
@@ -2087,10 +2154,12 @@ function liveStep(){
       }
       area = Math.abs(area) / 2 / (W * H);
     }
-    var big = area >= 0.12;                       /* 小さすぎる（遠すぎる）と、見つけた扱いにしない */
+    var big = area >= 0.07;                       /* 小さすぎる（遠すぎる）と、見つけた扱いにしない */
     liveQuad = q;
     liveMiss = q ? 0 : liveMiss + 1;
     var good = !!q && !edge && big;
+    if (good){ liveHold = 4; liveLast = q; }
+    else if (!q && liveHold > 0){ liveHold--; q = liveLast; good = true; }
     drawLive(q, good);
     var tip = $('cam-tip'), sb = $('cam-shotbox');
     /* シャッター（冥王星）のまわり：見つけたら衛星が回る、見つからないままなら白い輪。撮るのは人が押したときだけ */
@@ -2098,9 +2167,9 @@ function liveStep(){
     if (tip){
       tip.textContent = !q ? (liveMiss > 12 ? '見つからないままでも、丸いボタンで撮れます'
                                             : '名刺を画面に入れてください。机との境がはっきり写るようにします')
+                      : good ? '見つけました。丸いボタンで撮ってください'
                       : edge ? '名刺全体が入るように、少し離してください'
-                      : !big ? '名刺が小さいです。もう少し近づけてください'
-                      : '見つけました。丸いボタンで撮ってください';
+                      : '名刺が小さいです。もう少し近づけてください';
     }
   }
   liveTimer = setTimeout(liveStep, 200);
@@ -2109,7 +2178,7 @@ function openCamera(){
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ $('file-cam').click(); return; }
   $('cam').hidden = false;
   document.body.style.overflow = 'hidden';
-  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0;
+  liveQuad = null; liveHist = []; liveArmed = true; liveShotAt = Date.now(); liveMiss = 0; liveHold = 0; liveLast = null;
   drawLive(null);
   if ($('cam-shotbox')) $('cam-shotbox').className = 'shotbox';
   $('cam').classList.remove('found');
